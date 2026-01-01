@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Mirada Creativa — Un sistema para entrenar tu mirada</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Inter+Tight:wght@500;600&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500&display=swap" rel="stylesheet">
+  
+  <!-- Material Symbols -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100,0,0&display=swap">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/avif" href="assets/images/logo.avif">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-inner">
+      <a href="/" class="logo"><img src="assets/images/logo.avif" alt="Logo" class="logo-img">La Mirada Creativa</a>
+      <nav>
+        <a href="#sistema" class="nav-hide-mobile">El sistema</a>
+        <a href="#incluye" class="nav-hide-mobile">Qué incluye</a>
+        <a href="#para-quien" class="nav-hide-mobile">Para quién</a>
+        <a href="#beneficios" class="nav-hide-mobile">Beneficios</a>
+        <a href="#precio" class="nav-hide-mobile">Precio</a>
+        <a href="#preview" class="nav-hide-mobile">Preview</a>
+        <a href="#precio" class="btn btn--primary btn--small nav-hide-mobile">Comprar</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+          <span class="material-symbols-sharp">menu</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+  
+  <!-- Sticky Promo Banner -->
+  <div class="promo-banner-sticky">
+    <div class="promo-banner-sticky-content">
+      <span class="promo-banner-icon material-symbols-sharp">redeem</span>
+      <span class="promo-banner-title">Precio de lanzamiento por tiempo limitado</span>
+      <div class="promo-banner-price">
+        <span class="promo-banner-current">12 €</span>
+        <span class="promo-banner-old">29 €</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mobile Navigation -->
+  <div class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-header">
+      <a href="/" class="logo"><img src="assets/images/logo.avif" alt="Logo" class="logo-img">La Mirada Creativa</a>
+      <button class="mobile-nav-close" id="mobileNavClose" aria-label="Cerrar menú">
+        <span class="material-symbols-sharp">close</span>
+      </button>
+    </div>
+    <div class="mobile-nav-content">
+      <div class="mobile-nav-links">
+        <a href="#sistema" class="mobile-nav-link">El sistema</a>
+        <a href="#incluye" class="mobile-nav-link">Qué incluye</a>
+        <a href="#para-quien" class="mobile-nav-link">Para quién</a>
+        <a href="#beneficios" class="mobile-nav-link">Beneficios</a>
+        <a href="#precio" class="mobile-nav-link">Precio</a>
+        <a href="#preview" class="mobile-nav-link">Preview</a>
+      </div>
+      <div class="mobile-nav-cta">
+        <a href="#precio" class="btn btn--primary btn--price mobile-nav-link">
+          Comprar ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container container--wide">
+      <div class="hero-grid hero-grid--stacked">
+        <div class="hero-content">
+          <span class="small">Sistema de entrenamiento visual</span>
+          <h1>La Mirada Creativa</h1>
+          <ul class="hero-features">
+            <li><span class="material-symbols-sharp">check</span> Un sistema para entrenar tu mirada creativa</li>
+            <li><span class="material-symbols-sharp">check</span> 365 ejercicios diarios</li>
+            <li><span class="material-symbols-sharp">check</span> Para diseñadores, fotógrafos y creativos curiosos</li>
+            <li><span class="material-symbols-sharp">check</span> Sin complicaciones: solo observar 5 minutos al día</li>
+          </ul>
+          <div class="hero-meta">
+            <div class="hero-meta-item">
+              <span class="material-symbols-sharp">description</span>
+              <span class="hero-meta-label">Formato PDF</span>
+            </div>
+            <div class="hero-meta-item">
+              <span class="material-symbols-sharp">calendar_month</span>
+              <span class="hero-meta-label">365 días</span>
+            </div>
+            <div class="hero-meta-item">
+              <span class="material-symbols-sharp">timer</span>
+              <span class="hero-meta-label">5 min/día</span>
+            </div>
+          </div>
+          <div class="hero-actions">
+            <a href="#precio" class="btn btn--primary btn--price">
+              Comprar ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span>
+            </a>
+            <a href="#" class="btn btn--secondary preview-trigger">
+              Preview gratuito de 7 días
+            </a>
+          </div>
+        </div>
+        <div class="hero-cards">
+          <div class="card-deck">
+            <div class="card" data-index="0">
+              <div class="card-header">
+                <span class="card-day">Día 1 / 365</span>
+                <span class="card-block">Mirada Técnica</span>
+              </div>
+              <div class="card-content">
+                <h3 class="card-title">Punto en blanco</h3>
+                <p class="card-subtitle">Interrupción mínima</p>
+                <div class="card-icon">
+                  <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="14"/></svg>
+                </div>
+                <p class="card-desc">Busca una superficie completamente lisa y clara. Encuentra un único punto que rompa la uniformidad.</p>
+              </div>
+            </div>
+            <div class="card" data-index="1">
+              <div class="card-header">
+                <span class="card-day">Día 2 / 365</span>
+                <span class="card-block">Mirada Técnica</span>
+              </div>
+              <div class="card-content">
+                <h3 class="card-title">Línea sola</h3>
+                <p class="card-subtitle">Dirección pura</p>
+                <div class="card-icon">
+                  <svg viewBox="0 0 48 48"><line x1="8" y1="24" x2="40" y2="24"/></svg>
+                </div>
+                <p class="card-desc">Busca una única línea aislada sobre una superficie neutra. Síguela de principio a fin.</p>
+              </div>
+            </div>
+            <div class="card" data-index="2">
+              <div class="card-header">
+                <span class="card-day">Día 3 / 365</span>
+                <span class="card-block">Mirada Técnica</span>
+              </div>
+              <div class="card-content">
+                <h3 class="card-title">Sombra pequeña</h3>
+                <p class="card-subtitle">Forma sin objeto</p>
+                <div class="card-icon">
+                  <svg viewBox="0 0 48 48"><path d="M32 24c0 7.7-6.3 14-14 14S4 31.7 4 24s6.3-14 14-14"/></svg>
+                </div>
+                <p class="card-desc">Busca una sombra pequeña proyectada sobre una superficie lisa. Concéntrate solo en la forma oscura.</p>
+              </div>
+            </div>
+            <div class="card" data-index="3">
+              <div class="card-header">
+                <span class="card-day">Día 4 / 365</span>
+                <span class="card-block">Mirada Técnica</span>
+              </div>
+              <div class="card-content">
+                <h3 class="card-title">Objeto centrado</h3>
+                <p class="card-subtitle">Claridad absoluta</p>
+                <div class="card-icon">
+                  <svg viewBox="0 0 48 48">
+                    <path d="M8 8 L8 18 M8 8 L18 8"/>
+                    <path d="M40 8 L40 18 M40 8 L30 8"/>
+                    <path d="M8 40 L8 30 M8 40 L18 40"/>
+                    <path d="M40 40 L40 30 M40 40 L30 40"/>
+                    <circle cx="24" cy="24" r="2"/>
+                  </svg>
+                </div>
+                <p class="card-desc">Coloca o busca un objeto pequeño perfectamente centrado en una superficie simple.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="section-alt">
+    <div class="container container--wide">
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-icon">
+            <span class="material-symbols-sharp">event_repeat</span>
+          </div>
+          <div class="stat-title">365 ejercicios</div>
+          <p class="stat-desc">Un ejercicio diario durante un año completo</p>
+        </div>
+        <div class="stat-box">
+          <div class="stat-icon">
+            <span class="material-symbols-sharp">layers</span>
+          </div>
+          <div class="stat-title">4 bloques progresivos</div>
+          <p class="stat-desc">Técnica, sensibilidad, concepto y estilo propio</p>
+        </div>
+        <div class="stat-box">
+          <div class="stat-icon">
+            <span class="material-symbols-sharp">timer</span>
+          </div>
+          <div class="stat-title">5 minutos al día</div>
+          <p class="stat-desc">Práctica breve y sostenible que se integra en tu rutina</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sobre el autor -->
+  <section id="quien-soy">
+    <div class="container">
+      <div class="author-section">
+        <div class="author-intro">
+          <div class="author-avatar">
+            <img src="assets/images/profile-pic.JPG" alt="Rafael Alberola">
+          </div>
+          <div class="author-info">
+            <h3>Rafael Alberola</h3>
+            <p>Diseñador de producto y Fotógrafo</p>
+          </div>
+        </div>
+        
+        <div class="author-content">
+          <p>
+            No te enseño a hacer fotos. Te enseño a entrenar la mirada.
+          </p>
+          <p>
+            La Mirada Creativa es un sistema diario de observación que diseñé después de años trabajando en diseño de producto y fotografía. Cada día propone un ejercicio sencillo que entrena tu atención, tu sensibilidad y tu criterio visual.
+          </p>
+          <p>
+            No necesitas cámara. No necesitas conocimientos técnicos. Solo mirar.
+          </p>
+          <p>
+            Este sistema nace de una convicción simple: <span class="text-strong">menos explicación, más experiencia</span>. No vas a consumir contenido. Vas a practicar.
+          </p>
+          <p>
+            Está pensado para creativos, curiosos y personas que quieren aprender a mirar mejor —incluso sin experiencia visual previa.
+          </p>
+          
+          <p class="author-quote">
+            "La mirada se entrena. Y cuando entrenas la mirada, todo lo que creas mejora."
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- El sistema -->
+  <section id="sistema" class="section-alt">
+    <div class="container container--wide">
+      <div class="text-center">
+        <div class="blocks-deck-wrapper">
+          <div class="blocks-deck">
+            <div class="block-card" data-index="0">
+              <div class="block-card-header">
+                <span class="block-card-logo">La Mirada Creativa</span>
+                <span class="block-card-type">Mirada Técnica</span>
+              </div>
+              <div class="block-card-content">
+                <h3 class="block-card-title">Bloque 1</h3>
+                <p class="block-card-subtitle">Primer trimestre</p>
+                <div class="block-card-icon">
+                  <svg viewBox="0 0 64 64">
+                    <ellipse cx="32" cy="32" rx="28" ry="16"/>
+                    <circle cx="32" cy="32" r="8"/>
+                  </svg>
+                </div>
+                <p class="block-card-desc">En este trimestre aprenderás a desactivar el modo automático de tu cerebro. Tu ojo es una herramienta de precisión que ha sido domesticada por la rutina.</p>
+              </div>
+            </div>
+            <div class="block-card" data-index="1">
+              <div class="block-card-header">
+                <span class="block-card-logo">La Mirada Creativa</span>
+                <span class="block-card-type">Mirada Sensible</span>
+              </div>
+              <div class="block-card-content">
+                <h3 class="block-card-title">Bloque 2</h3>
+                <p class="block-card-subtitle">Segundo trimestre</p>
+                <div class="block-card-icon">
+                  <svg viewBox="0 0 64 64">
+                    <path d="M32 16 L48 32 L32 48 L16 32 Z"/>
+                  </svg>
+                </div>
+                <p class="block-card-desc">Ahora que tu ojo sabe mirar, aprenderá a sentir. Las escenas no solo tienen forma: tienen tensión, calma, peso y emoción.</p>
+              </div>
+            </div>
+            <div class="block-card" data-index="2">
+              <div class="block-card-header">
+                <span class="block-card-logo">La Mirada Creativa</span>
+                <span class="block-card-type">Mirada Conceptual</span>
+              </div>
+              <div class="block-card-content">
+                <h3 class="block-card-title">Bloque 3</h3>
+                <p class="block-card-subtitle">Tercer trimestre</p>
+                <div class="block-card-icon">
+                  <svg viewBox="0 0 64 64">
+                    <rect x="16" y="16" width="32" height="32" rx="2"/>
+                  </svg>
+                </div>
+                <p class="block-card-desc">Mirar bien no es suficiente. Ahora aprenderás a entender qué está pasando en lo que ves. Causa, consecuencia y significado.</p>
+              </div>
+            </div>
+            <div class="block-card" data-index="3">
+              <div class="block-card-header">
+                <span class="block-card-logo">La Mirada Creativa</span>
+                <span class="block-card-type">Mirada Propia</span>
+              </div>
+              <div class="block-card-content">
+                <h3 class="block-card-title">Bloque 4</h3>
+                <p class="block-card-subtitle">Cuarto trimestre</p>
+                <div class="block-card-icon">
+                  <svg viewBox="0 0 64 64">
+                    <ellipse cx="32" cy="32" rx="24" ry="14"/>
+                    <circle cx="32" cy="32" r="6"/>
+                    <line x1="52" y1="12" x2="56" y2="8"/>
+                    <line x1="56" y1="16" x2="60" y2="12"/>
+                  </svg>
+                </div>
+                <p class="block-card-desc">Ya no miras como antes. Ahora decides desde dónde miras y qué merece tu atención. No para copiar un estilo, sino para reconocer el tuyo.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="small">El sistema</span>
+        <h2>Un ejercicio al día.<br>Cinco minutos.<br>Durante un año.</h2>
+        <p style="max-width: 540px; margin: 0 auto;">
+          El sistema se estructura en 365 días, divididos en 4 bloques progresivos. Cada bloque entrena una capa distinta de tu forma de observar.
+        </p>
+      </div>
+      
+      <div class="blocks-grid">
+        <div class="block-item">
+          <div class="block-number">01</div>
+          <div class="block-title">Mirada Técnica</div>
+          <p class="block-desc">Composición, luz, forma y estructura.</p>
+        </div>
+        <div class="block-item">
+          <div class="block-number">02</div>
+          <div class="block-title">Mirada Sensible</div>
+          <p class="block-desc">Emoción, atmósfera, color y conexión.</p>
+        </div>
+        <div class="block-item">
+          <div class="block-number">03</div>
+          <div class="block-title">Mirada Conceptual</div>
+          <p class="block-desc">Narrativa, simbolismo y significado.</p>
+        </div>
+        <div class="block-item">
+          <div class="block-number">04</div>
+          <div class="block-title">Mirada Propia</div>
+          <p class="block-desc">Estilo personal, intuición y voz.</p>
+        </div>
+      </div>
+      
+      <p class="text-center text-strong" style="margin-top: var(--space-lg);">
+        No se trata de hacerlo perfecto. Se trata de hacerlo cada día.
+      </p>
+    </div>
+  </section>
+
+  <!-- Qué incluye -->
+  <section id="incluye">
+    <div class="container">
+      <div class="text-center">
+        <span class="small">Qué incluye</span>
+        <h2>El sistema completo</h2>
+        
+        <ul class="features-list">
+          <li>
+            <span class="material-symbols-sharp">check_circle</span>
+            365 ejercicios diarios de observación
+          </li>
+          <li>
+            <span class="material-symbols-sharp">check_circle</span>
+            4 bloques progresivos con intención clara
+          </li>
+          <li>
+            <span class="material-symbols-sharp">check_circle</span>
+            Misiones especiales para consolidar aprendizaje
+          </li>
+          <li>
+            <span class="material-symbols-sharp">check_circle</span>
+            Diseño limpio, pensado para usarse a diario
+          </li>
+          <li>
+            <span class="material-symbols-sharp">check_circle</span>
+            Formato PDF, sin distracciones
+          </li>
+        </ul>
+        
+        <div class="product-note">
+          <div class="product-note-item">
+            <span class="material-symbols-sharp">inventory_2</span>
+            <span>Es un producto terminado</span>
+          </div>
+          <div class="product-note-item">
+            <span class="material-symbols-sharp">download</span>
+            <span>Tuyo para siempre</span>
+          </div>
+          <div class="product-note-item">
+            <span class="material-symbols-sharp">sync_disabled</span>
+            <span>No depende de suscripciones</span>
+          </div>
+          <div class="product-note-item">
+            <span class="material-symbols-sharp">wifi_off</span>
+            <span>Funciona sin conexión a internet</span>
+          </div>
+          <div class="product-note-item">
+            <span class="material-symbols-sharp">videocam_off</span>
+            <span>Sin vídeos ni comunidad</span>
+          </div>
+          <div class="product-note-item">
+            <span class="material-symbols-sharp">update</span>
+            <span>Actualizaciones incluidas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Para quién -->
+  <section id="para-quien" class="section-alt">
+    <div class="container">
+      <div class="text-center">
+        <span class="small">Para quién es</span>
+        <h2>Este sistema es para ti si...</h2>
+      </div>
+      
+      <div class="accordion">
+        <div class="accordion-item active">
+          <button class="accordion-header">
+            <div class="accordion-header-left">
+              <span class="material-symbols-sharp">brush</span>
+              <span class="accordion-title">Eres creativo, aunque no tengas formación visual</span>
+            </div>
+            <span class="material-symbols-sharp accordion-icon">add</span>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              No importa si trabajas con texto, código, sonido o ideas. La observación entrena un músculo que mejora cualquier disciplina creativa.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-header">
+            <div class="accordion-header-left">
+              <span class="material-symbols-sharp">visibility</span>
+              <span class="accordion-title">Sientes que miras pero no siempre ves</span>
+            </div>
+            <span class="material-symbols-sharp accordion-icon">add</span>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              Muchas personas pasan por alto detalles que podrían inspirarles. Este sistema te entrena para captar lo que antes ignorabas.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-header">
+            <div class="accordion-header-left">
+              <span class="material-symbols-sharp">psychology</span>
+              <span class="accordion-title">Quieres entrenar criterio, no técnica</span>
+            </div>
+            <span class="material-symbols-sharp accordion-icon">add</span>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              No aprenderás a usar herramientas. Aprenderás a tomar decisiones visuales con intención y fundamento.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-header">
+            <div class="accordion-header-left">
+              <span class="material-symbols-sharp">target</span>
+              <span class="accordion-title">Prefieres sistemas simples a cursos largos</span>
+            </div>
+            <span class="material-symbols-sharp accordion-icon">add</span>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              Sin vídeos interminables, sin plataformas complejas. Un PDF, un ejercicio al día, y tú decides cuándo y dónde.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-header">
+            <div class="accordion-header-left">
+              <span class="material-symbols-sharp">routine</span>
+              <span class="accordion-title">Te interesa crear hábito, no consumir contenido</span>
+            </div>
+            <span class="material-symbols-sharp accordion-icon">add</span>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              El objetivo no es aprender datos. Es construir una práctica sostenible que transforme cómo percibes el mundo.
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <p class="text-center text-strong" style="margin-top: var(--space-lg);">
+        No es para aprender fotografía. Es para aprender a observar.
+      </p>
+    </div>
+  </section>
+
+  <!-- Beneficios -->
+  <section id="beneficios">
+    <div class="container container--wide">
+      <div class="text-center">
+        <span class="small">Beneficios</span>
+        <h2>Un sistema que no depende de nada</h2>
+      </div>
+      
+      <div class="philosophy-grid">
+        <div class="philosophy-item">
+          <div class="philosophy-icon">
+            <span class="material-symbols-sharp">person_off</span>
+          </div>
+          <div class="philosophy-title">Sin registros</div>
+          <p class="philosophy-desc">No necesitas crear cuentas ni registrarte en plataformas</p>
+        </div>
+        <div class="philosophy-item">
+          <div class="philosophy-icon">
+            <span class="material-symbols-sharp">hourglass_disabled</span>
+          </div>
+          <div class="philosophy-title">Sin caducidad</div>
+          <p class="philosophy-desc">No hay vídeos que expiran ni accesos limitados</p>
+        </div>
+        <div class="philosophy-item">
+          <div class="philosophy-icon">
+            <span class="material-symbols-sharp">group_off</span>
+          </div>
+          <div class="philosophy-title">Sin comunidad</div>
+          <p class="philosophy-desc">No hay grupos que seguir ni notificaciones que atender</p>
+        </div>
+      </div>
+      
+      <div class="philosophy-statement">
+        <p>El PDF es el sistema. Tú decides el ritmo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="precio" class="section-alt">
+    <div class="container">
+      <div class="text-center">
+        <span class="small">Precio</span>
+        <h2>Accede al sistema completo</h2>
+      </div>
+      
+      <div class="promo-banner">
+        <div class="promo-banner-content">
+          <span class="promo-banner-icon material-symbols-sharp">local_fire_department</span>
+          <div class="promo-banner-text">
+            <span class="promo-banner-title">Precio de lanzamiento</span>
+            <span class="promo-banner-subtitle">Solo por tiempo limitado</span>
+          </div>
+          <div class="promo-banner-price">
+            <span class="promo-banner-current">12 €</span>
+            <span class="promo-banner-old">29 €</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="pricing-main" id="comprar">
+        <div class="pricing-main-content">
+          <span class="price-label">Oferta limitada</span>
+          <div class="pricing-main-price">
+            <span class="price-current">12 €</span>
+            <span class="price-future">29 €</span>
+          </div>
+          <p class="pricing-main-note">Pago único. Acceso para siempre.</p>
+          
+          <ul class="pricing-main-features">
+            <li>
+              <span class="material-symbols-sharp">inventory_2</span>
+              Es un producto terminado
+            </li>
+            <li>
+              <span class="material-symbols-sharp">download</span>
+              Tuyo para siempre
+            </li>
+            <li>
+              <span class="material-symbols-sharp">sync_disabled</span>
+              No depende de suscripciones
+            </li>
+            <li>
+              <span class="material-symbols-sharp">wifi_off</span>
+              Funciona sin conexión a internet
+            </li>
+            <li>
+              <span class="material-symbols-sharp">videocam_off</span>
+              Sin vídeos ni comunidad
+            </li>
+            <li>
+              <span class="material-symbols-sharp">update</span>
+              Actualizaciones incluidas
+            </li>
+          </ul>
+          
+          <a href="#" class="btn btn--primary btn--large btn--price">Comprar ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span></a>
+        </div>
+      </div>
+      
+      <div class="callout">
+        <span class="material-symbols-sharp">schedule</span>
+        <div>
+          <p class="callout-title">El precio aumentará en 30 días</p>
+          <p class="callout-desc">El valor del sistema crecerá conforme avance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Preview -->
+  <section id="preview">
+    <div class="container">
+      <div class="preview-section">
+        <div class="text-center">
+          <span class="small">Preview gratuito</span>
+          <h2>Empieza ahora o decide después</h2>
+          <p style="max-width: 480px; margin: 0 auto var(--space-lg);">
+            Puedes empezar con un preview gratuito de 7 días.<br>
+            Es el inicio real del sistema.
+          </p>
+        </div>
+        
+        <div class="preview-grid">
+          <div class="preview-card">
+            <h3>Durante el preview</h3>
+            <ul class="preview-list">
+              <li>
+                <span class="material-symbols-sharp">check</span>
+                Accedes a los primeros ejercicios
+              </li>
+              <li>
+                <span class="material-symbols-sharp">check</span>
+                Decides si este proceso es para ti
+              </li>
+              <li>
+                <span class="material-symbols-sharp">check</span>
+                Puedes continuar al precio actual de 12 €
+              </li>
+            </ul>
+          </div>
+          
+          <div class="preview-card preview-card--muted">
+            <h3>Cuando termine el preview</h3>
+            <ul class="preview-list preview-list--muted">
+              <li>
+                <span class="material-symbols-sharp">arrow_forward</span>
+                El acceso gratuito se cierra
+              </li>
+              <li>
+                <span class="material-symbols-sharp">arrow_forward</span>
+                El precio será de 29 € o superior
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="preview-actions">
+          <a href="#" class="btn btn--secondary preview-trigger">Preview gratuito de 7 días</a>
+          <a href="#" class="btn btn--primary btn--price">Comprar ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Manifesto -->
+  <section class="section-alt">
+    <div class="container">
+      <div class="text-center">
+        <p class="manifesto-text">
+          La Mirada Creativa no te enseña qué mirar.<br>
+          Te entrena para que tú lo decidas.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Preview Modal -->
+  <div class="modal" id="previewModal">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-content modal-content--large">
+      <button class="modal-close" id="modalClose" aria-label="Cerrar modal">
+        <span class="material-symbols-sharp">close</span>
+      </button>
+      <div class="modal-body" id="kitFormContainer">
+        <!-- Kit form will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container container--wide">
+      <div class="footer-inner">
+        <div class="footer-links">
+          <a href="#">Contacto</a>
+          <a href="#">Privacidad</a>
+          <a href="#">Términos</a>
+        </div>
+        <p class="footer-copy">© 2025 La Mirada Creativa</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+
+</body>
+</html>
