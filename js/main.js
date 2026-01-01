@@ -129,7 +129,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const offset = position * 8;
         const rotation = position * 2;
         const zIndex = this.totalCards - position;
-        const brightness = 1 + (position * 0.1);
         
         // Apply drag offset only to the top card
         if (position === 0 && dragOffset !== 0) {
@@ -138,11 +137,11 @@ document.addEventListener('DOMContentLoaded', function() {
           card.style.transition = 'none';
         } else {
           card.style.transform = `translateY(${offset}px) translateX(${offset}px) rotate(${rotation}deg)`;
-          card.style.transition = 'transform 0.4s ease, filter 0.4s ease';
+          card.style.transition = 'transform 0.4s ease';
         }
         
         card.style.zIndex = zIndex;
-        card.style.filter = `brightness(${brightness})`;
+        card.style.filter = 'none';
       });
     }
     
@@ -185,11 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const diffX = endX - this.startX;
       
       if (Math.abs(diffX) > this.threshold) {
-        if (diffX > 0) {
-          this.prev();
-        } else {
-          this.next();
-        }
+        this.next();
       } else {
         // Snap back
         this.updatePositions();
@@ -219,11 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const diffX = e.clientX - this.startX;
       
       if (Math.abs(diffX) > this.threshold) {
-        if (diffX > 0) {
-          this.prev();
-        } else {
-          this.next();
-        }
+        this.next();
       } else {
         // Snap back
         this.updatePositions();

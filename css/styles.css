@@ -24,7 +24,7 @@
    ============================================ */
 :root {
   --color-bg: #FFFFFF;
-  --color-bg-alt: #E6E6E6;
+  --color-bg-alt: #f4f4f4;
   --color-text: #111111;
   --color-text-secondary: #555555;
   --color-text-tertiary: #888888;
@@ -69,6 +69,28 @@ body {
   font-size: 1rem;
   line-height: 1.7;
   color: var(--color-text);
+}
+
+/* Mobile-only line breaks */
+.mobile-break {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .mobile-break {
+    display: none;
+  }
+}
+
+/* Desktop-only line breaks */
+.desktop-break {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .desktop-break {
+    display: block;
+  }
   background-color: var(--color-bg);
 }
 
@@ -85,7 +107,7 @@ h1, h2, h3 {
 
 h1 {
   font-size: clamp(2.25rem, 5vw, 3.5rem);
-  margin-bottom: 0;
+  margin-bottom: 16px;
 }
 
 h2 {
@@ -178,7 +200,7 @@ header {
   top: 0;
   left: 0;
   right: 0;
-  padding: var(--space-sm) 0;
+  padding: 12px 0;
   background: var(--color-bg);
   border-bottom: 1px solid var(--color-border-light);
   z-index: 100;
@@ -294,7 +316,7 @@ nav a:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-sm) var(--space-md);
+  padding: 12px var(--space-md);
   border-bottom: 1px solid var(--color-border-light);
 }
 
@@ -331,7 +353,7 @@ nav a:hover {
   font-size: 1.25rem;
   color: var(--color-text);
   text-decoration: none;
-  padding: var(--space-sm) 0;
+  padding: var(--space-xs) 0;
   border-bottom: 1px solid var(--color-border-light);
 }
 
@@ -430,16 +452,23 @@ nav a:hover {
    Hero
    ============================================ */
 .hero {
-  padding-top: calc(var(--space-2xl) + 40px);
-  padding-bottom: var(--space-xl);
+  padding-top: calc(var(--space-2xl) + 24px);
+  padding-bottom: var(--space-lg);
   min-height: 100vh;
   display: flex;
   align-items: center;
 }
 
+@media (min-width: 768px) {
+  .hero {
+    padding-top: calc(var(--space-2xl) + 40px);
+    padding-bottom: var(--space-xl);
+  }
+}
+
 .hero-grid {
   display: grid;
-  gap: var(--space-lg);
+  gap: 0;
   align-items: center;
 }
 
@@ -525,7 +554,7 @@ nav a:hover {
   font-size: 1rem;
   color: var(--color-text-secondary);
   line-height: 1.4;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.75rem;
 }
 
 .hero-features .material-symbols-sharp {
@@ -537,6 +566,12 @@ nav a:hover {
     'wght' 400,
     'GRAD' 0,
     'opsz' 24;
+}
+
+@media (min-width: 768px) {
+  .hero-features li {
+    margin-bottom: 0.25rem;
+  }
 }
 
 .hero-meta {
@@ -587,6 +622,11 @@ nav a:hover {
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
+  width: 100%;
+}
+
+.hero-actions .btn {
+  width: 100%;
 }
 
 @media (min-width: 768px) {
@@ -677,7 +717,7 @@ nav a:hover {
   width: 100%;
   height: 100%;
   background-color: #F5F5F5;
-  border-radius: 4px;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   padding: 1rem;
@@ -685,7 +725,7 @@ nav a:hover {
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
   backface-visibility: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid #000;
+  border: 1px solid #e0e0e0;
   overflow: hidden;
 }
 
@@ -752,7 +792,7 @@ nav a:hover {
 
 .card-title {
   font-family: var(--font-display);
-  font-size: 0.875rem;
+  font-size: 1.175rem;
   font-weight: bold;
   line-height: 1.2;
   text-transform: uppercase;
@@ -760,15 +800,9 @@ nav a:hover {
   margin-bottom: 0.25rem;
 }
 
-@media (min-width: 768px) {
-  .card-title {
-    font-size: 1rem;
-  }
-}
-
 .card-subtitle {
   font-family: 'Space Mono', monospace;
-  font-size: 0.625rem;
+  font-size: 0.825rem;
   color: var(--color-text-tertiary);
   margin-bottom: 0.75rem;
 }
@@ -799,15 +833,9 @@ nav a:hover {
 
 .card-desc {
   font-family: 'Satoshi', sans-serif;
-  font-size: 0.625rem;
+  font-size: 14px;
   color: var(--color-text-secondary);
-  line-height: 1.6;
-}
-
-@media (min-width: 768px) {
-  .card-desc {
-    font-size: 0.6875rem;
-  }
+  line-height: 1.4;
 }
 
 /* Card Stack Positions - 4 cards */
@@ -901,7 +929,7 @@ nav a:hover {
   width: 100%;
   height: 100%;
   background: linear-gradient(180deg, #19132F 0%, #0C0520 100%);
-  border-radius: 4px;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   padding: 1rem;
@@ -983,7 +1011,7 @@ nav a:hover {
 
 .block-card-title {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 1.175rem;
   font-weight: bold;
   line-height: 1.2;
   text-transform: uppercase;
@@ -992,16 +1020,9 @@ nav a:hover {
   color: #ffffff;
 }
 
-@media (min-width: 768px) {
-  .block-card-title {
-    font-size: 1.75rem;
-  }
-}
-
 .block-card-subtitle {
   font-family: 'Space Mono', monospace;
-  font-size: 0.625rem;
-  text-transform: uppercase;
+  font-size: 0.825rem;
   letter-spacing: 0.08em;
   color: rgba(255, 255, 255, 0.5);
   margin-bottom: 1rem;
@@ -1024,24 +1045,32 @@ nav a:hover {
   fill: none;
 }
 
+.block-card-icon .material-symbols-sharp {
+  font-size: 64px;
+  color: #06BDFF;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 200,
+    'GRAD' 0,
+    'opsz' 48;
+}
+
 @media (min-width: 768px) {
   .block-card-icon svg {
     width: 72px;
     height: 72px;
   }
+  
+  .block-card-icon .material-symbols-sharp {
+    font-size: 72px;
+  }
 }
 
 .block-card-desc {
   font-family: 'Satoshi', sans-serif;
-  font-size: 0.6875rem;
+  font-size: 14px;
   color: rgba(255, 255, 255, 0.7);
-  line-height: 1.6;
-}
-
-@media (min-width: 768px) {
-  .block-card-desc {
-    font-size: 0.75rem;
-  }
+  line-height: 1.4;
 }
 
 /* Block Card Stack Positions */
@@ -1237,7 +1266,7 @@ nav a:hover {
 
 .author-content p {
   font-size: 1rem;
-  line-height: 1.8;
+  line-height: 1.6;
 }
 
 .author-quote {
@@ -1290,7 +1319,7 @@ nav a:hover {
 
 @media (min-width: 900px) {
   .block-item {
-    padding: var(--space-lg);
+    padding: 24px;
   }
 }
 
@@ -1312,9 +1341,10 @@ nav a:hover {
 }
 
 .block-desc {
-  font-size: 0.8125rem;
+  font-size: 15px;
   color: var(--color-text-tertiary);
   margin: 0;
+  line-height: 1.4;
 }
 
 /* ============================================
@@ -1332,7 +1362,7 @@ nav a:hover {
   border-bottom: 1px solid var(--color-border-light);
   display: flex;
   align-items: center;
-  gap: var(--space-md);
+  gap: var(--space-xs);
   font-size: 1rem;
   color: var(--color-text);
 }
@@ -1363,7 +1393,7 @@ nav a:hover {
   max-width: 400px;
   margin-left: auto;
   margin-right: auto;
-  padding: var(--space-lg);
+  padding: 24px;
   border: 1px solid var(--color-border);
 }
 
@@ -1421,7 +1451,7 @@ nav a:hover {
 .accordion-header-left {
   display: flex;
   align-items: center;
-  gap: var(--space-md);
+  gap: var(--space-sm);
 }
 
 .accordion-header-left .material-symbols-sharp {
@@ -1444,7 +1474,7 @@ nav a:hover {
 }
 
 .accordion-icon {
-  font-size: 28px;
+  font-size: 36px;
   color: var(--color-text-tertiary);
   transition: transform 0.3s ease;
   flex-shrink: 0;
@@ -1469,6 +1499,7 @@ nav a:hover {
   padding-left: 56px;
   color: var(--color-text-secondary);
   font-size: 1rem;
+  line-height: 1.4;
 }
 
 /* Highlight Box */
@@ -1479,9 +1510,10 @@ nav a:hover {
   gap: var(--space-sm);
   text-align: center;
   margin-top: var(--space-xl);
-  padding: var(--space-lg);
-  background: linear-gradient(135deg, rgba(232, 197, 71, 0.1) 0%, rgba(232, 197, 71, 0.05) 100%);
-  border: 1px solid rgba(232, 197, 71, 0.3);
+  margin-bottom: var(--space-lg);
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #ff6b35;
   border-radius: 12px;
 }
 
@@ -1496,7 +1528,7 @@ nav a:hover {
 }
 
 .highlight-box p {
-  font-size: 1.125rem;
+  font-size: 14px;
   line-height: 1.6;
   color: var(--color-text);
   margin: 0;
@@ -1524,7 +1556,7 @@ nav a:hover {
 
 .philosophy-item {
   background-color: var(--color-bg);
-  padding: var(--space-lg);
+  padding: var(--space-md) var(--space-md) var(--space-sm);
   text-align: center;
 }
 
@@ -1546,7 +1578,7 @@ nav a:hover {
 }
 
 .philosophy-desc {
-  font-size: 0.875rem;
+  font-size: 16px;
   color: var(--color-text-tertiary);
   margin: 0;
 }
@@ -1779,7 +1811,7 @@ nav a:hover {
   padding: var(--space-md);
   background-color: var(--color-bg);
   border-left: 3px solid var(--color-accent);
-  margin-top: var(--space-lg);
+  margin-top: 24px;
   max-width: 480px;
   margin-left: auto;
   margin-right: auto;
@@ -1890,6 +1922,10 @@ nav a:hover {
   .preview-actions--stacked {
     flex-direction: column;
     align-items: center;
+  }
+  
+  .preview-actions--stacked .btn {
+    min-width: 300px;
   }
 }
 
@@ -2021,7 +2057,7 @@ footer {
    ============================================ */
 .promo-banner-sticky {
   position: fixed;
-  top: 70px;
+  top: 65px;
   left: 0;
   right: 0;
   height: 40px;
@@ -2029,6 +2065,12 @@ footer {
   z-index: 99;
   display: flex;
   align-items: center;
+}
+
+@media (min-width: 768px) {
+  .promo-banner-sticky {
+    top: 63px;
+  }
 }
 
 .promo-banner-sticky-content {
