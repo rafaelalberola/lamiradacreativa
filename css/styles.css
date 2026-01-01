@@ -148,6 +148,7 @@ p:last-child {
 
 .text-strong {
   color: var(--color-text);
+  font-weight: 500;
 }
 
 /* ============================================
@@ -180,6 +181,7 @@ section {
 
 .text-center {
   text-align: center;
+  padding-bottom: var(--space-md);
 }
 
 .desktop-only {
