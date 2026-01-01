@@ -236,57 +236,5 @@ document.addEventListener('DOMContentLoaded', function() {
     new CardDeck(deck);
   });
   
-  // ============================================
-  // Preview Modal functionality
-  // ============================================
-  const previewModal = document.getElementById('previewModal');
-  const modalBackdrop = document.getElementById('modalBackdrop');
-  const modalClose = document.getElementById('modalClose');
-  const kitFormContainer = document.getElementById('kitFormContainer');
-  const previewTriggers = document.querySelectorAll('.preview-trigger');
-  let kitFormLoaded = false;
-  
-  function loadKitForm() {
-    if (!kitFormLoaded && kitFormContainer) {
-      const script = document.createElement('script');
-      script.async = true;
-      script.setAttribute('data-uid', '08042c43d5');
-      script.src = 'https://la-mirada-creativa.kit.com/08042c43d5/index.js';
-      kitFormContainer.appendChild(script);
-      kitFormLoaded = true;
-    }
-  }
-  
-  function openPreviewModal(e) {
-    e.preventDefault();
-    previewModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-    loadKitForm();
-  }
-  
-  function closePreviewModal() {
-    previewModal.classList.remove('active');
-    document.body.style.overflow = '';
-  }
-  
-  previewTriggers.forEach(trigger => {
-    trigger.addEventListener('click', openPreviewModal);
-  });
-  
-  if (modalClose) {
-    modalClose.addEventListener('click', closePreviewModal);
-  }
-  
-  if (modalBackdrop) {
-    modalBackdrop.addEventListener('click', closePreviewModal);
-  }
-  
-  // Close modal with Escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && previewModal.classList.contains('active')) {
-      closePreviewModal();
-    }
-  });
-  
 });
 

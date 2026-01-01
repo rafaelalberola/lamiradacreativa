@@ -84,8 +84,8 @@ h1, h2, h3 {
 }
 
 h1 {
-  font-size: clamp(2.5rem, 7vw, 4.5rem);
-  margin-bottom: var(--space-md);
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  margin-bottom: 0;
 }
 
 h2 {
@@ -458,7 +458,7 @@ nav a:hover {
 
 @media (min-width: 768px) {
   .hero-grid--stacked {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.3fr 1fr;
     max-width: var(--max-width-wide);
     align-items: center;
   }
@@ -486,6 +486,31 @@ nav a:hover {
   margin-bottom: var(--space-md);
 }
 
+.hero-subtitle {
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin-bottom: var(--space-lg);
+  max-width: 90%;
+}
+
+.hero-content:has(.hero-subtitle) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .hero-subtitle {
+    max-width: 100%;
+    margin-bottom: var(--space-md);
+  }
+  
+  .hero-content:has(.hero-subtitle) {
+    align-items: flex-start;
+  }
+}
+
 .hero-features {
   list-style: none;
   margin-bottom: var(--space-md);
@@ -499,8 +524,8 @@ nav a:hover {
   gap: var(--space-xs);
   font-size: 1rem;
   color: var(--color-text-secondary);
-  line-height: 1.6;
-  margin-bottom: var(--space-xs);
+  line-height: 1.4;
+  margin-bottom: 0.35rem;
 }
 
 .hero-features .material-symbols-sharp {
@@ -839,6 +864,11 @@ nav a:hover {
   50%, 70% { z-index: 3; transform: translateY(8px) translateX(8px) rotate(2deg); }
   75%, 95% { z-index: 4; transform: translateY(0) translateX(0) rotate(0deg); }
   100% { z-index: 1; transform: translateY(24px) translateX(24px) rotate(6deg); }
+}
+
+@keyframes pulse-icon {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
 }
 
 /* ============================================
@@ -1414,6 +1444,7 @@ nav a:hover {
 }
 
 .accordion-icon {
+  font-size: 28px;
   color: var(--color-text-tertiary);
   transition: transform 0.3s ease;
   flex-shrink: 0;
@@ -1438,6 +1469,41 @@ nav a:hover {
   padding-left: 56px;
   color: var(--color-text-secondary);
   font-size: 1rem;
+}
+
+/* Highlight Box */
+.highlight-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  text-align: center;
+  margin-top: var(--space-xl);
+  padding: var(--space-lg);
+  background: linear-gradient(135deg, rgba(232, 197, 71, 0.1) 0%, rgba(232, 197, 71, 0.05) 100%);
+  border: 1px solid rgba(232, 197, 71, 0.3);
+  border-radius: 12px;
+}
+
+.highlight-box-icon {
+  font-size: 40px;
+  color: var(--color-accent);
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48;
+}
+
+.highlight-box p {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.highlight-box strong {
+  color: var(--color-text);
 }
 
 /* ============================================
@@ -1468,7 +1534,7 @@ nav a:hover {
 
 .philosophy-icon .material-symbols-sharp {
   font-size: 48px;
-  color: var(--color-accent);
+  color: #22c55e;
 }
 
 .philosophy-title {
@@ -1766,7 +1832,7 @@ nav a:hover {
 
 .preview-card {
   background-color: var(--color-bg-alt);
-  padding: var(--space-lg);
+  padding: var(--space-md);
 }
 
 .preview-card--muted {
@@ -1818,6 +1884,11 @@ nav a:hover {
 @media (min-width: 600px) {
   .preview-actions {
     flex-direction: row;
+    align-items: center;
+  }
+  
+  .preview-actions--stacked {
+    flex-direction: column;
     align-items: center;
   }
 }
@@ -1881,6 +1952,71 @@ footer {
 }
 
 /* ============================================
+   Legal Pages
+   ============================================ */
+.legal-page {
+  padding: calc(var(--space-xl) + 70px) 0 var(--space-xl);
+}
+
+.legal-content {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.legal-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: var(--space-md);
+}
+
+.legal-content h2 {
+  font-size: 1.25rem;
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-sm);
+  color: var(--color-text);
+}
+
+.legal-content p {
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--space-sm);
+}
+
+.legal-intro {
+  font-size: 1.125rem;
+  color: var(--color-text);
+}
+
+.legal-list {
+  list-style: none;
+  margin: var(--space-sm) 0;
+  padding-left: 0;
+}
+
+.legal-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.legal-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+}
+
+.legal-content a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.legal-content a:hover {
+  text-decoration: underline;
+}
+
+/* ============================================
    Sticky Promo Banner
    ============================================ */
 .promo-banner-sticky {
@@ -1906,11 +2042,14 @@ footer {
 }
 
 .promo-banner-sticky .promo-banner-icon {
-  font-size: 18px;
-  color: var(--color-accent);
+  font-size: 26px;
+  color: #ff6b35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-variation-settings:
     'FILL' 1,
-    'wght' 400,
+    'wght' 500,
     'GRAD' 0,
     'opsz' 20;
 }

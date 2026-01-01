@@ -15,17 +15,27 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100,0,0&display=swap">
   
   <!-- Favicon -->
-  <link rel="icon" type="image/avif" href="assets/images/logo.avif">
+  <link rel="icon" type="image/avif" href="assets/images/logo.jpg">
   
   <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css">
+  
+  <!-- MailerLite Universal -->
+  <script>
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '2011266');
+  </script>
+  <!-- End MailerLite Universal -->
 </head>
 <body>
 
   <!-- Header -->
   <header>
     <div class="header-inner">
-      <a href="/" class="logo"><img src="assets/images/logo.avif" alt="Logo" class="logo-img">La Mirada Creativa</a>
+      <a href="/" class="logo"><img src="assets/images/logo.jpg" alt="Logo" class="logo-img">La Mirada Creativa</a>
       <nav>
         <a href="#sistema" class="nav-hide-mobile">El sistema</a>
         <a href="#incluye" class="nav-hide-mobile">Qué incluye</a>
@@ -33,7 +43,7 @@
         <a href="#beneficios" class="nav-hide-mobile">Beneficios</a>
         <a href="#precio" class="nav-hide-mobile">Precio</a>
         <a href="#preview" class="nav-hide-mobile">Preview</a>
-        <a href="#precio" class="btn btn--primary btn--small nav-hide-mobile">Comprar</a>
+        <a href="https://buy.stripe.com/test_9B6cN64E63284h4gVB0Fi00" target="_blank" class="btn btn--primary btn--small nav-hide-mobile">Comprar</a>
         <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
           <span class="material-symbols-sharp">menu</span>
         </button>
@@ -44,7 +54,7 @@
   <!-- Sticky Promo Banner -->
   <div class="promo-banner-sticky">
     <div class="promo-banner-sticky-content">
-      <span class="promo-banner-icon material-symbols-sharp">redeem</span>
+      <span class="promo-banner-icon material-symbols-sharp">card_giftcard</span>
       <span class="promo-banner-title">Precio de lanzamiento por tiempo limitado</span>
       <div class="promo-banner-price">
         <span class="promo-banner-current">12 €</span>
@@ -56,7 +66,7 @@
   <!-- Mobile Navigation -->
   <div class="mobile-nav" id="mobileNav">
     <div class="mobile-nav-header">
-      <a href="/" class="logo"><img src="assets/images/logo.avif" alt="Logo" class="logo-img">La Mirada Creativa</a>
+      <a href="/" class="logo"><img src="assets/images/logo.jpg" alt="Logo" class="logo-img">La Mirada Creativa</a>
       <button class="mobile-nav-close" id="mobileNavClose" aria-label="Cerrar menú">
         <span class="material-symbols-sharp">close</span>
       </button>
@@ -71,7 +81,7 @@
         <a href="#preview" class="mobile-nav-link">Preview</a>
       </div>
       <div class="mobile-nav-cta">
-        <a href="#precio" class="btn btn--primary btn--price mobile-nav-link">
+        <a href="https://buy.stripe.com/test_9B6cN64E63284h4gVB0Fi00" target="_blank" class="btn btn--primary btn--price mobile-nav-link">
           Comprar ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span>
         </a>
       </div>
@@ -85,31 +95,18 @@
         <div class="hero-content">
           <span class="small">Sistema de entrenamiento visual</span>
           <h1>La Mirada Creativa</h1>
+          <p class="hero-subtitle"><strong>Entrena tu mirada para que tu negocio nunca se quede sin ideas.</strong></p>
           <ul class="hero-features">
-            <li><span class="material-symbols-sharp">check</span> Un sistema para entrenar tu mirada creativa</li>
-            <li><span class="material-symbols-sharp">check</span> 365 ejercicios diarios</li>
-            <li><span class="material-symbols-sharp">check</span> Para diseñadores, fotógrafos y creativos curiosos</li>
-            <li><span class="material-symbols-sharp">check</span> Sin complicaciones: solo observar 5 minutos al día</li>
+            <li><span class="material-symbols-sharp">check</span> 365 ejercicios para generar ideas cuando estás en blanco</li>
+            <li><span class="material-symbols-sharp">check</span> Diseñadores, creadores y personas montando su negocio</li>
+            <li><span class="material-symbols-sharp">check</span> Solo 5 minutos al día. Sin teoría. Sin fórmulas mágicas.</li>
+            <li><span class="material-symbols-sharp">check</span> Sin suscripciones, sin cursos. Tuyo para siempre.</li>
           </ul>
-          <div class="hero-meta">
-            <div class="hero-meta-item">
-              <span class="material-symbols-sharp">description</span>
-              <span class="hero-meta-label">Formato PDF</span>
-            </div>
-            <div class="hero-meta-item">
-              <span class="material-symbols-sharp">calendar_month</span>
-              <span class="hero-meta-label">365 días</span>
-            </div>
-            <div class="hero-meta-item">
-              <span class="material-symbols-sharp">timer</span>
-              <span class="hero-meta-label">5 min/día</span>
-            </div>
-          </div>
           <div class="hero-actions">
-            <a href="#precio" class="btn btn--primary btn--price">
+            <a href="https://buy.stripe.com/test_9B6cN64E63284h4gVB0Fi00" target="_blank" class="btn btn--primary btn--price">
               Comprar ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span>
             </a>
-            <a href="#" class="btn btn--secondary preview-trigger">
+            <a class="btn btn--secondary ml-onclick-form" href="javascript:void(0)" onclick="ml('show', 'DQhu9v', true)">
               Preview gratuito de 7 días
             </a>
           </div>
@@ -190,24 +187,24 @@
       <div class="stats-grid">
         <div class="stat-box">
           <div class="stat-icon">
-            <span class="material-symbols-sharp">event_repeat</span>
+            <span class="material-symbols-sharp">description</span>
           </div>
-          <div class="stat-title">365 ejercicios</div>
-          <p class="stat-desc">Un ejercicio diario durante un año completo</p>
+          <div class="stat-title">Formato PDF</div>
+          <p class="stat-desc">Úsalo cuando quieras. Sin suscripciones ni cursos.</p>
         </div>
         <div class="stat-box">
           <div class="stat-icon">
-            <span class="material-symbols-sharp">layers</span>
+            <span class="material-symbols-sharp">calendar_month</span>
           </div>
-          <div class="stat-title">4 bloques progresivos</div>
-          <p class="stat-desc">Técnica, sensibilidad, concepto y estilo propio</p>
+          <div class="stat-title">365 días</div>
+          <p class="stat-desc">Ideas constantes para no quedarte bloqueado.</p>
         </div>
         <div class="stat-box">
           <div class="stat-icon">
             <span class="material-symbols-sharp">timer</span>
           </div>
-          <div class="stat-title">5 minutos al día</div>
-          <p class="stat-desc">Práctica breve y sostenible que se integra en tu rutina</p>
+          <div class="stat-title">5 min/día</div>
+          <p class="stat-desc">Haz que tu negocio venda con ideas creativas.</p>
         </div>
       </div>
     </div>
@@ -229,23 +226,30 @@
         
         <div class="author-content">
           <p>
-            No te enseño a hacer fotos. Te enseño a entrenar la mirada.
+            No te enseño a hacer fotos.<br>
+            Te enseño a desbloquear ideas entrenando la mirada.
           </p>
           <p>
-            La Mirada Creativa es un sistema diario de observación que diseñé después de años trabajando en diseño de producto y fotografía. Cada día propone un ejercicio sencillo que entrena tu atención, tu sensibilidad y tu criterio visual.
+            La Mirada Creativa es un sistema diario de observación pensado para que vuelvas a generar ideas visuales cuando te quedas en blanco. Lo diseñé después de años trabajando en diseño de producto y fotografía, viendo siempre el mismo problema: gente con cosas que vender o contar, pero sin saber qué mostrar.
           </p>
           <p>
-            No necesitas cámara. No necesitas conocimientos técnicos. Solo mirar.
+            Cada día propone un ejercicio sencillo que entrena tu atención, tu sensibilidad y tu criterio visual. Ese entrenamiento es lo que hace que, con el tiempo, crear contenido deje de ser una lucha.
           </p>
           <p>
-            Este sistema nace de una convicción simple: <span class="text-strong">menos explicación, más experiencia</span>. No vas a consumir contenido. Vas a practicar.
+            No necesitas cámara.<br>
+            No necesitas conocimientos técnicos.<br>
+            Solo mirar con intención.
           </p>
           <p>
-            Está pensado para creativos, curiosos y personas que quieren aprender a mirar mejor —incluso sin experiencia visual previa.
+            Este sistema parte de una idea muy simple: <span class="text-strong">menos teoría y más práctica</span>. No vienes a consumir contenido. Vienes a entrenar una habilidad que luego puedes aplicar a tu marca, a tus redes o a cualquier proyecto visual.
+          </p>
+          <p>
+            Está pensado para diseñadores, creadores, personas montando su propio negocio y cualquiera que quiera crear contenido con más sentido, incluso aunque nunca haya tenido formación visual.
           </p>
           
           <p class="author-quote">
-            "La mirada se entrena. Y cuando entrenas la mirada, todo lo que creas mejora."
+            Porque la creatividad no aparece por inspiración.<br>
+            Aparece cuando entrenas la mirada.
           </p>
         </div>
       </div>
@@ -331,7 +335,7 @@
         <span class="small">El sistema</span>
         <h2>Un ejercicio al día.<br>Cinco minutos.<br>Durante un año.</h2>
         <p style="max-width: 540px; margin: 0 auto;">
-          El sistema se estructura en 365 días, divididos en 4 bloques progresivos. Cada bloque entrena una capa distinta de tu forma de observar.
+          El sistema se estructura en 365 días, divididos en 4 bloques. Cada bloque entrena una capa distinta de tu forma de observar.
         </p>
       </div>
       
@@ -356,11 +360,7 @@
           <div class="block-title">Mirada Propia</div>
           <p class="block-desc">Estilo personal, intuición y voz.</p>
         </div>
-      </div>
-      
-      <p class="text-center text-strong" style="margin-top: var(--space-lg);">
-        No se trata de hacerlo perfecto. Se trata de hacerlo cada día.
-      </p>
+      </div
     </div>
   </section>
 
@@ -443,7 +443,21 @@
           </button>
           <div class="accordion-content">
             <div class="accordion-body">
-              No importa si trabajas con texto, código, sonido o ideas. La observación entrena un músculo que mejora cualquier disciplina creativa.
+              Tienes un pequeño negocio, una marca personal o estás empezando a vender online. Sabes que necesitas crear contenido, pero nunca has estudiado diseño ni fotografía y eso te frena.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-header">
+            <div class="accordion-header-left">
+              <span class="material-symbols-sharp">lightbulb</span>
+              <span class="accordion-title">Tienes un negocio y te quedas sin ideas para mostrarlo</span>
+            </div>
+            <span class="material-symbols-sharp accordion-icon">add</span>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              Una cafetería que siempre sube la misma foto del café. Un entrenador personal que no sabe qué publicar más allá de selfies. Una marca de ropa que siente que su Instagram no transmite nada especial. No te faltan cosas que vender. Te faltan ideas para enseñarlas.
             </div>
           </div>
         </div>
@@ -451,13 +465,13 @@
           <button class="accordion-header">
             <div class="accordion-header-left">
               <span class="material-symbols-sharp">visibility</span>
-              <span class="accordion-title">Sientes que miras pero no siempre ves</span>
+              <span class="accordion-title">Sientes que miras, pero no siempre ves oportunidades de contenido</span>
             </div>
             <span class="material-symbols-sharp accordion-icon">add</span>
           </button>
           <div class="accordion-content">
             <div class="accordion-body">
-              Muchas personas pasan por alto detalles que podrían inspirarles. Este sistema te entrena para captar lo que antes ignorabas.
+              Haces fotos, grabas vídeos o subes stories, pero no sabes por qué algunos funcionan y otros no. Intuyes que podrías hacerlo mejor, pero no sabes por dónde empezar.
             </div>
           </div>
         </div>
@@ -465,13 +479,13 @@
           <button class="accordion-header">
             <div class="accordion-header-left">
               <span class="material-symbols-sharp">psychology</span>
-              <span class="accordion-title">Quieres entrenar criterio, no técnica</span>
+              <span class="accordion-title">Quieres entrenar criterio para crear contenido que conecte y venda</span>
             </div>
             <span class="material-symbols-sharp accordion-icon">add</span>
           </button>
           <div class="accordion-content">
             <div class="accordion-body">
-              No aprenderás a usar herramientas. Aprenderás a tomar decisiones visuales con intención y fundamento.
+              No buscas aprender más herramientas. Quieres entender qué mostrar, cómo encuadrarlo y por qué una imagen genera interés y otra pasa desapercibida.
             </div>
           </div>
         </div>
@@ -485,7 +499,7 @@
           </button>
           <div class="accordion-content">
             <div class="accordion-body">
-              Sin vídeos interminables, sin plataformas complejas. Un PDF, un ejercicio al día, y tú decides cuándo y dónde.
+              No tienes tiempo para formaciones eternas. Te encaja más un ejercicio corto al día que luego puedas aplicar a tus posts, stories, reels o a cómo presentas tu producto.
             </div>
           </div>
         </div>
@@ -493,21 +507,25 @@
           <button class="accordion-header">
             <div class="accordion-header-left">
               <span class="material-symbols-sharp">routine</span>
-              <span class="accordion-title">Te interesa crear hábito, no consumir contenido</span>
+              <span class="accordion-title">Quieres crear hábito y constancia, no depender de la inspiración</span>
             </div>
             <span class="material-symbols-sharp accordion-icon">add</span>
           </button>
           <div class="accordion-content">
             <div class="accordion-body">
-              El objetivo no es aprender datos. Es construir una práctica sostenible que transforme cómo percibes el mundo.
+              No quieres subir contenido solo cuando "te viene la idea". Quieres una rutina ligera que te ayude a generar contenido de forma regular para tu negocio o marca.
             </div>
           </div>
         </div>
       </div>
       
-      <p class="text-center text-strong" style="margin-top: var(--space-lg);">
-        No es para aprender fotografía. Es para aprender a observar.
-      </p>
+      <div class="highlight-box">
+        <span class="material-symbols-sharp highlight-box-icon">visibility</span>
+        <p>
+          <strong>No es para aprender fotografía.</strong><br>
+          Es para entrenar la mirada, desbloquear creatividad y crear contenido que ayude a vender lo que haces.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -542,10 +560,6 @@
           <p class="philosophy-desc">No hay grupos que seguir ni notificaciones que atender</p>
         </div>
       </div>
-      
-      <div class="philosophy-statement">
-        <p>El PDF es el sistema. Tú decides el ritmo.</p>
-      </div>
     </div>
   </section>
 
@@ -555,20 +569,6 @@
       <div class="text-center">
         <span class="small">Precio</span>
         <h2>Accede al sistema completo</h2>
-      </div>
-      
-      <div class="promo-banner">
-        <div class="promo-banner-content">
-          <span class="promo-banner-icon material-symbols-sharp">local_fire_department</span>
-          <div class="promo-banner-text">
-            <span class="promo-banner-title">Precio de lanzamiento</span>
-            <span class="promo-banner-subtitle">Solo por tiempo limitado</span>
-          </div>
-          <div class="promo-banner-price">
-            <span class="promo-banner-current">12 €</span>
-            <span class="promo-banner-old">29 €</span>
-          </div>
-        </div>
       </div>
       
       <div class="pricing-main" id="comprar">
@@ -607,14 +607,14 @@
             </li>
           </ul>
           
-          <a href="#" class="btn btn--primary btn--large btn--price">Comprar ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span></a>
+          <a href="https://buy.stripe.com/test_9B6cN64E63284h4gVB0Fi00" target="_blank" class="btn btn--primary btn--large btn--price">Comprar ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span></a>
         </div>
       </div>
       
       <div class="callout">
         <span class="material-symbols-sharp">schedule</span>
         <div>
-          <p class="callout-title">El precio aumentará en 30 días</p>
+          <p class="callout-title">El precio aumentará</p>
           <p class="callout-desc">El valor del sistema crecerá conforme avance.</p>
         </div>
       </div>
@@ -627,7 +627,7 @@
       <div class="preview-section">
         <div class="text-center">
           <span class="small">Preview gratuito</span>
-          <h2>Empieza ahora o decide después</h2>
+          <h2>Empieza ahora y decide después.<br>Tienes 7 días para pensarlo.</h2>
           <p style="max-width: 480px; margin: 0 auto var(--space-lg);">
             Puedes empezar con un preview gratuito de 7 días.<br>
             Es el inicio real del sistema.
@@ -640,15 +640,15 @@
             <ul class="preview-list">
               <li>
                 <span class="material-symbols-sharp">check</span>
-                Accedes a los primeros ejercicios
+                Accede a los primeros 7 días
               </li>
               <li>
                 <span class="material-symbols-sharp">check</span>
-                Decides si este proceso es para ti
+                Decide si es para ti
               </li>
               <li>
                 <span class="material-symbols-sharp">check</span>
-                Puedes continuar al precio actual de 12 €
+                Puedes comprar a 12 €
               </li>
             </ul>
           </div>
@@ -658,19 +658,19 @@
             <ul class="preview-list preview-list--muted">
               <li>
                 <span class="material-symbols-sharp">arrow_forward</span>
-                El acceso gratuito se cierra
+                Mantienes los primeros 7 días
               </li>
               <li>
                 <span class="material-symbols-sharp">arrow_forward</span>
-                El precio será de 29 € o superior
+                El precio final aumentará
               </li>
             </ul>
           </div>
         </div>
         
-        <div class="preview-actions">
-          <a href="#" class="btn btn--secondary preview-trigger">Preview gratuito de 7 días</a>
-          <a href="#" class="btn btn--primary btn--price">Comprar ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span></a>
+        <div class="preview-actions preview-actions--stacked">
+          <a href="https://buy.stripe.com/test_9B6cN64E63284h4gVB0Fi00" target="_blank" class="btn btn--primary btn--price">Comprar ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span></a>
+          <a class="btn btn--secondary ml-onclick-form" href="javascript:void(0)" onclick="ml('show', 'DQhu9v', true)">Preview gratuito de 7 días</a>
         </div>
       </div>
     </div>
@@ -681,34 +681,19 @@
     <div class="container">
       <div class="text-center">
         <p class="manifesto-text">
-          La Mirada Creativa no te enseña qué mirar.<br>
-          Te entrena para que tú lo decidas.
+          La Mirada Creativa entrena tu mirada para que tu negocio nunca se quede sin ideas.
         </p>
       </div>
     </div>
   </section>
-
-  <!-- Preview Modal -->
-  <div class="modal" id="previewModal">
-    <div class="modal-backdrop" id="modalBackdrop"></div>
-    <div class="modal-content modal-content--large">
-      <button class="modal-close" id="modalClose" aria-label="Cerrar modal">
-        <span class="material-symbols-sharp">close</span>
-      </button>
-      <div class="modal-body" id="kitFormContainer">
-        <!-- Kit form will be loaded here -->
-      </div>
-    </div>
-  </div>
 
   <!-- Footer -->
   <footer>
     <div class="container container--wide">
       <div class="footer-inner">
         <div class="footer-links">
-          <a href="#">Contacto</a>
-          <a href="#">Privacidad</a>
-          <a href="#">Términos</a>
+          <a href="/privacidad.html">Privacidad</a>
+          <a href="/terminos.html">Términos</a>
         </div>
         <p class="footer-copy">© 2025 La Mirada Creativa</p>
       </div>
