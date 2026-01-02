@@ -246,6 +246,80 @@
       margin: 0 8px;
     }
 
+    /* Gyroscope Magic Button - Mobile Only */
+    .gyro-btn {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 20px;
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+      color: #fff;
+      box-shadow: 
+        0 2px 12px rgba(139, 92, 246, 0.4),
+        0 0 20px rgba(139, 92, 246, 0.2);
+      animation: gyro-pulse 2s ease-in-out infinite;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .gyro-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 
+        0 4px 20px rgba(139, 92, 246, 0.5),
+        0 0 30px rgba(139, 92, 246, 0.3);
+    }
+
+    .gyro-btn:active {
+      transform: scale(0.98);
+    }
+
+    .gyro-btn.active {
+      background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+      box-shadow: 
+        0 2px 12px rgba(16, 185, 129, 0.4),
+        0 0 20px rgba(16, 185, 129, 0.2);
+      animation: none;
+    }
+
+    .gyro-btn .material-symbols-sharp {
+      font-size: 16px;
+    }
+
+    @keyframes gyro-pulse {
+      0%, 100% {
+        box-shadow: 
+          0 2px 12px rgba(139, 92, 246, 0.4),
+          0 0 20px rgba(139, 92, 246, 0.2);
+      }
+      50% {
+        box-shadow: 
+          0 4px 24px rgba(139, 92, 246, 0.6),
+          0 0 40px rgba(217, 70, 239, 0.4);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .gyro-btn {
+        display: flex;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .gyro-btn span:not(.material-symbols-sharp) {
+        display: none;
+      }
+      .gyro-btn {
+        padding: 8px;
+        border-radius: 50%;
+      }
+    }
+
     /* Options Button & Dropdown */
     .options-wrapper {
       position: relative;
@@ -1800,6 +1874,12 @@
             </div>
           </div>
 
+          <!-- Gyroscope Button - Mobile Only -->
+          <button class="gyro-btn" id="gyroBtn" title="Activar efecto de movimiento">
+            <span class="material-symbols-sharp">motion_sensor_active</span>
+            <span>3D</span>
+          </button>
+
           <div class="header-separator"></div>
 
           <button class="logout-btn" id="logoutBtn" title="Cerrar sesión">
@@ -3034,87 +3114,111 @@
     });
 
     // ============================================
-    // Tilt Effect (Gyroscope & Hover)
+    // Tilt Effect (Desktop Hover + Mobile Gyroscope)
     // ============================================
-    let gyroPermissionGranted = false;
+    let tiltInitialized = false;
+    let gyroEnabled = false;
+    let gyroListener = null;
+    const gyroBtn = document.getElementById('gyroBtn');
     
     function initTiltEffect() {
-      const cards = document.querySelectorAll('.card');
+      // Prevent multiple initializations for desktop
+      if (tiltInitialized) return;
+      tiltInitialized = true;
       
-      cards.forEach(card => {
-        // Desktop: Mouse hover tilt
-        card.addEventListener('mouseenter', () => card.classList.add('tilting'));
-        card.addEventListener('mouseleave', () => {
-          card.classList.remove('tilting');
-          card.style.transform = '';
-          card.style.setProperty('--reflect-x', '50%');
-          card.style.setProperty('--reflect-y', '50%');
-        });
+      // Desktop only: Mouse hover tilt
+      if (window.innerWidth >= 768 && !('ontouchstart' in window)) {
+        const cards = document.querySelectorAll('.card');
         
-        card.addEventListener('mousemove', (e) => {
-          if (window.innerWidth < 768) return; // Skip on mobile
+        cards.forEach(card => {
+          card.addEventListener('mouseenter', () => card.classList.add('tilting'));
+          card.addEventListener('mouseleave', () => {
+            card.classList.remove('tilting');
+            card.style.transform = '';
+            card.style.setProperty('--reflect-x', '50%');
+            card.style.setProperty('--reflect-y', '50%');
+          });
           
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-          
-          const rotateX = ((y - centerY) / centerY) * -8;
-          const rotateY = ((x - centerX) / centerX) * 8;
-          
-          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-          
-          // Update reflection position to follow cursor
-          const reflectX = (x / rect.width) * 100;
-          const reflectY = (y / rect.height) * 100;
-          card.style.setProperty('--reflect-x', `${reflectX}%`);
-          card.style.setProperty('--reflect-y', `${reflectY}%`);
+          card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = ((y - centerY) / centerY) * -8;
+            const rotateY = ((x - centerX) / centerX) * 8;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            
+            const reflectX = (x / rect.width) * 100;
+            const reflectY = (y / rect.height) * 100;
+            card.style.setProperty('--reflect-x', `${reflectX}%`);
+            card.style.setProperty('--reflect-y', `${reflectY}%`);
+          });
         });
-      });
+      }
+    }
+    
+    // Gyroscope Button Handler (Mobile Only)
+    if (gyroBtn) {
+      // Check if gyro was previously enabled
+      if (localStorage.getItem('lmc_gyro_enabled') === 'true') {
+        tryEnableGyro();
+      }
       
-      // Mobile: Gyroscope tilt
-      if (window.DeviceOrientationEvent && 'ontouchstart' in window) {
-        requestGyroPermission();
-      }
+      gyroBtn.addEventListener('click', async () => {
+        if (gyroEnabled) {
+          disableGyro();
+        } else {
+          await tryEnableGyro();
+        }
+      });
     }
     
-    function requestGyroPermission() {
-      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+    async function tryEnableGyro() {
+      try {
+        // Check if DeviceOrientationEvent exists
+        if (!window.DeviceOrientationEvent) {
+          showToast('Tu dispositivo no soporta el sensor de movimiento', 'error', 'error', 3000);
+          return;
+        }
+        
         // iOS 13+ requires permission
-        document.body.addEventListener('click', async function requestOnClick() {
-          try {
-            const permission = await DeviceOrientationEvent.requestPermission();
-            if (permission === 'granted') {
-              gyroPermissionGranted = true;
-              initGyroscope();
-            }
-          } catch (e) {
-            console.log('Gyro permission denied');
+        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+          const permission = await DeviceOrientationEvent.requestPermission();
+          if (permission !== 'granted') {
+            showToast('Permiso de movimiento denegado', 'error', 'block', 3000);
+            return;
           }
-          document.body.removeEventListener('click', requestOnClick);
-        }, { once: true });
-      } else {
-        // Non-iOS devices
-        gyroPermissionGranted = true;
-        initGyroscope();
+        }
+        
+        enableGyro();
+        localStorage.setItem('lmc_gyro_enabled', 'true');
+        
+      } catch (err) {
+        console.error('Gyro error:', err);
+        showToast('No se pudo activar el sensor', 'error', 'error', 3000);
       }
     }
     
-    function initGyroscope() {
-      window.addEventListener('deviceorientation', (e) => {
-        if (!gyroPermissionGranted) return;
+    function enableGyro() {
+      gyroEnabled = true;
+      gyroBtn.classList.add('active');
+      gyroBtn.querySelector('span:not(.material-symbols-sharp)').textContent = 'ON';
+      
+      gyroListener = (e) => {
+        if (!gyroEnabled) return;
         
         const cards = document.querySelectorAll('.card');
-        const beta = Math.max(-20, Math.min(20, e.beta || 0)); // Front-back tilt
-        const gamma = Math.max(-20, Math.min(20, e.gamma || 0)); // Left-right tilt
+        const beta = Math.max(-25, Math.min(25, e.beta || 0));
+        const gamma = Math.max(-25, Math.min(25, e.gamma || 0));
         
-        const rotateX = beta * 0.5;
-        const rotateY = gamma * 0.5;
+        const rotateX = beta * 0.4;
+        const rotateY = gamma * 0.4;
         
-        // Calculate reflection position based on device tilt
-        const reflectX = 50 + (gamma * 2); // 50% center + tilt offset
-        const reflectY = 50 + (beta * 2);
+        const reflectX = 50 + (gamma * 1.5);
+        const reflectY = 50 + (beta * 1.5);
         
         cards.forEach(card => {
           card.classList.add('tilting');
@@ -3122,7 +3226,33 @@
           card.style.setProperty('--reflect-x', `${reflectX}%`);
           card.style.setProperty('--reflect-y', `${reflectY}%`);
         });
+      };
+      
+      window.addEventListener('deviceorientation', gyroListener);
+      showToast('Efecto 3D activado ✨', 'success', 'motion_sensor_active', 2000);
+    }
+    
+    function disableGyro() {
+      gyroEnabled = false;
+      gyroBtn.classList.remove('active');
+      gyroBtn.querySelector('span:not(.material-symbols-sharp)').textContent = '3D';
+      localStorage.removeItem('lmc_gyro_enabled');
+      
+      if (gyroListener) {
+        window.removeEventListener('deviceorientation', gyroListener);
+        gyroListener = null;
+      }
+      
+      // Reset card transforms
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        card.classList.remove('tilting');
+        card.style.transform = '';
+        card.style.setProperty('--reflect-x', '50%');
+        card.style.setProperty('--reflect-y', '50%');
       });
+      
+      showToast('Efecto 3D desactivado', 'success', 'motion_sensor_idle', 2000);
     }
 
     // ============================================
