@@ -2005,19 +2005,40 @@
     // Initialize Auth0 client
     async function initAuth0() {
       try {
+        // Check if Auth0 SDK is loaded
+        if (typeof auth0 === 'undefined' || !auth0.createAuth0Client) {
+          console.error('Auth0 SDK not loaded');
+          showLogin();
+          return;
+        }
+
         // Validate configuration
         if (AUTH0_DOMAIN === 'YOUR_AUTH0_DOMAIN.auth0.com' || AUTH0_CLIENT_ID === 'YOUR_AUTH0_CLIENT_ID') {
           throw new Error('Por favor configura AUTH0_DOMAIN y AUTH0_CLIENT_ID en app/index.html');
         }
 
-        auth0Client = await auth0.createAuth0Client({
-          domain: AUTH0_DOMAIN,
-          clientId: AUTH0_CLIENT_ID,
-          authorizationParams: {
-            redirect_uri: window.location.origin + '/app/'
-          },
-          cacheLocation: 'localstorage'
-        });
+        // Try to create Auth0 client with memory cache fallback for mobile
+        try {
+          auth0Client = await auth0.createAuth0Client({
+            domain: AUTH0_DOMAIN,
+            clientId: AUTH0_CLIENT_ID,
+            authorizationParams: {
+              redirect_uri: window.location.origin + '/app/'
+            },
+            cacheLocation: 'localstorage'
+          });
+        } catch (cacheErr) {
+          // Fallback to memory if localStorage fails (private browsing)
+          console.warn('localStorage cache failed, using memory:', cacheErr);
+          auth0Client = await auth0.createAuth0Client({
+            domain: AUTH0_DOMAIN,
+            clientId: AUTH0_CLIENT_ID,
+            authorizationParams: {
+              redirect_uri: window.location.origin + '/app/'
+            },
+            cacheLocation: 'memory'
+          });
+        }
 
         // Check if returning from Auth0 login
         if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
@@ -2029,9 +2050,11 @@
 
       } catch (err) {
         console.error('Auth0 initialization error:', err);
-        showMessage(err.message, 'error');
-        // Hide loading, show login with error
-        loginScreen.classList.remove('hidden');
+        if (typeof showMessage === 'function') {
+          showMessage('Error de conexión. Recarga la página.', 'error');
+        }
+        // Show login screen even on error
+        showLogin();
       }
     }
 
@@ -2195,7 +2218,7 @@
       logoutBtn.addEventListener('click', async () => {
         try {
           // Set flag to show toast after redirect
-          localStorage.setItem('lmc_logged_out', 'true');
+          safeSetItem('lmc_logged_out', 'true');
           await auth0Client.logout({
             logoutParams: {
               returnTo: window.location.origin + '/app/'
@@ -2208,8 +2231,8 @@
     }
 
     // Check for logout flag and show toast
-    if (localStorage.getItem('lmc_logged_out') === 'true') {
-      localStorage.removeItem('lmc_logged_out');
+    if (safeGetItem('lmc_logged_out') === 'true') {
+      safeRemoveItem('lmc_logged_out');
       setTimeout(() => {
         showToast('Sesión cerrada correctamente', 'success', 'logout', 3000);
       }, 500);
@@ -2221,8 +2244,13 @@
     // ============================================
     // CARD DATA - Loaded from data.js
     // ============================================
-    const allCards = window.CARDS || [];
+    const allCards = (window.CARDS && Array.isArray(window.CARDS)) ? window.CARDS : [];
     const TOTAL_CARDS = allCards.length;
+    
+    // Check if data loaded
+    if (allCards.length === 0) {
+      console.warn('No cards loaded from data.js');
+    }
 
     // ============================================
     // DOM Elements
@@ -2246,16 +2274,41 @@
     const indexList = document.getElementById('indexList');
 
     // ============================================
-    // LocalStorage Keys
+    // LocalStorage Keys & Safe Access
     // ============================================
     const STORAGE_KEY_INDEX = 'lmc_current_index';
     const STORAGE_KEY_VIEW = 'lmc_current_view';
+
+    // Safe localStorage wrapper (handles private browsing)
+    function safeGetItem(key) {
+      try {
+        return localStorage.getItem(key);
+      } catch (e) {
+        return null;
+      }
+    }
+    
+    function safeSetItem(key, value) {
+      try {
+        localStorage.setItem(key, value);
+      } catch (e) {
+        // Ignore - private browsing or quota exceeded
+      }
+    }
+    
+    function safeRemoveItem(key) {
+      try {
+        localStorage.removeItem(key);
+      } catch (e) {
+        // Ignore
+      }
+    }
 
     // ============================================
     // State
     // ============================================
     let currentView = 'swipe'; // Always default to horizontal view
-    let currentIndex = parseInt(localStorage.getItem(STORAGE_KEY_INDEX)) || 0;
+    let currentIndex = parseInt(safeGetItem(STORAGE_KEY_INDEX)) || 0;
     let filteredCards = [...allCards];
     
     // Validate stored index
@@ -2275,9 +2328,12 @@
     // Card HTML Generator
     // ============================================
     function createCardHTML(card) {
-      // Get style from CARD_STYLES
+      // Get style from CARD_STYLES (with fallback)
       const styleKey = card.style || 'block1';
-      const style = window.CARD_STYLES[styleKey] || window.CARD_STYLES.block1;
+      const defaultStyle = { bg: '#1a1025', bgEnd: '#2d1b3d', text: '#F5F5F7', accent: '#06BDFF' };
+      const style = (window.CARD_STYLES && window.CARD_STYLES[styleKey]) || 
+                    (window.CARD_STYLES && window.CARD_STYLES.block1) || 
+                    defaultStyle;
       
       // Determine day label
       let dayLabel = '';
@@ -2357,12 +2413,15 @@
     // ============================================
     function updateProgressBar(index, animate = true) {
       if (filteredCards.length === 0) return;
+      if (!progressCurrent || !progressTotal || !progressFill || !progressHandle) return;
       
       const card = filteredCards[index];
+      if (!card) return;
+      
       const progress = ((index + 1) / filteredCards.length) * 100;
       
       // Format: "DÍA X / 365: TITULO" for exercises, just title for others
-      let displayText = card.title;
+      let displayText = card.title || '';
       if (card.day) {
         displayText = `DÍA ${card.day} / 365: ${card.title}`;
       }
@@ -2381,11 +2440,13 @@
       progressHandle.style.left = `${progress}%`;
       
       // Save to localStorage
-      localStorage.setItem(STORAGE_KEY_INDEX, index.toString());
+      safeSetItem(STORAGE_KEY_INDEX, index.toString());
     }
 
     // Progress bar drag functionality
     function initProgressDrag() {
+      if (!progressTrack) return;
+      
       progressTrack.addEventListener('mousedown', startProgressDrag);
       progressTrack.addEventListener('touchstart', startProgressDrag, { passive: false });
       
@@ -2413,6 +2474,7 @@
     }
 
     function updateFromProgressPosition(e) {
+      if (!progressTrack) return;
       const rect = progressTrack.getBoundingClientRect();
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       let progress = (clientX - rect.left) / rect.width;
@@ -2436,6 +2498,8 @@
     // Swipe View (Horizontal Scroll)
     // ============================================
     function renderSwipeView() {
+      if (!swipeView) return;
+      
       if (swipeObserver) {
         swipeObserver.disconnect();
       }
@@ -2492,6 +2556,8 @@
     // Scroll View (Vertical)
     // ============================================
     function renderScrollView() {
+      if (!scrollView) return;
+      
       if (scrollObserver) {
         scrollObserver.disconnect();
       }
@@ -2635,7 +2701,7 @@
         if (newView) newView.classList.add('active');
         
         currentIndex = savedIndex; // Restaurar posición
-        localStorage.setItem(STORAGE_KEY_VIEW, viewName);
+        safeSetItem(STORAGE_KEY_VIEW, viewName);
         
         // Render new view
         if (currentView === 'swipe') {
@@ -3334,21 +3400,29 @@
     // Initialize Cards App
     // ============================================
     function initCardsApp() {
-      console.log(`La Mirada Creativa - ${allCards.length} cartas cargadas`);
-      parseURLParams();
-      initProgressDrag();
-      
-      // Restore saved view state
-      viewBtns.forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.view === currentView);
-      });
-      views.forEach(view => {
-        view.classList.toggle('active', view.id === currentView + 'View');
-      });
-      
-      // Render the current view
-      renderCurrentView();
-      initTiltEffect();
+      try {
+        console.log(`La Mirada Creativa - ${allCards.length} cartas cargadas`);
+        parseURLParams();
+        initProgressDrag();
+        
+        // Restore saved view state
+        if (viewBtns) {
+          viewBtns.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.view === currentView);
+          });
+        }
+        if (views) {
+          views.forEach(view => {
+            view.classList.toggle('active', view.id === currentView + 'View');
+          });
+        }
+        
+        // Render the current view
+        renderCurrentView();
+        initTiltEffect();
+      } catch (err) {
+        console.error('Error initializing cards app:', err);
+      }
     }
 
   </script>
