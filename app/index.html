@@ -443,6 +443,59 @@
       }
     }
 
+    /* Toast Notification */
+    .toast-notification {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #1a1a1a;
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      z-index: 10000;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 90vw;
+    }
+
+    .toast-notification.active {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .toast-notification.welcome {
+      background: linear-gradient(135deg, #1a1025 0%, #2d1b3d 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .toast-notification.success {
+      background: linear-gradient(135deg, #0d3320 0%, #145a38 100%);
+    }
+
+    .toast-notification .material-symbols-sharp {
+      font-size: 20px;
+      color: var(--color-accent);
+    }
+
+    .toast-notification.welcome .material-symbols-sharp {
+      color: #06BDFF;
+    }
+
+    @media (max-width: 480px) {
+      .toast-notification {
+        bottom: 120px;
+        padding: 12px 20px;
+        font-size: 13px;
+      }
+    }
+
     /* Index Modal */
     .index-modal {
       position: fixed;
@@ -1745,6 +1798,12 @@
       </button>
     </div>
 
+    <!-- Toast Notification -->
+    <div class="toast-notification" id="toastNotification">
+      <span class="material-symbols-sharp" id="toastIcon">check_circle</span>
+      <span id="toastMessage"></span>
+    </div>
+
     <!-- Progress Bar (Draggable) -->
     <div class="progress-bar">
       <div class="progress-inner">
@@ -1878,7 +1937,13 @@
           initCardsApp();
         }
         appLoading.classList.add('fade-out');
-        setTimeout(() => appLoading.classList.add('hidden'), 400);
+        setTimeout(() => {
+          appLoading.classList.add('hidden');
+          // Show welcome toast with user's name
+          const userName = user.name || user.nickname || user.email.split('@')[0];
+          const firstName = userName.split(' ')[0];
+          showToast(`¡Hola, ${firstName}! Bienvenido de nuevo`, 'welcome', 'waving_hand', 4000);
+        }, 400);
       }, 1500);
     }
 
@@ -1890,6 +1955,25 @@
     function showMessage(html, type) {
       loginMessage.innerHTML = html;
       loginMessage.className = 'login-message ' + type;
+    }
+
+    // Toast notification function
+    function showToast(message, type = 'success', icon = 'check_circle', duration = 3500) {
+      const toast = document.getElementById('toastNotification');
+      const toastMessage = document.getElementById('toastMessage');
+      const toastIcon = document.getElementById('toastIcon');
+      
+      toastMessage.textContent = message;
+      toastIcon.textContent = icon;
+      toast.className = 'toast-notification ' + type;
+      
+      // Show toast
+      setTimeout(() => toast.classList.add('active'), 10);
+      
+      // Hide after duration
+      setTimeout(() => {
+        toast.classList.remove('active');
+      }, duration);
     }
 
     // Login form submission - check user exists first
@@ -1941,6 +2025,8 @@
     // Logout button
     logoutBtn.addEventListener('click', async () => {
       try {
+        // Set flag to show toast after redirect
+        localStorage.setItem('lmc_logged_out', 'true');
         await auth0Client.logout({
           logoutParams: {
             returnTo: window.location.origin + '/app/'
@@ -1950,6 +2036,14 @@
         console.error('Logout error:', err);
       }
     });
+
+    // Check for logout flag and show toast
+    if (localStorage.getItem('lmc_logged_out') === 'true') {
+      localStorage.removeItem('lmc_logged_out');
+      setTimeout(() => {
+        showToast('Sesión cerrada correctamente', 'success', 'logout', 3000);
+      }, 500);
+    }
 
     // Initialize Auth0 on page load
     initAuth0();
