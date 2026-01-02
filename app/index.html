@@ -2558,7 +2558,30 @@
     }
 
     function scrollToSwipeCard(index, instant = false) {
-      const cardWrapper = swipeView.querySelector(`.swipe-card-wrapper[data-index="${index}"]`);
+      let cardWrapper = swipeView.querySelector(`.swipe-card-wrapper[data-index="${index}"]`);
+      
+      // If card not loaded (mobile lazy loading), re-render around target
+      if (!cardWrapper && isMobile) {
+        // Re-render centered on target index
+        const startIdx = Math.max(0, index - 10);
+        const endIdx = Math.min(filteredCards.length, index + CARDS_PER_BATCH);
+        
+        swipeView.innerHTML = filteredCards.slice(startIdx, endIdx).map((card, i) => {
+          const cardIndex = startIdx + i;
+          return `
+            <div class="swipe-card-wrapper" data-index="${cardIndex}">
+              ${createCardHTML(card)}
+            </div>
+          `;
+        }).join('');
+        
+        renderedSwipeCards = endIdx;
+        setupSwipeObserver();
+        setupCardClickHandlers(swipeView, 'swipe');
+        
+        cardWrapper = swipeView.querySelector(`.swipe-card-wrapper[data-index="${index}"]`);
+      }
+      
       if (cardWrapper) {
         cardWrapper.scrollIntoView({ behavior: instant ? 'instant' : 'smooth', block: 'center', inline: 'center' });
       }
@@ -2659,7 +2682,30 @@
     }
 
     function scrollToScrollCard(index, instant = false) {
-      const cardWrapper = scrollView.querySelector(`.scroll-card-wrapper[data-index="${index}"]`);
+      let cardWrapper = scrollView.querySelector(`.scroll-card-wrapper[data-index="${index}"]`);
+      
+      // If card not loaded (mobile lazy loading), re-render around target
+      if (!cardWrapper && isMobile) {
+        // Re-render centered on target index
+        const startIdx = Math.max(0, index - 10);
+        const endIdx = Math.min(filteredCards.length, index + CARDS_PER_BATCH);
+        
+        scrollView.innerHTML = filteredCards.slice(startIdx, endIdx).map((card, i) => {
+          const cardIndex = startIdx + i;
+          return `
+            <div class="scroll-card-wrapper" data-index="${cardIndex}">
+              ${createCardHTML(card)}
+            </div>
+          `;
+        }).join('');
+        
+        renderedScrollCards = endIdx;
+        setupScrollObserver();
+        setupCardClickHandlers(scrollView, 'scroll');
+        
+        cardWrapper = scrollView.querySelector(`.scroll-card-wrapper[data-index="${index}"]`);
+      }
+      
       if (cardWrapper) {
         cardWrapper.scrollIntoView({ behavior: instant ? 'instant' : 'smooth', block: 'center' });
       }
