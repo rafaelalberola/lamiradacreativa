@@ -1989,16 +1989,18 @@
     let currentUser = null;
 
     // Enable/disable login button based on email input
-    loginEmail.addEventListener('input', () => {
-      const email = loginEmail.value.trim();
-      const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      loginBtn.disabled = !isValidEmail;
-      // Clear any previous error message when typing
-      if (loginMessage.classList.contains('error')) {
-        loginMessage.className = 'login-message';
-        loginMessage.textContent = '';
-      }
-    });
+    if (loginEmail && loginBtn) {
+      loginEmail.addEventListener('input', () => {
+        const email = loginEmail.value.trim();
+        const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        loginBtn.disabled = !isValidEmail;
+        // Clear any previous error message when typing
+        if (loginMessage && loginMessage.classList.contains('error')) {
+          loginMessage.className = 'login-message';
+          loginMessage.textContent = '';
+        }
+      });
+    }
 
     // Initialize Auth0 client
     async function initAuth0() {
@@ -2098,6 +2100,8 @@
       const welcomeToast = document.getElementById('welcomeToast');
       const welcomeGreeting = document.getElementById('welcomeGreeting');
       
+      if (!welcomeToast || !welcomeGreeting) return;
+      
       welcomeGreeting.textContent = `¡Hola, ${name}!`;
       
       // Show toast
@@ -2115,6 +2119,8 @@
       const toastMsg = document.getElementById('toastMessage');
       const toastIcn = document.getElementById('toastIcon');
       
+      if (!toast || !toastMsg || !toastIcn) return;
+      
       toastMsg.textContent = message;
       toastIcn.textContent = icon;
       toast.className = 'toast-notification ' + type;
@@ -2129,65 +2135,77 @@
     }
 
     // Login form submission - check user exists first
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const email = loginEmail.value.trim();
-      if (!email) return;
+    if (loginForm) {
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = loginEmail ? loginEmail.value.trim() : '';
+        if (!email) return;
 
-      try {
-        loginBtn.disabled = true;
-        loginBtn.textContent = 'Verificando...';
-        loginMessage.className = 'login-message';
-        loginMessage.textContent = '';
-
-        // Check if user exists in Auth0
-        const response = await fetch('/.netlify/functions/check-user', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
-        });
-
-        const result = await response.json();
-
-        if (!result.exists) {
-          showMessage('Tu email no está registrado.<br>Si crees que es un error, <a href="mailto:soporte@lamiradacreativa.com">contacta con soporte</a>.', 'error');
-          loginBtn.disabled = false;
-          loginBtn.textContent = 'Enviar enlace de acceso';
-          return;
-        }
-
-        // User exists - redirect to Auth0 passwordless (magic link)
-        loginBtn.textContent = 'Enviando enlace...';
-        await auth0Client.loginWithRedirect({
-          authorizationParams: {
-            login_hint: email,
-            connection: 'email'  // Passwordless magic link
+        try {
+          if (loginBtn) {
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Verificando...';
           }
-        });
+          if (loginMessage) {
+            loginMessage.className = 'login-message';
+            loginMessage.textContent = '';
+          }
 
-      } catch (err) {
-        console.error('Login error:', err);
-        showMessage('Error al verificar el email. Inténtalo de nuevo.', 'error');
-        loginBtn.disabled = false;
-        loginBtn.textContent = 'Enviar enlace de acceso';
-      }
-    });
+          // Check if user exists in Auth0
+          const response = await fetch('/.netlify/functions/check-user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          });
+
+          const result = await response.json();
+
+          if (!result.exists) {
+            showMessage('Tu email no está registrado.<br>Si crees que es un error, <a href="mailto:soporte@lamiradacreativa.com">contacta con soporte</a>.', 'error');
+            if (loginBtn) {
+              loginBtn.disabled = false;
+              loginBtn.textContent = 'Enviar enlace de acceso';
+            }
+            return;
+          }
+
+          // User exists - redirect to Auth0 passwordless (magic link)
+          if (loginBtn) loginBtn.textContent = 'Enviando enlace...';
+          await auth0Client.loginWithRedirect({
+            authorizationParams: {
+              login_hint: email,
+              connection: 'email'  // Passwordless magic link
+            }
+          });
+
+        } catch (err) {
+          console.error('Login error:', err);
+          showMessage('Error al verificar el email. Inténtalo de nuevo.', 'error');
+          if (loginBtn) {
+            loginBtn.disabled = false;
+            loginBtn.textContent = 'Enviar enlace de acceso';
+          }
+        }
+      });
+    }
 
     // Logout button
-    logoutBtn.addEventListener('click', async () => {
-      try {
-        // Set flag to show toast after redirect
-        localStorage.setItem('lmc_logged_out', 'true');
-        await auth0Client.logout({
-          logoutParams: {
-            returnTo: window.location.origin + '/app/'
-          }
-        });
-      } catch (err) {
-        console.error('Logout error:', err);
-      }
-    });
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async () => {
+        try {
+          // Set flag to show toast after redirect
+          localStorage.setItem('lmc_logged_out', 'true');
+          await auth0Client.logout({
+            logoutParams: {
+              returnTo: window.location.origin + '/app/'
+            }
+          });
+        } catch (err) {
+          console.error('Logout error:', err);
+        }
+      });
+    }
 
     // Check for logout flag and show toast
     if (localStorage.getItem('lmc_logged_out') === 'true') {
@@ -3333,15 +3351,6 @@
       initTiltEffect();
     }
 
-    // Initialize app only if user is already logged in
-    // Otherwise wait for login event
-    if (window.netlifyIdentity) {
-      const user = window.netlifyIdentity.currentUser();
-      if (user) {
-        showApp(user);
-        initCardsApp();
-      }
-    }
   </script>
 </body>
 </html>
