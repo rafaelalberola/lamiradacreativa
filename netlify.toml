@@ -1,0 +1,29 @@
+# Netlify Configuration
+# La Mirada Creativa - Auth0 Authentication
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# Headers de seguridad
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+
+# Redirect /cartas a /app (legacy)
+[[redirects]]
+  from = "/cartas"
+  to = "/app"
+  status = 301
+
+[[redirects]]
+  from = "/cartas/*"
+  to = "/app"
+  status = 301
+
+# Functions
+[functions]
+  node_bundler = "esbuild"
