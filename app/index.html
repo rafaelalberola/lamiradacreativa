@@ -588,6 +588,7 @@
       align-items: center;
       gap: 12px;
       max-width: 90vw;
+      white-space: nowrap;
     }
 
     .toast-notification.active {
@@ -597,6 +598,20 @@
 
     .toast-notification.success {
       background: linear-gradient(135deg, #0d3320 0%, #145a38 100%);
+    }
+
+    /* Discreet light toast */
+    .toast-notification.light {
+      background: #fff;
+      color: #333;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      padding: 10px 16px;
+      font-size: 13px;
+    }
+
+    .toast-notification.light .material-symbols-sharp {
+      color: #666;
+      font-size: 16px;
     }
 
     .toast-notification .material-symbols-sharp {
@@ -3385,7 +3400,7 @@
       };
       
       window.addEventListener('deviceorientation', gyroListener);
-      showToast('Efecto 3D activado ✨', 'success', 'check_circle', 2000);
+      showToast('3D activado', 'light', 'view_in_ar', 1500);
     }
     
     function disableGyro(gyroBtn) {
@@ -3414,7 +3429,7 @@
         }
       }
       
-      showToast('Efecto 3D desactivado', 'success', 'check_circle', 2000);
+      showToast('3D desactivado', 'light', 'view_in_ar_off', 1500);
     }
 
     // ============================================
