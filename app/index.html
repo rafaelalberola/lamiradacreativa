@@ -106,33 +106,34 @@
       flex-shrink: 0;
       background: var(--color-bg);
       border-bottom: 1px solid var(--color-border-light);
-      padding: 12px 20px;
+      padding: 12px 24px;
       z-index: 100;
     }
 
     .header-inner {
-      max-width: 600px;
+      max-width: 1200px;
       margin: 0 auto;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      gap: 24px;
     }
 
     .logo {
       font-family: var(--font-headline);
       font-weight: 600;
-      font-size: 0.875rem;
+      font-size: 0.9rem;
       color: var(--color-text);
       text-decoration: none;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
-    /* Search */
+    /* Search - Centered */
     .search-wrapper {
       position: relative;
       flex: 1;
-      max-width: 200px;
+      max-width: 320px;
+      margin: 0 auto;
     }
 
     .search-input {
@@ -224,11 +225,25 @@
       font-size: 18px;
     }
 
-    /* Header Actions (Index + Options) */
+    /* Header Actions (Index + Options + Logout) */
     .header-actions {
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-shrink: 0;
+    }
+    
+    .header-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .header-separator {
+      width: 1px;
+      height: 20px;
+      background: var(--color-border-light);
+      margin: 0 8px;
     }
 
     /* Options Button & Dropdown */
@@ -443,7 +458,64 @@
       }
     }
 
-    /* Toast Notification */
+    /* Welcome Toast - Beautiful centered notification */
+    .welcome-toast {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: linear-gradient(145deg, #1a1025 0%, #2d1b3d 50%, #1a1025 100%);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 32px 48px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 
+        0 25px 80px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(6, 189, 255, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      z-index: 10000;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .welcome-toast.active {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+
+    .welcome-toast-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      display: block;
+      animation: wave 1s ease-in-out;
+    }
+
+    @keyframes wave {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(20deg); }
+      75% { transform: rotate(-15deg); }
+    }
+
+    .welcome-toast-greeting {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #fff 0%, #06BDFF 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .welcome-toast-message {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 400;
+    }
+
+    /* Simple Toast Notification */
     .toast-notification {
       position: fixed;
       bottom: 100px;
@@ -470,11 +542,6 @@
       opacity: 1;
     }
 
-    .toast-notification.welcome {
-      background: linear-gradient(135deg, #1a1025 0%, #2d1b3d 100%);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
     .toast-notification.success {
       background: linear-gradient(135deg, #0d3320 0%, #145a38 100%);
     }
@@ -484,11 +551,17 @@
       color: var(--color-accent);
     }
 
-    .toast-notification.welcome .material-symbols-sharp {
-      color: #06BDFF;
-    }
-
     @media (max-width: 480px) {
+      .welcome-toast {
+        padding: 28px 32px;
+        margin: 0 20px;
+        width: calc(100% - 40px);
+      }
+      
+      .welcome-toast-greeting {
+        font-size: 24px;
+      }
+      
       .toast-notification {
         bottom: 120px;
         padding: 12px 20px;
@@ -1613,39 +1686,24 @@
       background: var(--color-accent);
     }
 
-    /* User menu in header */
-    .user-menu {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .user-email {
-      font-size: 0.75rem;
-      color: var(--color-text-secondary);
-      max-width: 150px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
+    /* Logout button - red background */
     .logout-btn {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 32px;
       height: 32px;
-      border: 1px solid var(--color-border-light);
-      background: var(--color-bg);
+      border: none;
+      background: #dc2626;
       border-radius: 6px;
       cursor: pointer;
-      color: var(--color-text-secondary);
+      color: #fff;
       transition: all 0.2s;
     }
 
     .logout-btn:hover {
-      color: #f44336;
-      border-color: #f44336;
+      background: #b91c1c;
+      transform: scale(1.05);
     }
 
     .logout-btn .material-symbols-sharp {
@@ -1655,10 +1713,6 @@
     @media (max-width: 480px) {
       .login-container {
         padding: 1.5rem;
-      }
-
-      .user-email {
-        display: none;
       }
     }
   </style>
@@ -1723,33 +1777,34 @@
         </div>
 
         <div class="header-actions">
-          <button class="index-btn" id="indexBtn" title="Ver índice">
-            <span class="material-symbols-sharp">list</span>
-          </button>
+          <div class="header-actions-group">
+            <button class="index-btn" id="indexBtn" title="Ver índice">
+              <span class="material-symbols-sharp">list</span>
+            </button>
 
-          <div class="options-wrapper">
-            <button class="options-btn" id="optionsBtn" title="Opciones">
-              <span class="material-symbols-sharp">more_vert</span>
-            </button>
-            <div class="options-dropdown" id="optionsDropdown">
-            <button class="options-item" id="downloadCard">
-              <span class="material-symbols-sharp">image</span>
-              <span>Descargar carta actual (JPG)</span>
-            </button>
-            <div class="options-separator"></div>
-            <button class="options-item" id="downloadPDF">
-              <span class="material-symbols-sharp">picture_as_pdf</span>
-              <span>Descargar todas las cartas (PDF)</span>
-            </button>
+            <div class="options-wrapper">
+              <button class="options-btn" id="optionsBtn" title="Opciones">
+                <span class="material-symbols-sharp">more_vert</span>
+              </button>
+              <div class="options-dropdown" id="optionsDropdown">
+                <button class="options-item" id="downloadCard">
+                  <span class="material-symbols-sharp">image</span>
+                  <span>Descargar carta actual (JPG)</span>
+                </button>
+                <div class="options-separator"></div>
+                <button class="options-item" id="downloadPDF">
+                  <span class="material-symbols-sharp">picture_as_pdf</span>
+                  <span>Descargar todas las cartas (PDF)</span>
+                </button>
+              </div>
             </div>
           </div>
 
-          <div class="user-menu">
-            <span class="user-email" id="userEmail"></span>
-            <button class="logout-btn" id="logoutBtn" title="Cerrar sesión">
-              <span class="material-symbols-sharp">logout</span>
-            </button>
-          </div>
+          <div class="header-separator"></div>
+
+          <button class="logout-btn" id="logoutBtn" title="Cerrar sesión">
+            <span class="material-symbols-sharp">logout</span>
+          </button>
         </div>
       </div>
     </header>
@@ -1798,7 +1853,14 @@
       </button>
     </div>
 
-    <!-- Toast Notification -->
+    <!-- Welcome Toast (centered, beautiful) -->
+    <div class="welcome-toast" id="welcomeToast">
+      <span class="welcome-toast-icon">👋</span>
+      <div class="welcome-toast-greeting" id="welcomeGreeting">¡Hola!</div>
+      <div class="welcome-toast-message">Bienvenido de nuevo</div>
+    </div>
+
+    <!-- Simple Toast Notification -->
     <div class="toast-notification" id="toastNotification">
       <span class="material-symbols-sharp" id="toastIcon">check_circle</span>
       <span id="toastMessage"></span>
@@ -1841,7 +1903,6 @@
     const loginMessage = document.getElementById('loginMessage');
     const cardsApp = document.getElementById('cardsApp');
     const appLoading = document.getElementById('appLoading');
-    const userEmailDisplay = document.getElementById('userEmail');
     const logoutBtn = document.getElementById('logoutBtn');
 
     let auth0Client = null;
@@ -1926,11 +1987,6 @@
       cardsApp.style.display = 'flex';
       appLoading.classList.remove('hidden');
       
-      // Show user email
-      if (userEmailDisplay && user.email) {
-        userEmailDisplay.textContent = user.email;
-      }
-      
       // Initialize cards app after a small delay
       setTimeout(() => {
         if (typeof initCardsApp === 'function') {
@@ -1939,10 +1995,10 @@
         appLoading.classList.add('fade-out');
         setTimeout(() => {
           appLoading.classList.add('hidden');
-          // Show welcome toast with user's name
+          // Show beautiful welcome toast with user's name
           const userName = user.name || user.nickname || user.email.split('@')[0];
           const firstName = userName.split(' ')[0];
-          showToast(`¡Hola, ${firstName}! Bienvenido de nuevo`, 'welcome', 'waving_hand', 4000);
+          showWelcomeToast(firstName, 3000);
         }, 400);
       }, 1500);
     }
@@ -1957,14 +2013,30 @@
       loginMessage.className = 'login-message ' + type;
     }
 
-    // Toast notification function
+    // Welcome toast function (beautiful centered)
+    function showWelcomeToast(name, duration = 3000) {
+      const welcomeToast = document.getElementById('welcomeToast');
+      const welcomeGreeting = document.getElementById('welcomeGreeting');
+      
+      welcomeGreeting.textContent = `¡Hola, ${name}!`;
+      
+      // Show toast
+      setTimeout(() => welcomeToast.classList.add('active'), 100);
+      
+      // Hide after duration
+      setTimeout(() => {
+        welcomeToast.classList.remove('active');
+      }, duration);
+    }
+
+    // Simple toast notification function
     function showToast(message, type = 'success', icon = 'check_circle', duration = 3500) {
       const toast = document.getElementById('toastNotification');
-      const toastMessage = document.getElementById('toastMessage');
-      const toastIcon = document.getElementById('toastIcon');
+      const toastMsg = document.getElementById('toastMessage');
+      const toastIcn = document.getElementById('toastIcon');
       
-      toastMessage.textContent = message;
-      toastIcon.textContent = icon;
+      toastMsg.textContent = message;
+      toastIcn.textContent = icon;
       toast.className = 'toast-notification ' + type;
       
       // Show toast
