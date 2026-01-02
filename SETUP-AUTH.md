@@ -74,7 +74,7 @@ Asegúrate de que tus Payment Links de Stripe:
 | Variable | Valor |
 |----------|-------|
 | `STRIPE_WEBHOOK_SECRET` | `whsec_xxxxxxxxxx` |
-| `AUTH0_DOMAIN` | `dev-0m1u7zddedry8oo3.auth0.com` |
+| `AUTH0_DOMAIN` | `dev-0m1u7zddedry8oo3.eu.auth0.com` |
 | `AUTH0_M2M_CLIENT_ID` | El Client ID de la app M2M |
 | `AUTH0_M2M_CLIENT_SECRET` | El Client Secret de la app M2M |
 
