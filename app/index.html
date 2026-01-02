@@ -1989,7 +1989,20 @@
 
         // Check if returning from Auth0 login
         if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
-          await handleRedirectCallback();
+          // IMPORTANT: Clean URL FIRST to prevent infinite loop if callback fails
+          const currentUrl = window.location.href;
+          window.history.replaceState({}, document.title, window.location.pathname);
+          
+          try {
+            // Create a URL object to extract the query string for the callback
+            const url = new URL(currentUrl);
+            await auth0Client.handleRedirectCallback(url.search);
+          } catch (callbackErr) {
+            console.error('Redirect callback error:', callbackErr);
+            // URL is already cleaned, just show login
+            showLogin();
+            return;
+          }
         }
 
         // Update UI based on auth state
@@ -2002,18 +2015,6 @@
         }
         // Show login screen even on error
         showLogin();
-      }
-    }
-
-    // Handle redirect callback from Auth0
-    async function handleRedirectCallback() {
-      try {
-        await auth0Client.handleRedirectCallback();
-        // Clean URL
-        window.history.replaceState({}, document.title, window.location.pathname);
-      } catch (err) {
-        console.error('Redirect callback error:', err);
-        showMessage('Error al procesar el login: ' + err.message, 'error');
       }
     }
 
@@ -2419,6 +2420,11 @@
     // ============================================
     // Swipe View (Horizontal Scroll)
     // ============================================
+    // Check if mobile device
+    const isMobile = window.innerWidth < 768 || 'ontouchstart' in window;
+    const CARDS_PER_BATCH = isMobile ? 20 : 394; // Load fewer cards on mobile
+    let renderedSwipeCards = 0;
+
     function renderSwipeView() {
       if (!swipeView) return;
       
@@ -2431,16 +2437,57 @@
         return;
       }
 
-      swipeView.innerHTML = filteredCards.map((card, index) => `
-        <div class="swipe-card-wrapper" data-index="${index}">
-          ${createCardHTML(card)}
-        </div>
-      `).join('');
+      // On mobile, start with cards around current index
+      const startIdx = isMobile ? Math.max(0, currentIndex - 5) : 0;
+      const endIdx = isMobile ? Math.min(filteredCards.length, currentIndex + CARDS_PER_BATCH) : filteredCards.length;
+      renderedSwipeCards = endIdx;
+
+      swipeView.innerHTML = filteredCards.slice(startIdx, endIdx).map((card, i) => {
+        const index = startIdx + i;
+        return `
+          <div class="swipe-card-wrapper" data-index="${index}">
+            ${createCardHTML(card)}
+          </div>
+        `;
+      }).join('');
 
       setupSwipeObserver();
       setupCardClickHandlers(swipeView, 'swipe');
+      
+      // Load more cards as user scrolls (mobile only)
+      if (isMobile) {
+        swipeView.addEventListener('scroll', loadMoreSwipeCards, { passive: true });
+      }
+      
       // Use instant scroll when switching views to maintain position
       setTimeout(() => scrollToSwipeCard(currentIndex, true), 50);
+    }
+
+    function loadMoreSwipeCards() {
+      if (!isMobile || renderedSwipeCards >= filteredCards.length) return;
+      
+      const scrollLeft = swipeView.scrollLeft;
+      const scrollWidth = swipeView.scrollWidth;
+      const clientWidth = swipeView.clientWidth;
+      
+      // Load more when near the end
+      if (scrollLeft + clientWidth > scrollWidth - 1000) {
+        const startIdx = renderedSwipeCards;
+        const endIdx = Math.min(filteredCards.length, renderedSwipeCards + CARDS_PER_BATCH);
+        
+        const fragment = document.createDocumentFragment();
+        for (let i = startIdx; i < endIdx; i++) {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'swipe-card-wrapper';
+          wrapper.dataset.index = i;
+          wrapper.innerHTML = createCardHTML(filteredCards[i]);
+          fragment.appendChild(wrapper);
+          swipeObserver.observe(wrapper);
+        }
+        swipeView.appendChild(fragment);
+        renderedSwipeCards = endIdx;
+        setupCardClickHandlers(swipeView, 'swipe');
+      }
     }
 
     function scrollToSwipeCard(index, instant = false) {
@@ -2477,6 +2524,8 @@
     // ============================================
     // Scroll View (Vertical)
     // ============================================
+    let renderedScrollCards = 0;
+
     function renderScrollView() {
       if (!scrollView) return;
       
@@ -2489,16 +2538,57 @@
         return;
       }
 
-      scrollView.innerHTML = filteredCards.map((card, index) => `
-        <div class="scroll-card-wrapper" data-index="${index}">
-          ${createCardHTML(card)}
-        </div>
-      `).join('');
+      // On mobile, start with cards around current index
+      const startIdx = isMobile ? Math.max(0, currentIndex - 5) : 0;
+      const endIdx = isMobile ? Math.min(filteredCards.length, currentIndex + CARDS_PER_BATCH) : filteredCards.length;
+      renderedScrollCards = endIdx;
+
+      scrollView.innerHTML = filteredCards.slice(startIdx, endIdx).map((card, i) => {
+        const index = startIdx + i;
+        return `
+          <div class="scroll-card-wrapper" data-index="${index}">
+            ${createCardHTML(card)}
+          </div>
+        `;
+      }).join('');
 
       setupScrollObserver();
       setupCardClickHandlers(scrollView, 'scroll');
+      
+      // Load more cards as user scrolls (mobile only)
+      if (isMobile) {
+        scrollView.addEventListener('scroll', loadMoreScrollCards, { passive: true });
+      }
+      
       // Use instant scroll when switching views to maintain position
       setTimeout(() => scrollToScrollCard(currentIndex, true), 50);
+    }
+
+    function loadMoreScrollCards() {
+      if (!isMobile || renderedScrollCards >= filteredCards.length) return;
+      
+      const scrollTop = scrollView.scrollTop;
+      const scrollHeight = scrollView.scrollHeight;
+      const clientHeight = scrollView.clientHeight;
+      
+      // Load more when near the end
+      if (scrollTop + clientHeight > scrollHeight - 1000) {
+        const startIdx = renderedScrollCards;
+        const endIdx = Math.min(filteredCards.length, renderedScrollCards + CARDS_PER_BATCH);
+        
+        const fragment = document.createDocumentFragment();
+        for (let i = startIdx; i < endIdx; i++) {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'scroll-card-wrapper';
+          wrapper.dataset.index = i;
+          wrapper.innerHTML = createCardHTML(filteredCards[i]);
+          fragment.appendChild(wrapper);
+          scrollObserver.observe(wrapper);
+        }
+        scrollView.appendChild(fragment);
+        renderedScrollCards = endIdx;
+        setupCardClickHandlers(scrollView, 'scroll');
+      }
     }
 
     function scrollToScrollCard(index, instant = false) {
