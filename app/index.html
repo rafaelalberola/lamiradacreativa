@@ -110,12 +110,24 @@
       z-index: 100;
     }
 
+    @media (max-width: 480px) {
+      .header {
+        padding: 10px 12px;
+      }
+    }
+
     .header-inner {
       max-width: 1200px;
       margin: 0 auto;
       display: flex;
       align-items: center;
       gap: 24px;
+    }
+
+    @media (max-width: 480px) {
+      .header-inner {
+        gap: 8px;
+      }
     }
 
     .logo {
@@ -126,6 +138,12 @@
       text-decoration: none;
       white-space: nowrap;
       flex-shrink: 0;
+    }
+
+    @media (max-width: 480px) {
+      .logo {
+        font-size: 0.75rem;
+      }
     }
 
     /* Search - Centered */
@@ -232,11 +250,23 @@
       gap: 8px;
       flex-shrink: 0;
     }
+
+    @media (max-width: 480px) {
+      .header-actions {
+        gap: 4px;
+      }
+    }
     
     .header-actions-group {
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+
+    @media (max-width: 480px) {
+      .header-actions-group {
+        gap: 4px;
+      }
     }
     
     .header-separator {
@@ -244,6 +274,12 @@
       height: 20px;
       background: var(--color-border-light);
       margin: 0 8px;
+    }
+
+    @media (max-width: 480px) {
+      .header-separator {
+        margin: 0 4px;
+      }
     }
 
     /* Gyroscope Magic Button - Mobile Only */
@@ -532,63 +568,6 @@
       }
     }
 
-    /* Welcome Toast - Beautiful centered notification */
-    .welcome-toast {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.8);
-      background: linear-gradient(145deg, #1a1025 0%, #2d1b3d 50%, #1a1025 100%);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #fff;
-      padding: 32px 48px;
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 
-        0 25px 80px rgba(0, 0, 0, 0.5),
-        0 0 60px rgba(6, 189, 255, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-      z-index: 10000;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .welcome-toast.active {
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-    }
-
-    .welcome-toast-icon {
-      font-size: 48px;
-      margin-bottom: 16px;
-      display: block;
-      animation: wave 1s ease-in-out;
-    }
-
-    @keyframes wave {
-      0%, 100% { transform: rotate(0deg); }
-      25% { transform: rotate(20deg); }
-      75% { transform: rotate(-15deg); }
-    }
-
-    .welcome-toast-greeting {
-      font-family: var(--font-display);
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      background: linear-gradient(135deg, #fff 0%, #06BDFF 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .welcome-toast-message {
-      font-size: 15px;
-      color: rgba(255, 255, 255, 0.7);
-      font-weight: 400;
-    }
-
     /* Simple Toast Notification */
     .toast-notification {
       position: fixed;
@@ -626,16 +605,6 @@
     }
 
     @media (max-width: 480px) {
-      .welcome-toast {
-        padding: 28px 32px;
-        margin: 0 20px;
-        width: calc(100% - 40px);
-      }
-      
-      .welcome-toast-greeting {
-        font-size: 24px;
-      }
-      
       .toast-notification {
         bottom: 120px;
         padding: 12px 20px;
@@ -1933,13 +1902,6 @@
       </button>
     </div>
 
-    <!-- Welcome Toast (centered, beautiful) -->
-    <div class="welcome-toast" id="welcomeToast">
-      <span class="welcome-toast-icon">👋</span>
-      <div class="welcome-toast-greeting" id="welcomeGreeting">¡Hola!</div>
-      <div class="welcome-toast-message">Bienvenido de nuevo</div>
-    </div>
-
     <!-- Simple Toast Notification -->
     <div class="toast-notification" id="toastNotification">
       <span class="material-symbols-sharp" id="toastIcon">check_circle</span>
@@ -2128,10 +2090,10 @@
         appLoading.classList.add('fade-out');
         setTimeout(() => {
           appLoading.classList.add('hidden');
-          // Show beautiful welcome toast with user's name
+          // Show discreet welcome toast
           const userName = user.name || user.nickname || user.email.split('@')[0];
           const firstName = userName.split(' ')[0];
-          showWelcomeToast(firstName, 3000);
+          showToast(`¡Hola, ${firstName}! 👋`, 'success', 'waving_hand', 3000);
         }, 400);
       }, 1500);
     }
@@ -2144,24 +2106,6 @@
     function showMessage(html, type) {
       loginMessage.innerHTML = html;
       loginMessage.className = 'login-message ' + type;
-    }
-
-    // Welcome toast function (beautiful centered)
-    function showWelcomeToast(name, duration = 3000) {
-      const welcomeToast = document.getElementById('welcomeToast');
-      const welcomeGreeting = document.getElementById('welcomeGreeting');
-      
-      if (!welcomeToast || !welcomeGreeting) return;
-      
-      welcomeGreeting.textContent = `¡Hola, ${name}!`;
-      
-      // Show toast
-      setTimeout(() => welcomeToast.classList.add('active'), 100);
-      
-      // Hide after duration
-      setTimeout(() => {
-        welcomeToast.classList.remove('active');
-      }, duration);
     }
 
     // Simple toast notification function
@@ -3388,22 +3332,28 @@
       gyroListener = (e) => {
         if (!gyroEnabled) return;
         
-        const cards = document.querySelectorAll('.card');
-        const beta = Math.max(-25, Math.min(25, e.beta || 0));
-        const gamma = Math.max(-25, Math.min(25, e.gamma || 0));
+        // Only affect the current visible card
+        const activeView = document.querySelector('.view.active.visible');
+        if (!activeView) return;
         
-        const rotateX = beta * 0.4;
-        const rotateY = gamma * 0.4;
+        const currentWrapper = activeView.querySelector(`[data-index="${currentIndex}"]`);
+        const card = currentWrapper ? currentWrapper.querySelector('.card') : null;
+        if (!card) return;
         
-        const reflectX = 50 + (gamma * 1.5);
-        const reflectY = 50 + (beta * 1.5);
+        const beta = Math.max(-30, Math.min(30, e.beta || 0));
+        const gamma = Math.max(-30, Math.min(30, e.gamma || 0));
         
-        cards.forEach(card => {
-          card.classList.add('tilting');
-          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-          card.style.setProperty('--reflect-x', `${reflectX}%`);
-          card.style.setProperty('--reflect-y', `${reflectY}%`);
-        });
+        // Increased rotation for more noticeable effect
+        const rotateX = beta * 0.8;
+        const rotateY = gamma * 0.8;
+        
+        const reflectX = 50 + (gamma * 2);
+        const reflectY = 50 + (beta * 2);
+        
+        card.classList.add('tilting');
+        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        card.style.setProperty('--reflect-x', `${reflectX}%`);
+        card.style.setProperty('--reflect-y', `${reflectY}%`);
       };
       
       window.addEventListener('deviceorientation', gyroListener);
@@ -3423,14 +3373,18 @@
         gyroListener = null;
       }
       
-      // Reset card transforms
-      const cards = document.querySelectorAll('.card');
-      cards.forEach(card => {
-        card.classList.remove('tilting');
-        card.style.transform = '';
-        card.style.setProperty('--reflect-x', '50%');
-        card.style.setProperty('--reflect-y', '50%');
-      });
+      // Reset only current card transform
+      const activeView = document.querySelector('.view.active.visible');
+      if (activeView) {
+        const currentWrapper = activeView.querySelector(`[data-index="${currentIndex}"]`);
+        const card = currentWrapper ? currentWrapper.querySelector('.card') : null;
+        if (card) {
+          card.classList.remove('tilting');
+          card.style.transform = '';
+          card.style.setProperty('--reflect-x', '50%');
+          card.style.setProperty('--reflect-y', '50%');
+        }
+      }
       
       showToast('Efecto 3D desactivado', 'success', 'check_circle', 2000);
     }
