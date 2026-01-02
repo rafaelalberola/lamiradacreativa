@@ -1,5 +1,6 @@
 // Stripe Webhook Handler
 // Creates Auth0 users when a Stripe checkout is completed
+// Uses passwordless (magic links) - no password needed
 
 const crypto = require('crypto');
 
@@ -29,16 +30,6 @@ function verifyStripeSignature(payload, signature, secret) {
   }
 }
 
-// Generate random password for new users
-function generatePassword() {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%';
-  let password = '';
-  for (let i = 0; i < 16; i++) {
-    password += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return password;
-}
-
 // Get Auth0 Management API token
 async function getAuth0Token() {
   const response = await fetch(`https://${process.env.AUTH0_DOMAIN}/oauth/token`, {
@@ -60,7 +51,7 @@ async function getAuth0Token() {
   return data.access_token;
 }
 
-// Create user in Auth0
+// Create user in Auth0 for passwordless login
 async function createAuth0User(email, name, stripeCustomerId) {
   const token = await getAuth0Token();
   
@@ -95,7 +86,8 @@ async function createAuth0User(email, name, stripeCustomerId) {
     return { exists: true, email };
   }
   
-  // Create new user
+  // Create new user for passwordless (email connection)
+  // With passwordless, users don't need a password - they login via magic link
   const createResponse = await fetch(`https://${process.env.AUTH0_DOMAIN}/api/v2/users`, {
     method: 'POST',
     headers: {
@@ -105,9 +97,8 @@ async function createAuth0User(email, name, stripeCustomerId) {
     body: JSON.stringify({
       email: email,
       name: name || email.split('@')[0],
-      connection: 'Username-Password-Authentication',
-      password: generatePassword(),
-      email_verified: false,
+      connection: 'email',  // Passwordless email connection
+      email_verified: true,  // Passwordless verifies email automatically
       app_metadata: {
         purchased: true,
         stripe_customer_id: stripeCustomerId,
@@ -123,18 +114,7 @@ async function createAuth0User(email, name, stripeCustomerId) {
   
   const newUser = await createResponse.json();
   
-  // Send password reset email so user can set their own password
-  await fetch(`https://${process.env.AUTH0_DOMAIN}/dbconnections/change_password`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      client_id: process.env.AUTH0_M2M_CLIENT_ID,
-      email: email,
-      connection: 'Username-Password-Authentication'
-    })
-  });
-  
-  console.log('User created and password reset email sent:', email);
+  console.log('Passwordless user created:', email);
   return { created: true, email, user_id: newUser.user_id };
 }
 

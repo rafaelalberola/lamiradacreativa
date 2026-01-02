@@ -1622,7 +1622,7 @@
       <p class="login-subtitle">365 días de entrenamiento visual</p>
       
       <form class="login-form" id="loginForm">
-        <p class="login-desc">Accede con el email que usaste para tu compra</p>
+        <p class="login-desc">Introduce el email de tu compra y te enviaremos un enlace de acceso</p>
         <input 
           type="email" 
           class="login-input" 
@@ -1632,7 +1632,7 @@
           autocomplete="email"
         >
         <button type="submit" class="login-btn" id="loginBtn" disabled>
-          Iniciar sesión
+          Enviar enlace de acceso
         </button>
       </form>
 
@@ -1917,15 +1917,16 @@
         if (!result.exists) {
           showMessage('Tu email no está registrado.<br>Si crees que es un error, <a href="mailto:soporte@lamiradacreativa.com">contacta con soporte</a>.', 'error');
           loginBtn.disabled = false;
-          loginBtn.textContent = 'Iniciar sesión';
+          loginBtn.textContent = 'Enviar enlace de acceso';
           return;
         }
 
-        // User exists - redirect to Auth0 with email pre-filled
-        loginBtn.textContent = 'Redirigiendo...';
+        // User exists - redirect to Auth0 passwordless (magic link)
+        loginBtn.textContent = 'Enviando enlace...';
         await auth0Client.loginWithRedirect({
           authorizationParams: {
-            login_hint: email
+            login_hint: email,
+            connection: 'email'  // Passwordless magic link
           }
         });
 
@@ -1933,7 +1934,7 @@
         console.error('Login error:', err);
         showMessage('Error al verificar el email. Inténtalo de nuevo.', 'error');
         loginBtn.disabled = false;
-        loginBtn.textContent = 'Iniciar sesión';
+        loginBtn.textContent = 'Enviar enlace de acceso';
       }
     });
 
