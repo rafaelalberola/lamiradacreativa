@@ -2960,17 +2960,17 @@
     
     let pdfCancelled = false;
 
-    function showToast(status = 'Preparando...', progress = 0) {
+    function showPdfToast(status = 'Preparando...', progress = 0) {
       toastStatus.textContent = status;
       toastFill.style.width = `${progress}%`;
       toastProgress.classList.add('active');
     }
 
-    function hideToast() {
+    function hidePdfToast() {
       toastProgress.classList.remove('active');
     }
 
-    function updateToast(current, total) {
+    function updatePdfToast(current, total) {
       const progress = (current / total) * 100;
       toastStatus.textContent = `Carta ${current} de ${total}`;
       toastFill.style.width = `${progress}%`;
@@ -2979,7 +2979,7 @@
     // Cancel button handler
     toastCancel.addEventListener('click', () => {
       pdfCancelled = true;
-      hideToast();
+      hidePdfToast();
     });
 
     // Download all cards as PDF
@@ -3002,8 +3002,8 @@
       // Reset cancel flag
       pdfCancelled = false;
       
-      // Show toast
-      showToast('Preparando...', 0);
+      // Show PDF progress toast
+      showPdfToast('Preparando...', 0);
       downloadPDFBtn.disabled = true;
 
       try {
@@ -3045,7 +3045,7 @@
           const card = allCards[i];
           
           // Update toast progress
-          updateToast(i + 1, allCards.length);
+          updatePdfToast(i + 1, allCards.length);
 
           // Render card HTML
           tempContainer.innerHTML = createCardHTML(card);
@@ -3101,11 +3101,11 @@
         pdf.save('la-mirada-creativa-365-cartas.pdf');
 
         // Hide toast after a moment
-        setTimeout(() => hideToast(), 1500);
+        setTimeout(() => hidePdfToast(), 1500);
 
       } catch (error) {
         console.error('Error generating PDF:', error);
-        hideToast();
+        hidePdfToast();
         alert('Error al generar el PDF. Intenta de nuevo.');
       }
 
