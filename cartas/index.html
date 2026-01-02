@@ -2544,3 +2544,2548 @@
   </script>
 </body>
 </html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cartas — La Mirada Creativa</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Inter+Tight:wght@500;600&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500&display=swap" rel="stylesheet">
+  
+  <!-- Material Symbols -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..400,0,0&display=swap">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="../assets/images/logo.jpg">
+  
+  <!-- Libraries for card export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  
+  <style>
+    /* Monograf Font */
+    @font-face {
+      font-family: 'Monograf';
+      src: url('../assets/fonts/MonografRegular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Monograf';
+      src: url('../assets/fonts/MonografBold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* CSS Variables */
+    :root {
+      --color-bg: #FFFFFF;
+      --color-bg-alt: #f4f4f4;
+      --color-text: #111111;
+      --color-text-secondary: #555555;
+      --color-text-tertiary: #888888;
+      --color-accent: #FF5006;
+      --color-accent-glow: rgba(255, 80, 6, 0.4);
+      --color-border: #D0D0D0;
+      --color-border-light: #E0E0E0;
+      
+      /* Card colors - Dark purple gradient */
+      --card-bg-start: #1a1025;
+      --card-bg-end: #2d1b3d;
+      --card-text: #FFFFFF;
+      --card-text-secondary: rgba(255, 255, 255, 0.7);
+      --card-text-tertiary: rgba(255, 255, 255, 0.5);
+      --card-border: rgba(255, 255, 255, 0.1);
+      
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-headline: 'Inter Tight', 'Inter', sans-serif;
+      --font-display: 'Monograf', monospace;
+    }
+
+    /* Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--color-text);
+      background-color: var(--color-bg-alt);
+      overflow: hidden;
+    }
+
+    /* Layout */
+    .app {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .header {
+      flex-shrink: 0;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border-light);
+      padding: 12px 20px;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo {
+      font-family: var(--font-headline);
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--color-text);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    /* Search */
+    .search-wrapper {
+      position: relative;
+      flex: 1;
+      max-width: 200px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 6px 10px 6px 32px;
+      border: 1px solid var(--color-border-light);
+      border-radius: 6px;
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      background: var(--color-bg-alt);
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      background: var(--color-bg);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: var(--color-text-tertiary);
+      pointer-events: none;
+    }
+
+    /* View Toggle */
+    .view-toggle {
+      display: flex;
+      gap: 2px;
+      background: var(--color-bg-alt);
+      padding: 3px;
+      border-radius: 6px;
+    }
+
+    .view-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 28px;
+      border: none;
+      background: transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--color-text-tertiary);
+      transition: all 0.2s;
+    }
+
+    .view-btn:hover {
+      color: var(--color-text);
+    }
+
+    .view-btn.active {
+      background: var(--color-bg);
+      color: var(--color-text);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .view-btn .material-symbols-sharp {
+      font-size: 18px;
+    }
+
+    /* Index Button */
+    .index-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--color-border-light);
+      background: var(--color-bg);
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--color-text-secondary);
+      transition: all 0.2s;
+    }
+
+    .index-btn:hover {
+      color: var(--color-text);
+      border-color: var(--color-border);
+      background: var(--color-bg-alt);
+    }
+
+    .index-btn .material-symbols-sharp {
+      font-size: 18px;
+    }
+
+    /* Header Actions (Index + Options) */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Options Button & Dropdown */
+    .options-wrapper {
+      position: relative;
+    }
+
+    .options-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--color-border-light);
+      background: var(--color-bg);
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--color-text-secondary);
+      transition: all 0.2s;
+    }
+
+    .options-btn:hover {
+      color: var(--color-text);
+      border-color: var(--color-border);
+      background: var(--color-bg-alt);
+    }
+
+    .options-btn .material-symbols-sharp {
+      font-size: 18px;
+    }
+
+    .options-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border-light);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      min-width: 220px;
+      padding: 8px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px) scale(0.95);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+    }
+
+    .options-dropdown.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    .options-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 12px 14px;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      color: var(--color-text);
+      text-align: left;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+
+    .options-item:hover {
+      background: var(--color-bg-alt);
+    }
+
+    .options-item .material-symbols-sharp {
+      font-size: 20px;
+      color: var(--color-text-secondary);
+    }
+
+    .options-separator {
+      height: 1px;
+      background: var(--color-border-light);
+      margin: 4px 0;
+    }
+
+    .options-item:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Toast Alert for Progress */
+    .toast-progress {
+      position: fixed;
+      bottom: 93px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border-light);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 280px;
+      max-width: 400px;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toast-progress.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast-progress-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 80, 6, 0.1);
+      border-radius: 10px;
+      color: var(--color-accent);
+      flex-shrink: 0;
+    }
+
+    .toast-progress-icon .material-symbols-sharp {
+      font-size: 20px;
+      animation: pulse 1.5s ease infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .toast-progress-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .toast-progress-title {
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--color-text);
+      margin-bottom: 4px;
+    }
+
+    .toast-progress-status {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--color-text-tertiary);
+    }
+
+    .toast-progress-bar {
+      width: 100%;
+      height: 3px;
+      background: var(--color-bg-alt);
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .toast-progress-fill {
+      height: 100%;
+      background: var(--color-accent);
+      border-radius: 2px;
+      transition: width 0.2s ease;
+    }
+
+    .toast-cancel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--color-text-tertiary);
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .toast-cancel:hover {
+      background: var(--color-bg-alt);
+      color: var(--color-text);
+    }
+
+    .toast-cancel .material-symbols-sharp {
+      font-size: 18px;
+    }
+
+    @media (max-width: 480px) {
+      .toast-progress {
+        left: 16px;
+        right: 16px;
+        transform: translateX(0) translateY(100px);
+        min-width: auto;
+      }
+
+      .toast-progress.active {
+        transform: translateX(0) translateY(0);
+      }
+    }
+
+    /* Index Modal */
+    .index-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .index-modal.active {
+      display: flex;
+    }
+
+    .index-content {
+      background: var(--color-bg);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Mobile: iOS-style bottom sheet */
+    @media (max-width: 767px) {
+      .index-modal {
+        padding: 0;
+        align-items: flex-end;
+        justify-content: flex-end;
+        background: rgba(0, 0, 0, 0.4);
+      }
+
+      .index-modal.active {
+        animation: fadeIn 0.2s ease;
+      }
+
+      .index-content {
+        max-width: 100%;
+        max-height: calc(100vh - 48px); /* Leave space at top for depth */
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.25);
+        animation: slideUp 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+      }
+
+      @keyframes fadeIn {
+        from { background: rgba(0, 0, 0, 0); }
+        to { background: rgba(0, 0, 0, 0.4); }
+      }
+
+      @keyframes slideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+
+      .index-header {
+        padding: 12px 20px 12px;
+        border-bottom: none;
+        position: relative;
+      }
+
+      .index-header::before {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 36px;
+        height: 4px;
+        background: var(--color-border);
+        border-radius: 2px;
+      }
+
+      .index-title {
+        width: 100%;
+        text-align: center;
+        padding-top: 8px;
+      }
+
+      .index-close {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+      }
+
+      .index-list {
+        padding-bottom: env(safe-area-inset-bottom, 20px);
+      }
+    }
+
+    .index-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--color-border-light);
+    }
+
+    .index-title {
+      font-family: var(--font-headline);
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--color-text);
+    }
+
+    .index-close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--color-text-secondary);
+      transition: all 0.2s;
+    }
+
+    .index-close:hover {
+      background: var(--color-bg-alt);
+      color: var(--color-text);
+    }
+
+    .index-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+
+    /* Index items */
+    .index-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .index-item:hover {
+      background: var(--color-bg-alt);
+    }
+
+    .index-item-bullet {
+      font-size: 0.4rem;
+      color: var(--color-text-tertiary);
+      width: 16px;
+      text-align: center;
+    }
+
+    .index-item-title {
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      color: var(--color-text);
+      flex: 1;
+    }
+
+    .index-item-icon {
+      font-size: 16px;
+      color: var(--color-text-tertiary);
+    }
+
+    /* Section headers (not clickable) */
+    .index-header-item {
+      padding: 16px 16px 6px;
+      margin-top: 12px;
+      cursor: default;
+    }
+
+    .index-header-item:first-child {
+      margin-top: 4px;
+    }
+
+    .index-header-item .index-header-title {
+      font-family: var(--font-body);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      color: var(--color-text-tertiary);
+      opacity: 0.7;
+      letter-spacing: 0.03em;
+    }
+
+    /* Separator */
+    .index-separator {
+      height: 1px;
+      background: var(--color-border-light);
+      margin: 12px 16px;
+    }
+
+    .index-month {
+      padding: 8px 16px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6875rem;
+      color: var(--color-text-tertiary);
+      opacity: 0.6;
+      text-align: center;
+    }
+
+    /* Level 1 - Sub items */
+    .index-item.level-1 {
+      padding-left: 24px;
+    }
+
+    /* Level 2 - Sub-sub items */
+    .index-item.level-2 {
+      padding-left: 40px;
+    }
+
+    .index-item.level-2 .index-item-title {
+      font-size: 0.8125rem;
+      color: var(--color-text-secondary);
+    }
+
+    .index-item.level-2 .index-item-bullet {
+      font-size: 0.3rem;
+    }
+
+    /* Special styles */
+    .index-item.is-special .index-item-title {
+      color: #FF5006;
+    }
+
+    .index-item.is-congrats .index-item-title {
+      color: #22c55e;
+    }
+
+    /* Current/active item */
+    .index-item.is-current {
+      background: rgba(255, 80, 6, 0.1);
+      border-left: 3px solid var(--color-accent);
+      padding-left: 21px;
+    }
+
+    .index-item.is-current .index-item-title {
+      color: var(--color-accent);
+      font-weight: 500;
+    }
+
+    .index-item.is-current .index-item-bullet {
+      color: var(--color-accent);
+    }
+
+    /* Main Content */
+    .main {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Owner Banner */
+    .owner-banner {
+      background: var(--color-bg);
+      padding: 10px 20px;
+      text-align: center;
+      font-size: 0.8125rem;
+      color: var(--color-text-secondary);
+      border-bottom: 1px solid var(--color-border-light);
+    }
+
+    .owner-name {
+      font-weight: 500;
+      color: var(--color-text);
+    }
+
+    /* Progress Bar */
+    .progress-bar {
+      flex-shrink: 0;
+      background: var(--color-bg);
+      border-top: 1px solid var(--color-border-light);
+      padding: 12px 20px 16px;
+      z-index: 100;
+    }
+
+    .progress-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.75rem;
+      color: var(--color-text-tertiary);
+    }
+
+    .progress-current {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+    }
+
+    .progress-track {
+      position: relative;
+      height: 20px;
+      background: var(--color-border-light);
+      border-radius: 10px;
+      cursor: pointer;
+      touch-action: none;
+    }
+
+    .progress-track-inner {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 4px;
+      transform: translateY(-50%);
+      background: var(--color-border);
+      border-radius: 2px;
+    }
+
+    .progress-fill {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      height: 4px;
+      transform: translateY(-50%);
+      background: var(--color-accent);
+      border-radius: 2px;
+      transition: width 0.1s ease;
+    }
+
+    .progress-handle {
+      position: absolute;
+      top: 50%;
+      width: 16px;
+      height: 16px;
+      background: var(--color-accent);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      cursor: grab;
+      box-shadow: 0 2px 6px var(--color-accent-glow);
+      transition: transform 0.1s ease;
+    }
+
+    .progress-handle:active {
+      cursor: grabbing;
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    /* Views Container */
+    .view {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0;
+      transform: scale(0.92) translateY(20px);
+      filter: blur(8px);
+      transition: 
+        opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .view.active {
+      display: flex;
+    }
+
+    .view.active.visible {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      filter: blur(0);
+    }
+
+    /* Exit animation - scale up and fade */
+    .view.exiting {
+      opacity: 0;
+      transform: scale(1.05) translateY(-10px);
+      filter: blur(4px);
+    }
+
+    /* ============================================
+       CARD STYLES - Dynamic Colors
+       ============================================ */
+    .card {
+      /* Use inline custom properties for dynamic colors */
+      background: var(--card-bg, linear-gradient(145deg, #1a1025 0%, #2d1b3d 100%));
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+      color: var(--card-text, #F5F5F7);
+      box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        0 8px 16px rgba(0, 0, 0, 0.15),
+        0 24px 48px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      user-select: none;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+      will-change: transform;
+    }
+
+    /* Tilt reflection overlay - follows cursor/gyro */
+    .card::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: radial-gradient(
+        circle at var(--reflect-x, 50%) var(--reflect-y, 50%),
+        rgba(255, 255, 255, 0.06) 0%,
+        rgba(255, 255, 255, 0.02) 25%,
+        transparent 50%
+      );
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      border-radius: inherit;
+      z-index: 10;
+    }
+
+    .card.tilting::after {
+      opacity: 1;
+    }
+
+    /* Hide problematic CSS for html2canvas capture */
+    /* html2canvas doesn't support color-mix() or modern CSS color functions */
+    .card.capturing::after,
+    .card.capturing::before,
+    .card.capturing *::after,
+    .card.capturing *::before {
+      display: none !important;
+      content: none !important;
+      background: none !important;
+    }
+    
+    .card.capturing {
+      transform: none !important;
+      filter: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      border: none !important;
+    }
+    
+    .card.capturing *,
+    .card.capturing .card-icon .material-symbols-sharp {
+      filter: none !important;
+      text-shadow: none !important;
+    }
+
+    /* Clickable cards */
+    .card {
+      cursor: pointer;
+    }
+
+    /* Subtle glow effect based on accent color */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(
+        circle at 30% 20%,
+        rgba(6, 189, 255, 0.08) 0%,
+        transparent 50%
+      );
+      pointer-events: none;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      z-index: 1;
+      min-height: 1.5rem;
+    }
+
+    /* Sin separador cuando no hay contenido en header */
+    .card-header.no-separator {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-day {
+      font-family: var(--font-body);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--card-text, #F5F5F7);
+      opacity: 0.6;
+    }
+
+    .card-block {
+      font-family: var(--font-body);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--card-accent, #06BDFF);
+    }
+
+    .card-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: bold;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.25rem;
+      color: var(--card-text, #F5F5F7);
+    }
+
+    .card-subtitle {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.875rem;
+      color: var(--card-text, #F5F5F7);
+      opacity: 0.7;
+      margin-bottom: 1rem;
+    }
+
+    .card-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      min-height: 100px;
+      margin-bottom: 1rem;
+    }
+
+    .card-icon .material-symbols-sharp {
+      font-size: 80px;
+      color: var(--card-accent);
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 200,
+        'GRAD' 0,
+        'opsz' 48;
+      /* Icon vibrant at 100%, glow ultra subtle */
+      filter: drop-shadow(0 0 30px var(--card-accent)) drop-shadow(0 0 60px var(--card-accent));
+    }
+
+    .card-desc {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 0.9375rem;
+      color: var(--card-text, #F5F5F7);
+      opacity: 0.85;
+      line-height: 1.6;
+    }
+
+    /* Light theme cards */
+    .card-theme-light {
+      border-color: rgba(0, 0, 0, 0.06);
+      box-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.04),
+        0 4px 8px rgba(0, 0, 0, 0.06),
+        0 12px 24px rgba(0, 0, 0, 0.08),
+        0 0 0 1px rgba(0, 0, 0, 0.02);
+    }
+    
+    .card-theme-light::before {
+      background: radial-gradient(
+        circle at 30% 80%,
+        rgba(6, 189, 255, 0.06) 0%,
+        transparent 60%
+      );
+    }
+
+    .card-theme-light::after {
+      background: linear-gradient(
+        105deg,
+        transparent 40%,
+        rgba(255, 255, 255, 0.05) 45%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 0.05) 55%,
+        transparent 60%
+      );
+    }
+
+    .card-theme-light .card-header {
+      border-bottom-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .card-theme-light .card-icon .material-symbols-sharp {
+      /* Icon vibrant, glow ultra subtle on light cards */
+      filter: drop-shadow(0 0 25px var(--card-accent)) drop-shadow(0 0 55px var(--card-accent));
+    }
+
+    /* Special style cards */
+    .card-special {
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .card-congrats {
+      border: 2px solid rgba(76, 175, 80, 0.3);
+    }
+    
+    /* Gold theme cards */
+    .card-theme-gold .card-icon .material-symbols-sharp {
+      /* Icon vibrant, glow ultra subtle */
+      filter: drop-shadow(0 0 30px var(--card-accent)) drop-shadow(0 0 58px var(--card-accent));
+    }
+
+    /* Cover and intro card styles */
+    .card-cover,
+    .card-block-cover {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .card-cover .card-title,
+    .card-block-cover .card-title {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-cover .card-header {
+      justify-content: center;
+    }
+
+    /* Ready card keeps tag on left */
+    .card-ready .card-header {
+      justify-content: flex-start;
+    }
+
+    /* ============================================
+       SWIPE VIEW - Horizontal scroll with snap
+       ============================================ */
+    .swipe-view {
+      flex-direction: row;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 calc(50% - 170px); /* Center with peek */
+      gap: 450px;
+    }
+
+    .swipe-card-wrapper {
+      flex-shrink: 0;
+      scroll-snap-align: center;
+      width: 340px;
+      min-width: 340px;
+      height: 100%;
+      padding: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .swipe-card-wrapper .card {
+      width: 100%;
+      max-width: 340px;
+      height: 100%;
+      max-height: 520px;
+    }
+
+    /* ============================================
+       SCROLL VIEW - Vertical scroll
+       ============================================ */
+    .scroll-view {
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-snap-type: y mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding: calc(50% - 260px) 0; /* Center with peek */
+      gap: 20px;
+    }
+
+    .scroll-card-wrapper {
+      flex-shrink: 0;
+      scroll-snap-align: center;
+      scroll-snap-stop: always; /* Forces stop at each card */
+      min-height: 520px;
+      height: auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scroll-card-wrapper .card {
+      width: 100%;
+      max-width: 340px;
+      height: 100%;
+      max-height: 520px;
+    }
+
+    /* No results */
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--color-text-tertiary);
+      width: 100%;
+    }
+
+    .no-results .material-symbols-sharp {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    /* Loading */
+    .loading {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-tertiary);
+      background: var(--color-bg);
+      z-index: 10;
+    }
+
+    .loading-spinner {
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--color-border-light);
+      border-top-color: var(--color-accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 12px;
+    }
+
+    .loading p {
+      font-size: 0.8125rem;
+      opacity: 0.6;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Initial loading overlay - prevents flicker */
+    .app-loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #111111;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+    }
+    
+    .app-loading.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .app-loading .loading-spinner {
+      border-color: rgba(255, 255, 255, 0.1);
+      border-top-color: var(--color-accent);
+    }
+
+    .app-loading-text {
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.5);
+      text-align: center;
+      max-width: 280px;
+      line-height: 1.5;
+      animation: fadeInText 0.6s ease 0.3s both;
+    }
+
+    .app-loading-text span {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.9);
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    @keyframes fadeInText {
+      from { 
+        opacity: 0; 
+        transform: translateY(8px);
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .search-wrapper {
+        display: none;
+      }
+
+      .card {
+        padding: 1.25rem;
+      }
+
+      .card-title {
+        font-size: 1.25rem;
+      }
+
+      .card-icon .material-symbols-sharp {
+        font-size: 64px;
+      }
+
+      .card-desc {
+        font-size: 0.875rem;
+      }
+
+      .swipe-card-wrapper .card,
+      .scroll-card-wrapper .card {
+        max-width: 300px;
+        max-height: 460px;
+      }
+
+      .swipe-view {
+        padding: 0 calc(50% - 150px);
+        gap: 20px;
+      }
+
+      .swipe-card-wrapper {
+        width: 300px;
+        min-width: 300px;
+        padding: 16px 0;
+      }
+
+      .scroll-view {
+        padding-top: calc(50vh - 280px);
+        padding-bottom: calc(50vh - 280px);
+        gap: 60px; /* Smaller gap, cards closer but with peek */
+      }
+
+      .scroll-card-wrapper {
+        min-height: 460px;
+        padding: 0 16px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .card-title {
+        font-size: 1.75rem;
+      }
+
+      .card-icon .material-symbols-sharp {
+        font-size: 96px;
+      }
+    }
+
+    /* Hide scrollbars but keep functionality */
+    .swipe-view::-webkit-scrollbar,
+    .scroll-view::-webkit-scrollbar {
+      display: none;
+    }
+
+    .swipe-view,
+    .scroll-view {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Initial loading overlay -->
+  <div class="app-loading" id="appLoading">
+    <div class="loading-spinner"></div>
+    <p class="app-loading-text">
+      <span>La Mirada Creativa</span>
+      365 días de entrenamiento visual
+    </p>
+  </div>
+
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-inner">
+        <a href="/" class="logo">La Mirada Creativa</a>
+        
+        <div class="search-wrapper">
+          <span class="material-symbols-sharp search-icon">search</span>
+          <input type="text" class="search-input" id="searchInput" placeholder="Buscar...">
+        </div>
+        
+        <div class="view-toggle">
+          <button class="view-btn active" data-view="swipe" title="Scroll horizontal">
+            <span class="material-symbols-sharp">swap_horiz</span>
+          </button>
+          <button class="view-btn" data-view="scroll" title="Scroll vertical">
+            <span class="material-symbols-sharp">swap_vert</span>
+          </button>
+        </div>
+
+        <div class="header-actions">
+          <button class="index-btn" id="indexBtn" title="Ver índice">
+            <span class="material-symbols-sharp">list</span>
+          </button>
+
+          <div class="options-wrapper">
+            <button class="options-btn" id="optionsBtn" title="Opciones">
+              <span class="material-symbols-sharp">more_vert</span>
+            </button>
+            <div class="options-dropdown" id="optionsDropdown">
+            <button class="options-item" id="downloadCard">
+              <span class="material-symbols-sharp">image</span>
+              <span>Descargar carta actual (JPG)</span>
+            </button>
+            <div class="options-separator"></div>
+            <button class="options-item" id="downloadPDF">
+              <span class="material-symbols-sharp">picture_as_pdf</span>
+              <span>Descargar todas las cartas (PDF)</span>
+            </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Index Modal -->
+    <div class="index-modal" id="indexModal">
+      <div class="index-content">
+        <div class="index-header">
+          <h2 class="index-title">Índice de cartas</h2>
+          <button class="index-close" id="indexClose">
+            <span class="material-symbols-sharp">close</span>
+          </button>
+        </div>
+        <div class="index-list" id="indexList"></div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Owner Banner (shown if URL has identifier) -->
+      <div class="owner-banner" id="ownerBanner" style="display: none;">
+        Este stack pertenece a <span class="owner-name" id="ownerName"></span>. <span id="accessInfo"></span>
+      </div>
+
+      <!-- Swipe View (horizontal scroll) -->
+      <div class="view swipe-view active" id="swipeView"></div>
+
+      <!-- Scroll View (vertical scroll) -->
+      <div class="view scroll-view" id="scrollView"></div>
+    </main>
+
+    <!-- Toast Progress Alert -->
+    <div class="toast-progress" id="toastProgress">
+      <div class="toast-progress-icon">
+        <span class="material-symbols-sharp">picture_as_pdf</span>
+      </div>
+      <div class="toast-progress-content">
+        <div class="toast-progress-title">Generando PDF</div>
+        <div class="toast-progress-status" id="toastStatus">Preparando...</div>
+        <div class="toast-progress-bar">
+          <div class="toast-progress-fill" id="toastFill"></div>
+        </div>
+      </div>
+      <button class="toast-cancel" id="toastCancel" title="Cancelar">
+        <span class="material-symbols-sharp">close</span>
+      </button>
+    </div>
+
+    <!-- Progress Bar (Draggable) -->
+    <div class="progress-bar">
+      <div class="progress-inner">
+        <div class="progress-info">
+          <span class="progress-current" id="progressCurrent">Cargando...</span>
+          <span class="progress-total" id="progressTotal">— / 394</span>
+        </div>
+        <div class="progress-track" id="progressTrack">
+          <div class="progress-track-inner"></div>
+          <div class="progress-fill" id="progressFill"></div>
+          <div class="progress-handle" id="progressHandle"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load card data from external file -->
+  <script src="data.js"></script>
+  
+  <script>
+    // ============================================
+    // CARD DATA - Loaded from data.js
+    // ============================================
+    const allCards = window.CARDS || [];
+    const TOTAL_CARDS = allCards.length;
+
+    // ============================================
+    // DOM Elements
+    // ============================================
+    const swipeView = document.getElementById('swipeView');
+    const scrollView = document.getElementById('scrollView');
+    const searchInput = document.getElementById('searchInput');
+    const viewBtns = document.querySelectorAll('.view-btn');
+    const views = document.querySelectorAll('.view');
+    const ownerBanner = document.getElementById('ownerBanner');
+    const ownerName = document.getElementById('ownerName');
+    const accessInfo = document.getElementById('accessInfo');
+    const progressCurrent = document.getElementById('progressCurrent');
+    const progressTotal = document.getElementById('progressTotal');
+    const progressFill = document.getElementById('progressFill');
+    const progressTrack = document.getElementById('progressTrack');
+    const progressHandle = document.getElementById('progressHandle');
+    const indexBtn = document.getElementById('indexBtn');
+    const indexModal = document.getElementById('indexModal');
+    const indexClose = document.getElementById('indexClose');
+    const indexList = document.getElementById('indexList');
+
+    // ============================================
+    // LocalStorage Keys
+    // ============================================
+    const STORAGE_KEY_INDEX = 'lmc_current_index';
+    const STORAGE_KEY_VIEW = 'lmc_current_view';
+
+    // ============================================
+    // State
+    // ============================================
+    let currentView = 'swipe'; // Always default to horizontal view
+    let currentIndex = parseInt(localStorage.getItem(STORAGE_KEY_INDEX)) || 0;
+    let filteredCards = [...allCards];
+    
+    // Validate stored index
+    if (currentIndex >= allCards.length) currentIndex = 0;
+
+    // Progress drag state
+    let isDraggingProgress = false;
+    
+    // Flag to prevent observer updates during view switch
+    let isSwitchingView = false;
+    
+    // Scroll observer references
+    let swipeObserver = null;
+    let scrollObserver = null;
+
+    // ============================================
+    // Card HTML Generator
+    // ============================================
+    function createCardHTML(card) {
+      // Get style from CARD_STYLES
+      const styleKey = card.style || 'block1';
+      const style = window.CARD_STYLES[styleKey] || window.CARD_STYLES.block1;
+      
+      // Determine day label
+      let dayLabel = '';
+      let ruleNumber = null;
+      if (card.day) {
+        dayLabel = `Día ${card.day} / 365`;
+      } else if (card.type === 'cover') {
+        dayLabel = ''; // Sin etiqueta en portada
+      } else if (card.type === 'presentation') {
+        dayLabel = 'ME PRESENTO';
+      } else if (card.title === 'MI SISTEMA' || card.title === 'REGLAS BÁSICAS' || card.type === 'syllabus') {
+        // Mi sistema y Reglas básicas siempre usan LA MIRADA CREATIVA
+        dayLabel = 'LA MIRADA CREATIVA';
+      } else if (card.type === 'rules') {
+        // Reglas de oro también usan LA MIRADA CREATIVA
+        dayLabel = 'LA MIRADA CREATIVA';
+      } else if (card.type === 'intro') {
+        dayLabel = 'INTRODUCCIÓN AL SISTEMA';
+      } else if (card.type === 'ready') {
+        dayLabel = 'ESTÁS PREPARADO';
+      } else if (card.type === 'block-cover') {
+        dayLabel = `BLOQUE ${card.blockNumber}`;
+      } else if (card.type === 'special') {
+        dayLabel = '⭐ MISIÓN ESPECIAL';
+      } else if (card.type === 'congrats') {
+        dayLabel = '🎉 FELICIDADES';
+      } else if (card.type === 'closing') {
+        dayLabel = 'CIERRE';
+      } else {
+        dayLabel = card.type?.toUpperCase() || '';
+      }
+      
+      const blockLabel = card.block || '';
+      
+      // Process subtitle for cover card (add line break)
+      let subtitleText = card.subtitle || '';
+      if (card.type === 'cover' && subtitleText) {
+        subtitleText = subtitleText.replace('días de', 'días<br>de');
+      }
+      
+      // Build inline style - gradient from bottom (dark) to top-left (light)
+      const bgGradient = style.bgEnd ? `linear-gradient(to top left, ${style.bg} 0%, ${style.bgEnd} 100%)` : style.bg;
+      const inlineStyle = `
+        --card-bg: ${bgGradient};
+        --card-text: ${style.text};
+        --card-accent: ${style.accent};
+      `.replace(/\s+/g, ' ').trim();
+      
+      // Card classes
+      const cardClasses = ['card', `card-${styleKey}`];
+      if (style.theme) cardClasses.push(`card-theme-${style.theme}`);
+      
+      // Header classes - no separator if empty
+      const hasHeaderContent = dayLabel || blockLabel;
+      const headerClass = hasHeaderContent ? 'card-header' : 'card-header no-separator';
+      
+      return `
+        <div class="${cardClasses.join(' ')}" style="${inlineStyle}">
+          <div class="${headerClass}">
+            <span class="card-day">${dayLabel}</span>
+            <span class="card-block">${blockLabel}</span>
+          </div>
+          <div class="card-content">
+            <h3 class="card-title">${card.title}</h3>
+            <p class="card-subtitle">${subtitleText}</p>
+            <div class="card-icon">
+              <span class="material-symbols-sharp">${card.icon}</span>
+            </div>
+            <p class="card-desc">${card.desc.replace(/\n/g, '<br>')}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    // ============================================
+    // Progress Bar
+    // ============================================
+    function updateProgressBar(index, animate = true) {
+      if (filteredCards.length === 0) return;
+      
+      const card = filteredCards[index];
+      const progress = ((index + 1) / filteredCards.length) * 100;
+      
+      // Format: "DÍA X / 365: TITULO" for exercises, just title for others
+      let displayText = card.title;
+      if (card.day) {
+        displayText = `DÍA ${card.day} / 365: ${card.title}`;
+      }
+      progressCurrent.textContent = displayText;
+      progressTotal.textContent = `${index + 1} / ${filteredCards.length}`;
+      
+      if (!animate) {
+        progressFill.style.transition = 'none';
+        progressHandle.style.transition = 'none';
+      } else {
+        progressFill.style.transition = 'width 0.2s ease';
+        progressHandle.style.transition = 'left 0.2s ease';
+      }
+      
+      progressFill.style.width = `${progress}%`;
+      progressHandle.style.left = `${progress}%`;
+      
+      // Save to localStorage
+      localStorage.setItem(STORAGE_KEY_INDEX, index.toString());
+    }
+
+    // Progress bar drag functionality
+    function initProgressDrag() {
+      progressTrack.addEventListener('mousedown', startProgressDrag);
+      progressTrack.addEventListener('touchstart', startProgressDrag, { passive: false });
+      
+      document.addEventListener('mousemove', moveProgressDrag);
+      document.addEventListener('touchmove', moveProgressDrag, { passive: false });
+      
+      document.addEventListener('mouseup', endProgressDrag);
+      document.addEventListener('touchend', endProgressDrag);
+    }
+
+    function startProgressDrag(e) {
+      e.preventDefault();
+      isDraggingProgress = true;
+      updateFromProgressPosition(e);
+    }
+
+    function moveProgressDrag(e) {
+      if (!isDraggingProgress) return;
+      e.preventDefault();
+      updateFromProgressPosition(e);
+    }
+
+    function endProgressDrag() {
+      isDraggingProgress = false;
+    }
+
+    function updateFromProgressPosition(e) {
+      const rect = progressTrack.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      let progress = (clientX - rect.left) / rect.width;
+      progress = Math.max(0, Math.min(1, progress));
+      
+      const newIndex = Math.round(progress * (filteredCards.length - 1));
+      
+      if (newIndex !== currentIndex) {
+        currentIndex = newIndex;
+        updateProgressBar(currentIndex, false);
+        
+        if (currentView === 'swipe') {
+          scrollToSwipeCard(currentIndex);
+        } else {
+          scrollToScrollCard(currentIndex);
+        }
+      }
+    }
+
+    // ============================================
+    // Swipe View (Horizontal Scroll)
+    // ============================================
+    function renderSwipeView() {
+      if (swipeObserver) {
+        swipeObserver.disconnect();
+      }
+      
+      if (filteredCards.length === 0) {
+        swipeView.innerHTML = '<div class="no-results"><span class="material-symbols-sharp">search_off</span><p>Sin resultados</p></div>';
+        return;
+      }
+
+      swipeView.innerHTML = filteredCards.map((card, index) => `
+        <div class="swipe-card-wrapper" data-index="${index}">
+          ${createCardHTML(card)}
+        </div>
+      `).join('');
+
+      setupSwipeObserver();
+      setupCardClickHandlers(swipeView, 'swipe');
+      // Use instant scroll when switching views to maintain position
+      setTimeout(() => scrollToSwipeCard(currentIndex, true), 50);
+    }
+
+    function scrollToSwipeCard(index, instant = false) {
+      const cardWrapper = swipeView.querySelector(`.swipe-card-wrapper[data-index="${index}"]`);
+      if (cardWrapper) {
+        cardWrapper.scrollIntoView({ behavior: instant ? 'instant' : 'smooth', block: 'center', inline: 'center' });
+      }
+    }
+
+    function setupSwipeObserver() {
+      const cards = swipeView.querySelectorAll('.swipe-card-wrapper');
+      
+      swipeObserver = new IntersectionObserver((entries) => {
+        // Don't update during view switch
+        if (isSwitchingView) return;
+        
+        entries.forEach(entry => {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+            const index = parseInt(entry.target.dataset.index);
+            if (index !== currentIndex && !isDraggingProgress) {
+              currentIndex = index;
+              updateProgressBar(index);
+            }
+          }
+        });
+      }, {
+        root: swipeView,
+        threshold: 0.5
+      });
+
+      cards.forEach(card => swipeObserver.observe(card));
+    }
+
+    // ============================================
+    // Scroll View (Vertical)
+    // ============================================
+    function renderScrollView() {
+      if (scrollObserver) {
+        scrollObserver.disconnect();
+      }
+      
+      if (filteredCards.length === 0) {
+        scrollView.innerHTML = '<div class="no-results"><span class="material-symbols-sharp">search_off</span><p>No se encontraron cartas</p></div>';
+        return;
+      }
+
+      scrollView.innerHTML = filteredCards.map((card, index) => `
+        <div class="scroll-card-wrapper" data-index="${index}">
+          ${createCardHTML(card)}
+        </div>
+      `).join('');
+
+      setupScrollObserver();
+      setupCardClickHandlers(scrollView, 'scroll');
+      // Use instant scroll when switching views to maintain position
+      setTimeout(() => scrollToScrollCard(currentIndex, true), 50);
+    }
+
+    function scrollToScrollCard(index, instant = false) {
+      const cardWrapper = scrollView.querySelector(`.scroll-card-wrapper[data-index="${index}"]`);
+      if (cardWrapper) {
+        cardWrapper.scrollIntoView({ behavior: instant ? 'instant' : 'smooth', block: 'center' });
+      }
+    }
+
+    function setupScrollObserver() {
+      const cards = scrollView.querySelectorAll('.scroll-card-wrapper');
+      
+      scrollObserver = new IntersectionObserver((entries) => {
+        // Don't update during view switch
+        if (isSwitchingView) return;
+        
+        entries.forEach(entry => {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+            const index = parseInt(entry.target.dataset.index);
+            if (index !== currentIndex && !isDraggingProgress) {
+              currentIndex = index;
+              updateProgressBar(index);
+            }
+          }
+        });
+      }, {
+        root: scrollView,
+        threshold: 0.5
+      });
+
+      cards.forEach(card => scrollObserver.observe(card));
+    }
+
+    // ============================================
+    // Card Click Handlers
+    // ============================================
+    function setupCardClickHandlers(container, viewType) {
+      const wrappers = container.querySelectorAll(`.${viewType}-card-wrapper`);
+      
+      wrappers.forEach(wrapper => {
+        const card = wrapper.querySelector('.card');
+        if (card) {
+          card.addEventListener('click', (e) => {
+            const index = parseInt(wrapper.dataset.index);
+            if (index !== currentIndex) {
+              currentIndex = index;
+              updateProgressBar(index);
+              
+              if (viewType === 'swipe') {
+                scrollToSwipeCard(index);
+              } else {
+                scrollToScrollCard(index);
+              }
+            }
+          });
+        }
+      });
+    }
+
+    // ============================================
+    // Search
+    // ============================================
+    function filterCards(query) {
+      const q = query.toLowerCase().trim();
+      
+      if (!q) {
+        filteredCards = [...allCards];
+      } else {
+        filteredCards = allCards.filter(card => {
+          const dayStr = card.day ? card.day.toString() : '';
+          return (
+            dayStr.includes(q) ||
+            (card.title && card.title.toLowerCase().includes(q)) ||
+            (card.subtitle && card.subtitle.toLowerCase().includes(q)) ||
+            (card.desc && card.desc.toLowerCase().includes(q)) ||
+            (card.block && card.block.toLowerCase().includes(q))
+          );
+        });
+      }
+      
+      currentIndex = 0;
+      renderCurrentView();
+    }
+
+    searchInput.addEventListener('input', (e) => {
+      filterCards(e.target.value);
+    });
+
+    // ============================================
+    // View Toggle
+    // ============================================
+    function switchView(viewName) {
+      if (currentView === viewName) return;
+      
+      const savedIndex = currentIndex; // Guardar posición actual
+      
+      // Set flag to prevent observer updates
+      isSwitchingView = true;
+      
+      // Exit animation on current view
+      const currentActiveView = document.getElementById(currentView + 'View');
+      if (currentActiveView) {
+        currentActiveView.classList.add('exiting');
+        currentActiveView.classList.remove('visible');
+      }
+      
+      // After exit animation, switch views
+      setTimeout(() => {
+        // Remove exiting class and deactivate
+        views.forEach(view => {
+          view.classList.remove('exiting', 'visible', 'active');
+        });
+        
+        currentView = viewName;
+        
+        viewBtns.forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.view === viewName);
+        });
+        
+        // Activate new view
+        const newView = document.getElementById(viewName + 'View');
+        if (newView) newView.classList.add('active');
+        
+        currentIndex = savedIndex; // Restaurar posición
+        localStorage.setItem(STORAGE_KEY_VIEW, viewName);
+        
+        // Render new view
+        if (currentView === 'swipe') {
+          renderSwipeView();
+        } else {
+          renderScrollView();
+        }
+        updateProgressBar(currentIndex);
+        initTiltEffect();
+        
+        // Entrance animation after rendering
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            const newView = document.getElementById(viewName + 'View');
+            if (newView) newView.classList.add('visible');
+            
+            // Reset flag after transition completes
+            setTimeout(() => {
+              isSwitchingView = false;
+            }, 400);
+          });
+        });
+      }, 300); // Wait for exit animation
+    }
+
+    function renderCurrentView() {
+      if (currentView === 'swipe') {
+        renderSwipeView();
+      } else {
+        renderScrollView();
+      }
+      updateProgressBar(currentIndex);
+      initTiltEffect();
+      
+      // Make view visible
+      const activeView = document.getElementById(currentView + 'View');
+      if (activeView) activeView.classList.add('visible');
+    }
+
+    viewBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        switchView(btn.dataset.view);
+      });
+    });
+
+    // ============================================
+    // Index Modal
+    // ============================================
+    function buildIndex() {
+      let html = '';
+      
+      // Helper to capitalize only the first letter of a string
+      function capitalize(str) {
+        if (!str) return '';
+        const lower = str.toLowerCase();
+        return lower.charAt(0).toUpperCase() + lower.slice(1);
+      }
+      
+      // Helper to create section header (not clickable)
+      function createHeader(title) {
+        return `<div class="index-header-item"><span class="index-header-title">${title}</span></div>`;
+      }
+      
+      // Helper to create clickable item
+      function createItem(card, index, level, customTitle = null) {
+        let itemClass = `index-item level-${level}`;
+        if (card.type === 'special') itemClass += ' is-special';
+        if (card.type === 'congrats') itemClass += ' is-congrats';
+        if (index === currentIndex) itemClass += ' is-current';
+        
+        const title = customTitle || card.title;
+        const bullet = level === 1 ? '○' : '•';
+        
+        return `
+          <div class="${itemClass}" data-index="${index}">
+            <span class="index-item-bullet">${bullet}</span>
+            <span class="index-item-title">${title}</span>
+            <span class="material-symbols-sharp index-item-icon">${card.icon}</span>
+          </div>
+        `;
+      }
+      
+      // Helper for separator with month
+      function createSeparator(monthText = null) {
+        let sep = '<div class="index-separator"></div>';
+        if (monthText) {
+          sep += `<div class="index-month">${monthText}</div>`;
+        }
+        return sep;
+      }
+      
+      // Month names by block (3 months per block)
+      const blockMonths = {
+        1: ['Enero', 'Febrero', 'Marzo'],
+        2: ['Abril', 'Mayo', 'Junio'],
+        3: ['Julio', 'Agosto', 'Septiembre'],
+        4: ['Octubre', 'Noviembre', 'Diciembre']
+      };
+      
+      let currentBlockNum = 0;
+      let inBlock = false;
+      let currentMonth = null;
+      
+      // Helper to get month index from day (0, 1, or 2)
+      function getMonthIndex(day) {
+        const dayInBlock = ((day - 1) % 90); // Day within the 90-day block
+        if (dayInBlock < 30) return 0;
+        if (dayInBlock < 60) return 1;
+        return 2;
+      }
+      
+      allCards.forEach((card, index) => {
+        // PORTADA
+        if (card.type === 'cover') {
+          html += createHeader('Portada');
+          html += createItem(card, index, 1, 'La mirada creativa');
+        }
+        // ME PRESENTO section
+        else if (card.type === 'presentation') {
+          if (card.title === 'HOLA SOY RAFA') {
+            html += createHeader('Me presento');
+          }
+          html += createItem(card, index, 1, capitalize(card.title));
+        }
+        // INTRODUCCIÓN section
+        else if (card.type === 'intro' && (card.title === 'TU META' || card.title === 'NO ES TU CÁMARA')) {
+          if (card.title === 'TU META') {
+            html += createHeader('Introducción');
+          }
+          html += createItem(card, index, 1, capitalize(card.title));
+        }
+        // LA MIRADA CREATIVA / EL SISTEMA section
+        else if (card.type === 'intro' && (card.title === 'MI SISTEMA' || card.title === 'REGLAS BÁSICAS')) {
+          if (card.title === 'MI SISTEMA') {
+            html += createHeader('El sistema');
+            html += createItem(card, index, 1, 'Mi sistema');
+          } else {
+            html += createItem(card, index, 1, 'Reglas básicas');
+          }
+        }
+        // REGLAS DE ORO (sub-items of Reglas básicas)
+        else if (card.type === 'rules') {
+          const ruleNum = card.id - 6;
+          html += createItem(card, index, 2, `Regla ${ruleNum}: ${capitalize(card.title)}`);
+        }
+        // ESTÁS PREPARADO
+        else if (card.type === 'ready') {
+          html += createItem(card, index, 1, 'Estás preparado');
+        }
+        // BLOQUES
+        else if (card.type === 'block-cover') {
+          currentBlockNum = card.blockNumber;
+          inBlock = true;
+          currentMonth = null; // Reset month tracking
+          html += createHeader(`Bloque ${currentBlockNum}: ${capitalize(card.block)}`);
+        }
+        // EJERCICIOS DIARIOS
+        else if (card.type === 'exercise' && inBlock) {
+          // Check if we need to add a month header
+          const monthIndex = getMonthIndex(card.day);
+          const monthName = blockMonths[currentBlockNum]?.[monthIndex];
+          
+          if (monthName && monthName !== currentMonth) {
+            currentMonth = monthName;
+            html += createHeader(monthName);
+          }
+          
+          html += createItem(card, index, 1, `Día ${card.day}: ${capitalize(card.title)}`);
+        }
+        // MISIONES
+        else if (card.type === 'special' && inBlock) {
+          html += createItem(card, index, 1, `Misión día ${card.day}`);
+        }
+        // FELICITACIONES
+        else if (card.type === 'congrats' && inBlock) {
+          html += createItem(card, index, 1, 'Completado ✓');
+          html += createSeparator();
+        }
+        // CIERRE
+        else if (card.type === 'closing') {
+          if (card.title === 'GRACIAS') {
+            inBlock = false;
+            html += createHeader('Cierre');
+          }
+          html += createItem(card, index, 1, capitalize(card.title));
+        }
+      });
+      
+      indexList.innerHTML = html;
+      
+      // Add click handlers (only for items with valid index)
+      indexList.querySelectorAll('.index-item[data-index]').forEach(item => {
+        const idx = parseInt(item.dataset.index);
+        if (idx >= 0) {
+          item.addEventListener('click', () => {
+            currentIndex = idx;
+            updateProgressBar(idx);
+            closeIndex();
+            
+            if (currentView === 'swipe') {
+              scrollToSwipeCard(idx);
+            } else {
+              scrollToScrollCard(idx);
+            }
+          });
+        }
+      });
+    }
+    
+    function openIndex() {
+      indexModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      
+      // Scroll to current item after modal opens
+      setTimeout(() => {
+        const currentItem = indexList.querySelector('.index-item.is-current');
+        if (currentItem) {
+          currentItem.scrollIntoView({ behavior: 'instant', block: 'start' });
+          // Add small offset from top
+          indexList.scrollTop = Math.max(0, indexList.scrollTop - 20);
+        }
+      }, 50);
+    }
+    
+    function closeIndex() {
+      indexModal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    
+    indexBtn.addEventListener('click', () => {
+      buildIndex();
+      openIndex();
+    });
+    
+    indexClose.addEventListener('click', closeIndex);
+    
+    indexModal.addEventListener('click', (e) => {
+      if (e.target === indexModal) {
+        closeIndex();
+      }
+    });
+    
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && indexModal.classList.contains('active')) {
+        closeIndex();
+      }
+    });
+
+    // ============================================
+    // Options Menu & Download
+    // ============================================
+    const optionsBtn = document.getElementById('optionsBtn');
+    const optionsDropdown = document.getElementById('optionsDropdown');
+    const downloadCardBtn = document.getElementById('downloadCard');
+    const downloadPDFBtn = document.getElementById('downloadPDF');
+
+    // Toggle dropdown
+    optionsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      optionsDropdown.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+      optionsDropdown.classList.remove('active');
+    });
+
+    optionsDropdown.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    // Download current card as JPG
+    downloadCardBtn.addEventListener('click', async () => {
+      optionsDropdown.classList.remove('active');
+      
+      const card = filteredCards[currentIndex];
+      
+      // Find the current visible card
+      const activeView = document.querySelector('.view.active.visible');
+      const cardWrapper = activeView?.querySelector(`[data-index="${currentIndex}"]`);
+      const cardElement = cardWrapper?.querySelector('.card');
+      
+      if (!cardElement || typeof html2canvas === 'undefined') {
+        alert('Error al capturar la carta. Intenta de nuevo.');
+        return;
+      }
+
+      // Show loading state
+      downloadCardBtn.disabled = true;
+      downloadCardBtn.querySelector('span:last-child').textContent = 'Generando...';
+
+      try {
+        // Temporarily add class to disable problematic CSS for html2canvas
+        cardElement.classList.add('capturing');
+        cardElement.classList.remove('tilting');
+        const originalTransform = cardElement.style.transform;
+        cardElement.style.transform = 'none';
+        
+        // Wait for styles to apply
+        await new Promise(resolve => setTimeout(resolve, 50));
+        
+        const canvas = await html2canvas(cardElement, {
+          scale: 2,
+          backgroundColor: '#1a1025',
+          useCORS: true,
+          logging: false,
+          ignoreElements: (element) => {
+            // Ignore pseudo-elements by checking for reflection-related classes
+            return element.classList?.contains('card-reflection');
+          }
+        });
+        
+        // Restore original state
+        cardElement.classList.remove('capturing');
+        cardElement.style.transform = originalTransform;
+
+        // Create download link
+        const link = document.createElement('a');
+        const dayStr = card.day ? `dia-${card.day}` : card.type;
+        const titleStr = card.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        link.download = `la-mirada-creativa-${dayStr}-${titleStr}.jpg`;
+        link.href = canvas.toDataURL('image/jpeg', 0.95);
+        link.click();
+      } catch (error) {
+        console.error('Error capturing card:', error);
+        alert('Error al generar la imagen. Intenta de nuevo.');
+      }
+
+      // Reset button
+      downloadCardBtn.disabled = false;
+      downloadCardBtn.querySelector('span:last-child').textContent = 'Descargar carta actual (JPG)';
+    });
+
+    // Toast elements
+    const toastProgress = document.getElementById('toastProgress');
+    const toastStatus = document.getElementById('toastStatus');
+    const toastFill = document.getElementById('toastFill');
+    const toastCancel = document.getElementById('toastCancel');
+    
+    let pdfCancelled = false;
+
+    function showToast(status = 'Preparando...', progress = 0) {
+      toastStatus.textContent = status;
+      toastFill.style.width = `${progress}%`;
+      toastProgress.classList.add('active');
+    }
+
+    function hideToast() {
+      toastProgress.classList.remove('active');
+    }
+
+    function updateToast(current, total) {
+      const progress = (current / total) * 100;
+      toastStatus.textContent = `Carta ${current} de ${total}`;
+      toastFill.style.width = `${progress}%`;
+    }
+
+    // Cancel button handler
+    toastCancel.addEventListener('click', () => {
+      pdfCancelled = true;
+      hideToast();
+    });
+
+    // Download all cards as PDF
+    downloadPDFBtn.addEventListener('click', async () => {
+      optionsDropdown.classList.remove('active');
+      
+      // Check if libraries are loaded
+      if (typeof html2canvas === 'undefined') {
+        alert('Librería html2canvas no cargada. Recarga la página.');
+        return;
+      }
+      
+      if (typeof window.jspdf === 'undefined') {
+        alert('Librería jsPDF no cargada. Recarga la página.');
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      
+      // Reset cancel flag
+      pdfCancelled = false;
+      
+      // Show toast
+      showToast('Preparando...', 0);
+      downloadPDFBtn.disabled = true;
+
+      try {
+        // Card dimensions (maintain aspect ratio)
+        const cardWidth = 340;
+        const cardHeight = 520;
+        
+        // Create PDF with exact card dimensions (no margins)
+        const pdf = new jsPDF({
+          orientation: 'portrait',
+          unit: 'px',
+          format: [cardWidth, cardHeight]
+        });
+
+        // Create a temporary container for rendering cards
+        const tempContainer = document.createElement('div');
+        tempContainer.id = 'pdf-temp-container';
+        tempContainer.style.cssText = `
+          position: fixed;
+          top: -9999px;
+          left: -9999px;
+          width: ${cardWidth}px;
+          height: ${cardHeight}px;
+          z-index: -9999;
+        `;
+        document.body.appendChild(tempContainer);
+
+        // Small delay to ensure container is ready
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        for (let i = 0; i < allCards.length; i++) {
+          // Check if cancelled
+          if (pdfCancelled) {
+            document.body.removeChild(tempContainer);
+            downloadPDFBtn.disabled = false;
+            return;
+          }
+          
+          const card = allCards[i];
+          
+          // Update toast progress
+          updateToast(i + 1, allCards.length);
+
+          // Render card HTML
+          tempContainer.innerHTML = createCardHTML(card);
+          const cardEl = tempContainer.querySelector('.card');
+          
+          if (!cardEl) {
+            console.error('Card element not found for index:', i);
+            continue;
+          }
+          
+          // Add capturing class to disable problematic CSS
+          cardEl.classList.add('capturing');
+          cardEl.style.width = `${cardWidth}px`;
+          cardEl.style.height = `${cardHeight}px`;
+          cardEl.style.minHeight = `${cardHeight}px`;
+          cardEl.style.transform = 'none';
+          cardEl.style.position = 'relative';
+
+          // Small delay to ensure styles are applied (reduced for speed)
+          await new Promise(resolve => setTimeout(resolve, 8));
+
+          // Capture to canvas (scale 1.5 for speed/quality balance)
+          const canvas = await html2canvas(cardEl, {
+            scale: 1.5,
+            backgroundColor: '#1a1025',
+            useCORS: true,
+            logging: false,
+            allowTaint: true
+          });
+
+          // Add page (except for first)
+          if (i > 0) pdf.addPage();
+
+          // Add image to PDF (0.85 quality for speed/size balance)
+          const imgData = canvas.toDataURL('image/jpeg', 0.85);
+          pdf.addImage(imgData, 'JPEG', 0, 0, cardWidth, cardHeight);
+        }
+
+        // Remove temp container
+        document.body.removeChild(tempContainer);
+
+        // Check if cancelled at the end
+        if (pdfCancelled) {
+          downloadPDFBtn.disabled = false;
+          return;
+        }
+
+        // Update toast to complete
+        toastStatus.textContent = '¡Completado!';
+        toastFill.style.width = '100%';
+
+        // Download PDF
+        pdf.save('la-mirada-creativa-365-cartas.pdf');
+
+        // Hide toast after a moment
+        setTimeout(() => hideToast(), 1500);
+
+      } catch (error) {
+        console.error('Error generating PDF:', error);
+        hideToast();
+        alert('Error al generar el PDF. Intenta de nuevo.');
+      }
+
+      // Reset button
+      downloadPDFBtn.disabled = false;
+    });
+
+    // ============================================
+    // Tilt Effect (Gyroscope & Hover)
+    // ============================================
+    let gyroPermissionGranted = false;
+    
+    function initTiltEffect() {
+      const cards = document.querySelectorAll('.card');
+      
+      cards.forEach(card => {
+        // Desktop: Mouse hover tilt
+        card.addEventListener('mouseenter', () => card.classList.add('tilting'));
+        card.addEventListener('mouseleave', () => {
+          card.classList.remove('tilting');
+          card.style.transform = '';
+          card.style.setProperty('--reflect-x', '50%');
+          card.style.setProperty('--reflect-y', '50%');
+        });
+        
+        card.addEventListener('mousemove', (e) => {
+          if (window.innerWidth < 768) return; // Skip on mobile
+          
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          
+          const rotateX = ((y - centerY) / centerY) * -8;
+          const rotateY = ((x - centerX) / centerX) * 8;
+          
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+          
+          // Update reflection position to follow cursor
+          const reflectX = (x / rect.width) * 100;
+          const reflectY = (y / rect.height) * 100;
+          card.style.setProperty('--reflect-x', `${reflectX}%`);
+          card.style.setProperty('--reflect-y', `${reflectY}%`);
+        });
+      });
+      
+      // Mobile: Gyroscope tilt
+      if (window.DeviceOrientationEvent && 'ontouchstart' in window) {
+        requestGyroPermission();
+      }
+    }
+    
+    function requestGyroPermission() {
+      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        // iOS 13+ requires permission
+        document.body.addEventListener('click', async function requestOnClick() {
+          try {
+            const permission = await DeviceOrientationEvent.requestPermission();
+            if (permission === 'granted') {
+              gyroPermissionGranted = true;
+              initGyroscope();
+            }
+          } catch (e) {
+            console.log('Gyro permission denied');
+          }
+          document.body.removeEventListener('click', requestOnClick);
+        }, { once: true });
+      } else {
+        // Non-iOS devices
+        gyroPermissionGranted = true;
+        initGyroscope();
+      }
+    }
+    
+    function initGyroscope() {
+      window.addEventListener('deviceorientation', (e) => {
+        if (!gyroPermissionGranted) return;
+        
+        const cards = document.querySelectorAll('.card');
+        const beta = Math.max(-20, Math.min(20, e.beta || 0)); // Front-back tilt
+        const gamma = Math.max(-20, Math.min(20, e.gamma || 0)); // Left-right tilt
+        
+        const rotateX = beta * 0.5;
+        const rotateY = gamma * 0.5;
+        
+        // Calculate reflection position based on device tilt
+        const reflectX = 50 + (gamma * 2); // 50% center + tilt offset
+        const reflectY = 50 + (beta * 2);
+        
+        cards.forEach(card => {
+          card.classList.add('tilting');
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+          card.style.setProperty('--reflect-x', `${reflectX}%`);
+          card.style.setProperty('--reflect-y', `${reflectY}%`);
+        });
+      });
+    }
+
+    // ============================================
+    // URL Parameter Handling
+    // ============================================
+    function parseURLParams() {
+      const path = window.location.pathname;
+      const parts = path.split('/').filter(Boolean);
+      
+      if (parts.length >= 2 && parts[0] === 'cartas') {
+        const identifier = parts[1];
+        const match = identifier.match(/^([a-zA-Z]+)-(\d+)$/);
+        
+        if (match) {
+          const name = match[1].charAt(0).toUpperCase() + match[1].slice(1);
+          const accessNum = parseInt(match[2]);
+          
+          ownerName.textContent = name;
+          accessInfo.textContent = `Acceso ${accessNum} de 30`;
+          ownerBanner.style.display = 'block';
+        }
+      }
+    }
+
+    // ============================================
+    // Keyboard Navigation
+    // ============================================
+    document.addEventListener('keydown', (e) => {
+      if (e.target === searchInput) return;
+      
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (currentIndex < filteredCards.length - 1) {
+          currentIndex++;
+          updateProgressBar(currentIndex);
+          if (currentView === 'swipe') {
+            scrollToSwipeCard(currentIndex);
+          } else {
+            scrollToScrollCard(currentIndex);
+          }
+        }
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (currentIndex > 0) {
+          currentIndex--;
+          updateProgressBar(currentIndex);
+          if (currentView === 'swipe') {
+            scrollToSwipeCard(currentIndex);
+          } else {
+            scrollToScrollCard(currentIndex);
+          }
+        }
+      }
+    });
+
+    // ============================================
+    // Initialize
+    // ============================================
+    function init() {
+      console.log(`La Mirada Creativa - ${allCards.length} cartas cargadas`);
+      parseURLParams();
+      initProgressDrag();
+      
+      // Restore saved view state
+      viewBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.view === currentView);
+      });
+      views.forEach(view => {
+        view.classList.toggle('active', view.id === currentView + 'View');
+      });
+      
+      // Render the current view
+      renderCurrentView();
+      initTiltEffect();
+      
+      // Hide loading overlay with fade
+      const appLoading = document.getElementById('appLoading');
+      if (appLoading) {
+        // Delay to show loading message (1.5 seconds)
+        setTimeout(() => {
+          appLoading.classList.add('fade-out');
+          setTimeout(() => appLoading.remove(), 400);
+        }, 1500);
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
