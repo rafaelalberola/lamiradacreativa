@@ -3119,7 +3119,6 @@
     let tiltInitialized = false;
     let gyroEnabled = false;
     let gyroListener = null;
-    const gyroBtn = document.getElementById('gyroBtn');
     
     function initTiltEffect() {
       // Prevent multiple initializations for desktop
@@ -3158,54 +3157,57 @@
           });
         });
       }
+      
+      // Setup gyroscope button (mobile only) - only click handler, no auto-enable
+      initGyroButton();
     }
     
-    // Gyroscope Button Handler (Mobile Only)
-    if (gyroBtn) {
-      // Check if gyro was previously enabled
-      if (localStorage.getItem('lmc_gyro_enabled') === 'true') {
-        tryEnableGyro();
-      }
+    function initGyroButton() {
+      const gyroBtn = document.getElementById('gyroBtn');
+      if (!gyroBtn) return;
       
+      // Only add click handler - never auto-enable (iOS requires user gesture)
       gyroBtn.addEventListener('click', async () => {
         if (gyroEnabled) {
-          disableGyro();
+          disableGyro(gyroBtn);
         } else {
-          await tryEnableGyro();
+          await tryEnableGyro(gyroBtn);
         }
       });
     }
     
-    async function tryEnableGyro() {
+    async function tryEnableGyro(gyroBtn) {
       try {
         // Check if DeviceOrientationEvent exists
-        if (!window.DeviceOrientationEvent) {
-          showToast('Tu dispositivo no soporta el sensor de movimiento', 'error', 'error', 3000);
+        if (typeof window.DeviceOrientationEvent === 'undefined') {
+          showToast('Tu dispositivo no soporta el sensor', 'error', 'error', 3000);
           return;
         }
         
-        // iOS 13+ requires permission
+        // iOS 13+ requires permission - must be called from user gesture
         if (typeof DeviceOrientationEvent.requestPermission === 'function') {
           const permission = await DeviceOrientationEvent.requestPermission();
           if (permission !== 'granted') {
-            showToast('Permiso de movimiento denegado', 'error', 'block', 3000);
+            showToast('Permiso denegado', 'error', 'block', 3000);
             return;
           }
         }
         
-        enableGyro();
-        localStorage.setItem('lmc_gyro_enabled', 'true');
+        enableGyro(gyroBtn);
         
       } catch (err) {
         console.error('Gyro error:', err);
-        showToast('No se pudo activar el sensor', 'error', 'error', 3000);
+        showToast('No se pudo activar', 'error', 'error', 3000);
       }
     }
     
-    function enableGyro() {
+    function enableGyro(gyroBtn) {
       gyroEnabled = true;
-      gyroBtn.classList.add('active');
-      gyroBtn.querySelector('span:not(.material-symbols-sharp)').textContent = 'ON';
+      if (gyroBtn) {
+        gyroBtn.classList.add('active');
+        const textSpan = gyroBtn.querySelector('span:not(.material-symbols-sharp)');
+        if (textSpan) textSpan.textContent = 'ON';
+      }
       
       gyroListener = (e) => {
         if (!gyroEnabled) return;
@@ -3229,14 +3231,16 @@
       };
       
       window.addEventListener('deviceorientation', gyroListener);
-      showToast('Efecto 3D activado ✨', 'success', 'motion_sensor_active', 2000);
+      showToast('Efecto 3D activado ✨', 'success', 'check_circle', 2000);
     }
     
-    function disableGyro() {
+    function disableGyro(gyroBtn) {
       gyroEnabled = false;
-      gyroBtn.classList.remove('active');
-      gyroBtn.querySelector('span:not(.material-symbols-sharp)').textContent = '3D';
-      localStorage.removeItem('lmc_gyro_enabled');
+      if (gyroBtn) {
+        gyroBtn.classList.remove('active');
+        const textSpan = gyroBtn.querySelector('span:not(.material-symbols-sharp)');
+        if (textSpan) textSpan.textContent = '3D';
+      }
       
       if (gyroListener) {
         window.removeEventListener('deviceorientation', gyroListener);
@@ -3252,7 +3256,7 @@
         card.style.setProperty('--reflect-y', '50%');
       });
       
-      showToast('Efecto 3D desactivado', 'success', 'motion_sensor_idle', 2000);
+      showToast('Efecto 3D desactivado', 'success', 'check_circle', 2000);
     }
 
     // ============================================
@@ -3341,3 +3345,4 @@
   </script>
 </body>
 </html>
+
