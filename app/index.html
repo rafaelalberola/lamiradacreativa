@@ -1894,6 +1894,33 @@
     const AUTH0_CLIENT_ID = 'wTRFr8TqbqdxBkWCJeQ052zvGGemnwsZ';
     
     // ============================================
+    // Safe localStorage wrapper (must be first!)
+    // ============================================
+    function safeGetItem(key) {
+      try {
+        return localStorage.getItem(key);
+      } catch (e) {
+        return null;
+      }
+    }
+    
+    function safeSetItem(key, value) {
+      try {
+        localStorage.setItem(key, value);
+      } catch (e) {
+        // Ignore - private browsing or quota exceeded
+      }
+    }
+    
+    function safeRemoveItem(key) {
+      try {
+        localStorage.removeItem(key);
+      } catch (e) {
+        // Ignore
+      }
+    }
+    
+    // ============================================
     // AUTHENTICATION - Auth0
     // ============================================
     const loginScreen = document.getElementById('loginScreen');
@@ -2194,35 +2221,10 @@
     const indexList = document.getElementById('indexList');
 
     // ============================================
-    // LocalStorage Keys & Safe Access
+    // LocalStorage Keys
     // ============================================
     const STORAGE_KEY_INDEX = 'lmc_current_index';
     const STORAGE_KEY_VIEW = 'lmc_current_view';
-
-    // Safe localStorage wrapper (handles private browsing)
-    function safeGetItem(key) {
-      try {
-        return localStorage.getItem(key);
-      } catch (e) {
-        return null;
-      }
-    }
-    
-    function safeSetItem(key, value) {
-      try {
-        localStorage.setItem(key, value);
-      } catch (e) {
-        // Ignore - private browsing or quota exceeded
-      }
-    }
-    
-    function safeRemoveItem(key) {
-      try {
-        localStorage.removeItem(key);
-      } catch (e) {
-        // Ignore
-      }
-    }
 
     // ============================================
     // State
