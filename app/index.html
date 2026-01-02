@@ -653,17 +653,22 @@
       display: none;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
       border: none;
-      background: var(--color-bg-alt);
+      background: transparent;
       border-radius: 8px;
       cursor: pointer;
       color: var(--color-text);
+      transition: opacity 0.2s;
+    }
+
+    .mobile-menu-btn:active {
+      opacity: 0.6;
     }
 
     .mobile-menu-btn .material-symbols-sharp {
-      font-size: 22px;
+      font-size: 26px;
     }
 
     /* Mobile Options Bottom Sheet */
@@ -755,6 +760,30 @@
 
     .mobile-option-item.active .material-symbols-sharp {
       color: var(--color-accent);
+    }
+
+    /* 3D Toggle specific - green when active */
+    .mobile-option-item.gyro-active {
+      background: rgba(34, 197, 94, 0.1);
+    }
+
+    .mobile-option-item.gyro-active .material-symbols-sharp {
+      color: #22c55e;
+    }
+
+    .mobile-option-item .gyro-status {
+      margin-left: auto;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: var(--color-bg-alt);
+      color: var(--color-text-secondary);
+    }
+
+    .mobile-option-item.gyro-active .gyro-status {
+      background: #22c55e;
+      color: white;
     }
 
     .mobile-option-item.danger {
@@ -2155,6 +2184,7 @@
           <button class="mobile-option-item" id="mobileGyroBtn">
             <span class="material-symbols-sharp">view_in_ar</span>
             Efecto 3D
+            <span class="gyro-status" id="gyroStatus">OFF</span>
           </button>
           
           <div class="mobile-options-separator"></div>
@@ -3621,7 +3651,9 @@
       mobileViewSwipe.classList.toggle('active', currentView === 'swipe');
       mobileViewScroll.classList.toggle('active', currentView === 'scroll');
       // Update gyro button state
-      mobileGyroBtn.classList.toggle('active', gyroEnabled);
+      const gyroStatus = document.getElementById('gyroStatus');
+      mobileGyroBtn.classList.toggle('gyro-active', gyroEnabled);
+      if (gyroStatus) gyroStatus.textContent = gyroEnabled ? 'ON' : 'OFF';
       // Sync search input
       if (mobileSearchInput && searchInput) {
         mobileSearchInput.value = searchInput.value;
@@ -3674,12 +3706,18 @@
     if (mobileGyroBtn) {
       mobileGyroBtn.addEventListener('click', async () => {
         const gyroBtn = document.getElementById('gyroBtn');
+        const gyroStatus = document.getElementById('gyroStatus');
+        
         if (gyroEnabled) {
           disableGyro(gyroBtn);
-          mobileGyroBtn.classList.remove('active');
+          mobileGyroBtn.classList.remove('gyro-active');
+          if (gyroStatus) gyroStatus.textContent = 'OFF';
         } else {
           await tryEnableGyro(gyroBtn);
-          mobileGyroBtn.classList.toggle('active', gyroEnabled);
+          if (gyroEnabled) {
+            mobileGyroBtn.classList.add('gyro-active');
+            if (gyroStatus) gyroStatus.textContent = 'ON';
+          }
         }
       });
     }
@@ -3735,7 +3773,13 @@
     let tiltInitialized = false;
     let gyroEnabled = false;
     let gyroListener = null;
-    let gyroReferenceBeta = null; // Reference angle when user activates gyro (phone held naturally)
+    let gyroReferenceBeta = null; // Reference angle when user activates gyro
+    let gyroReferenceGamma = null;
+    
+    // Smoothing variables for fluid motion
+    let smoothBeta = 0;
+    let smoothGamma = 0;
+    const SMOOTHING = 0.15; // Lower = smoother but slower response
     
     function initTiltEffect() {
       // Prevent multiple initializations
@@ -3820,7 +3864,10 @@
     
     function enableGyro(gyroBtn) {
       gyroEnabled = true;
-      gyroReferenceBeta = null; // Reset reference to capture new position
+      gyroReferenceBeta = null;
+      gyroReferenceGamma = null;
+      smoothBeta = 0;
+      smoothGamma = 0;
       
       if (gyroBtn) {
         gyroBtn.classList.add('active');
@@ -3834,11 +3881,24 @@
         const rawBeta = e.beta || 0;
         const rawGamma = e.gamma || 0;
         
-        // Capture reference angle on first reading (user's natural holding position)
-        // Typically ~45-60° when user holds phone tilted towards face
+        // Capture reference on first reading (user's natural holding position)
         if (gyroReferenceBeta === null) {
           gyroReferenceBeta = rawBeta;
+          gyroReferenceGamma = rawGamma;
+          return; // Skip first frame to establish baseline
         }
+        
+        // Calculate relative tilt from reference position
+        let targetBeta = rawBeta - gyroReferenceBeta;
+        let targetGamma = rawGamma - gyroReferenceGamma;
+        
+        // Clamp to reasonable range
+        targetBeta = Math.max(-20, Math.min(20, targetBeta));
+        targetGamma = Math.max(-20, Math.min(20, targetGamma));
+        
+        // Smooth interpolation (lerp) for fluid motion
+        smoothBeta += (targetBeta - smoothBeta) * SMOOTHING;
+        smoothGamma += (targetGamma - smoothGamma) * SMOOTHING;
         
         // Only affect the current visible card
         const activeView = document.querySelector('.view.active.visible');
@@ -3848,31 +3908,21 @@
         const card = currentWrapper ? currentWrapper.querySelector('.card') : null;
         if (!card) return;
         
-        // Calculate relative tilt from user's natural holding position
-        const relativeBeta = rawBeta - gyroReferenceBeta;
+        // Subtle rotation - less is more for natural feel
+        const rotateX = smoothBeta * -0.5;
+        const rotateY = smoothGamma * 0.5;
         
-        // Clamp values to reasonable range
-        const beta = Math.max(-25, Math.min(25, relativeBeta));
-        const gamma = Math.max(-25, Math.min(25, rawGamma));
-        
-        // Rotation effect - beta tilts forward/back, gamma tilts left/right
-        const rotateX = beta * -0.8; // Negative so tilting forward rotates card towards user
-        const rotateY = gamma * 0.8;
-        
-        const reflectX = 50 + (gamma * 2);
-        const reflectY = 50 + (beta * -2);
-        
-        // Dynamic shadow based on tilt - shadow moves opposite to tilt
-        const shadowX = gamma * -1.2;
-        const shadowY = beta * 1.2;
-        const shadowBlur = 25 + Math.abs(gamma) * 0.8 + Math.abs(beta) * 0.8;
-        const shadowSpread = 4 + (Math.abs(gamma) + Math.abs(beta)) * 0.2;
+        // Dynamic shadow - subtle and realistic
+        const shadowX = smoothGamma * -0.8;
+        const shadowY = smoothBeta * 0.8;
+        const tiltMagnitude = Math.sqrt(smoothBeta * smoothBeta + smoothGamma * smoothGamma);
+        const shadowBlur = 20 + tiltMagnitude * 0.5;
+        const shadowOpacity = 0.15 + tiltMagnitude * 0.005;
         
         card.classList.add('tilting');
-        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-        card.style.boxShadow = `${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px rgba(0, 0, 0, 0.3)`;
-        card.style.setProperty('--reflect-x', `${reflectX}%`);
-        card.style.setProperty('--reflect-y', `${reflectY}%`);
+        card.style.transition = 'none'; // Disable CSS transitions during gyro
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.01)`;
+        card.style.boxShadow = `${shadowX}px ${shadowY}px ${shadowBlur}px 2px rgba(0, 0, 0, ${shadowOpacity})`;
       };
       
       window.addEventListener('deviceorientation', gyroListener);
@@ -3881,7 +3931,10 @@
     
     function disableGyro(gyroBtn) {
       gyroEnabled = false;
-      gyroReferenceBeta = null; // Reset reference for next activation
+      gyroReferenceBeta = null;
+      gyroReferenceGamma = null;
+      smoothBeta = 0;
+      smoothGamma = 0;
       
       if (gyroBtn) {
         gyroBtn.classList.remove('active');
@@ -3894,17 +3947,20 @@
         gyroListener = null;
       }
       
-      // Reset only current card transform
+      // Reset card with smooth transition back to normal
       const activeView = document.querySelector('.view.active.visible');
       if (activeView) {
         const currentWrapper = activeView.querySelector(`[data-index="${currentIndex}"]`);
         const card = currentWrapper ? currentWrapper.querySelector('.card') : null;
         if (card) {
           card.classList.remove('tilting');
+          card.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
           card.style.transform = '';
           card.style.boxShadow = '';
-          card.style.setProperty('--reflect-x', '50%');
-          card.style.setProperty('--reflect-y', '50%');
+          // Clear transition after animation completes
+          setTimeout(() => {
+            if (card) card.style.transition = '';
+          }, 300);
         }
       }
       
