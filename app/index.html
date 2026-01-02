@@ -630,8 +630,8 @@
     /* Mobile: Hide elements and show only menu button */
     @media (max-width: 768px) {
       .view-toggle,
-      .header-actions-group .index-btn,
-      .header-actions-group .options-wrapper,
+      .search-wrapper,
+      .header-actions-group,
       .gyro-btn,
       .header-separator,
       .logout-btn {
@@ -640,6 +640,7 @@
 
       .header-actions {
         gap: 0;
+        margin-left: auto;
       }
 
       /* Show mobile menu button */
@@ -648,19 +649,18 @@
       }
     }
 
-    /* Mobile Menu Button */
+    /* Mobile Menu Button - matches landing exactly */
     .mobile-menu-btn {
       display: none;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      height: 40px;
+      background: none;
       border: none;
-      background: transparent;
-      border-radius: 8px;
       cursor: pointer;
+      padding: 8px;
+      margin-right: -8px; /* Align to edge */
+      margin-left: auto; /* Push to far right */
       color: var(--color-text);
-      transition: opacity 0.2s;
     }
 
     .mobile-menu-btn:active {
@@ -668,7 +668,7 @@
     }
 
     .mobile-menu-btn .material-symbols-sharp {
-      font-size: 26px;
+      font-size: 24px;
     }
 
     /* Mobile Options Bottom Sheet */
@@ -3913,11 +3913,12 @@
         const rotateY = smoothGamma * 0.5;
         
         // Dynamic shadow - subtle and realistic
-        const shadowX = smoothGamma * -0.8;
-        const shadowY = smoothBeta * 0.8;
+        // Base offset of 8px down to simulate light from above (natural phone position)
+        const shadowX = smoothGamma * -0.6;
+        const shadowY = 8 + (smoothBeta * 0.6); // Base 8px down + tilt adjustment
         const tiltMagnitude = Math.sqrt(smoothBeta * smoothBeta + smoothGamma * smoothGamma);
-        const shadowBlur = 20 + tiltMagnitude * 0.5;
-        const shadowOpacity = 0.15 + tiltMagnitude * 0.005;
+        const shadowBlur = 20 + tiltMagnitude * 0.4;
+        const shadowOpacity = 0.18 + tiltMagnitude * 0.004;
         
         card.classList.add('tilting');
         card.style.transition = 'none'; // Disable CSS transitions during gyro
