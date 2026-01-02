@@ -627,6 +627,213 @@
       }
     }
 
+    /* Mobile: Hide elements and show only menu button */
+    @media (max-width: 768px) {
+      .view-toggle,
+      .header-actions-group .index-btn,
+      .header-actions-group .options-wrapper,
+      .gyro-btn,
+      .header-separator,
+      .logout-btn {
+        display: none !important;
+      }
+
+      .header-actions {
+        gap: 0;
+      }
+
+      /* Show mobile menu button */
+      .mobile-menu-btn {
+        display: flex !important;
+      }
+    }
+
+    /* Mobile Menu Button */
+    .mobile-menu-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: var(--color-bg-alt);
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--color-text);
+    }
+
+    .mobile-menu-btn .material-symbols-sharp {
+      font-size: 22px;
+    }
+
+    /* Mobile Options Bottom Sheet */
+    .mobile-options-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+      display: none;
+      align-items: flex-end;
+    }
+
+    .mobile-options-modal.active {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .mobile-options-content {
+      background: var(--color-bg);
+      width: 100%;
+      max-height: 70vh;
+      border-radius: 20px 20px 0 0;
+      animation: slideUp 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+      padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
+
+    .mobile-options-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 20px 16px;
+      position: relative;
+    }
+
+    .mobile-options-header::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 36px;
+      height: 4px;
+      background: var(--color-border);
+      border-radius: 2px;
+    }
+
+    .mobile-options-title {
+      font-family: var(--font-headline);
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--color-text);
+      padding-top: 8px;
+    }
+
+    .mobile-options-list {
+      padding: 0 12px 12px;
+    }
+
+    .mobile-option-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      padding: 16px;
+      border: none;
+      background: transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      color: var(--color-text);
+      text-align: left;
+      transition: background 0.15s;
+    }
+
+    .mobile-option-item:active {
+      background: var(--color-bg-alt);
+    }
+
+    .mobile-option-item .material-symbols-sharp {
+      font-size: 24px;
+      color: var(--color-text-secondary);
+      width: 32px;
+      text-align: center;
+    }
+
+    .mobile-option-item.active .material-symbols-sharp {
+      color: var(--color-accent);
+    }
+
+    .mobile-option-item.danger {
+      color: #dc2626;
+    }
+
+    .mobile-option-item.danger .material-symbols-sharp {
+      color: #dc2626;
+    }
+
+    .mobile-options-separator {
+      height: 1px;
+      background: var(--color-border-light);
+      margin: 8px 16px;
+    }
+
+    .mobile-option-group {
+      display: flex;
+      gap: 8px;
+      padding: 8px 16px;
+    }
+
+    .mobile-option-toggle {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px;
+      border: 1px solid var(--color-border-light);
+      background: var(--color-bg);
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      color: var(--color-text-secondary);
+      transition: all 0.2s;
+    }
+
+    .mobile-option-toggle.active {
+      background: var(--color-text);
+      color: var(--color-bg);
+      border-color: var(--color-text);
+    }
+
+    .mobile-option-toggle .material-symbols-sharp {
+      font-size: 20px;
+    }
+
+    .mobile-search-wrapper {
+      position: relative;
+      padding: 4px 16px 8px;
+    }
+
+    .mobile-search-input {
+      width: 100%;
+      padding: 12px 12px 12px 44px;
+      border: 1px solid var(--color-border-light);
+      border-radius: 12px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      background: var(--color-bg-alt);
+      color: var(--color-text);
+    }
+
+    .mobile-search-input:focus {
+      outline: none;
+      border-color: var(--color-accent);
+    }
+
+    .mobile-search-icon {
+      position: absolute;
+      left: 28px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 22px;
+      color: var(--color-text-secondary);
+    }
+
     /* Index Modal */
     .index-modal {
       position: fixed;
@@ -672,10 +879,11 @@
 
       .index-content {
         max-width: 100%;
-        max-height: calc(100vh - 48px); /* Leave space at top for depth */
+        max-height: 80vh;
         border-radius: 20px 20px 0 0;
         box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.25);
         animation: slideUp 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+        overflow: hidden;
       }
 
       @keyframes fadeIn {
@@ -689,15 +897,16 @@
       }
 
       .index-header {
-        padding: 12px 20px 12px;
+        padding: 20px 20px 12px;
         border-bottom: none;
         position: relative;
+        flex-shrink: 0;
       }
 
       .index-header::before {
         content: '';
         position: absolute;
-        top: 8px;
+        top: 10px;
         left: 50%;
         transform: translateX(-50%);
         width: 36px;
@@ -709,17 +918,20 @@
       .index-title {
         width: 100%;
         text-align: center;
-        padding-top: 8px;
+        padding-top: 4px;
       }
 
       .index-close {
         position: absolute;
         right: 12px;
-        top: 12px;
+        top: 16px;
       }
 
       .index-list {
         padding-bottom: env(safe-area-inset-bottom, 20px);
+        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
       }
     }
 
@@ -1897,9 +2109,75 @@
           <button class="logout-btn" id="logoutBtn" title="Cerrar sesión">
             <span class="material-symbols-sharp">logout</span>
           </button>
+
+          <!-- Mobile Menu Button -->
+          <button class="mobile-menu-btn" id="mobileMenuBtn" title="Menú">
+            <span class="material-symbols-sharp">menu</span>
+          </button>
         </div>
       </div>
     </header>
+
+    <!-- Mobile Options Bottom Sheet -->
+    <div class="mobile-options-modal" id="mobileOptionsModal">
+      <div class="mobile-options-content">
+        <div class="mobile-options-header">
+          <span class="mobile-options-title">Opciones</span>
+        </div>
+        <div class="mobile-options-list">
+          <!-- Mobile Search -->
+          <div class="mobile-search-wrapper">
+            <span class="material-symbols-sharp mobile-search-icon">search</span>
+            <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Buscar cartas...">
+          </div>
+          
+          <div class="mobile-options-separator"></div>
+
+          <!-- View Toggle -->
+          <div class="mobile-option-group">
+            <button class="mobile-option-toggle active" id="mobileViewSwipe">
+              <span class="material-symbols-sharp">swap_horiz</span>
+              Horizontal
+            </button>
+            <button class="mobile-option-toggle" id="mobileViewScroll">
+              <span class="material-symbols-sharp">swap_vert</span>
+              Vertical
+            </button>
+          </div>
+          
+          <div class="mobile-options-separator"></div>
+          
+          <button class="mobile-option-item" id="mobileIndexBtn">
+            <span class="material-symbols-sharp">list</span>
+            Índice de cartas
+          </button>
+          
+          <button class="mobile-option-item" id="mobileGyroBtn">
+            <span class="material-symbols-sharp">view_in_ar</span>
+            Efecto 3D
+          </button>
+          
+          <div class="mobile-options-separator"></div>
+          
+          <button class="mobile-option-item" id="mobileDownloadCard">
+            <span class="material-symbols-sharp">image</span>
+            Descargar carta actual
+          </button>
+          
+          <button class="mobile-option-item" id="mobileDownloadPDF">
+            <span class="material-symbols-sharp">picture_as_pdf</span>
+            Descargar todas (PDF)
+          </button>
+          
+          <div class="mobile-options-separator"></div>
+          
+          <button class="mobile-option-item danger" id="mobileLogoutBtn">
+            <span class="material-symbols-sharp">logout</span>
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Index Modal -->
     <div class="index-modal" id="indexModal">
@@ -3323,6 +3601,135 @@
     });
 
     // ============================================
+    // Mobile Options Menu
+    // ============================================
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileOptionsModal = document.getElementById('mobileOptionsModal');
+    const mobileViewSwipe = document.getElementById('mobileViewSwipe');
+    const mobileViewScroll = document.getElementById('mobileViewScroll');
+    const mobileIndexBtn = document.getElementById('mobileIndexBtn');
+    const mobileGyroBtn = document.getElementById('mobileGyroBtn');
+    const mobileDownloadCard = document.getElementById('mobileDownloadCard');
+    const mobileDownloadPDF = document.getElementById('mobileDownloadPDF');
+    const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
+    const mobileSearchInput = document.getElementById('mobileSearchInput');
+
+    function openMobileOptions() {
+      mobileOptionsModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      // Update view toggle state
+      mobileViewSwipe.classList.toggle('active', currentView === 'swipe');
+      mobileViewScroll.classList.toggle('active', currentView === 'scroll');
+      // Update gyro button state
+      mobileGyroBtn.classList.toggle('active', gyroEnabled);
+      // Sync search input
+      if (mobileSearchInput && searchInput) {
+        mobileSearchInput.value = searchInput.value;
+      }
+    }
+
+    function closeMobileOptions() {
+      mobileOptionsModal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    if (mobileMenuBtn) {
+      mobileMenuBtn.addEventListener('click', openMobileOptions);
+    }
+
+    if (mobileOptionsModal) {
+      mobileOptionsModal.addEventListener('click', (e) => {
+        if (e.target === mobileOptionsModal) {
+          closeMobileOptions();
+        }
+      });
+    }
+
+    if (mobileViewSwipe) {
+      mobileViewSwipe.addEventListener('click', () => {
+        switchView('swipe');
+        mobileViewSwipe.classList.add('active');
+        mobileViewScroll.classList.remove('active');
+      });
+    }
+
+    if (mobileViewScroll) {
+      mobileViewScroll.addEventListener('click', () => {
+        switchView('scroll');
+        mobileViewScroll.classList.add('active');
+        mobileViewSwipe.classList.remove('active');
+      });
+    }
+
+    if (mobileIndexBtn) {
+      mobileIndexBtn.addEventListener('click', () => {
+        closeMobileOptions();
+        setTimeout(() => {
+          buildIndex();
+          openIndex();
+        }, 100);
+      });
+    }
+
+    if (mobileGyroBtn) {
+      mobileGyroBtn.addEventListener('click', async () => {
+        const gyroBtn = document.getElementById('gyroBtn');
+        if (gyroEnabled) {
+          disableGyro(gyroBtn);
+          mobileGyroBtn.classList.remove('active');
+        } else {
+          await tryEnableGyro(gyroBtn);
+          mobileGyroBtn.classList.toggle('active', gyroEnabled);
+        }
+      });
+    }
+
+    if (mobileDownloadCard) {
+      mobileDownloadCard.addEventListener('click', () => {
+        closeMobileOptions();
+        downloadCardBtn.click();
+      });
+    }
+
+    if (mobileDownloadPDF) {
+      mobileDownloadPDF.addEventListener('click', () => {
+        closeMobileOptions();
+        downloadPDFBtn.click();
+      });
+    }
+
+    if (mobileLogoutBtn) {
+      mobileLogoutBtn.addEventListener('click', async () => {
+        closeMobileOptions();
+        try {
+          safeSetItem('lmc_logged_out', 'true');
+          await auth0Client.logout({
+            logoutParams: {
+              returnTo: window.location.origin + '/app/'
+            }
+          });
+        } catch (err) {
+          console.error('Logout error:', err);
+        }
+      });
+    }
+
+    if (mobileSearchInput) {
+      mobileSearchInput.addEventListener('input', (e) => {
+        // Sync with main search input
+        searchInput.value = e.target.value;
+        filterCards(e.target.value);
+      });
+      
+      // Close modal and apply search when pressing enter
+      mobileSearchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          closeMobileOptions();
+        }
+      });
+    }
+
+    // ============================================
     // Tilt Effect (Desktop Hover + Mobile Gyroscope)
     // ============================================
     let tiltInitialized = false;
@@ -3439,8 +3846,15 @@
         const reflectX = 50 + (gamma * 2);
         const reflectY = 50 + (beta * 2);
         
+        // Dynamic shadow based on tilt - shadow moves opposite to tilt
+        const shadowX = gamma * -1.5;
+        const shadowY = beta * -1.5;
+        const shadowBlur = 30 + Math.abs(gamma) + Math.abs(beta);
+        const shadowSpread = 5 + (Math.abs(gamma) + Math.abs(beta)) * 0.3;
+        
         card.classList.add('tilting');
         card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        card.style.boxShadow = `${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px rgba(0, 0, 0, 0.35)`;
         card.style.setProperty('--reflect-x', `${reflectX}%`);
         card.style.setProperty('--reflect-y', `${reflectY}%`);
       };
@@ -3470,6 +3884,7 @@
         if (card) {
           card.classList.remove('tilting');
           card.style.transform = '';
+          card.style.boxShadow = '';
           card.style.setProperty('--reflect-x', '50%');
           card.style.setProperty('--reflect-y', '50%');
         }
