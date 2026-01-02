@@ -960,7 +960,12 @@
       transform: translate(-50%, -50%) scale(1.2);
     }
 
-    /* Views Container */
+    /* Views Container - 3D Transitions */
+    .main {
+      perspective: 1200px;
+      perspective-origin: center center;
+    }
+
     .view {
       display: none;
       position: absolute;
@@ -969,28 +974,51 @@
       right: 0;
       bottom: 0;
       opacity: 0;
-      transform: scale(0.92) translateY(20px);
-      filter: blur(8px);
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
       transition: 
-        opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-        filter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+        transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+        filter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .view.active {
       display: flex;
     }
 
-    .view.active.visible {
+    /* Swipe view enters from left with rotation */
+    .swipe-view {
+      transform: translateX(-100%) rotateY(-15deg) scale(0.9);
+      filter: blur(4px);
+    }
+
+    .swipe-view.active.visible {
       opacity: 1;
-      transform: scale(1) translateY(0);
+      transform: translateX(0) rotateY(0) scale(1);
       filter: blur(0);
     }
 
-    /* Exit animation - scale up and fade */
-    .view.exiting {
+    .swipe-view.exiting {
       opacity: 0;
-      transform: scale(1.05) translateY(-10px);
+      transform: translateX(100%) rotateY(15deg) scale(0.9);
+      filter: blur(4px);
+    }
+
+    /* Scroll view enters from right with rotation */
+    .scroll-view {
+      transform: translateX(100%) rotateY(15deg) scale(0.9);
+      filter: blur(4px);
+    }
+
+    .scroll-view.active.visible {
+      opacity: 1;
+      transform: translateX(0) rotateY(0) scale(1);
+      filter: blur(0);
+    }
+
+    .scroll-view.exiting {
+      opacity: 0;
+      transform: translateX(-100%) rotateY(-15deg) scale(0.9);
       filter: blur(4px);
     }
 
@@ -2748,19 +2776,19 @@
         updateProgressBar(currentIndex);
         initTiltEffect();
         
-        // Entrance animation after rendering
+        // Entrance animation after rendering - slight delay for wow effect
         requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
+          setTimeout(() => {
             const newView = document.getElementById(viewName + 'View');
             if (newView) newView.classList.add('visible');
             
             // Reset flag after transition completes
             setTimeout(() => {
               isSwitchingView = false;
-            }, 400);
-          });
+            }, 500);
+          }, 50);
         });
-      }, 300); // Wait for exit animation
+      }, 400); // Wait for exit animation
     }
 
     function renderCurrentView() {
