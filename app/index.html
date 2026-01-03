@@ -1180,30 +1180,6 @@
       will-change: transform;
     }
 
-    /* Tilt reflection overlay - follows cursor */
-    .card::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(
-        circle at var(--reflect-x, 50%) var(--reflect-y, 50%),
-        rgba(255, 255, 255, 0.15) 0%,
-        transparent 50%
-      );
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-      border-radius: inherit;
-      z-index: 10;
-    }
-
-    .card.tilting::after {
-      opacity: 1;
-    }
-
     /* Hide problematic CSS for html2canvas capture */
     /* html2canvas doesn't support color-mix() or modern CSS color functions */
     .card.capturing::after,
@@ -3331,7 +3307,6 @@
       try {
         // Temporarily add class to disable problematic CSS for html2canvas
         cardElement.classList.add('capturing');
-        cardElement.classList.remove('tilting');
         const originalTransform = cardElement.style.transform;
         cardElement.style.transform = 'none';
         
@@ -3604,7 +3579,7 @@
     }
 
     // ============================================
-    // Tilt Effect (Desktop) + 3D Mode (Mobile)
+    // 3D Mode (Mobile Only)
     // ============================================
     let mode3dActive = false;
     let mode3dGyroListener = null;
@@ -3612,60 +3587,7 @@
     let smoothGamma = 0;
     const SMOOTHING = 0.1;
     
-    // Desktop tilt - using document-level listener
-    const isDesktop = window.innerWidth >= 768 && !('ontouchstart' in window);
-    let currentTiltCard = null;
-    
-    if (isDesktop) {
-      document.addEventListener('mousemove', (e) => {
-        const card = e.target.closest('.card');
-        
-        if (card) {
-          // Entered a card
-          if (currentTiltCard !== card) {
-            // Reset previous card
-            if (currentTiltCard) {
-              currentTiltCard.classList.remove('tilting');
-              currentTiltCard.style.transform = '';
-              currentTiltCard.style.setProperty('--reflect-x', '50%');
-              currentTiltCard.style.setProperty('--reflect-y', '50%');
-            }
-            currentTiltCard = card;
-            card.classList.add('tilting');
-          }
-          
-          // Apply tilt
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-          
-          const rotateX = ((y - centerY) / centerY) * -8;
-          const rotateY = ((x - centerX) / centerX) * 8;
-          
-          card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-          
-          // Reflection follows cursor
-          const reflectX = (x / rect.width) * 100;
-          const reflectY = (y / rect.height) * 100;
-          card.style.setProperty('--reflect-x', `${reflectX}%`);
-          card.style.setProperty('--reflect-y', `${reflectY}%`);
-        } else {
-          // Left all cards
-          if (currentTiltCard) {
-            currentTiltCard.classList.remove('tilting');
-            currentTiltCard.style.transform = '';
-            currentTiltCard.style.setProperty('--reflect-x', '50%');
-            currentTiltCard.style.setProperty('--reflect-y', '50%');
-            currentTiltCard = null;
-          }
-        }
-      });
-    }
-    
     function initTiltEffect() {
-      // Mobile: Initialize 3D mode button
       init3DMode();
     }
     
@@ -3809,13 +3731,6 @@
         const shadowX = smoothGamma * -0.3;
         const shadowY = 15 + Math.abs(smoothBeta) * 0.2;
         clonedCard.style.boxShadow = `${shadowX}px ${shadowY}px 35px rgba(0, 0, 0, 0.4)`;
-        
-        // Reflection follows tilt
-        const reflectX = 50 - (smoothGamma * 1.5);
-        const reflectY = 50 - (smoothBeta * 1.5);
-        clonedCard.style.setProperty('--reflect-x', `${reflectX}%`);
-        clonedCard.style.setProperty('--reflect-y', `${reflectY}%`);
-        clonedCard.classList.add('tilting');
       };
       
       window.addEventListener('deviceorientation', mode3dGyroListener);
