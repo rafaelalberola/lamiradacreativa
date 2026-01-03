@@ -237,6 +237,8 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      margin-left: auto;
+      margin-right: 16px;
     }
 
     /* 3D Button - Mobile Only */
@@ -244,23 +246,31 @@
       display: none;
       align-items: center;
       justify-content: center;
-      width: 32px;
-      height: 32px;
-      border: 1px solid var(--color-border-light);
-      background: var(--color-bg);
+      gap: 4px;
+      padding: 6px 12px;
+      border: none;
       border-radius: 6px;
       cursor: pointer;
-      color: var(--color-text-secondary);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
       transition: all 0.2s;
     }
 
     .btn-3d:hover {
-      color: var(--color-text);
-      border-color: var(--color-text-secondary);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-3d:active {
+      transform: translateY(0);
     }
 
     .btn-3d .material-symbols-sharp {
-      font-size: 18px;
+      font-size: 16px;
     }
 
     @media (max-width: 768px) {
@@ -1966,6 +1976,7 @@
           </div>
           <button class="btn-3d" id="view3dHeaderBtn" title="Ver en 3D">
             <span class="material-symbols-sharp">view_in_ar</span>
+            <span>3D</span>
           </button>
         </div>
 
