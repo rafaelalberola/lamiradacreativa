@@ -2231,6 +2231,26 @@ section[id] {
   scroll-margin-top: 110px;
 }
 
+/* ============================================
+   App Access Section
+   ============================================ */
+.app-access-section {
+  background: linear-gradient(135deg, #19132F 0%, #0C0520 100%);
+  padding: var(--space-2xl) 0;
+}
+
+.btn--accent {
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8f5a 100%);
+  color: #fff;
+  border: none;
+}
+
+.btn--accent:hover {
+  background: linear-gradient(135deg, #ff8f5a 0%, #ff6b35 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+}
+
 
    ============================================ */
 
