@@ -1387,7 +1387,7 @@
     .swipe-view {
       flex-direction: row;
       overflow-x: auto;
-      overflow-y: hidden;
+      overflow-y: visible;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
       padding: 0 calc(50% - 170px); /* Center with peek */
@@ -1400,7 +1400,7 @@
       width: 340px;
       min-width: 340px;
       height: 100%;
-      padding: 20px 0;
+      padding: 40px 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1419,7 +1419,7 @@
     .scroll-view {
       flex-direction: column;
       overflow-y: auto;
-      overflow-x: hidden;
+      overflow-x: visible;
       scroll-snap-type: y mandatory;
       -webkit-overflow-scrolling: touch;
       padding: calc(50% - 260px) 0; /* Center with peek */
@@ -1432,7 +1432,7 @@
       scroll-snap-stop: always; /* Forces stop at each card */
       min-height: 520px;
       height: auto;
-      padding: 0 20px;
+      padding: 30px 20px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1584,7 +1584,7 @@
       .swipe-card-wrapper {
         width: 300px;
         min-width: 300px;
-        padding: 16px 0;
+        padding: 35px 0;
       }
 
       .scroll-view {
@@ -3760,9 +3760,9 @@
         
         card.classList.add('tilting');
         
-        // Use smooth transition when card is entering, subtle for continuous movement
+        // Smooth transition for transform, faster for shadow
         if (gyroCardTransitioning) {
-          card.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)';
+          card.style.transition = 'transform 0.35s ease-out, box-shadow 0.2s ease-out';
         } else {
           card.style.transition = 'transform 0.1s ease-out, box-shadow 0.1s ease-out';
         }
