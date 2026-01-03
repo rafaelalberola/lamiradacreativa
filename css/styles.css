@@ -1049,8 +1049,8 @@ nav a:hover {
 }
 
 .block-card-logo {
-  font-family: var(--font-headline);
-  font-size: 0.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -1060,10 +1060,10 @@ nav a:hover {
 
 .block-card-type {
   font-family: var(--font-body);
-  font-size: 0.5rem;
+  font-size: 0.625rem;
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.05em;
   color: #06BDFF;
   white-space: nowrap;
 }
@@ -1123,6 +1123,19 @@ nav a:hover {
     'wght' 200,
     'GRAD' 0,
     'opsz' 48;
+  transition: transform 0.3s ease;
+}
+
+.block-card-icon {
+  transition: filter 0.3s ease;
+}
+
+.block-card:hover .block-card-icon .material-symbols-sharp {
+  transform: scale(1.15);
+}
+
+.block-card:hover .block-card-icon {
+  filter: drop-shadow(0 0 20px #06BDFF) drop-shadow(0 0 40px rgba(6, 189, 255, 0.5));
 }
 
 @media (min-width: 768px) {
@@ -1138,9 +1151,9 @@ nav a:hover {
 
 .block-card-desc {
   font-family: 'Satoshi', sans-serif;
-  font-size: 11px;
+  font-size: 0.90rem;
   color: rgba(255, 255, 255, 0.7);
-  line-height: 1.45;
+  line-height: 1.4;
   margin-bottom: 0.5rem;
 }
 
@@ -1259,7 +1272,7 @@ nav a:hover {
 
 @media (min-width: 768px) {
   .stats-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
