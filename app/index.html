@@ -2581,12 +2581,25 @@
       updateFromProgressPosition(e);
     }
 
-    function endProgressDrag() {
+    function endProgressDrag(e) {
+      if (!isDraggingProgress) return;
       isDraggingProgress = false;
+      
+      // Ensure final scroll to target position
+      if (currentView === 'swipe') {
+        scrollToSwipeCard(currentIndex, false);
+      } else {
+        scrollToScrollCard(currentIndex, false);
+      }
     }
+
+    let lastSliderUpdate = 0;
+    const SLIDER_THROTTLE = 50; // ms between updates while dragging
 
     function updateFromProgressPosition(e) {
       if (!progressTrack) return;
+      
+      const now = Date.now();
       const rect = progressTrack.getBoundingClientRect();
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       let progress = (clientX - rect.left) / rect.width;
@@ -2594,15 +2607,22 @@
       
       const newIndex = Math.round(progress * (filteredCards.length - 1));
       
+      // Always update progress bar visually
+      updateProgressBar(newIndex, false);
+      
       if (newIndex !== currentIndex) {
-        resetOtherCardsGyro(); // Reset previous card's gyro
+        resetOtherCardsGyro();
         currentIndex = newIndex;
-        updateProgressBar(currentIndex, false);
         
-        if (currentView === 'swipe') {
-          scrollToSwipeCard(currentIndex);
-        } else {
-          scrollToScrollCard(currentIndex);
+        // Throttle actual card scrolling while dragging to prevent lag
+        if (now - lastSliderUpdate > SLIDER_THROTTLE) {
+          lastSliderUpdate = now;
+          
+          if (currentView === 'swipe') {
+            scrollToSwipeCard(currentIndex, true); // instant scroll while dragging
+          } else {
+            scrollToScrollCard(currentIndex, true);
+          }
         }
       }
     }
@@ -2685,9 +2705,9 @@
       
       // If card not loaded (mobile lazy loading), re-render around target
       if (!cardWrapper && isMobile) {
-        // Re-render centered on target index
-        const startIdx = Math.max(0, index - 10);
-        const endIdx = Math.min(filteredCards.length, index + CARDS_PER_BATCH);
+        // Re-render centered on target index with padding on both sides
+        const startIdx = Math.max(0, index - Math.floor(CARDS_PER_BATCH / 2));
+        const endIdx = Math.min(filteredCards.length, startIdx + CARDS_PER_BATCH);
         
         swipeView.innerHTML = filteredCards.slice(startIdx, endIdx).map((card, i) => {
           const cardIndex = startIdx + i;
@@ -2706,7 +2726,15 @@
       }
       
       if (cardWrapper) {
-        cardWrapper.scrollIntoView({ behavior: instant ? 'instant' : 'smooth', block: 'center', inline: 'center' });
+        // Use scrollIntoView for smooth behavior, or direct scroll for instant
+        if (instant) {
+          const containerRect = swipeView.getBoundingClientRect();
+          const cardRect = cardWrapper.getBoundingClientRect();
+          const scrollLeft = swipeView.scrollLeft + (cardRect.left - containerRect.left) - (containerRect.width / 2) + (cardRect.width / 2);
+          swipeView.scrollLeft = scrollLeft;
+        } else {
+          cardWrapper.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+        }
       }
     }
 
@@ -2809,9 +2837,9 @@
       
       // If card not loaded (mobile lazy loading), re-render around target
       if (!cardWrapper && isMobile) {
-        // Re-render centered on target index
-        const startIdx = Math.max(0, index - 10);
-        const endIdx = Math.min(filteredCards.length, index + CARDS_PER_BATCH);
+        // Re-render centered on target index with padding on both sides
+        const startIdx = Math.max(0, index - Math.floor(CARDS_PER_BATCH / 2));
+        const endIdx = Math.min(filteredCards.length, startIdx + CARDS_PER_BATCH);
         
         scrollView.innerHTML = filteredCards.slice(startIdx, endIdx).map((card, i) => {
           const cardIndex = startIdx + i;
@@ -2830,7 +2858,14 @@
       }
       
       if (cardWrapper) {
-        cardWrapper.scrollIntoView({ behavior: instant ? 'instant' : 'smooth', block: 'center' });
+        if (instant) {
+          const containerRect = scrollView.getBoundingClientRect();
+          const cardRect = cardWrapper.getBoundingClientRect();
+          const scrollTop = scrollView.scrollTop + (cardRect.top - containerRect.top) - (containerRect.height / 2) + (cardRect.height / 2);
+          scrollView.scrollTop = scrollTop;
+        } else {
+          cardWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
       }
     }
 
