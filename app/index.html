@@ -3544,6 +3544,7 @@
     let smoothBeta = 0;
     let smoothGamma = 0;
     let lastGyroCardIndex = -1;
+    let gyroCardTransitioning = false; // Flag for smooth entry transition
     const SMOOTHING = 0.12;
 
     // Reset a card's gyro transform with smooth transition
@@ -3674,10 +3675,16 @@
           return;
         }
         
-        // Detect card change - reset previous card smoothly
+        // Detect card change - handle smooth transitions
         if (lastGyroCardIndex !== currentIndex) {
-          resetOtherCardsGyro();
+          resetOtherCardsGyro(); // Old card fades out
           lastGyroCardIndex = currentIndex;
+          gyroCardTransitioning = true; // New card will fade in
+          
+          // Allow transition for new card entry
+          setTimeout(() => {
+            gyroCardTransitioning = false;
+          }, 350);
         }
         
         // Calculate relative tilt from reference
@@ -3701,16 +3708,22 @@
         if (!card) return;
         
         // Standardized floating effect with subtle tilt
-        // Fixed rotation values for consistent feel
         const rotateX = smoothBeta * -0.6;
         const rotateY = smoothGamma * 0.6;
         
         // Always-visible floating shadow below the card
         const shadowOffsetX = smoothGamma * -0.4;
-        const shadowOffsetY = 12; // Fixed shadow below
+        const shadowOffsetY = 12;
         
         card.classList.add('tilting');
-        card.style.transition = 'none';
+        
+        // Use transition when card is entering, none for continuous movement
+        if (gyroCardTransitioning) {
+          card.style.transition = 'transform 0.3s ease-out, box-shadow 0.3s ease-out';
+        } else {
+          card.style.transition = 'none';
+        }
+        
         card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`;
         card.style.boxShadow = `${shadowOffsetX}px ${shadowOffsetY}px 30px rgba(0, 0, 0, 0.35)`;
       };
@@ -3726,6 +3739,7 @@
       smoothBeta = 0;
       smoothGamma = 0;
       lastGyroCardIndex = -1;
+      gyroCardTransitioning = false;
       
       if (gyroBtn) {
         gyroBtn.classList.remove('active');
