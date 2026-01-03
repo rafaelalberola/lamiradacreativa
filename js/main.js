@@ -306,6 +306,11 @@ document.addEventListener('DOMContentLoaded', function() {
   checkoutButtons.forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
+      e.stopPropagation();
+      // Close mobile nav if open
+      if (mobileNav && mobileNav.classList.contains('active')) {
+        closeMobileNav();
+      }
       openCheckoutModal();
     });
   });
