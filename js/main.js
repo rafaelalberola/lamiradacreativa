@@ -311,6 +311,13 @@ document.addEventListener('DOMContentLoaded', function() {
       if (mobileNav && mobileNav.classList.contains('active')) {
         closeMobileNav();
       }
+      // Track begin_checkout event in Google Analytics
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'begin_checkout', {
+          currency: 'EUR',
+          value: 12
+        });
+      }
       openCheckoutModal();
     });
   });

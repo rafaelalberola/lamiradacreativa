@@ -2161,6 +2161,24 @@
     const AUTH0_CLIENT_ID = 'wTRFr8TqbqdxBkWCJeQ052zvGGemnwsZ';
     
     // ============================================
+    // Track successful purchase from Stripe
+    // ============================================
+    (function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const sessionId = urlParams.get('session_id');
+      if (sessionId && typeof gtag !== 'undefined') {
+        // Track purchase event in Google Analytics
+        gtag('event', 'purchase', {
+          transaction_id: sessionId,
+          currency: 'EUR',
+          value: 12
+        });
+        // Clean URL to prevent duplicate tracking on refresh
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    })();
+    
+    // ============================================
     // Safe localStorage wrapper (must be first!)
     // ============================================
     function safeGetItem(key) {
