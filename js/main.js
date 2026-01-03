@@ -227,20 +227,4 @@ document.addEventListener('DOMContentLoaded', function() {
     new CardDeck(deck);
   });
   
-  // ============================================
-  // VanillaTilt - Desktop Only
-  // ============================================
-  if (window.innerWidth >= 768 && typeof VanillaTilt !== 'undefined') {
-    const tiltCards = document.querySelectorAll('.card, .block-card');
-    VanillaTilt.init(tiltCards, {
-      max: 12,
-      speed: 400,
-      scale: 1,
-      perspective: 1000,
-      glare: true,
-      "max-glare": 0.15,
-      gyroscope: false
-    });
-  }
-  
 });
