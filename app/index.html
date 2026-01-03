@@ -522,8 +522,12 @@
     .toast-notification {
       position: fixed;
       bottom: 100px;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+      width: fit-content;
+      transform: translateY(100px);
       background: #1a1a1a;
       color: #fff;
       padding: 14px 24px;
@@ -533,7 +537,7 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       z-index: 10000;
       opacity: 0;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       align-items: center;
       gap: 12px;
@@ -542,7 +546,7 @@
     }
 
     .toast-notification.active {
-      transform: translateX(-50%) translateY(0);
+      transform: translateY(0);
       opacity: 1;
     }
 
@@ -555,8 +559,6 @@
       background: #fff;
       color: #333;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-      padding: 10px 16px;
-      font-size: 13px;
     }
 
     .toast-notification.light .material-symbols-sharp {
@@ -1404,6 +1406,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      perspective: 1000px;
+      transform-style: preserve-3d;
     }
 
     .swipe-card-wrapper .card {
@@ -1436,6 +1440,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      perspective: 1000px;
+      transform-style: preserve-3d;
     }
 
     .scroll-card-wrapper .card {
@@ -3746,9 +3752,45 @@
         const activeView = document.querySelector('.view.active.visible');
         if (!activeView) return;
         
-        const currentWrapper = activeView.querySelector(`[data-index="${currentIndex}"]`);
+        // Always find the most visually centered card for reliable detection
+        const wrappers = activeView.querySelectorAll('[data-index]');
+        if (wrappers.length === 0) return;
+        
+        const viewRect = activeView.getBoundingClientRect();
+        const viewCenter = currentView === 'swipe' 
+          ? viewRect.left + viewRect.width / 2 
+          : viewRect.top + viewRect.height / 2;
+        
+        let currentWrapper = null;
+        let closestDistance = Infinity;
+        
+        wrappers.forEach(wrapper => {
+          const rect = wrapper.getBoundingClientRect();
+          const wrapperCenter = currentView === 'swipe'
+            ? rect.left + rect.width / 2
+            : rect.top + rect.height / 2;
+          const distance = Math.abs(wrapperCenter - viewCenter);
+          
+          // Only consider cards that are mostly visible (within view bounds)
+          const isVisible = currentView === 'swipe'
+            ? rect.right > viewRect.left && rect.left < viewRect.right
+            : rect.bottom > viewRect.top && rect.top < viewRect.bottom;
+          
+          if (isVisible && distance < closestDistance) {
+            closestDistance = distance;
+            currentWrapper = wrapper;
+          }
+        });
+        
         const card = currentWrapper ? currentWrapper.querySelector('.card') : null;
         if (!card) return;
+        
+        // Update currentIndex to match what we found visually
+        const wrapperIndex = parseInt(currentWrapper.dataset.index);
+        if (!isNaN(wrapperIndex) && wrapperIndex !== currentIndex) {
+          currentIndex = wrapperIndex;
+          updateProgressBar(currentIndex);
+        }
         
         // Standardized floating effect with subtle tilt
         const rotateX = smoothBeta * -0.6;
@@ -3795,22 +3837,17 @@
         gyroListener = null;
       }
       
-      // Reset card with smooth transition back to normal
-      const activeView = document.querySelector('.view.active.visible');
-      if (activeView) {
-        const currentWrapper = activeView.querySelector(`[data-index="${currentIndex}"]`);
-        const card = currentWrapper ? currentWrapper.querySelector('.card') : null;
-        if (card) {
-          card.classList.remove('tilting');
-          card.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
-          card.style.transform = '';
-          card.style.boxShadow = '';
-          // Clear transition after animation completes
-          setTimeout(() => {
-            if (card) card.style.transition = '';
-          }, 300);
-        }
-      }
+      // Reset all tilting cards with smooth transition back to normal
+      const tiltingCards = document.querySelectorAll('.card.tilting');
+      tiltingCards.forEach(card => {
+        card.classList.remove('tilting');
+        card.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+        card.style.transform = '';
+        card.style.boxShadow = '';
+        setTimeout(() => {
+          card.style.transition = '';
+        }, 300);
+      });
       
       showToast('3D desactivado', 'light', 'view_in_ar_off', 1500);
     }
