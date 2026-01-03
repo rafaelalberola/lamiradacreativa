@@ -1,13 +1,45 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2HEEKVP1BF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-2HEEKVP1BF');
+  </script>
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>La Mirada Creativa — Un sistema para entrenar tu mirada</title>
+  <meta name="description" content="365 ejercicios para entrenar tu mirada creativa. Un sistema de cartas interactivas para desbloquear tu creatividad en solo 5 minutos al día.">
   
-  <!-- Fonts -->
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://lamiradacreativa.com/">
+  <meta property="og:title" content="La Mirada Creativa — Un sistema para entrenar tu mirada">
+  <meta property="og:description" content="365 ejercicios para entrenar tu mirada creativa. Un sistema de cartas interactivas para desbloquear tu creatividad en solo 5 minutos al día.">
+  <meta property="og:image" content="https://lamiradacreativa.com/assets/images/social.png">
+  <meta property="og:locale" content="es_ES">
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://lamiradacreativa.com/">
+  <meta name="twitter:title" content="La Mirada Creativa — Un sistema para entrenar tu mirada">
+  <meta name="twitter:description" content="365 ejercicios para entrenar tu mirada creativa. Un sistema de cartas interactivas para desbloquear tu creatividad en solo 5 minutos al día.">
+  <meta name="twitter:image" content="https://lamiradacreativa.com/assets/images/social.png">
+  
+  <!-- Preconnect to external domains -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link rel="preconnect" href="https://js.stripe.com" crossorigin>
+  
+  <!-- Preload critical CSS -->
+  <link rel="preload" href="css/styles.css" as="style">
+  
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Inter+Tight:wght@500;600&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500&display=swap" rel="stylesheet">
   
@@ -305,7 +337,7 @@
       <div class="author-section">
         <div class="author-intro">
           <div class="author-avatar">
-            <img src="assets/images/profile-pic.JPG" alt="Rafa">
+            <img src="assets/images/profile-pic.JPG" alt="Rafa" loading="lazy">
           </div>
           <div class="author-info">
             <h3>Rafa</h3>
