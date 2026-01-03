@@ -335,12 +335,47 @@
     .mode-3d-card {
       width: 340px;
       height: 520px;
+      transform-style: preserve-3d;
+    }
+    
+    /* Hide the card's own glow in 3D mode - we apply it to the container */
+    .mode-3d-card::before {
+      display: none;
+    }
+    
+    /* Static ambient glow on container (doesn't rotate with card) */
+    .mode-3d-card-container::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      height: 600px;
+      background: radial-gradient(
+        ellipse at 30% 30%,
+        rgba(6, 189, 255, 0.12) 0%,
+        transparent 50%
+      );
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    /* Icon parallax layer - will be animated via JS */
+    .mode-3d-card .card-icon {
+      transform-style: preserve-3d;
+      transition: transform 0.05s linear, filter 0.05s linear;
     }
 
     @media (max-width: 480px) {
       .mode-3d-card {
         width: 300px;
         height: 460px;
+      }
+      
+      .mode-3d-card-container::before {
+        width: 350px;
+        height: 520px;
       }
     }
 
@@ -1184,15 +1219,15 @@
     .card::after {
       content: '';
       position: absolute;
-      top: -100%;
-      left: -100%;
-      width: 300%;
-      height: 300%;
+      top: -25%;
+      left: -25%;
+      width: 150%;
+      height: 150%;
       background: radial-gradient(
         circle at var(--reflect-x, 50%) var(--reflect-y, 50%),
-        rgba(255, 255, 255, 0.06) 0%,
-        rgba(255, 255, 255, 0.02) 25%,
-        transparent 50%
+        rgba(255, 255, 255, 0.18) 0%,
+        rgba(255, 255, 255, 0.06) 30%,
+        transparent 60%
       );
       pointer-events: none;
       opacity: 0;
@@ -1323,6 +1358,8 @@
       flex: 1;
       min-height: 100px;
       margin-bottom: 1rem;
+      transform-style: preserve-3d;
+      transition: transform 0.05s linear, filter 0.05s linear;
     }
 
     .card-icon .material-symbols-sharp {
@@ -3612,7 +3649,7 @@
     let mode3dGyroListener = null;
     let smoothBeta = 0;
     let smoothGamma = 0;
-    const SMOOTHING = 0.08; // Lower = smoother, more fluid
+    const SMOOTHING = 0.12; // Increased for more fluid movement
 
     // Removed old gyro-related functions (resetCardGyro, resetOtherCardsGyro)
     // The new 3D mode handles everything in its own isolated context
@@ -3637,6 +3674,13 @@
               card.style.transform = '';
               card.style.setProperty('--reflect-x', '50%');
               card.style.setProperty('--reflect-y', '50%');
+              
+              // Reset icon parallax
+              const cardIcon = card.querySelector('.card-icon');
+              if (cardIcon) {
+                cardIcon.style.transform = '';
+                cardIcon.style.filter = '';
+              }
             }
           }, true);
           
@@ -3659,6 +3703,17 @@
             const reflectY = (y / rect.height) * 100;
             card.style.setProperty('--reflect-x', `${reflectX}%`);
             card.style.setProperty('--reflect-y', `${reflectY}%`);
+            
+            // Parallax: Icon rotates in opposite direction
+            const cardIcon = card.querySelector('.card-icon');
+            if (cardIcon) {
+              const iconRotateX = rotateX * -0.3;
+              const iconRotateY = rotateY * -0.3;
+              const iconShadowX = rotateY * 0.2;
+              const iconShadowY = 4 + Math.abs(rotateX) * 0.15;
+              cardIcon.style.transform = `translateZ(20px) rotateX(${iconRotateX}deg) rotateY(${iconRotateY}deg)`;
+              cardIcon.style.filter = `drop-shadow(${iconShadowX}px ${iconShadowY}px 5px rgba(0, 0, 0, 0.3))`;
+            }
           });
         }
       }
@@ -3769,9 +3824,14 @@
       smoothBeta = 0;
       smoothGamma = 0;
       
-      // Reference for gyro relative positioning
+      // Reference for gyro relative positioning - with averaging
       let refBeta = null;
       let refGamma = null;
+      let calibrationReadings = [];
+      const CALIBRATION_SAMPLES = 5;
+      
+      // Get icon element for parallax
+      const cardIcon = clonedCard.querySelector('.card-icon');
       
       mode3dGyroListener = (e) => {
         if (!mode3dActive) return;
@@ -3779,33 +3839,59 @@
         const rawBeta = e.beta || 0;
         const rawGamma = e.gamma || 0;
         
-        // Set reference on first reading
-        if (refBeta === null) {
-          refBeta = rawBeta;
-          refGamma = rawGamma;
+        // Calibration: average first N readings for stable reference
+        if (calibrationReadings.length < CALIBRATION_SAMPLES) {
+          calibrationReadings.push({ beta: rawBeta, gamma: rawGamma });
+          if (calibrationReadings.length === CALIBRATION_SAMPLES) {
+            // Calculate average reference position
+            refBeta = calibrationReadings.reduce((sum, r) => sum + r.beta, 0) / CALIBRATION_SAMPLES;
+            refGamma = calibrationReadings.reduce((sum, r) => sum + r.gamma, 0) / CALIBRATION_SAMPLES;
+          }
+          return; // Skip rendering during calibration
         }
         
         // Calculate tilt relative to starting position
         let targetBeta = rawBeta - refBeta;
         let targetGamma = rawGamma - refGamma;
         
-        // Clamp range
-        targetBeta = Math.max(-25, Math.min(25, targetBeta));
-        targetGamma = Math.max(-25, Math.min(25, targetGamma));
+        // Clamp range - more subtle
+        targetBeta = Math.max(-15, Math.min(15, targetBeta));
+        targetGamma = Math.max(-15, Math.min(15, targetGamma));
         
         // Smooth interpolation
         smoothBeta += (targetBeta - smoothBeta) * SMOOTHING;
         smoothGamma += (targetGamma - smoothGamma) * SMOOTHING;
         
-        // Apply tilt effect - lighter, more subtle
-        const rotateX = smoothBeta * -0.7;
-        const rotateY = smoothGamma * 0.7;
-        const shadowX = smoothGamma * -0.5;
-        const shadowY = 15 + Math.abs(smoothBeta) * 0.3;
-        const shadowBlur = 30 + Math.abs(smoothBeta + smoothGamma) * 0.2;
+        // Apply tilt effect - more subtle multiplier
+        const rotateX = smoothBeta * -0.5;
+        const rotateY = smoothGamma * 0.5;
         
+        // Card transform
         clonedCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        
+        // Dynamic shadow based on tilt
+        const shadowX = smoothGamma * -0.4;
+        const shadowY = 15 + Math.abs(smoothBeta) * 0.2;
+        const shadowBlur = 30 + Math.abs(smoothBeta + smoothGamma) * 0.15;
         clonedCard.style.boxShadow = `${shadowX}px ${shadowY}px ${shadowBlur}px rgba(0, 0, 0, 0.4)`;
+        
+        // Parallax: Icon rotates in OPPOSITE direction (creates depth)
+        if (cardIcon) {
+          const iconRotateX = smoothBeta * 0.3; // Opposite to card
+          const iconRotateY = smoothGamma * -0.3; // Opposite to card
+          const iconShadowX = smoothGamma * 0.3;
+          const iconShadowY = 4 + Math.abs(smoothBeta) * 0.2;
+          
+          cardIcon.style.transform = `translateZ(25px) rotateX(${iconRotateX}deg) rotateY(${iconRotateY}deg)`;
+          cardIcon.style.filter = `drop-shadow(${iconShadowX}px ${iconShadowY}px 6px rgba(0, 0, 0, 0.35))`;
+        }
+        
+        // Dynamic reflection follows tilt (opposite direction for realism)
+        const reflectX = 50 - (smoothGamma * 2);
+        const reflectY = 50 - (smoothBeta * 2);
+        clonedCard.style.setProperty('--reflect-x', `${reflectX}%`);
+        clonedCard.style.setProperty('--reflect-y', `${reflectY}%`);
+        clonedCard.classList.add('tilting');
       };
       
       window.addEventListener('deviceorientation', mode3dGyroListener);

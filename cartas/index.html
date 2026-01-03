@@ -841,6 +841,7 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
       overflow: hidden;
       user-select: none;
+      transform-style: preserve-3d;
       position: relative;
       transform-style: preserve-3d;
       transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
@@ -851,15 +852,15 @@
     .card::after {
       content: '';
       position: absolute;
-      top: -100%;
-      left: -100%;
-      width: 300%;
-      height: 300%;
+      top: -25%;
+      left: -25%;
+      width: 150%;
+      height: 150%;
       background: radial-gradient(
         circle at var(--reflect-x, 50%) var(--reflect-y, 50%),
-        rgba(255, 255, 255, 0.06) 0%,
-        rgba(255, 255, 255, 0.02) 25%,
-        transparent 50%
+        rgba(255, 255, 255, 0.18) 0%,
+        rgba(255, 255, 255, 0.06) 30%,
+        transparent 60%
       );
       pointer-events: none;
       opacity: 0;
@@ -990,6 +991,8 @@
       flex: 1;
       min-height: 100px;
       margin-bottom: 1rem;
+      transform-style: preserve-3d;
+      transition: transform 0.05s linear, filter 0.05s linear;
     }
 
     .card-icon .material-symbols-sharp {
@@ -2369,6 +2372,13 @@
     // Tilt Effect (Gyroscope & Hover)
     // ============================================
     let gyroPermissionGranted = false;
+    let smoothBeta = 0;
+    let smoothGamma = 0;
+    const GYRO_SMOOTHING = 0.12;
+    let gyroRefBeta = null;
+    let gyroRefGamma = null;
+    let gyroCalibrationReadings = [];
+    const GYRO_CALIBRATION_SAMPLES = 5;
     
     function initTiltEffect() {
       const cards = document.querySelectorAll('.card');
@@ -2381,6 +2391,13 @@
           card.style.transform = '';
           card.style.setProperty('--reflect-x', '50%');
           card.style.setProperty('--reflect-y', '50%');
+          
+          // Reset icon parallax
+          const cardIcon = card.querySelector('.card-icon');
+          if (cardIcon) {
+            cardIcon.style.transform = '';
+            cardIcon.style.filter = '';
+          }
         });
         
         card.addEventListener('mousemove', (e) => {
@@ -2402,6 +2419,17 @@
           const reflectY = (y / rect.height) * 100;
           card.style.setProperty('--reflect-x', `${reflectX}%`);
           card.style.setProperty('--reflect-y', `${reflectY}%`);
+          
+          // Parallax: Icon rotates in opposite direction
+          const cardIcon = card.querySelector('.card-icon');
+          if (cardIcon) {
+            const iconRotateX = rotateX * -0.3;
+            const iconRotateY = rotateY * -0.3;
+            const iconShadowX = rotateY * 0.2;
+            const iconShadowY = 4 + Math.abs(rotateX) * 0.15;
+            cardIcon.style.transform = `translateZ(20px) rotateX(${iconRotateX}deg) rotateY(${iconRotateY}deg)`;
+            cardIcon.style.filter = `drop-shadow(${iconShadowX}px ${iconShadowY}px 5px rgba(0, 0, 0, 0.3))`;
+          }
         });
       });
       
@@ -2437,22 +2465,55 @@
       window.addEventListener('deviceorientation', (e) => {
         if (!gyroPermissionGranted) return;
         
+        const rawBeta = e.beta || 0;
+        const rawGamma = e.gamma || 0;
+        
+        // Calibration: average first N readings for stable reference
+        if (gyroCalibrationReadings.length < GYRO_CALIBRATION_SAMPLES) {
+          gyroCalibrationReadings.push({ beta: rawBeta, gamma: rawGamma });
+          if (gyroCalibrationReadings.length === GYRO_CALIBRATION_SAMPLES) {
+            gyroRefBeta = gyroCalibrationReadings.reduce((sum, r) => sum + r.beta, 0) / GYRO_CALIBRATION_SAMPLES;
+            gyroRefGamma = gyroCalibrationReadings.reduce((sum, r) => sum + r.gamma, 0) / GYRO_CALIBRATION_SAMPLES;
+          }
+          return;
+        }
+        
+        // Calculate tilt relative to starting position
+        let targetBeta = rawBeta - gyroRefBeta;
+        let targetGamma = rawGamma - gyroRefGamma;
+        
+        // Clamp range - more subtle
+        targetBeta = Math.max(-15, Math.min(15, targetBeta));
+        targetGamma = Math.max(-15, Math.min(15, targetGamma));
+        
+        // Smooth interpolation
+        smoothBeta += (targetBeta - smoothBeta) * GYRO_SMOOTHING;
+        smoothGamma += (targetGamma - smoothGamma) * GYRO_SMOOTHING;
+        
+        const rotateX = smoothBeta * -0.5;
+        const rotateY = smoothGamma * 0.5;
+        
+        // Calculate reflection position based on device tilt (opposite direction)
+        const reflectX = 50 - (smoothGamma * 2);
+        const reflectY = 50 - (smoothBeta * 2);
+        
         const cards = document.querySelectorAll('.card');
-        const beta = Math.max(-20, Math.min(20, e.beta || 0)); // Front-back tilt
-        const gamma = Math.max(-20, Math.min(20, e.gamma || 0)); // Left-right tilt
-        
-        const rotateX = beta * 0.5;
-        const rotateY = gamma * 0.5;
-        
-        // Calculate reflection position based on device tilt
-        const reflectX = 50 + (gamma * 2); // 50% center + tilt offset
-        const reflectY = 50 + (beta * 2);
-        
         cards.forEach(card => {
           card.classList.add('tilting');
           card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
           card.style.setProperty('--reflect-x', `${reflectX}%`);
           card.style.setProperty('--reflect-y', `${reflectY}%`);
+          
+          // Parallax: Icon rotates in opposite direction
+          const cardIcon = card.querySelector('.card-icon');
+          if (cardIcon) {
+            const iconRotateX = smoothBeta * 0.3;
+            const iconRotateY = smoothGamma * -0.3;
+            const iconShadowX = smoothGamma * 0.3;
+            const iconShadowY = 4 + Math.abs(smoothBeta) * 0.2;
+            cardIcon.style.transform = `translateZ(25px) rotateX(${iconRotateX}deg) rotateY(${iconRotateY}deg)`;
+            cardIcon.style.filter = `drop-shadow(${iconShadowX}px ${iconShadowY}px 6px rgba(0, 0, 0, 0.35))`;
+          }
         });
       });
     }
@@ -3387,6 +3448,7 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
       overflow: hidden;
       user-select: none;
+      transform-style: preserve-3d;
       position: relative;
       transform-style: preserve-3d;
       transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
@@ -3397,15 +3459,15 @@
     .card::after {
       content: '';
       position: absolute;
-      top: -100%;
-      left: -100%;
-      width: 300%;
-      height: 300%;
+      top: -25%;
+      left: -25%;
+      width: 150%;
+      height: 150%;
       background: radial-gradient(
         circle at var(--reflect-x, 50%) var(--reflect-y, 50%),
-        rgba(255, 255, 255, 0.06) 0%,
-        rgba(255, 255, 255, 0.02) 25%,
-        transparent 50%
+        rgba(255, 255, 255, 0.18) 0%,
+        rgba(255, 255, 255, 0.06) 30%,
+        transparent 60%
       );
       pointer-events: none;
       opacity: 0;
@@ -3536,6 +3598,8 @@
       flex: 1;
       min-height: 100px;
       margin-bottom: 1rem;
+      transform-style: preserve-3d;
+      transition: transform 0.05s linear, filter 0.05s linear;
     }
 
     .card-icon .material-symbols-sharp {
@@ -4915,6 +4979,13 @@
     // Tilt Effect (Gyroscope & Hover)
     // ============================================
     let gyroPermissionGranted = false;
+    let smoothBeta = 0;
+    let smoothGamma = 0;
+    const GYRO_SMOOTHING = 0.12;
+    let gyroRefBeta = null;
+    let gyroRefGamma = null;
+    let gyroCalibrationReadings = [];
+    const GYRO_CALIBRATION_SAMPLES = 5;
     
     function initTiltEffect() {
       const cards = document.querySelectorAll('.card');
@@ -4927,6 +4998,13 @@
           card.style.transform = '';
           card.style.setProperty('--reflect-x', '50%');
           card.style.setProperty('--reflect-y', '50%');
+          
+          // Reset icon parallax
+          const cardIcon = card.querySelector('.card-icon');
+          if (cardIcon) {
+            cardIcon.style.transform = '';
+            cardIcon.style.filter = '';
+          }
         });
         
         card.addEventListener('mousemove', (e) => {
@@ -4948,6 +5026,17 @@
           const reflectY = (y / rect.height) * 100;
           card.style.setProperty('--reflect-x', `${reflectX}%`);
           card.style.setProperty('--reflect-y', `${reflectY}%`);
+          
+          // Parallax: Icon rotates in opposite direction
+          const cardIcon = card.querySelector('.card-icon');
+          if (cardIcon) {
+            const iconRotateX = rotateX * -0.3;
+            const iconRotateY = rotateY * -0.3;
+            const iconShadowX = rotateY * 0.2;
+            const iconShadowY = 4 + Math.abs(rotateX) * 0.15;
+            cardIcon.style.transform = `translateZ(20px) rotateX(${iconRotateX}deg) rotateY(${iconRotateY}deg)`;
+            cardIcon.style.filter = `drop-shadow(${iconShadowX}px ${iconShadowY}px 5px rgba(0, 0, 0, 0.3))`;
+          }
         });
       });
       
@@ -4983,22 +5072,55 @@
       window.addEventListener('deviceorientation', (e) => {
         if (!gyroPermissionGranted) return;
         
+        const rawBeta = e.beta || 0;
+        const rawGamma = e.gamma || 0;
+        
+        // Calibration: average first N readings for stable reference
+        if (gyroCalibrationReadings.length < GYRO_CALIBRATION_SAMPLES) {
+          gyroCalibrationReadings.push({ beta: rawBeta, gamma: rawGamma });
+          if (gyroCalibrationReadings.length === GYRO_CALIBRATION_SAMPLES) {
+            gyroRefBeta = gyroCalibrationReadings.reduce((sum, r) => sum + r.beta, 0) / GYRO_CALIBRATION_SAMPLES;
+            gyroRefGamma = gyroCalibrationReadings.reduce((sum, r) => sum + r.gamma, 0) / GYRO_CALIBRATION_SAMPLES;
+          }
+          return;
+        }
+        
+        // Calculate tilt relative to starting position
+        let targetBeta = rawBeta - gyroRefBeta;
+        let targetGamma = rawGamma - gyroRefGamma;
+        
+        // Clamp range - more subtle
+        targetBeta = Math.max(-15, Math.min(15, targetBeta));
+        targetGamma = Math.max(-15, Math.min(15, targetGamma));
+        
+        // Smooth interpolation
+        smoothBeta += (targetBeta - smoothBeta) * GYRO_SMOOTHING;
+        smoothGamma += (targetGamma - smoothGamma) * GYRO_SMOOTHING;
+        
+        const rotateX = smoothBeta * -0.5;
+        const rotateY = smoothGamma * 0.5;
+        
+        // Calculate reflection position based on device tilt (opposite direction)
+        const reflectX = 50 - (smoothGamma * 2);
+        const reflectY = 50 - (smoothBeta * 2);
+        
         const cards = document.querySelectorAll('.card');
-        const beta = Math.max(-20, Math.min(20, e.beta || 0)); // Front-back tilt
-        const gamma = Math.max(-20, Math.min(20, e.gamma || 0)); // Left-right tilt
-        
-        const rotateX = beta * 0.5;
-        const rotateY = gamma * 0.5;
-        
-        // Calculate reflection position based on device tilt
-        const reflectX = 50 + (gamma * 2); // 50% center + tilt offset
-        const reflectY = 50 + (beta * 2);
-        
         cards.forEach(card => {
           card.classList.add('tilting');
           card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
           card.style.setProperty('--reflect-x', `${reflectX}%`);
           card.style.setProperty('--reflect-y', `${reflectY}%`);
+          
+          // Parallax: Icon rotates in opposite direction
+          const cardIcon = card.querySelector('.card-icon');
+          if (cardIcon) {
+            const iconRotateX = smoothBeta * 0.3;
+            const iconRotateY = smoothGamma * -0.3;
+            const iconShadowX = smoothGamma * 0.3;
+            const iconShadowY = 4 + Math.abs(smoothBeta) * 0.2;
+            cardIcon.style.transform = `translateZ(25px) rotateX(${iconRotateX}deg) rotateY(${iconRotateY}deg)`;
+            cardIcon.style.filter = `drop-shadow(${iconShadowX}px ${iconShadowY}px 6px rgba(0, 0, 0, 0.35))`;
+          }
         });
       });
     }
