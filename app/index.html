@@ -232,27 +232,27 @@
       }
     }
 
-    /* Floating 3D Button - appears over centered card */
+    /* Floating 3D Button - positioned between card and slider */
     .view-3d-btn {
       position: fixed;
-      bottom: 100px;
+      bottom: 72px;
       left: 50%;
       transform: translateX(-50%);
       display: none;
       align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
+      gap: 6px;
+      padding: 6px 14px;
       border: none;
-      border-radius: 24px;
+      border-radius: 16px;
       font-family: var(--font-body);
-      font-size: 0.875rem;
+      font-size: 0.75rem;
       font-weight: 500;
       cursor: pointer;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      color: #fff;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
       transition: all 0.3s ease;
       z-index: 100;
       opacity: 0;
@@ -265,7 +265,7 @@
     }
 
     .view-3d-btn:hover {
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(0, 0, 0, 0.75);
       transform: translateX(-50%) scale(1.02);
     }
 
@@ -274,7 +274,7 @@
     }
 
     .view-3d-btn .material-symbols-sharp {
-      font-size: 20px;
+      font-size: 16px;
     }
 
     @media (max-width: 768px) {
@@ -347,15 +347,16 @@
       left: 50%;
       transform: translateX(-50%);
       color: rgba(255, 255, 255, 0.5);
-      font-size: 0.8125rem;
+      font-size: 0.75rem;
       text-align: center;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      white-space: nowrap;
     }
 
     .mode-3d-hint .material-symbols-sharp {
-      font-size: 20px;
+      font-size: 18px;
       animation: tilt-hint 2s ease-in-out infinite;
     }
 
@@ -2111,7 +2112,7 @@
       </div>
       <div class="mode-3d-hint">
         <span class="material-symbols-sharp">phone_iphone</span>
-        Mueve el dispositivo para ver en 3D
+        Mueve el dispositivo
       </div>
     </div>
 
@@ -3605,11 +3606,9 @@
     let tiltInitialized = false;
     let mode3dActive = false;
     let mode3dGyroListener = null;
-    let mode3dReferenceBeta = null;
-    let mode3dReferenceGamma = null;
     let smoothBeta = 0;
     let smoothGamma = 0;
-    const SMOOTHING = 0.1;
+    const SMOOTHING = 0.12;
 
     // Removed old gyro-related functions (resetCardGyro, resetOtherCardsGyro)
     // The new 3D mode handles everything in its own isolated context
@@ -3723,10 +3722,18 @@
       
       if (!currentCard) return;
       
-      // Clone the card
+      // Clone the card (deep clone preserves all styles and classes)
       const clonedCard = currentCard.cloneNode(true);
       clonedCard.classList.add('mode-3d-card');
-      clonedCard.style.cssText = ''; // Reset any inline styles
+      
+      // Copy computed background style explicitly to preserve card colors
+      const computedStyle = window.getComputedStyle(currentCard);
+      clonedCard.style.background = computedStyle.background;
+      clonedCard.style.backgroundColor = computedStyle.backgroundColor;
+      
+      // Reset only transform/shadow (we'll control these with gyro)
+      clonedCard.style.transform = '';
+      clonedCard.style.boxShadow = '';
       
       // Clear container and add cloned card
       mode3dCardContainer.innerHTML = '';
@@ -3741,12 +3748,15 @@
         mode3dOverlay.classList.add('active');
       });
       
-      // Start gyro listener for 3D mode
+      // Start gyro listener for 3D mode - captures reference immediately
       mode3dActive = true;
-      mode3dReferenceBeta = null;
-      mode3dReferenceGamma = null;
       smoothBeta = 0;
       smoothGamma = 0;
+      
+      // Use a flag to capture reference on first valid reading
+      let referenceSet = false;
+      let refBeta = 0;
+      let refGamma = 0;
       
       mode3dGyroListener = (e) => {
         if (!mode3dActive) return;
@@ -3754,16 +3764,16 @@
         const rawBeta = e.beta || 0;
         const rawGamma = e.gamma || 0;
         
-        // Capture reference on first reading (user's natural phone angle)
-        if (mode3dReferenceBeta === null) {
-          mode3dReferenceBeta = rawBeta;
-          mode3dReferenceGamma = rawGamma;
-          return;
+        // Capture reference on first reading but don't skip frame
+        if (!referenceSet) {
+          refBeta = rawBeta;
+          refGamma = rawGamma;
+          referenceSet = true;
         }
         
         // Calculate relative tilt from reference
-        let targetBeta = rawBeta - mode3dReferenceBeta;
-        let targetGamma = rawGamma - mode3dReferenceGamma;
+        let targetBeta = rawBeta - refBeta;
+        let targetGamma = rawGamma - refGamma;
         
         // Clamp to reasonable range
         targetBeta = Math.max(-20, Math.min(20, targetBeta));
