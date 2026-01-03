@@ -1462,8 +1462,8 @@
       overflow-x: visible;
       scroll-snap-type: y mandatory;
       -webkit-overflow-scrolling: touch;
-      padding: calc(50vh - 275px) 0; /* Center vertically */
-      gap: 12px;
+      padding: calc(50vh - 310px) 0; /* Center with peek of adjacent cards */
+      gap: 20px;
     }
 
     .scroll-card-wrapper {
@@ -1649,6 +1649,11 @@
 
       .card-icon .material-symbols-sharp {
         font-size: 96px;
+      }
+      
+      .scroll-card-wrapper .card {
+        height: 550px;
+        max-height: none;
       }
     }
 
