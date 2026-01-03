@@ -23,6 +23,7 @@
   <!-- Libraries for card export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
   
   <style>
     /* Monograf Font */
@@ -1208,6 +1209,11 @@
     /* Clickable cards */
     .card {
       cursor: pointer;
+      transform-style: preserve-3d;
+    }
+    
+    .js-tilt-glare {
+      border-radius: inherit;
     }
 
     /* Subtle glow effect based on accent color */
@@ -3588,6 +3594,21 @@
     const SMOOTHING = 0.1;
     
     function initTiltEffect() {
+      // Desktop only: VanillaTilt on cards
+      if (window.innerWidth >= 768 && typeof VanillaTilt !== 'undefined') {
+        const cards = document.querySelectorAll('.card:not([data-tilt])');
+        if (cards.length > 0) {
+          VanillaTilt.init(cards, {
+            max: 12,
+            speed: 400,
+            scale: 1,
+            perspective: 1000,
+            glare: true,
+            "max-glare": 0.15,
+            gyroscope: false
+          });
+        }
+      }
       init3DMode();
     }
     
