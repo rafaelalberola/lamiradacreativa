@@ -1300,7 +1300,8 @@
       min-height: 100px;
       margin-bottom: 1rem;
       transform: translateZ(80px);
-      transition: transform 0.1s ease-out;
+      transition: transform 0.3s ease, filter 0.3s ease;
+      pointer-events: none;
     }
     
     /* 3D Tilt Effect */
@@ -1321,14 +1322,12 @@
         'GRAD' 0,
         'opsz' 48;
       transition: transform 0.3s ease;
-    }
-    
-    .card-icon {
-      transition: transform 0.3s ease, filter 0.3s ease;
+      filter: none;
     }
     
     .card:hover .card-icon .material-symbols-sharp {
       transform: scale(1.15);
+      filter: none;
     }
     
     .card:hover .card-icon {

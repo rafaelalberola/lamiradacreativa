@@ -759,17 +759,20 @@ nav a:hover {
 
 .card-icon {
   transform: translateZ(80px);
-  transition: transform 0.1s ease-out;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  pointer-events: none;
 }
 
 .card-icon svg,
 .card-icon .material-symbols-sharp {
   transition: transform 0.3s ease;
+  filter: none;
 }
 
 .card:hover .card-icon svg,
 .card:hover .card-icon .material-symbols-sharp {
   transform: scale(1.15);
+  filter: none;
 }
 
 .card:hover .card-icon {
