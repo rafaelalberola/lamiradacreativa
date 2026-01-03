@@ -770,7 +770,7 @@ nav a:hover {
 .card:hover .card-icon svg,
 .card:hover .card-icon .material-symbols-sharp {
   transform: scale(1.15);
-  filter: drop-shadow(0 15px 25px rgba(180, 90, 0, 0.6));
+  filter: drop-shadow(0 0 25px var(--color-accent)) drop-shadow(0 0 50px var(--color-accent));
 }
 
 /* Vanilla Tilt Glare Override */
