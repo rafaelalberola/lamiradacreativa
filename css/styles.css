@@ -847,10 +847,22 @@ nav a:hover {
 
 .card-desc {
   font-family: 'Satoshi', sans-serif;
-  font-size: 11px;
+  font-size: 0.90rem;
   color: var(--color-text-secondary);
-  line-height: 1.45;
+  line-height: 1.4;
   margin-bottom: 0.5rem;
+}
+
+.swipe-card-wrapper .card,
+.scroll-card-wrapper .card {
+  max-height: 500px;
+}
+
+@media (min-width: 768px) {
+  .swipe-card-wrapper .card,
+  .scroll-card-wrapper .card {
+    max-height: none;
+  }
 }
 
 .card-tip {
