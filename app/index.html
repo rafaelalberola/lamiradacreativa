@@ -232,78 +232,136 @@
       }
     }
 
-    /* Gyroscope Magic Button - Mobile Only */
-    .gyro-btn {
+    /* Floating 3D Button - appears over centered card */
+    .view-3d-btn {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
       display: none;
       align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
+      gap: 8px;
+      padding: 10px 20px;
       border: none;
-      border-radius: 20px;
+      border-radius: 24px;
       font-family: var(--font-body);
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       font-weight: 500;
       cursor: pointer;
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       color: #fff;
-      box-shadow: 
-        0 2px 12px rgba(139, 92, 246, 0.4),
-        0 0 20px rgba(139, 92, 246, 0.2);
-      animation: gyro-pulse 2s ease-in-out infinite;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
       transition: all 0.3s ease;
-      white-space: nowrap;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
     }
 
-    .gyro-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 
-        0 4px 20px rgba(139, 92, 246, 0.5),
-        0 0 30px rgba(139, 92, 246, 0.3);
+    .view-3d-btn.visible {
+      opacity: 1;
+      pointer-events: auto;
     }
 
-    .gyro-btn:active {
-      transform: scale(0.98);
+    .view-3d-btn:hover {
+      background: rgba(0, 0, 0, 0.85);
+      transform: translateX(-50%) scale(1.02);
     }
 
-    .gyro-btn.active {
-      background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
-      box-shadow: 
-        0 2px 12px rgba(16, 185, 129, 0.4),
-        0 0 20px rgba(16, 185, 129, 0.2);
-      animation: none;
+    .view-3d-btn:active {
+      transform: translateX(-50%) scale(0.98);
     }
 
-    .gyro-btn .material-symbols-sharp {
-      font-size: 16px;
-    }
-
-    @keyframes gyro-pulse {
-      0%, 100% {
-        box-shadow: 
-          0 2px 12px rgba(139, 92, 246, 0.4),
-          0 0 20px rgba(139, 92, 246, 0.2);
-      }
-      50% {
-        box-shadow: 
-          0 4px 24px rgba(139, 92, 246, 0.6),
-          0 0 40px rgba(217, 70, 239, 0.4);
-      }
+    .view-3d-btn .material-symbols-sharp {
+      font-size: 20px;
     }
 
     @media (max-width: 768px) {
-      .gyro-btn {
+      .view-3d-btn {
         display: flex;
       }
     }
 
-    @media (max-width: 400px) {
-      .gyro-btn span:not(.material-symbols-sharp) {
-        display: none;
-      }
-      .gyro-btn {
-        padding: 8px;
-        border-radius: 50%;
-      }
+    /* 3D Viewing Mode Overlay */
+    .mode-3d-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .mode-3d-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .mode-3d-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .mode-3d-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .mode-3d-close .material-symbols-sharp {
+      font-size: 24px;
+    }
+
+    .mode-3d-card-container {
+      perspective: 800px;
+      transform-style: preserve-3d;
+    }
+
+    .mode-3d-card {
+      width: 300px;
+      max-height: 460px;
+      transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+    }
+
+    .mode-3d-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.8125rem;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mode-3d-hint .material-symbols-sharp {
+      font-size: 20px;
+      animation: tilt-hint 2s ease-in-out infinite;
+    }
+
+    @keyframes tilt-hint {
+      0%, 100% { transform: rotate(-15deg); }
+      50% { transform: rotate(15deg); }
     }
 
     /* Options Button & Dropdown */
@@ -582,7 +640,6 @@
     /* Mobile: Hide elements and show only menu button */
     @media (max-width: 768px) {
       .header-actions-group,
-      .gyro-btn,
       .header-separator,
       .logout-btn {
         display: none !important;
@@ -700,30 +757,6 @@
 
     .mobile-option-item.active .material-symbols-sharp {
       color: var(--color-accent);
-    }
-
-    /* 3D Toggle specific - green when active */
-    .mobile-option-item.gyro-active {
-      background: rgba(34, 197, 94, 0.1);
-    }
-
-    .mobile-option-item.gyro-active .material-symbols-sharp {
-      color: #22c55e;
-    }
-
-    .mobile-option-item .gyro-status {
-      margin-left: auto;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 4px 8px;
-      border-radius: 4px;
-      background: var(--color-bg-alt);
-      color: var(--color-text-secondary);
-    }
-
-    .mobile-option-item.gyro-active .gyro-status {
-      background: #22c55e;
-      color: white;
     }
 
     .mobile-option-item.danger {
@@ -1962,11 +1995,6 @@
             </div>
           </div>
 
-          <!-- Gyroscope Button - Mobile Only -->
-          <button class="gyro-btn" id="gyroBtn" title="Activar efecto 3D">
-            <span class="material-symbols-sharp">motion_sensor_active</span>
-            <span>3D</span>
-          </button>
 
           <div class="header-separator"></div>
 
@@ -1989,11 +2017,6 @@
           <span class="mobile-options-title">Opciones</span>
         </div>
         <div class="mobile-options-list">
-          <button class="mobile-option-item" id="mobileGyroBtn">
-            <span class="material-symbols-sharp">view_in_ar</span>
-            Efecto 3D
-            <span class="gyro-status" id="gyroStatus">OFF</span>
-          </button>
           
           <div class="mobile-options-separator"></div>
           
@@ -2070,6 +2093,26 @@
     <div class="toast-notification" id="toastNotification">
       <span class="material-symbols-sharp" id="toastIcon">check_circle</span>
       <span id="toastMessage"></span>
+    </div>
+
+    <!-- Floating 3D View Button (Mobile only) -->
+    <button class="view-3d-btn" id="view3dBtn">
+      <span class="material-symbols-sharp">view_in_ar</span>
+      Ver en 3D
+    </button>
+
+    <!-- 3D Viewing Mode Overlay -->
+    <div class="mode-3d-overlay" id="mode3dOverlay">
+      <button class="mode-3d-close" id="mode3dClose">
+        <span class="material-symbols-sharp">close</span>
+      </button>
+      <div class="mode-3d-card-container" id="mode3dCardContainer">
+        <!-- Card will be cloned here -->
+      </div>
+      <div class="mode-3d-hint">
+        <span class="material-symbols-sharp">phone_iphone</span>
+        Mueve el dispositivo para ver en 3D
+      </div>
     </div>
 
     <!-- Progress Bar (Draggable) -->
@@ -3490,7 +3533,6 @@
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileOptionsModal = document.getElementById('mobileOptionsModal');
     const mobileIndexBtn = document.getElementById('mobileIndexBtn');
-    const mobileGyroBtn = document.getElementById('mobileGyroBtn');
     const mobileDownloadCard = document.getElementById('mobileDownloadCard');
     const mobileDownloadPDF = document.getElementById('mobileDownloadPDF');
     const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
@@ -3498,10 +3540,6 @@
     function openMobileOptions() {
       mobileOptionsModal.classList.add('active');
       document.body.style.overflow = 'hidden';
-      // Update gyro button state
-      const gyroStatus = document.getElementById('gyroStatus');
-      if (mobileGyroBtn) mobileGyroBtn.classList.toggle('gyro-active', gyroEnabled);
-      if (gyroStatus) gyroStatus.textContent = gyroEnabled ? 'ON' : 'OFF';
     }
 
     function closeMobileOptions() {
@@ -3528,25 +3566,6 @@
           buildIndex();
           openIndex();
         }, 100);
-      });
-    }
-
-    if (mobileGyroBtn) {
-      mobileGyroBtn.addEventListener('click', async () => {
-        const gyroBtn = document.getElementById('gyroBtn');
-        const gyroStatus = document.getElementById('gyroStatus');
-        
-        if (gyroEnabled) {
-          disableGyro(gyroBtn);
-          mobileGyroBtn.classList.remove('gyro-active');
-          if (gyroStatus) gyroStatus.textContent = 'OFF';
-        } else {
-          await tryEnableGyro(gyroBtn);
-          if (gyroEnabled) {
-            mobileGyroBtn.classList.add('gyro-active');
-            if (gyroStatus) gyroStatus.textContent = 'ON';
-          }
-        }
       });
     }
 
@@ -3581,44 +3600,21 @@
     }
 
     // ============================================
-    // Tilt Effect (Desktop Hover + Mobile Gyroscope)
+    // Tilt Effect (Desktop Hover) + 3D Mode (Mobile)
     // ============================================
     let tiltInitialized = false;
-    let gyroEnabled = false;
-    let gyroListener = null;
-    let gyroReferenceBeta = null; // Reference angle when user activates gyro
-    let gyroReferenceGamma = null;
-    
-    // Smoothing variables for fluid motion
+    let mode3dActive = false;
+    let mode3dGyroListener = null;
+    let mode3dReferenceBeta = null;
+    let mode3dReferenceGamma = null;
     let smoothBeta = 0;
     let smoothGamma = 0;
-    let lastGyroCardIndex = -1;
-    let gyroCardTransitioning = false;
-    const SMOOTHING = 0.08; // Lower = smoother, more fluid
+    const SMOOTHING = 0.1;
 
-    // Reset a card's gyro transform with smooth transition
-    function resetCardGyro(cardElement) {
-      if (!cardElement) return;
-      cardElement.classList.remove('tilting');
-      cardElement.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)';
-      cardElement.style.transform = '';
-      cardElement.style.boxShadow = '';
-    }
-
-    // Reset all cards except current (call when changing cards)
-    function resetOtherCardsGyro() {
-      if (!gyroEnabled) return;
-      const allTiltingCards = document.querySelectorAll('.card.tilting');
-      allTiltingCards.forEach(card => {
-        const wrapper = card.closest('[data-index]');
-        if (wrapper && parseInt(wrapper.dataset.index) !== currentIndex) {
-          resetCardGyro(card);
-        }
-      });
-    }
+    // Removed old gyro-related functions (resetCardGyro, resetOtherCardsGyro)
+    // The new 3D mode handles everything in its own isolated context
     
     function initTiltEffect() {
-      // Prevent multiple initializations
       if (tiltInitialized) return;
       tiltInitialized = true;
       
@@ -3655,201 +3651,181 @@
         });
       }
       
-      // Setup gyroscope button (mobile only) - only click handler, no auto-enable
-      initGyroButton();
+      // Mobile: Initialize 3D mode button
+      init3DMode();
     }
     
-    function initGyroButton() {
-      const gyroBtn = document.getElementById('gyroBtn');
-      if (!gyroBtn) return;
+    // ============================================
+    // 3D Viewing Mode (Mobile Only)
+    // ============================================
+    function init3DMode() {
+      const view3dBtn = document.getElementById('view3dBtn');
+      const mode3dOverlay = document.getElementById('mode3dOverlay');
+      const mode3dClose = document.getElementById('mode3dClose');
+      const mode3dCardContainer = document.getElementById('mode3dCardContainer');
       
-      // Only add click handler - never auto-enable (iOS requires user gesture)
-      gyroBtn.addEventListener('click', async () => {
-        if (gyroEnabled) {
-          disableGyro(gyroBtn);
-        } else {
-          await tryEnableGyro(gyroBtn);
+      if (!view3dBtn || !mode3dOverlay) return;
+      
+      // Show button on mobile after a short delay
+      if (window.innerWidth < 768 && 'ontouchstart' in window) {
+        setTimeout(() => {
+          view3dBtn.classList.add('visible');
+        }, 1500);
+      }
+      
+      // Open 3D mode
+      view3dBtn.addEventListener('click', async () => {
+        await open3DMode();
+      });
+      
+      // Close 3D mode
+      if (mode3dClose) {
+        mode3dClose.addEventListener('click', close3DMode);
+      }
+      
+      // Close on overlay click
+      mode3dOverlay.addEventListener('click', (e) => {
+        if (e.target === mode3dOverlay) {
+          close3DMode();
         }
       });
     }
     
-    async function tryEnableGyro(gyroBtn) {
+    async function open3DMode() {
+      const mode3dOverlay = document.getElementById('mode3dOverlay');
+      const mode3dCardContainer = document.getElementById('mode3dCardContainer');
+      const view3dBtn = document.getElementById('view3dBtn');
+      
+      if (!mode3dOverlay || !mode3dCardContainer) return;
+      
+      // Request gyro permission (iOS 13+)
       try {
-        // Check if DeviceOrientationEvent exists
-        if (typeof window.DeviceOrientationEvent === 'undefined') {
-          showToast('Tu dispositivo no soporta el sensor', 'error', 'error', 3000);
-          return;
-        }
-        
-        // iOS 13+ requires permission - must be called from user gesture
-        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        if (typeof DeviceOrientationEvent !== 'undefined' && 
+            typeof DeviceOrientationEvent.requestPermission === 'function') {
           const permission = await DeviceOrientationEvent.requestPermission();
           if (permission !== 'granted') {
-            showToast('Permiso denegado', 'error', 'block', 3000);
+            showToast('Permiso denegado para el sensor', 'light', 'block', 2500);
             return;
           }
         }
-        
-        enableGyro(gyroBtn);
-        
       } catch (err) {
-        console.error('Gyro error:', err);
-        showToast('No se pudo activar', 'error', 'error', 3000);
+        console.error('Gyro permission error:', err);
+        showToast('No se pudo acceder al sensor', 'light', 'error', 2500);
+        return;
       }
-    }
-    
-    function enableGyro(gyroBtn) {
-      gyroEnabled = true;
-      gyroReferenceBeta = null;
-      gyroReferenceGamma = null;
+      
+      // Clone current card into the 3D container
+      const activeView = document.querySelector('.view.active.visible');
+      if (!activeView) return;
+      
+      const currentWrapper = activeView.querySelector(`[data-index="${currentIndex}"]`);
+      const currentCard = currentWrapper ? currentWrapper.querySelector('.card') : null;
+      
+      if (!currentCard) return;
+      
+      // Clone the card
+      const clonedCard = currentCard.cloneNode(true);
+      clonedCard.classList.add('mode-3d-card');
+      clonedCard.style.cssText = ''; // Reset any inline styles
+      
+      // Clear container and add cloned card
+      mode3dCardContainer.innerHTML = '';
+      mode3dCardContainer.appendChild(clonedCard);
+      
+      // Hide the floating button and show overlay
+      view3dBtn.classList.remove('visible');
+      mode3dOverlay.style.display = 'flex';
+      
+      // Trigger animation
+      requestAnimationFrame(() => {
+        mode3dOverlay.classList.add('active');
+      });
+      
+      // Start gyro listener for 3D mode
+      mode3dActive = true;
+      mode3dReferenceBeta = null;
+      mode3dReferenceGamma = null;
       smoothBeta = 0;
       smoothGamma = 0;
       
-      if (gyroBtn) {
-        gyroBtn.classList.add('active');
-        const textSpan = gyroBtn.querySelector('span:not(.material-symbols-sharp)');
-        if (textSpan) textSpan.textContent = 'ON';
-      }
-      
-      gyroListener = (e) => {
-        if (!gyroEnabled) return;
+      mode3dGyroListener = (e) => {
+        if (!mode3dActive) return;
         
         const rawBeta = e.beta || 0;
         const rawGamma = e.gamma || 0;
         
-        // Capture reference on first reading
-        if (gyroReferenceBeta === null) {
-          gyroReferenceBeta = rawBeta;
-          gyroReferenceGamma = rawGamma;
+        // Capture reference on first reading (user's natural phone angle)
+        if (mode3dReferenceBeta === null) {
+          mode3dReferenceBeta = rawBeta;
+          mode3dReferenceGamma = rawGamma;
           return;
         }
         
-        // Detect card change - handle smooth transitions
-        if (lastGyroCardIndex !== currentIndex) {
-          resetOtherCardsGyro(); // Old card fades out smoothly
-          lastGyroCardIndex = currentIndex;
-          gyroCardTransitioning = true; // New card will fade in
-          
-          // Allow transition for new card entry
-          setTimeout(() => {
-            gyroCardTransitioning = false;
-          }, 450);
-        }
-        
         // Calculate relative tilt from reference
-        let targetBeta = rawBeta - gyroReferenceBeta;
-        let targetGamma = rawGamma - gyroReferenceGamma;
+        let targetBeta = rawBeta - mode3dReferenceBeta;
+        let targetGamma = rawGamma - mode3dReferenceGamma;
         
         // Clamp to reasonable range
-        targetBeta = Math.max(-15, Math.min(15, targetBeta));
-        targetGamma = Math.max(-15, Math.min(15, targetGamma));
+        targetBeta = Math.max(-20, Math.min(20, targetBeta));
+        targetGamma = Math.max(-20, Math.min(20, targetGamma));
         
-        // Smooth interpolation (lerp)
+        // Smooth interpolation
         smoothBeta += (targetBeta - smoothBeta) * SMOOTHING;
         smoothGamma += (targetGamma - smoothGamma) * SMOOTHING;
         
-        // Only affect current visible card
-        const activeView = document.querySelector('.view.active.visible');
-        if (!activeView) return;
-        
-        // Always find the most visually centered card for reliable detection
-        const wrappers = activeView.querySelectorAll('[data-index]');
-        if (wrappers.length === 0) return;
-        
-        const viewRect = activeView.getBoundingClientRect();
-        const viewCenter = currentView === 'swipe' 
-          ? viewRect.left + viewRect.width / 2 
-          : viewRect.top + viewRect.height / 2;
-        
-        let currentWrapper = null;
-        let closestDistance = Infinity;
-        
-        wrappers.forEach(wrapper => {
-          const rect = wrapper.getBoundingClientRect();
-          const wrapperCenter = currentView === 'swipe'
-            ? rect.left + rect.width / 2
-            : rect.top + rect.height / 2;
-          const distance = Math.abs(wrapperCenter - viewCenter);
-          
-          // Only consider cards that are mostly visible (within view bounds)
-          const isVisible = currentView === 'swipe'
-            ? rect.right > viewRect.left && rect.left < viewRect.right
-            : rect.bottom > viewRect.top && rect.top < viewRect.bottom;
-          
-          if (isVisible && distance < closestDistance) {
-            closestDistance = distance;
-            currentWrapper = wrapper;
-          }
-        });
-        
-        const card = currentWrapper ? currentWrapper.querySelector('.card') : null;
+        // Apply transform to cloned card
+        const card = mode3dCardContainer.querySelector('.mode-3d-card');
         if (!card) return;
         
-        // Update currentIndex to match what we found visually
-        const wrapperIndex = parseInt(currentWrapper.dataset.index);
-        if (!isNaN(wrapperIndex) && wrapperIndex !== currentIndex) {
-          currentIndex = wrapperIndex;
-          updateProgressBar(currentIndex);
-        }
+        const rotateX = smoothBeta * -0.8;
+        const rotateY = smoothGamma * 0.8;
+        const shadowOffsetX = smoothGamma * -0.6;
+        const shadowOffsetY = 15 + Math.abs(smoothBeta) * 0.3;
         
-        // Standardized floating effect with subtle tilt
-        const rotateX = smoothBeta * -0.6;
-        const rotateY = smoothGamma * 0.6;
-        
-        // Prominent floating shadow below the card
-        const shadowOffsetX = smoothGamma * -0.5;
-        const shadowOffsetY = 20;
-        
-        card.classList.add('tilting');
-        
-        // Smooth transition for transform, faster for shadow
-        if (gyroCardTransitioning) {
-          card.style.transition = 'transform 0.35s ease-out, box-shadow 0.2s ease-out';
-        } else {
-          card.style.transition = 'transform 0.1s ease-out, box-shadow 0.1s ease-out';
-        }
-        
-        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(25px)`;
-        card.style.boxShadow = `${shadowOffsetX}px ${shadowOffsetY}px 40px 5px rgba(0, 0, 0, 0.5)`;
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(30px)`;
+        card.style.boxShadow = `${shadowOffsetX}px ${shadowOffsetY}px 50px rgba(0, 0, 0, 0.6)`;
       };
       
-      window.addEventListener('deviceorientation', gyroListener);
-      showToast('3D activado', 'light', 'view_in_ar', 1500);
+      window.addEventListener('deviceorientation', mode3dGyroListener);
+      
+      // Prevent body scroll
+      document.body.style.overflow = 'hidden';
     }
     
-    function disableGyro(gyroBtn) {
-      gyroEnabled = false;
-      gyroReferenceBeta = null;
-      gyroReferenceGamma = null;
-      smoothBeta = 0;
-      smoothGamma = 0;
-      lastGyroCardIndex = -1;
-      gyroCardTransitioning = false;
+    function close3DMode() {
+      const mode3dOverlay = document.getElementById('mode3dOverlay');
+      const view3dBtn = document.getElementById('view3dBtn');
       
-      if (gyroBtn) {
-        gyroBtn.classList.remove('active');
-        const textSpan = gyroBtn.querySelector('span:not(.material-symbols-sharp)');
-        if (textSpan) textSpan.textContent = '3D';
+      mode3dActive = false;
+      
+      // Remove gyro listener
+      if (mode3dGyroListener) {
+        window.removeEventListener('deviceorientation', mode3dGyroListener);
+        mode3dGyroListener = null;
       }
       
-      if (gyroListener) {
-        window.removeEventListener('deviceorientation', gyroListener);
-        gyroListener = null;
-      }
-      
-      // Reset all tilting cards with smooth transition back to normal
-      const tiltingCards = document.querySelectorAll('.card.tilting');
-      tiltingCards.forEach(card => {
-        card.classList.remove('tilting');
-        card.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
-        card.style.transform = '';
-        card.style.boxShadow = '';
+      // Hide overlay with animation
+      if (mode3dOverlay) {
+        mode3dOverlay.classList.remove('active');
         setTimeout(() => {
-          card.style.transition = '';
+          mode3dOverlay.style.display = 'none';
         }, 300);
-      });
+      }
       
-      showToast('3D desactivado', 'light', 'view_in_ar_off', 1500);
+      // Show floating button again
+      if (view3dBtn && window.innerWidth < 768) {
+        setTimeout(() => {
+          view3dBtn.classList.add('visible');
+        }, 400);
+      }
+      
+      // Restore body scroll
+      document.body.style.overflow = '';
+    }
+    
+    // Helper function for keyboard navigation (no longer resets gyro cards)
+    function resetOtherCardsGyro() {
+      // No-op - kept for compatibility with keyboard navigation
     }
 
     // ============================================
