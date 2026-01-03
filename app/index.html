@@ -3687,8 +3687,8 @@
         let targetGamma = rawGamma - gyroReferenceGamma;
         
         // Clamp to reasonable range
-        targetBeta = Math.max(-18, Math.min(18, targetBeta));
-        targetGamma = Math.max(-18, Math.min(18, targetGamma));
+        targetBeta = Math.max(-25, Math.min(25, targetBeta));
+        targetGamma = Math.max(-25, Math.min(25, targetGamma));
         
         // Smooth interpolation (lerp)
         smoothBeta += (targetBeta - smoothBeta) * SMOOTHING;
@@ -3702,20 +3702,21 @@
         const card = currentWrapper ? currentWrapper.querySelector('.card') : null;
         if (!card) return;
         
-        // Subtle rotation
-        const rotateX = smoothBeta * -0.4;
-        const rotateY = smoothGamma * 0.4;
+        // Increased rotation for more noticeable 3D effect
+        const rotateX = smoothBeta * -0.8;
+        const rotateY = smoothGamma * 0.8;
         
-        // Dynamic shadow
-        const shadowX = smoothGamma * -0.5;
-        const shadowY = 6 + (smoothBeta * 0.4);
+        // Dynamic shadow - more pronounced
+        const shadowX = smoothGamma * -1;
+        const shadowY = 8 + (smoothBeta * 0.8);
         const tiltMagnitude = Math.sqrt(smoothBeta * smoothBeta + smoothGamma * smoothGamma);
-        const shadowBlur = 16 + tiltMagnitude * 0.3;
+        const shadowBlur = 20 + tiltMagnitude * 0.5;
+        const shadowOpacity = 0.2 + tiltMagnitude * 0.008;
         
         card.classList.add('tilting');
         card.style.transition = 'transform 0.08s linear, box-shadow 0.08s linear';
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        card.style.boxShadow = `${shadowX}px ${shadowY}px ${shadowBlur}px rgba(0, 0, 0, 0.2)`;
+        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        card.style.boxShadow = `${shadowX}px ${shadowY}px ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity})`;
       };
       
       window.addEventListener('deviceorientation', gyroListener);
