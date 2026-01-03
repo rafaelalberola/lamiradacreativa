@@ -2251,7 +2251,7 @@
           // Show discreet welcome toast
           const userName = user.name || user.nickname || user.email.split('@')[0];
           const firstName = userName.split(' ')[0];
-          showToast(`¡Hola, ${firstName}! 👋`, 'light', 'waving_hand', 3000);
+          showToast(`¡Hola, ${firstName}! 👋`, 'light', null, 3000);
         }, 400);
       }, 1500);
     }
@@ -2275,7 +2275,15 @@
       if (!toast || !toastMsg || !toastIcn) return;
       
       toastMsg.textContent = message;
-      toastIcn.textContent = icon;
+      
+      // Hide icon if empty/null
+      if (icon) {
+        toastIcn.textContent = icon;
+        toastIcn.style.display = '';
+      } else {
+        toastIcn.style.display = 'none';
+      }
+      
       toast.className = 'toast-notification ' + type;
       
       // Show toast
@@ -3544,14 +3552,14 @@
     let smoothBeta = 0;
     let smoothGamma = 0;
     let lastGyroCardIndex = -1;
-    let gyroCardTransitioning = false; // Flag for smooth entry transition
-    const SMOOTHING = 0.12;
+    let gyroCardTransitioning = false;
+    const SMOOTHING = 0.08; // Lower = smoother, more fluid
 
     // Reset a card's gyro transform with smooth transition
     function resetCardGyro(cardElement) {
       if (!cardElement) return;
       cardElement.classList.remove('tilting');
-      cardElement.style.transition = 'transform 0.3s ease-out, box-shadow 0.3s ease-out';
+      cardElement.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)';
       cardElement.style.transform = '';
       cardElement.style.boxShadow = '';
     }
@@ -3677,14 +3685,14 @@
         
         // Detect card change - handle smooth transitions
         if (lastGyroCardIndex !== currentIndex) {
-          resetOtherCardsGyro(); // Old card fades out
+          resetOtherCardsGyro(); // Old card fades out smoothly
           lastGyroCardIndex = currentIndex;
           gyroCardTransitioning = true; // New card will fade in
           
           // Allow transition for new card entry
           setTimeout(() => {
             gyroCardTransitioning = false;
-          }, 350);
+          }, 450);
         }
         
         // Calculate relative tilt from reference
@@ -3717,11 +3725,11 @@
         
         card.classList.add('tilting');
         
-        // Use transition when card is entering, none for continuous movement
+        // Use smooth transition when card is entering, subtle for continuous movement
         if (gyroCardTransitioning) {
-          card.style.transition = 'transform 0.3s ease-out, box-shadow 0.3s ease-out';
+          card.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)';
         } else {
-          card.style.transition = 'none';
+          card.style.transition = 'transform 0.1s ease-out, box-shadow 0.1s ease-out';
         }
         
         card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`;
