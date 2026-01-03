@@ -1314,8 +1314,19 @@
         'wght' 200,
         'GRAD' 0,
         'opsz' 48;
-      /* Icon vibrant at 100%, glow ultra subtle */
-      filter: drop-shadow(0 0 30px var(--card-accent)) drop-shadow(0 0 60px var(--card-accent));
+      transition: transform 0.3s ease;
+    }
+    
+    .card-icon {
+      transition: filter 0.3s ease;
+    }
+    
+    .card:hover .card-icon .material-symbols-sharp {
+      transform: scale(1.15);
+    }
+    
+    .card:hover .card-icon {
+      filter: drop-shadow(0 0 20px var(--card-accent)) drop-shadow(0 0 40px var(--card-accent));
     }
 
     .card-desc {
@@ -1360,8 +1371,7 @@
     }
 
     .card-theme-light .card-icon .material-symbols-sharp {
-      /* Icon vibrant, glow ultra subtle on light cards */
-      filter: drop-shadow(0 0 25px var(--card-accent)) drop-shadow(0 0 55px var(--card-accent));
+      /* No default glow - only on hover */
     }
 
     /* Special style cards */
@@ -1375,8 +1385,7 @@
     
     /* Gold theme cards */
     .card-theme-gold .card-icon .material-symbols-sharp {
-      /* Icon vibrant, glow ultra subtle */
-      filter: drop-shadow(0 0 30px var(--card-accent)) drop-shadow(0 0 58px var(--card-accent));
+      /* No default glow - only on hover */
     }
 
     /* Cover and intro card styles */
