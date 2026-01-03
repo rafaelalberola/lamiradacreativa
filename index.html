@@ -29,6 +29,84 @@
     ml('account', '2011266');
   </script>
   <!-- End MailerLite Universal -->
+  
+  <!-- Stripe.js -->
+  <script src="https://js.stripe.com/v3/"></script>
+  
+  <!-- Checkout Modal Styles -->
+  <style>
+    .checkout-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    .checkout-modal.active {
+      display: flex;
+    }
+    .checkout-modal-content {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 20px;
+    }
+    .checkout-modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: background 0.2s;
+    }
+    .checkout-modal-close:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+    .checkout-modal-close .material-symbols-sharp {
+      font-size: 18px;
+      color: #333;
+    }
+    #checkout-container {
+      min-height: 400px;
+    }
+    .checkout-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      gap: 16px;
+    }
+    .checkout-loading-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #eee;
+      border-top-color: #FF5006;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
 
@@ -44,7 +122,7 @@
         <a href="#precio" class="nav-hide-mobile">Precio</a>
         <a href="#preview" class="nav-hide-mobile">Preview</a>
         <a href="/app" class="nav-hide-mobile">App</a>
-        <a href="https://buy.stripe.com/test_9B6cN64E63284h4gVB0Fi00" target="_blank" class="btn btn--primary btn--small nav-hide-mobile">Comprar</a>
+        <button class="btn btn--primary btn--small nav-hide-mobile btn-checkout">Comprar</button>
         <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
           <span class="material-symbols-sharp">menu</span>
         </button>
@@ -83,9 +161,9 @@
         <a href="/app" class="mobile-nav-link">Acceder</a>
       </div>
       <div class="mobile-nav-cta">
-        <a href="https://buy.stripe.com/test_9B6cN64E63284h4gVB0Fi00" target="_blank" class="btn btn--primary btn--price mobile-nav-link">
+        <button class="btn btn--primary btn--price mobile-nav-link btn-checkout">
           Comprar ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span>
-        </a>
+        </button>
       </div>
     </div>
   </div>
@@ -106,9 +184,9 @@
             <li><span class="material-symbols-sharp">check</span> PDF y acceso a App exclusiva</li>
           </ul>
           <div class="hero-actions">
-            <a href="https://buy.stripe.com/test_9B6cN64E63284h4gVB0Fi00" target="_blank" class="btn btn--primary btn--price">
+            <button class="btn btn--primary btn--price btn-checkout">
               Comprar ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span>
-            </a>
+            </button>
             <a class="btn btn--secondary ml-onclick-form" href="javascript:void(0)" onclick="ml('show', 'DQhu9v', true)">
               Preview gratuito de 7 días
             </a>
@@ -609,7 +687,7 @@
             </li>
           </ul>
           
-          <a href="https://buy.stripe.com/test_9B6cN64E63284h4gVB0Fi00" target="_blank" class="btn btn--primary btn--large btn--price">Comprar ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span></a>
+          <button class="btn btn--primary btn--large btn--price btn-checkout">Comprar ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span></button>
         </div>
       </div>
       
@@ -670,7 +748,7 @@
         </div>
         
         <div class="preview-actions preview-actions--stacked">
-          <a href="https://buy.stripe.com/test_9B6cN64E63284h4gVB0Fi00" target="_blank" class="btn btn--primary btn--price">Comprar ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span></a>
+          <button class="btn btn--primary btn--price btn-checkout">Comprar ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span></button>
           <a class="btn btn--secondary ml-onclick-form" href="javascript:void(0)" onclick="ml('show', 'DQhu9v', true)">Preview gratuito de 7 días</a>
         </div>
       </div>
@@ -714,6 +792,21 @@
       </div>
     </div>
   </footer>
+
+  <!-- Checkout Modal -->
+  <div class="checkout-modal" id="checkoutModal">
+    <div class="checkout-modal-content">
+      <button class="checkout-modal-close" id="checkoutClose">
+        <span class="material-symbols-sharp">close</span>
+      </button>
+      <div id="checkout-container">
+        <div class="checkout-loading">
+          <div class="checkout-loading-spinner"></div>
+          <span>Cargando checkout...</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Scripts -->
   <script src="js/main.js"></script>

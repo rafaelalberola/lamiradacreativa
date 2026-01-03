@@ -227,4 +227,106 @@ document.addEventListener('DOMContentLoaded', function() {
     new CardDeck(deck);
   });
   
+  // ============================================
+  // Stripe Embedded Checkout
+  // ============================================
+  const checkoutModal = document.getElementById('checkoutModal');
+  const checkoutClose = document.getElementById('checkoutClose');
+  const checkoutContainer = document.getElementById('checkout-container');
+  const checkoutButtons = document.querySelectorAll('.btn-checkout');
+  
+  let stripe = null;
+  let checkoutInstance = null;
+  
+  async function initCheckout() {
+    if (!stripe) {
+      stripe = Stripe('pk_test_51RbTz6FlqCLMJz4qJaIVEWqnQmb5w26x3qKsPuwPKTj5hJLf1UMJ6t6Pfo39FBmJPcXyGxCMkX9v2kw8wIXWdwMg00DFYKaIaZ');
+    }
+    
+    try {
+      // Create checkout session
+      const response = await fetch('/.netlify/functions/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Error creating checkout session');
+      }
+      
+      const { clientSecret } = await response.json();
+      
+      // Mount embedded checkout
+      checkoutInstance = await stripe.initEmbeddedCheckout({
+        clientSecret
+      });
+      
+      checkoutContainer.innerHTML = '';
+      checkoutInstance.mount('#checkout-container');
+      
+    } catch (error) {
+      console.error('Checkout error:', error);
+      checkoutContainer.innerHTML = `
+        <div class="checkout-loading">
+          <span class="material-symbols-sharp" style="font-size: 48px; color: #e53935;">error</span>
+          <span>Error al cargar el checkout</span>
+          <button class="btn btn--secondary" onclick="window.location.reload()">Reintentar</button>
+        </div>
+      `;
+    }
+  }
+  
+  function openCheckoutModal() {
+    checkoutModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Reset container
+    checkoutContainer.innerHTML = `
+      <div class="checkout-loading">
+        <div class="checkout-loading-spinner"></div>
+        <span>Cargando checkout...</span>
+      </div>
+    `;
+    
+    initCheckout();
+  }
+  
+  function closeCheckoutModal() {
+    checkoutModal.classList.remove('active');
+    document.body.style.overflow = '';
+    
+    // Destroy checkout instance
+    if (checkoutInstance) {
+      checkoutInstance.destroy();
+      checkoutInstance = null;
+    }
+  }
+  
+  // Event listeners
+  checkoutButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openCheckoutModal();
+    });
+  });
+  
+  if (checkoutClose) {
+    checkoutClose.addEventListener('click', closeCheckoutModal);
+  }
+  
+  if (checkoutModal) {
+    checkoutModal.addEventListener('click', (e) => {
+      if (e.target === checkoutModal) {
+        closeCheckoutModal();
+      }
+    });
+  }
+  
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && checkoutModal.classList.contains('active')) {
+      closeCheckoutModal();
+    }
+  });
+  
 });
