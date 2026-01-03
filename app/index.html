@@ -232,17 +232,34 @@
       }
     }
 
-    /* 3D Button in Header - Mobile Only */
-    .view-3d-header-btn {
-      display: none !important;
+    /* Separate 3D Button - Mobile Only */
+    .btn-3d {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--color-border-light);
+      background: var(--color-bg);
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--color-text-secondary);
+      transition: all 0.2s;
+      margin-left: 8px;
+    }
+
+    .btn-3d:hover {
+      color: var(--color-text);
+      border-color: var(--color-text-secondary);
+    }
+
+    .btn-3d .material-symbols-sharp {
+      font-size: 18px;
     }
 
     @media (max-width: 768px) {
-      .view-3d-header-btn {
-        display: flex !important;
-        margin-left: 4px;
-        border-left: 1px solid var(--color-border-light);
-        padding-left: 6px;
+      .btn-3d {
+        display: flex;
       }
     }
 
@@ -259,13 +276,10 @@
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      opacity: 0;
-      transition: opacity 0.3s ease;
     }
 
     .mode-3d-overlay.active {
       display: flex;
-      opacity: 1;
     }
 
     .mode-3d-close {
@@ -296,12 +310,24 @@
     .mode-3d-card-container {
       perspective: 800px;
       transform-style: preserve-3d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .mode-3d-card {
-      width: 300px;
-      max-height: 460px;
+      width: 100%;
+      max-width: 340px;
+      height: auto;
+      max-height: 520px;
       transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+    }
+
+    @media (max-width: 480px) {
+      .mode-3d-card {
+        max-width: 300px;
+        max-height: 460px;
+      }
     }
 
     .mode-3d-hint {
@@ -1933,10 +1959,12 @@
           <button class="view-btn" data-view="scroll" title="Scroll vertical">
             <span class="material-symbols-sharp">swap_vert</span>
           </button>
-          <button class="view-btn view-3d-header-btn" id="view3dHeaderBtn" title="Ver en 3D">
-            <span class="material-symbols-sharp">view_in_ar</span>
-          </button>
         </div>
+        
+        <!-- Separate 3D button (mobile only) -->
+        <button class="btn-3d" id="view3dHeaderBtn" title="Ver en 3D">
+          <span class="material-symbols-sharp">view_in_ar</span>
+        </button>
 
         <div class="header-actions">
           <div class="header-actions-group">
@@ -3622,135 +3650,140 @@
       const mode3dOverlay = document.getElementById('mode3dOverlay');
       const mode3dClose = document.getElementById('mode3dClose');
       
-      if (!mode3dOverlay) return;
-      
-      // Open 3D mode from header button
+      // Setup button click handler
       if (view3dHeaderBtn) {
-        view3dHeaderBtn.addEventListener('click', async () => {
+        view3dHeaderBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           await open3DMode();
         });
       }
       
-      // Close 3D mode
+      // Close button
       if (mode3dClose) {
-        mode3dClose.addEventListener('click', close3DMode);
+        mode3dClose.addEventListener('click', (e) => {
+          e.preventDefault();
+          close3DMode();
+        });
       }
       
-      // Close on overlay click
-      mode3dOverlay.addEventListener('click', (e) => {
-        if (e.target === mode3dOverlay) {
-          close3DMode();
-        }
-      });
+      // Close on overlay background click
+      if (mode3dOverlay) {
+        mode3dOverlay.addEventListener('click', (e) => {
+          if (e.target === mode3dOverlay) {
+            close3DMode();
+          }
+        });
+      }
     }
     
     async function open3DMode() {
       const mode3dOverlay = document.getElementById('mode3dOverlay');
       const mode3dCardContainer = document.getElementById('mode3dCardContainer');
       
-      if (!mode3dOverlay || !mode3dCardContainer) return;
+      if (!mode3dOverlay || !mode3dCardContainer) {
+        console.error('3D mode elements not found');
+        return;
+      }
       
-      // Request gyro permission (iOS 13+)
+      // Request gyro permission (iOS 13+) - must be from user gesture
       try {
         if (typeof DeviceOrientationEvent !== 'undefined' && 
             typeof DeviceOrientationEvent.requestPermission === 'function') {
           const permission = await DeviceOrientationEvent.requestPermission();
           if (permission !== 'granted') {
-            showToast('Permiso denegado para el sensor', 'light', 'block', 2500);
+            showToast('Permiso denegado', 'light', 'block', 2000);
             return;
           }
         }
       } catch (err) {
         console.error('Gyro permission error:', err);
-        showToast('No se pudo acceder al sensor', 'light', 'error', 2500);
+        showToast('Error de sensor', 'light', 'error', 2000);
         return;
       }
       
-      // Clone current card into the 3D container
+      // Find current card
       const activeView = document.querySelector('.view.active.visible');
-      if (!activeView) return;
+      if (!activeView) {
+        console.error('No active view found');
+        return;
+      }
       
       const currentWrapper = activeView.querySelector(`[data-index="${currentIndex}"]`);
       const currentCard = currentWrapper ? currentWrapper.querySelector('.card') : null;
       
-      if (!currentCard) return;
+      if (!currentCard) {
+        console.error('Current card not found');
+        return;
+      }
       
-      // Clone the card (deep clone preserves all styles and classes)
+      // Clone the card
       const clonedCard = currentCard.cloneNode(true);
       clonedCard.classList.add('mode-3d-card');
       
-      // Copy computed background style explicitly to preserve card colors
+      // Copy background styles to preserve colors
       const computedStyle = window.getComputedStyle(currentCard);
       clonedCard.style.background = computedStyle.background;
       clonedCard.style.backgroundColor = computedStyle.backgroundColor;
       
-      // Reset only transform/shadow (we'll control these with gyro)
-      clonedCard.style.transform = '';
-      clonedCard.style.boxShadow = '';
+      // Set initial state - ready to tilt, no transition needed
+      clonedCard.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(40px)';
+      clonedCard.style.boxShadow = '0px 20px 40px rgba(0, 0, 0, 0.5)';
+      clonedCard.style.transition = 'none'; // No transition for instant response
       
-      // Clear container and add cloned card
+      // Clear and add card
       mode3dCardContainer.innerHTML = '';
       mode3dCardContainer.appendChild(clonedCard);
       
-      // Show overlay
+      // Show overlay immediately
       mode3dOverlay.style.display = 'flex';
+      mode3dOverlay.classList.add('active');
       
-      // Trigger animation
-      requestAnimationFrame(() => {
-        mode3dOverlay.classList.add('active');
-      });
-      
-      // Start gyro listener for 3D mode
+      // Start gyro - ready immediately
       mode3dActive = true;
       smoothBeta = 0;
       smoothGamma = 0;
       
-      // Cache card reference for the listener (fixes the need to tap)
-      const card3d = clonedCard;
-      
-      // Use a flag to capture reference on first valid reading
-      let referenceSet = false;
-      let refBeta = 0;
-      let refGamma = 0;
+      // Reference for gyro relative positioning
+      let refBeta = null;
+      let refGamma = null;
       
       mode3dGyroListener = (e) => {
-        if (!mode3dActive || !card3d) return;
+        if (!mode3dActive) return;
         
         const rawBeta = e.beta || 0;
         const rawGamma = e.gamma || 0;
         
-        // Capture reference on first reading but don't skip frame
-        if (!referenceSet) {
+        // Set reference on first reading
+        if (refBeta === null) {
           refBeta = rawBeta;
           refGamma = rawGamma;
-          referenceSet = true;
         }
         
-        // Calculate relative tilt from reference
+        // Calculate tilt relative to starting position
         let targetBeta = rawBeta - refBeta;
         let targetGamma = rawGamma - refGamma;
         
-        // Clamp to reasonable range
-        targetBeta = Math.max(-20, Math.min(20, targetBeta));
-        targetGamma = Math.max(-20, Math.min(20, targetGamma));
+        // Clamp range
+        targetBeta = Math.max(-25, Math.min(25, targetBeta));
+        targetGamma = Math.max(-25, Math.min(25, targetGamma));
         
         // Smooth interpolation
         smoothBeta += (targetBeta - smoothBeta) * SMOOTHING;
         smoothGamma += (targetGamma - smoothGamma) * SMOOTHING;
         
-        // Apply transform to cached card reference
-        const rotateX = smoothBeta * -0.8;
-        const rotateY = smoothGamma * 0.8;
-        const shadowOffsetX = smoothGamma * -0.6;
-        const shadowOffsetY = 15 + Math.abs(smoothBeta) * 0.3;
+        // Apply tilt effect
+        const rotateX = smoothBeta * -1.5;
+        const rotateY = smoothGamma * 1.5;
+        const shadowX = smoothGamma * -1.2;
+        const shadowY = 20 + Math.abs(smoothBeta) * 0.8;
+        const shadowBlur = 40 + Math.abs(smoothBeta + smoothGamma) * 0.5;
         
-        card3d.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(30px)`;
-        card3d.style.boxShadow = `${shadowOffsetX}px ${shadowOffsetY}px 50px rgba(0, 0, 0, 0.6)`;
+        clonedCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(40px) scale(1.02)`;
+        clonedCard.style.boxShadow = `${shadowX}px ${shadowY}px ${shadowBlur}px rgba(0, 0, 0, 0.6)`;
       };
       
       window.addEventListener('deviceorientation', mode3dGyroListener);
-      
-      // Prevent body scroll
       document.body.style.overflow = 'hidden';
     }
     
@@ -3765,12 +3798,10 @@
         mode3dGyroListener = null;
       }
       
-      // Hide overlay with animation
+      // Hide overlay instantly
       if (mode3dOverlay) {
         mode3dOverlay.classList.remove('active');
-        setTimeout(() => {
-          mode3dOverlay.style.display = 'none';
-        }, 300);
+        mode3dOverlay.style.display = 'none';
       }
       
       // Restore body scroll
