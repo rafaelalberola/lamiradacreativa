@@ -131,41 +131,6 @@
       gap: 0.5rem;
     }
 
-    /* Search - Centered */
-    .search-wrapper {
-      position: relative;
-      flex: 1;
-      max-width: 320px;
-      margin: 0 auto;
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 6px 10px 6px 32px;
-      border: 1px solid var(--color-border-light);
-      border-radius: 6px;
-      font-family: var(--font-body);
-      font-size: 0.8125rem;
-      background: var(--color-bg-alt);
-      transition: border-color 0.2s, background 0.2s;
-    }
-
-    .search-input:focus {
-      outline: none;
-      border-color: var(--color-accent);
-      background: var(--color-bg);
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 16px;
-      color: var(--color-text-tertiary);
-      pointer-events: none;
-    }
-
     /* View Toggle */
     .view-toggle {
       display: flex;
@@ -614,8 +579,6 @@
 
     /* Mobile: Hide elements and show only menu button */
     @media (max-width: 768px) {
-      .view-toggle,
-      .search-wrapper,
       .header-actions-group,
       .gyro-btn,
       .header-separator,
@@ -775,68 +738,6 @@
       margin: 8px 16px;
     }
 
-    .mobile-option-group {
-      display: flex;
-      gap: 8px;
-      padding: 8px 16px;
-    }
-
-    .mobile-option-toggle {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px;
-      border: 1px solid var(--color-border-light);
-      background: var(--color-bg);
-      border-radius: 10px;
-      cursor: pointer;
-      font-family: var(--font-body);
-      font-size: 0.875rem;
-      color: var(--color-text-secondary);
-      transition: all 0.2s;
-    }
-
-    .mobile-option-toggle.active {
-      background: var(--color-text);
-      color: var(--color-bg);
-      border-color: var(--color-text);
-    }
-
-    .mobile-option-toggle .material-symbols-sharp {
-      font-size: 20px;
-    }
-
-    .mobile-search-wrapper {
-      position: relative;
-      padding: 4px 16px 8px;
-    }
-
-    .mobile-search-input {
-      width: 100%;
-      padding: 12px 12px 12px 44px;
-      border: 1px solid var(--color-border-light);
-      border-radius: 12px;
-      font-family: var(--font-body);
-      font-size: 1rem;
-      background: var(--color-bg-alt);
-      color: var(--color-text);
-    }
-
-    .mobile-search-input:focus {
-      outline: none;
-      border-color: var(--color-accent);
-    }
-
-    .mobile-search-icon {
-      position: absolute;
-      left: 28px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 22px;
-      color: var(--color-text-secondary);
-    }
 
     /* Index Modal */
     .index-modal {
@@ -1653,10 +1554,6 @@
 
     /* Responsive */
     @media (max-width: 480px) {
-      .search-wrapper {
-        display: none;
-      }
-
       .card {
         padding: 1.25rem;
       }
@@ -2026,11 +1923,6 @@
       <div class="header-inner">
         <a href="/" class="logo">La Mirada Creativa</a>
         
-        <div class="search-wrapper">
-          <span class="material-symbols-sharp search-icon">search</span>
-          <input type="text" class="search-input" id="searchInput" placeholder="Buscar...">
-        </div>
-        
         <div class="view-toggle">
           <button class="view-btn active" data-view="swipe" title="Scroll horizontal">
             <span class="material-symbols-sharp">swap_horiz</span>
@@ -2091,33 +1983,6 @@
           <span class="mobile-options-title">Opciones</span>
         </div>
         <div class="mobile-options-list">
-          <!-- Mobile Search -->
-          <div class="mobile-search-wrapper">
-            <span class="material-symbols-sharp mobile-search-icon">search</span>
-            <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Buscar cartas...">
-          </div>
-          
-          <div class="mobile-options-separator"></div>
-
-          <!-- View Toggle -->
-          <div class="mobile-option-group">
-            <button class="mobile-option-toggle active" id="mobileViewSwipe">
-              <span class="material-symbols-sharp">swap_horiz</span>
-              Horizontal
-            </button>
-            <button class="mobile-option-toggle" id="mobileViewScroll">
-              <span class="material-symbols-sharp">swap_vert</span>
-              Vertical
-            </button>
-          </div>
-          
-          <div class="mobile-options-separator"></div>
-          
-          <button class="mobile-option-item" id="mobileIndexBtn">
-            <span class="material-symbols-sharp">list</span>
-            Índice de cartas
-          </button>
-          
           <button class="mobile-option-item" id="mobileGyroBtn">
             <span class="material-symbols-sharp">view_in_ar</span>
             Efecto 3D
@@ -2125,6 +1990,11 @@
           </button>
           
           <div class="mobile-options-separator"></div>
+          
+          <button class="mobile-option-item" id="mobileIndexBtn">
+            <span class="material-symbols-sharp">list</span>
+            Índice de cartas
+          </button>
           
           <button class="mobile-option-item" id="mobileDownloadCard">
             <span class="material-symbols-sharp">image</span>
@@ -2517,7 +2387,6 @@
     // ============================================
     const swipeView = document.getElementById('swipeView');
     const scrollView = document.getElementById('scrollView');
-    const searchInput = document.getElementById('searchInput');
     const viewBtns = document.querySelectorAll('.view-btn');
     const views = document.querySelectorAll('.view');
     const ownerBanner = document.getElementById('ownerBanner');
@@ -3032,10 +2901,6 @@
       currentIndex = 0;
       renderCurrentView();
     }
-
-    searchInput.addEventListener('input', (e) => {
-      filterCards(e.target.value);
-    });
 
     // ============================================
     // View Toggle
@@ -3575,29 +3440,19 @@
     // ============================================
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileOptionsModal = document.getElementById('mobileOptionsModal');
-    const mobileViewSwipe = document.getElementById('mobileViewSwipe');
-    const mobileViewScroll = document.getElementById('mobileViewScroll');
     const mobileIndexBtn = document.getElementById('mobileIndexBtn');
     const mobileGyroBtn = document.getElementById('mobileGyroBtn');
     const mobileDownloadCard = document.getElementById('mobileDownloadCard');
     const mobileDownloadPDF = document.getElementById('mobileDownloadPDF');
     const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
-    const mobileSearchInput = document.getElementById('mobileSearchInput');
 
     function openMobileOptions() {
       mobileOptionsModal.classList.add('active');
       document.body.style.overflow = 'hidden';
-      // Update view toggle state
-      mobileViewSwipe.classList.toggle('active', currentView === 'swipe');
-      mobileViewScroll.classList.toggle('active', currentView === 'scroll');
       // Update gyro button state
       const gyroStatus = document.getElementById('gyroStatus');
-      mobileGyroBtn.classList.toggle('gyro-active', gyroEnabled);
+      if (mobileGyroBtn) mobileGyroBtn.classList.toggle('gyro-active', gyroEnabled);
       if (gyroStatus) gyroStatus.textContent = gyroEnabled ? 'ON' : 'OFF';
-      // Sync search input
-      if (mobileSearchInput && searchInput) {
-        mobileSearchInput.value = searchInput.value;
-      }
     }
 
     function closeMobileOptions() {
@@ -3614,22 +3469,6 @@
         if (e.target === mobileOptionsModal) {
           closeMobileOptions();
         }
-      });
-    }
-
-    if (mobileViewSwipe) {
-      mobileViewSwipe.addEventListener('click', () => {
-        switchView('swipe');
-        mobileViewSwipe.classList.add('active');
-        mobileViewScroll.classList.remove('active');
-      });
-    }
-
-    if (mobileViewScroll) {
-      mobileViewScroll.addEventListener('click', () => {
-        switchView('scroll');
-        mobileViewScroll.classList.add('active');
-        mobileViewSwipe.classList.remove('active');
       });
     }
 
@@ -3688,21 +3527,6 @@
           });
         } catch (err) {
           console.error('Logout error:', err);
-        }
-      });
-    }
-
-    if (mobileSearchInput) {
-      mobileSearchInput.addEventListener('input', (e) => {
-        // Sync with main search input
-        searchInput.value = e.target.value;
-        filterCards(e.target.value);
-      });
-      
-      // Close modal and apply search when pressing enter
-      mobileSearchInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          closeMobileOptions();
         }
       });
     }
@@ -3963,8 +3787,6 @@
     // Keyboard Navigation
     // ============================================
     document.addEventListener('keydown', (e) => {
-      if (e.target === searchInput) return;
-      
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         e.preventDefault();
         if (currentIndex < filteredCards.length - 1) {
