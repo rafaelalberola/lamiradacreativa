@@ -1322,6 +1322,15 @@
         'opsz' 48;
       /* Icon vibrant at 100%, glow ultra subtle */
       filter: drop-shadow(0 0 30px var(--card-accent)) drop-shadow(0 0 60px var(--card-accent));
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+    
+    .card:hover .card-icon .material-symbols-sharp {
+      transform: scale(1.15);
+      filter: 
+        drop-shadow(0 0 30px var(--card-accent)) 
+        drop-shadow(0 0 60px var(--card-accent))
+        drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
     }
 
     .card-desc {
