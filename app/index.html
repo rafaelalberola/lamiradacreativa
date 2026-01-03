@@ -3611,7 +3611,7 @@
     let mode3dGyroListener = null;
     let smoothBeta = 0;
     let smoothGamma = 0;
-    const SMOOTHING = 0.12;
+    const SMOOTHING = 0.08; // Lower = smoother, more fluid
 
     // Removed old gyro-related functions (resetCardGyro, resetOtherCardsGyro)
     // The new 3D mode handles everything in its own isolated context
@@ -3620,20 +3620,29 @@
       if (tiltInitialized) return;
       tiltInitialized = true;
       
-      // Desktop only: Mouse hover tilt
+      // Desktop only: Mouse hover tilt using event delegation
       if (window.innerWidth >= 768 && !('ontouchstart' in window)) {
-        const cards = document.querySelectorAll('.card');
-        
-        cards.forEach(card => {
-          card.addEventListener('mouseenter', () => card.classList.add('tilting'));
-          card.addEventListener('mouseleave', () => {
-            card.classList.remove('tilting');
-            card.style.transform = '';
-            card.style.setProperty('--reflect-x', '50%');
-            card.style.setProperty('--reflect-y', '50%');
-          });
+        const main = document.querySelector('.main');
+        if (main) {
+          main.addEventListener('mouseenter', (e) => {
+            const card = e.target.closest('.card');
+            if (card) card.classList.add('tilting');
+          }, true);
           
-          card.addEventListener('mousemove', (e) => {
+          main.addEventListener('mouseleave', (e) => {
+            const card = e.target.closest('.card');
+            if (card) {
+              card.classList.remove('tilting');
+              card.style.transform = '';
+              card.style.setProperty('--reflect-x', '50%');
+              card.style.setProperty('--reflect-y', '50%');
+            }
+          }, true);
+          
+          main.addEventListener('mousemove', (e) => {
+            const card = e.target.closest('.card');
+            if (!card || !card.classList.contains('tilting')) return;
+            
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
@@ -3650,7 +3659,7 @@
             card.style.setProperty('--reflect-x', `${reflectX}%`);
             card.style.setProperty('--reflect-y', `${reflectY}%`);
           });
-        });
+        }
       }
       
       // Mobile: Initialize 3D mode button
@@ -3787,15 +3796,15 @@
         smoothBeta += (targetBeta - smoothBeta) * SMOOTHING;
         smoothGamma += (targetGamma - smoothGamma) * SMOOTHING;
         
-        // Apply tilt effect
-        const rotateX = smoothBeta * -1.5;
-        const rotateY = smoothGamma * 1.5;
-        const shadowX = smoothGamma * -1.2;
-        const shadowY = 20 + Math.abs(smoothBeta) * 0.8;
-        const shadowBlur = 40 + Math.abs(smoothBeta + smoothGamma) * 0.5;
+        // Apply tilt effect - lighter, more subtle
+        const rotateX = smoothBeta * -0.7;
+        const rotateY = smoothGamma * 0.7;
+        const shadowX = smoothGamma * -0.5;
+        const shadowY = 15 + Math.abs(smoothBeta) * 0.3;
+        const shadowBlur = 30 + Math.abs(smoothBeta + smoothGamma) * 0.2;
         
-        clonedCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(40px) scale(1.02)`;
-        clonedCard.style.boxShadow = `${shadowX}px ${shadowY}px ${shadowBlur}px rgba(0, 0, 0, 0.6)`;
+        clonedCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        clonedCard.style.boxShadow = `${shadowX}px ${shadowY}px ${shadowBlur}px rgba(0, 0, 0, 0.4)`;
       };
       
       window.addEventListener('deviceorientation', mode3dGyroListener);
