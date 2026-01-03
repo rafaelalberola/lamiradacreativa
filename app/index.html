@@ -232,54 +232,17 @@
       }
     }
 
-    /* Floating 3D Button - positioned between card and slider */
-    .view-3d-btn {
-      position: fixed;
-      bottom: 72px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: none;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      border: none;
-      border-radius: 16px;
-      font-family: var(--font-body);
-      font-size: 0.75rem;
-      font-weight: 500;
-      cursor: pointer;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      color: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s ease;
-      z-index: 100;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .view-3d-btn.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .view-3d-btn:hover {
-      background: rgba(0, 0, 0, 0.75);
-      transform: translateX(-50%) scale(1.02);
-    }
-
-    .view-3d-btn:active {
-      transform: translateX(-50%) scale(0.98);
-    }
-
-    .view-3d-btn .material-symbols-sharp {
-      font-size: 16px;
+    /* 3D Button in Header - Mobile Only */
+    .view-3d-header-btn {
+      display: none !important;
     }
 
     @media (max-width: 768px) {
-      .view-3d-btn {
-        display: flex;
+      .view-3d-header-btn {
+        display: flex !important;
+        margin-left: 4px;
+        border-left: 1px solid var(--color-border-light);
+        padding-left: 6px;
       }
     }
 
@@ -1970,6 +1933,9 @@
           <button class="view-btn" data-view="scroll" title="Scroll vertical">
             <span class="material-symbols-sharp">swap_vert</span>
           </button>
+          <button class="view-btn view-3d-header-btn" id="view3dHeaderBtn" title="Ver en 3D">
+            <span class="material-symbols-sharp">view_in_ar</span>
+          </button>
         </div>
 
         <div class="header-actions">
@@ -2095,12 +2061,6 @@
       <span class="material-symbols-sharp" id="toastIcon">check_circle</span>
       <span id="toastMessage"></span>
     </div>
-
-    <!-- Floating 3D View Button (Mobile only) -->
-    <button class="view-3d-btn" id="view3dBtn">
-      <span class="material-symbols-sharp">view_in_ar</span>
-      Ver en 3D
-    </button>
 
     <!-- 3D Viewing Mode Overlay -->
     <div class="mode-3d-overlay" id="mode3dOverlay">
@@ -3658,24 +3618,18 @@
     // 3D Viewing Mode (Mobile Only)
     // ============================================
     function init3DMode() {
-      const view3dBtn = document.getElementById('view3dBtn');
+      const view3dHeaderBtn = document.getElementById('view3dHeaderBtn');
       const mode3dOverlay = document.getElementById('mode3dOverlay');
       const mode3dClose = document.getElementById('mode3dClose');
-      const mode3dCardContainer = document.getElementById('mode3dCardContainer');
       
-      if (!view3dBtn || !mode3dOverlay) return;
+      if (!mode3dOverlay) return;
       
-      // Show button on mobile after a short delay
-      if (window.innerWidth < 768 && 'ontouchstart' in window) {
-        setTimeout(() => {
-          view3dBtn.classList.add('visible');
-        }, 1500);
+      // Open 3D mode from header button
+      if (view3dHeaderBtn) {
+        view3dHeaderBtn.addEventListener('click', async () => {
+          await open3DMode();
+        });
       }
-      
-      // Open 3D mode
-      view3dBtn.addEventListener('click', async () => {
-        await open3DMode();
-      });
       
       // Close 3D mode
       if (mode3dClose) {
@@ -3693,7 +3647,6 @@
     async function open3DMode() {
       const mode3dOverlay = document.getElementById('mode3dOverlay');
       const mode3dCardContainer = document.getElementById('mode3dCardContainer');
-      const view3dBtn = document.getElementById('view3dBtn');
       
       if (!mode3dOverlay || !mode3dCardContainer) return;
       
@@ -3739,8 +3692,7 @@
       mode3dCardContainer.innerHTML = '';
       mode3dCardContainer.appendChild(clonedCard);
       
-      // Hide the floating button and show overlay
-      view3dBtn.classList.remove('visible');
+      // Show overlay
       mode3dOverlay.style.display = 'flex';
       
       // Trigger animation
@@ -3748,10 +3700,13 @@
         mode3dOverlay.classList.add('active');
       });
       
-      // Start gyro listener for 3D mode - captures reference immediately
+      // Start gyro listener for 3D mode
       mode3dActive = true;
       smoothBeta = 0;
       smoothGamma = 0;
+      
+      // Cache card reference for the listener (fixes the need to tap)
+      const card3d = clonedCard;
       
       // Use a flag to capture reference on first valid reading
       let referenceSet = false;
@@ -3759,7 +3714,7 @@
       let refGamma = 0;
       
       mode3dGyroListener = (e) => {
-        if (!mode3dActive) return;
+        if (!mode3dActive || !card3d) return;
         
         const rawBeta = e.beta || 0;
         const rawGamma = e.gamma || 0;
@@ -3783,17 +3738,14 @@
         smoothBeta += (targetBeta - smoothBeta) * SMOOTHING;
         smoothGamma += (targetGamma - smoothGamma) * SMOOTHING;
         
-        // Apply transform to cloned card
-        const card = mode3dCardContainer.querySelector('.mode-3d-card');
-        if (!card) return;
-        
+        // Apply transform to cached card reference
         const rotateX = smoothBeta * -0.8;
         const rotateY = smoothGamma * 0.8;
         const shadowOffsetX = smoothGamma * -0.6;
         const shadowOffsetY = 15 + Math.abs(smoothBeta) * 0.3;
         
-        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(30px)`;
-        card.style.boxShadow = `${shadowOffsetX}px ${shadowOffsetY}px 50px rgba(0, 0, 0, 0.6)`;
+        card3d.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(30px)`;
+        card3d.style.boxShadow = `${shadowOffsetX}px ${shadowOffsetY}px 50px rgba(0, 0, 0, 0.6)`;
       };
       
       window.addEventListener('deviceorientation', mode3dGyroListener);
@@ -3804,7 +3756,6 @@
     
     function close3DMode() {
       const mode3dOverlay = document.getElementById('mode3dOverlay');
-      const view3dBtn = document.getElementById('view3dBtn');
       
       mode3dActive = false;
       
@@ -3820,13 +3771,6 @@
         setTimeout(() => {
           mode3dOverlay.style.display = 'none';
         }, 300);
-      }
-      
-      // Show floating button again
-      if (view3dBtn && window.innerWidth < 768) {
-        setTimeout(() => {
-          view3dBtn.classList.add('visible');
-        }, 400);
       }
       
       // Restore body scroll
