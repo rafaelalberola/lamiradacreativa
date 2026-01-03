@@ -1300,8 +1300,7 @@
       min-height: 100px;
       margin-bottom: 1rem;
       transform: translateZ(80px);
-      transition: transform 0.3s ease, filter 0.3s ease;
-      pointer-events: none;
+      transition: transform 0.1s ease-out;
     }
     
     /* 3D Tilt Effect */
@@ -1321,17 +1320,8 @@
         'wght' 200,
         'GRAD' 0,
         'opsz' 48;
-      transition: transform 0.3s ease;
-      filter: none;
-    }
-    
-    .card:hover .card-icon .material-symbols-sharp {
-      transform: scale(1.15);
-      filter: none;
-    }
-    
-    .card:hover .card-icon {
-      filter: drop-shadow(0 0 20px var(--card-accent)) drop-shadow(0 0 40px var(--card-accent));
+      /* Icon vibrant at 100%, glow ultra subtle */
+      filter: drop-shadow(0 0 30px var(--card-accent)) drop-shadow(0 0 60px var(--card-accent));
     }
 
     .card-desc {
@@ -1375,6 +1365,11 @@
       border-bottom-color: rgba(0, 0, 0, 0.08);
     }
 
+    .card-theme-light .card-icon .material-symbols-sharp {
+      /* Icon vibrant, glow ultra subtle on light cards */
+      filter: drop-shadow(0 0 25px var(--card-accent)) drop-shadow(0 0 55px var(--card-accent));
+    }
+
     /* Special style cards */
     .card-special {
       border: 2px solid rgba(255, 255, 255, 0.3);
@@ -1384,6 +1379,12 @@
       border: 2px solid rgba(76, 175, 80, 0.3);
     }
     
+    /* Gold theme cards */
+    .card-theme-gold .card-icon .material-symbols-sharp {
+      /* Icon vibrant, glow ultra subtle */
+      filter: drop-shadow(0 0 30px var(--card-accent)) drop-shadow(0 0 58px var(--card-accent));
+    }
+
     /* Cover and intro card styles */
     .card-cover,
     .card-block-cover {
@@ -3598,29 +3599,17 @@
     let smoothGamma = 0;
     const SMOOTHING = 0.1;
     
-    let tiltInitialized = false;
-    
     function initTiltEffect() {
-      // Only initialize once
-      if (tiltInitialized) {
-        init3DMode();
-        return;
-      }
-      tiltInitialized = true;
-      
       // Initialize VanillaTilt on all cards
       if (typeof VanillaTilt !== 'undefined') {
-        const cards = document.querySelectorAll('.card:not([data-tilt-init])');
-        cards.forEach(card => card.setAttribute('data-tilt-init', 'true'));
+        const cards = document.querySelectorAll('.card');
         VanillaTilt.init(cards, {
           max: 15,
-          speed: 800,
+          speed: 400,
           scale: 0.94,
           perspective: 1000,
           glare: true,
           "max-glare": 0.15,
-          reset: true,
-          easing: "cubic-bezier(.03,.98,.52,.99)",
           gyroscope: true,
           gyroscopeMinAngleX: -20,
           gyroscopeMaxAngleX: 20,
