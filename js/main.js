@@ -236,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
     VanillaTilt.init(tiltCards, {
       max: 15,
       speed: 400,
-      scale: 0.97,
+      scale: 0.94,
       perspective: 1000,
       glare: true,
       "max-glare": 0.15,

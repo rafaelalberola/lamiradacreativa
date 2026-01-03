@@ -764,7 +764,12 @@ nav a:hover {
 
 .card-icon svg,
 .card-icon .material-symbols-sharp {
-  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.15));
+  transition: filter 0.3s ease;
+}
+
+.card:hover .card-icon svg,
+.card:hover .card-icon .material-symbols-sharp {
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.35));
 }
 
 /* Vanilla Tilt Glare Override */
