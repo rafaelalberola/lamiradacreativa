@@ -3674,21 +3674,19 @@
           return;
         }
         
-        // Detect card change - reset previous and start fresh
+        // Detect card change - reset previous card smoothly
         if (lastGyroCardIndex !== currentIndex) {
           resetOtherCardsGyro();
-          smoothBeta = 0;
-          smoothGamma = 0;
           lastGyroCardIndex = currentIndex;
         }
         
-        // Calculate relative tilt
+        // Calculate relative tilt from reference
         let targetBeta = rawBeta - gyroReferenceBeta;
         let targetGamma = rawGamma - gyroReferenceGamma;
         
         // Clamp to reasonable range
-        targetBeta = Math.max(-25, Math.min(25, targetBeta));
-        targetGamma = Math.max(-25, Math.min(25, targetGamma));
+        targetBeta = Math.max(-15, Math.min(15, targetBeta));
+        targetGamma = Math.max(-15, Math.min(15, targetGamma));
         
         // Smooth interpolation (lerp)
         smoothBeta += (targetBeta - smoothBeta) * SMOOTHING;
@@ -3702,21 +3700,19 @@
         const card = currentWrapper ? currentWrapper.querySelector('.card') : null;
         if (!card) return;
         
-        // Increased rotation for more noticeable 3D effect
-        const rotateX = smoothBeta * -0.8;
-        const rotateY = smoothGamma * 0.8;
+        // Standardized floating effect with subtle tilt
+        // Fixed rotation values for consistent feel
+        const rotateX = smoothBeta * -0.6;
+        const rotateY = smoothGamma * 0.6;
         
-        // Dynamic shadow - more pronounced
-        const shadowX = smoothGamma * -1;
-        const shadowY = 8 + (smoothBeta * 0.8);
-        const tiltMagnitude = Math.sqrt(smoothBeta * smoothBeta + smoothGamma * smoothGamma);
-        const shadowBlur = 20 + tiltMagnitude * 0.5;
-        const shadowOpacity = 0.2 + tiltMagnitude * 0.008;
+        // Always-visible floating shadow below the card
+        const shadowOffsetX = smoothGamma * -0.4;
+        const shadowOffsetY = 12; // Fixed shadow below
         
         card.classList.add('tilting');
-        card.style.transition = 'transform 0.08s linear, box-shadow 0.08s linear';
-        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-        card.style.boxShadow = `${shadowX}px ${shadowY}px ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity})`;
+        card.style.transition = 'none';
+        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`;
+        card.style.boxShadow = `${shadowOffsetX}px ${shadowOffsetY}px 30px rgba(0, 0, 0, 0.35)`;
       };
       
       window.addEventListener('deviceorientation', gyroListener);
