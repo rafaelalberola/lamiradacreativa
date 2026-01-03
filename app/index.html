@@ -2718,6 +2718,7 @@
       const newIndex = Math.round(progress * (filteredCards.length - 1));
       
       if (newIndex !== currentIndex) {
+        resetOtherCardsGyro(); // Reset previous card's gyro
         currentIndex = newIndex;
         updateProgressBar(currentIndex, false);
         
@@ -2836,13 +2837,13 @@
       const cards = swipeView.querySelectorAll('.swipe-card-wrapper');
       
       swipeObserver = new IntersectionObserver((entries) => {
-        // Don't update during view switch
         if (isSwitchingView) return;
         
         entries.forEach(entry => {
           if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
             const index = parseInt(entry.target.dataset.index);
             if (index !== currentIndex && !isDraggingProgress) {
+              resetOtherCardsGyro(); // Reset previous card's gyro
               currentIndex = index;
               updateProgressBar(index);
             }
@@ -2960,13 +2961,13 @@
       const cards = scrollView.querySelectorAll('.scroll-card-wrapper');
       
       scrollObserver = new IntersectionObserver((entries) => {
-        // Don't update during view switch
         if (isSwitchingView) return;
         
         entries.forEach(entry => {
           if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
             const index = parseInt(entry.target.dataset.index);
             if (index !== currentIndex && !isDraggingProgress) {
+              resetOtherCardsGyro(); // Reset previous card's gyro
               currentIndex = index;
               updateProgressBar(index);
             }
@@ -2992,6 +2993,7 @@
           card.addEventListener('click', (e) => {
             const index = parseInt(wrapper.dataset.index);
             if (index !== currentIndex) {
+              resetOtherCardsGyro(); // Reset previous card's gyro
               currentIndex = index;
               updateProgressBar(index);
               
@@ -3267,6 +3269,7 @@
         const idx = parseInt(item.dataset.index);
         if (idx >= 0) {
           item.addEventListener('click', () => {
+            resetOtherCardsGyro(); // Reset previous card's gyro
             currentIndex = idx;
             updateProgressBar(idx);
             closeIndex();
@@ -3716,8 +3719,29 @@
     // Smoothing variables for fluid motion
     let smoothBeta = 0;
     let smoothGamma = 0;
-    let lastGyroCardIndex = -1; // Track card changes for smooth transition
-    const SMOOTHING = 0.12; // Lower = smoother movement
+    let lastGyroCardIndex = -1;
+    const SMOOTHING = 0.12;
+
+    // Reset a card's gyro transform with smooth transition
+    function resetCardGyro(cardElement) {
+      if (!cardElement) return;
+      cardElement.classList.remove('tilting');
+      cardElement.style.transition = 'transform 0.3s ease-out, box-shadow 0.3s ease-out';
+      cardElement.style.transform = '';
+      cardElement.style.boxShadow = '';
+    }
+
+    // Reset all cards except current (call when changing cards)
+    function resetOtherCardsGyro() {
+      if (!gyroEnabled) return;
+      const allTiltingCards = document.querySelectorAll('.card.tilting');
+      allTiltingCards.forEach(card => {
+        const wrapper = card.closest('[data-index]');
+        if (wrapper && parseInt(wrapper.dataset.index) !== currentIndex) {
+          resetCardGyro(card);
+        }
+      });
+    }
     
     function initTiltEffect() {
       // Prevent multiple initializations
@@ -3819,34 +3843,22 @@
         const rawBeta = e.beta || 0;
         const rawGamma = e.gamma || 0;
         
-        // Capture reference on first reading (user's natural holding position)
+        // Capture reference on first reading
         if (gyroReferenceBeta === null) {
           gyroReferenceBeta = rawBeta;
           gyroReferenceGamma = rawGamma;
           return;
         }
         
-        // Detect card change - reset smooth values for transition
+        // Detect card change - reset previous and start fresh
         if (lastGyroCardIndex !== currentIndex) {
-          // Reset previous card if exists
-          if (lastGyroCardIndex >= 0) {
-            const activeView = document.querySelector('.view.active.visible');
-            const prevWrapper = activeView?.querySelector(`[data-index="${lastGyroCardIndex}"]`);
-            const prevCard = prevWrapper?.querySelector('.card');
-            if (prevCard) {
-              prevCard.classList.remove('tilting');
-              prevCard.style.transition = 'transform 0.25s ease-out, box-shadow 0.25s ease-out';
-              prevCard.style.transform = '';
-              prevCard.style.boxShadow = '';
-            }
-          }
-          // Reset smooth values so new card starts from neutral
+          resetOtherCardsGyro();
           smoothBeta = 0;
           smoothGamma = 0;
           lastGyroCardIndex = currentIndex;
         }
         
-        // Calculate relative tilt from reference position
+        // Calculate relative tilt
         let targetBeta = rawBeta - gyroReferenceBeta;
         let targetGamma = rawGamma - gyroReferenceGamma;
         
@@ -3854,11 +3866,11 @@
         targetBeta = Math.max(-18, Math.min(18, targetBeta));
         targetGamma = Math.max(-18, Math.min(18, targetGamma));
         
-        // Smooth interpolation (lerp) for fluid motion
+        // Smooth interpolation (lerp)
         smoothBeta += (targetBeta - smoothBeta) * SMOOTHING;
         smoothGamma += (targetGamma - smoothGamma) * SMOOTHING;
         
-        // Only affect the current visible card
+        // Only affect current visible card
         const activeView = document.querySelector('.view.active.visible');
         if (!activeView) return;
         
@@ -3870,8 +3882,7 @@
         const rotateX = smoothBeta * -0.4;
         const rotateY = smoothGamma * 0.4;
         
-        // Dynamic shadow - consistent across all card types
-        // Use rgba with fixed moderate opacity that works on light and dark
+        // Dynamic shadow
         const shadowX = smoothGamma * -0.5;
         const shadowY = 6 + (smoothBeta * 0.4);
         const tiltMagnitude = Math.sqrt(smoothBeta * smoothBeta + smoothGamma * smoothGamma);
@@ -3957,6 +3968,7 @@
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         e.preventDefault();
         if (currentIndex < filteredCards.length - 1) {
+          resetOtherCardsGyro();
           currentIndex++;
           updateProgressBar(currentIndex);
           if (currentView === 'swipe') {
@@ -3968,6 +3980,7 @@
       } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
         e.preventDefault();
         if (currentIndex > 0) {
+          resetOtherCardsGyro();
           currentIndex--;
           updateProgressBar(currentIndex);
           if (currentView === 'swipe') {
