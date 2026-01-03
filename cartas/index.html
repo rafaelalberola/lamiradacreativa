@@ -20,7 +20,6 @@
   <!-- Libraries for card export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
   
   <style>
     /* Monograf Font */
@@ -966,17 +965,6 @@
       flex: 1;
       min-height: 100px;
       margin-bottom: 1rem;
-      transform: translateZ(80px);
-      transition: transform 0.1s ease-out;
-    }
-    
-    /* 3D Tilt Effect */
-    .card {
-      transform-style: preserve-3d;
-    }
-    
-    .js-tilt-glare {
-      border-radius: inherit;
     }
 
     .card-icon .material-symbols-sharp {
@@ -2352,27 +2340,70 @@
     });
 
     // ============================================
-    // 3D Tilt Effect (VanillaTilt)
+    // Gyroscope (Mobile Only)
     // ============================================
+    let gyroPermissionGranted = false;
+    let smoothBeta = 0;
+    let smoothGamma = 0;
+    const GYRO_SMOOTHING = 0.1;
+    let gyroRefBeta = null;
+    let gyroRefGamma = null;
+    
     function initTiltEffect() {
-      // Initialize VanillaTilt on all cards (handles both desktop mouse and mobile gyroscope)
-      if (typeof VanillaTilt !== 'undefined') {
-        const cards = document.querySelectorAll('.card');
-        VanillaTilt.init(cards, {
-          max: 15,
-          speed: 400,
-          scale: 0.94,
-          perspective: 1000,
-          glare: true,
-          "max-glare": 0.15,
-          gyroscope: true,
-          gyroscopeMinAngleX: -20,
-          gyroscopeMaxAngleX: 20,
-          gyroscopeMinAngleY: -20,
-          gyroscopeMaxAngleY: 20,
-          gyroscopeSamples: 10
-        });
+      if (window.DeviceOrientationEvent && 'ontouchstart' in window) {
+        requestGyroPermission();
       }
+    }
+    
+    function requestGyroPermission() {
+      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        document.body.addEventListener('click', async function requestOnClick() {
+          try {
+            const permission = await DeviceOrientationEvent.requestPermission();
+            if (permission === 'granted') {
+              gyroPermissionGranted = true;
+              initGyroscope();
+            }
+          } catch (e) {
+            console.log('Gyro permission denied');
+          }
+          document.body.removeEventListener('click', requestOnClick);
+        }, { once: true });
+      } else {
+        gyroPermissionGranted = true;
+        initGyroscope();
+      }
+    }
+    
+    function initGyroscope() {
+      window.addEventListener('deviceorientation', (e) => {
+        if (!gyroPermissionGranted) return;
+        
+        const rawBeta = e.beta || 0;
+        const rawGamma = e.gamma || 0;
+        
+        if (gyroRefBeta === null) {
+          gyroRefBeta = rawBeta;
+          gyroRefGamma = rawGamma;
+        }
+        
+        let targetBeta = rawBeta - gyroRefBeta;
+        let targetGamma = rawGamma - gyroRefGamma;
+        
+        targetBeta = Math.max(-20, Math.min(20, targetBeta));
+        targetGamma = Math.max(-20, Math.min(20, targetGamma));
+        
+        smoothBeta += (targetBeta - smoothBeta) * GYRO_SMOOTHING;
+        smoothGamma += (targetGamma - smoothGamma) * GYRO_SMOOTHING;
+        
+        const rotateX = smoothBeta * -0.6;
+        const rotateY = smoothGamma * 0.6;
+        
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+          card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+      });
     }
 
     // ============================================
@@ -2484,7 +2515,6 @@
   <!-- Libraries for card export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
   
   <style>
     /* Monograf Font */
@@ -3430,17 +3460,6 @@
       flex: 1;
       min-height: 100px;
       margin-bottom: 1rem;
-      transform: translateZ(80px);
-      transition: transform 0.1s ease-out;
-    }
-    
-    /* 3D Tilt Effect */
-    .card {
-      transform-style: preserve-3d;
-    }
-    
-    .js-tilt-glare {
-      border-radius: inherit;
     }
 
     .card-icon .material-symbols-sharp {
@@ -4816,27 +4835,70 @@
     });
 
     // ============================================
-    // 3D Tilt Effect (VanillaTilt)
+    // Gyroscope (Mobile Only)
     // ============================================
+    let gyroPermissionGranted = false;
+    let smoothBeta = 0;
+    let smoothGamma = 0;
+    const GYRO_SMOOTHING = 0.1;
+    let gyroRefBeta = null;
+    let gyroRefGamma = null;
+    
     function initTiltEffect() {
-      // Initialize VanillaTilt on all cards (handles both desktop mouse and mobile gyroscope)
-      if (typeof VanillaTilt !== 'undefined') {
-        const cards = document.querySelectorAll('.card');
-        VanillaTilt.init(cards, {
-          max: 15,
-          speed: 400,
-          scale: 0.94,
-          perspective: 1000,
-          glare: true,
-          "max-glare": 0.15,
-          gyroscope: true,
-          gyroscopeMinAngleX: -20,
-          gyroscopeMaxAngleX: 20,
-          gyroscopeMinAngleY: -20,
-          gyroscopeMaxAngleY: 20,
-          gyroscopeSamples: 10
-        });
+      if (window.DeviceOrientationEvent && 'ontouchstart' in window) {
+        requestGyroPermission();
       }
+    }
+    
+    function requestGyroPermission() {
+      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        document.body.addEventListener('click', async function requestOnClick() {
+          try {
+            const permission = await DeviceOrientationEvent.requestPermission();
+            if (permission === 'granted') {
+              gyroPermissionGranted = true;
+              initGyroscope();
+            }
+          } catch (e) {
+            console.log('Gyro permission denied');
+          }
+          document.body.removeEventListener('click', requestOnClick);
+        }, { once: true });
+      } else {
+        gyroPermissionGranted = true;
+        initGyroscope();
+      }
+    }
+    
+    function initGyroscope() {
+      window.addEventListener('deviceorientation', (e) => {
+        if (!gyroPermissionGranted) return;
+        
+        const rawBeta = e.beta || 0;
+        const rawGamma = e.gamma || 0;
+        
+        if (gyroRefBeta === null) {
+          gyroRefBeta = rawBeta;
+          gyroRefGamma = rawGamma;
+        }
+        
+        let targetBeta = rawBeta - gyroRefBeta;
+        let targetGamma = rawGamma - gyroRefGamma;
+        
+        targetBeta = Math.max(-20, Math.min(20, targetBeta));
+        targetGamma = Math.max(-20, Math.min(20, targetGamma));
+        
+        smoothBeta += (targetBeta - smoothBeta) * GYRO_SMOOTHING;
+        smoothGamma += (targetGamma - smoothGamma) * GYRO_SMOOTHING;
+        
+        const rotateX = smoothBeta * -0.6;
+        const rotateY = smoothGamma * 0.6;
+        
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+          card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+      });
     }
 
     // ============================================
