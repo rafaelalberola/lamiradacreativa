@@ -3754,9 +3754,9 @@
         const rotateX = smoothBeta * -0.6;
         const rotateY = smoothGamma * 0.6;
         
-        // Always-visible floating shadow below the card
-        const shadowOffsetX = smoothGamma * -0.4;
-        const shadowOffsetY = 12;
+        // Prominent floating shadow below the card
+        const shadowOffsetX = smoothGamma * -0.5;
+        const shadowOffsetY = 20;
         
         card.classList.add('tilting');
         
@@ -3767,8 +3767,8 @@
           card.style.transition = 'transform 0.1s ease-out, box-shadow 0.1s ease-out';
         }
         
-        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`;
-        card.style.boxShadow = `${shadowOffsetX}px ${shadowOffsetY}px 30px rgba(0, 0, 0, 0.35)`;
+        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(25px)`;
+        card.style.boxShadow = `${shadowOffsetX}px ${shadowOffsetY}px 40px 5px rgba(0, 0, 0, 0.5)`;
       };
       
       window.addEventListener('deviceorientation', gyroListener);
