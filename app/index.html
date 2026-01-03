@@ -232,7 +232,14 @@
       }
     }
 
-    /* Separate 3D Button - Mobile Only */
+    /* View Controls Container */
+    .view-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* 3D Button - Mobile Only */
     .btn-3d {
       display: none;
       align-items: center;
@@ -245,7 +252,6 @@
       cursor: pointer;
       color: var(--color-text-secondary);
       transition: all 0.2s;
-      margin-left: 8px;
     }
 
     .btn-3d:hover {
@@ -1952,19 +1958,19 @@
       <div class="header-inner">
         <a href="/" class="logo">La Mirada Creativa</a>
         
-        <div class="view-toggle">
-          <button class="view-btn active" data-view="swipe" title="Scroll horizontal">
-            <span class="material-symbols-sharp">swap_horiz</span>
-          </button>
-          <button class="view-btn" data-view="scroll" title="Scroll vertical">
-            <span class="material-symbols-sharp">swap_vert</span>
+        <div class="view-controls">
+          <div class="view-toggle">
+            <button class="view-btn active" data-view="swipe" title="Scroll horizontal">
+              <span class="material-symbols-sharp">swap_horiz</span>
+            </button>
+            <button class="view-btn" data-view="scroll" title="Scroll vertical">
+              <span class="material-symbols-sharp">swap_vert</span>
+            </button>
+          </div>
+          <button class="btn-3d" id="view3dHeaderBtn" title="Ver en 3D">
+            <span class="material-symbols-sharp">view_in_ar</span>
           </button>
         </div>
-        
-        <!-- Separate 3D button (mobile only) -->
-        <button class="btn-3d" id="view3dHeaderBtn" title="Ver en 3D">
-          <span class="material-symbols-sharp">view_in_ar</span>
-        </button>
 
         <div class="header-actions">
           <div class="header-actions-group">
@@ -3726,10 +3732,10 @@
       clonedCard.style.background = computedStyle.background;
       clonedCard.style.backgroundColor = computedStyle.backgroundColor;
       
-      // Set initial state - ready to tilt, no transition needed
-      clonedCard.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(40px)';
-      clonedCard.style.boxShadow = '0px 20px 40px rgba(0, 0, 0, 0.5)';
-      clonedCard.style.transition = 'none'; // No transition for instant response
+      // Set initial state - centered, no tilt, ready to respond to gyro
+      clonedCard.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0px)';
+      clonedCard.style.boxShadow = '0px 15px 35px rgba(0, 0, 0, 0.4)';
+      clonedCard.style.transition = 'none';
       
       // Clear and add card
       mode3dCardContainer.innerHTML = '';
