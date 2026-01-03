@@ -235,11 +235,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     VanillaTilt.init(tiltCards, {
       max: 15,
-      speed: 400,
+      speed: 800,
       scale: 0.94,
       perspective: 1000,
       glare: true,
       "max-glare": 0.15,
+      reset: true,
+      easing: "cubic-bezier(.03,.98,.52,.99)",
       gyroscope: true,
       gyroscopeMinAngleX: -20,
       gyroscopeMaxAngleX: 20,

@@ -1320,12 +1320,19 @@
         'wght' 200,
         'GRAD' 0,
         'opsz' 48;
+      transition: transform 0.3s ease;
+    }
+    
+    .card-icon {
       transition: transform 0.3s ease, filter 0.3s ease;
     }
     
     .card:hover .card-icon .material-symbols-sharp {
       transform: scale(1.15);
-      filter: drop-shadow(0 0 25px var(--card-accent)) drop-shadow(0 0 50px var(--card-accent));
+    }
+    
+    .card:hover .card-icon {
+      filter: drop-shadow(0 0 20px var(--card-accent)) drop-shadow(0 0 40px color-mix(in srgb, var(--card-accent) 50%, transparent));
     }
 
     .card-desc {
@@ -3607,11 +3614,13 @@
         const cards = document.querySelectorAll('.card');
         VanillaTilt.init(cards, {
           max: 15,
-          speed: 400,
+          speed: 800,
           scale: 0.94,
           perspective: 1000,
           glare: true,
           "max-glare": 0.15,
+          reset: true,
+          easing: "cubic-bezier(.03,.98,.52,.99)",
           gyroscope: true,
           gyroscopeMinAngleX: -20,
           gyroscopeMaxAngleX: 20,
