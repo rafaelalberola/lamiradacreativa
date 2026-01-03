@@ -998,7 +998,7 @@
     }
     
     .card:hover .card-icon {
-      filter: drop-shadow(0 0 20px var(--card-accent)) drop-shadow(0 0 40px color-mix(in srgb, var(--card-accent) 50%, transparent));
+      filter: drop-shadow(0 0 20px var(--card-accent)) drop-shadow(0 0 40px var(--card-accent));
     }
 
     .card-desc {
@@ -2353,10 +2353,15 @@
     // ============================================
     // 3D Tilt Effect (VanillaTilt)
     // ============================================
+    let tiltInitialized = false;
+    
     function initTiltEffect() {
-      // Initialize VanillaTilt on all cards (handles both desktop mouse and mobile gyroscope)
+      if (tiltInitialized) return;
+      tiltInitialized = true;
+      
       if (typeof VanillaTilt !== 'undefined') {
-        const cards = document.querySelectorAll('.card');
+        const cards = document.querySelectorAll('.card:not([data-tilt-init])');
+        cards.forEach(card => card.setAttribute('data-tilt-init', 'true'));
         VanillaTilt.init(cards, {
           max: 15,
           speed: 800,
@@ -3463,7 +3468,7 @@
     }
     
     .card:hover .card-icon {
-      filter: drop-shadow(0 0 20px var(--card-accent)) drop-shadow(0 0 40px color-mix(in srgb, var(--card-accent) 50%, transparent));
+      filter: drop-shadow(0 0 20px var(--card-accent)) drop-shadow(0 0 40px var(--card-accent));
     }
 
     .card-desc {
@@ -4818,10 +4823,15 @@
     // ============================================
     // 3D Tilt Effect (VanillaTilt)
     // ============================================
+    let tiltInitialized = false;
+    
     function initTiltEffect() {
-      // Initialize VanillaTilt on all cards (handles both desktop mouse and mobile gyroscope)
+      if (tiltInitialized) return;
+      tiltInitialized = true;
+      
       if (typeof VanillaTilt !== 'undefined') {
-        const cards = document.querySelectorAll('.card');
+        const cards = document.querySelectorAll('.card:not([data-tilt-init])');
+        cards.forEach(card => card.setAttribute('data-tilt-init', 'true'));
         VanillaTilt.init(cards, {
           max: 15,
           speed: 800,

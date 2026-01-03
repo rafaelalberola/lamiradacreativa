@@ -1331,7 +1331,7 @@
     }
     
     .card:hover .card-icon {
-      filter: drop-shadow(0 0 20px var(--card-accent)) drop-shadow(0 0 40px color-mix(in srgb, var(--card-accent) 50%, transparent));
+      filter: drop-shadow(0 0 20px var(--card-accent)) drop-shadow(0 0 40px var(--card-accent));
     }
 
     .card-desc {
@@ -3598,10 +3598,20 @@
     let smoothGamma = 0;
     const SMOOTHING = 0.1;
     
+    let tiltInitialized = false;
+    
     function initTiltEffect() {
+      // Only initialize once
+      if (tiltInitialized) {
+        init3DMode();
+        return;
+      }
+      tiltInitialized = true;
+      
       // Initialize VanillaTilt on all cards
       if (typeof VanillaTilt !== 'undefined') {
-        const cards = document.querySelectorAll('.card');
+        const cards = document.querySelectorAll('.card:not([data-tilt-init])');
+        cards.forEach(card => card.setAttribute('data-tilt-init', 'true'));
         VanillaTilt.init(cards, {
           max: 15,
           speed: 800,
