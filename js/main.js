@@ -227,4 +227,26 @@ document.addEventListener('DOMContentLoaded', function() {
     new CardDeck(deck);
   });
   
+  // ============================================
+  // VanillaTilt 3D Effect with Parallax Icons
+  // ============================================
+  if (typeof VanillaTilt !== 'undefined') {
+    const tiltCards = document.querySelectorAll('.card, .block-card');
+    
+    VanillaTilt.init(tiltCards, {
+      max: 15,
+      speed: 400,
+      scale: 1.02,
+      perspective: 1000,
+      glare: true,
+      "max-glare": 0.15,
+      gyroscope: true,
+      gyroscopeMinAngleX: -20,
+      gyroscopeMaxAngleX: 20,
+      gyroscopeMinAngleY: -20,
+      gyroscopeMaxAngleY: 20,
+      gyroscopeSamples: 10
+    });
+  }
+  
 });

@@ -23,6 +23,7 @@
   <!-- Libraries for card export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
   
   <style>
     /* Monograf Font */
@@ -1298,6 +1299,17 @@
       flex: 1;
       min-height: 100px;
       margin-bottom: 1rem;
+      transform: translateZ(40px);
+      transition: transform 0.1s ease-out;
+    }
+    
+    /* 3D Tilt Effect */
+    .card {
+      transform-style: preserve-3d;
+    }
+    
+    .js-tilt-glare {
+      border-radius: inherit;
     }
 
     .card-icon .material-symbols-sharp {
@@ -3588,6 +3600,24 @@
     const SMOOTHING = 0.1;
     
     function initTiltEffect() {
+      // Initialize VanillaTilt on all cards
+      if (typeof VanillaTilt !== 'undefined') {
+        const cards = document.querySelectorAll('.card');
+        VanillaTilt.init(cards, {
+          max: 15,
+          speed: 400,
+          scale: 1.02,
+          perspective: 1000,
+          glare: true,
+          "max-glare": 0.15,
+          gyroscope: true,
+          gyroscopeMinAngleX: -20,
+          gyroscopeMaxAngleX: 20,
+          gyroscopeMinAngleY: -20,
+          gyroscopeMaxAngleY: 20,
+          gyroscopeSamples: 10
+        });
+      }
       init3DMode();
     }
     

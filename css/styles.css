@@ -752,6 +752,26 @@ nav a:hover {
   z-index: 1;
 }
 
+/* 3D Tilt Effect Styles */
+.card {
+  transform-style: preserve-3d;
+}
+
+.card-icon {
+  transform: translateZ(40px);
+  transition: transform 0.1s ease-out;
+}
+
+.card-icon svg,
+.card-icon .material-symbols-sharp {
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.15));
+}
+
+/* Vanilla Tilt Glare Override */
+.js-tilt-glare {
+  border-radius: inherit;
+}
+
 @media (min-width: 768px) {
   .card {
     padding: 1.25rem;
