@@ -236,12 +236,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const tiltCards = document.querySelectorAll('.card, .block-card');
     
     tiltCards.forEach(card => {
-      // Create shine overlay for reflection effect
-      const shine = document.createElement('div');
-      shine.classList.add('card-shine');
-      card.appendChild(shine);
+      // Create shine overlay if it doesn't exist
+      let shine = card.querySelector('.card-shine');
+      if (!shine) {
+        shine = document.createElement('div');
+        shine.classList.add('card-shine');
+        card.appendChild(shine);
+      }
+      
+      // Store base transform for stack positioning
+      let baseTransform = '';
       
       card.addEventListener('mouseenter', () => {
+        // Capture current transform as base (from stack positioning)
+        baseTransform = card.style.transform || '';
         card.style.transition = 'transform 0.1s ease-out';
       });
       
@@ -252,36 +260,27 @@ document.addEventListener('DOMContentLoaded', function() {
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
         
-        const rotateX = (y - centerY) / 10;
-        const rotateY = (centerX - x) / 10;
+        // Calculate rotation (limited range for subtle effect)
+        const rotateX = ((y - centerY) / centerY) * -8;
+        const rotateY = ((x - centerX) / centerX) * 8;
         
-        // Get current stack transform
-        const currentTransform = card.style.transform || '';
-        const stackMatch = currentTransform.match(/translateY\([^)]+\)\s*translateX\([^)]+\)\s*rotate\([^)]+\)/);
-        const stackTransform = stackMatch ? stackMatch[0] : '';
-        
-        card.style.transform = `${stackTransform} perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        // Apply tilt on top of base transform
+        card.style.transform = `${baseTransform} perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
         
         // Update shine position
         const shineX = (x / rect.width) * 100;
         const shineY = (y / rect.height) * 100;
-        shine.style.background = `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%)`;
+        shine.style.background = `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 50%)`;
         shine.style.opacity = '1';
       });
       
       card.addEventListener('mouseleave', () => {
         card.style.transition = 'transform 0.4s ease';
-        // Reset to stack position
-        const currentTransform = card.style.transform || '';
-        const stackMatch = currentTransform.match(/translateY\([^)]+\)\s*translateX\([^)]+\)\s*rotate\([^)]+\)/);
-        const stackTransform = stackMatch ? stackMatch[0] : '';
-        card.style.transform = stackTransform;
+        // Reset to base transform
+        card.style.transform = baseTransform;
         
         // Hide shine
-        const shine = card.querySelector('.card-shine');
-        if (shine) {
-          shine.style.opacity = '0';
-        }
+        shine.style.opacity = '0';
       });
     });
   }
