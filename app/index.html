@@ -1319,14 +1319,23 @@
     
     .card-icon {
       transition: filter 0.3s ease;
-    }
-    
-    .card:hover .card-icon .material-symbols-sharp {
-      transform: scale(1.15);
-    }
-    
-    .card:hover .card-icon {
+      /* Mobile: glow by default since no hover */
       filter: drop-shadow(0 0 20px var(--card-accent)) drop-shadow(0 0 40px var(--card-accent));
+    }
+    
+    /* Desktop: no glow by default, only on hover */
+    @media (min-width: 768px) {
+      .card-icon {
+        filter: none;
+      }
+      
+      .card:hover .card-icon .material-symbols-sharp {
+        transform: scale(1.15);
+      }
+      
+      .card:hover .card-icon {
+        filter: drop-shadow(0 0 20px var(--card-accent)) drop-shadow(0 0 40px var(--card-accent));
+      }
     }
 
     .card-desc {
