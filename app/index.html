@@ -3604,62 +3604,67 @@
     }
 
     // ============================================
-    // Tilt Effect (Desktop Hover) + 3D Mode (Mobile)
+    // Tilt Effect (Desktop) + 3D Mode (Mobile)
     // ============================================
-    let tiltInitialized = false;
     let mode3dActive = false;
     let mode3dGyroListener = null;
     let smoothBeta = 0;
     let smoothGamma = 0;
     const SMOOTHING = 0.1;
     
-    function initTiltEffect() {
-      if (tiltInitialized) return;
-      tiltInitialized = true;
-      
-      // Desktop only: Mouse hover tilt
-      if (window.innerWidth >= 768 && !('ontouchstart' in window)) {
-        const main = document.querySelector('.main');
-        if (main) {
-          main.addEventListener('mouseenter', (e) => {
-            const card = e.target.closest('.card');
-            if (card) card.classList.add('tilting');
-          }, true);
-          
-          main.addEventListener('mouseleave', (e) => {
-            const card = e.target.closest('.card');
-            if (card) {
-              card.classList.remove('tilting');
-              card.style.transform = '';
-              card.style.setProperty('--reflect-x', '50%');
-              card.style.setProperty('--reflect-y', '50%');
+    // Desktop tilt - using document-level listener
+    const isDesktop = window.innerWidth >= 768 && !('ontouchstart' in window);
+    let currentTiltCard = null;
+    
+    if (isDesktop) {
+      document.addEventListener('mousemove', (e) => {
+        const card = e.target.closest('.card');
+        
+        if (card) {
+          // Entered a card
+          if (currentTiltCard !== card) {
+            // Reset previous card
+            if (currentTiltCard) {
+              currentTiltCard.classList.remove('tilting');
+              currentTiltCard.style.transform = '';
+              currentTiltCard.style.setProperty('--reflect-x', '50%');
+              currentTiltCard.style.setProperty('--reflect-y', '50%');
             }
-          }, true);
+            currentTiltCard = card;
+            card.classList.add('tilting');
+          }
           
-          main.addEventListener('mousemove', (e) => {
-            const card = e.target.closest('.card');
-            if (!card || !card.classList.contains('tilting')) return;
-            
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const rotateX = ((y - centerY) / centerY) * -6;
-            const rotateY = ((x - centerX) / centerX) * 6;
-            
-            card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            
-            // Reflection follows cursor
-            const reflectX = (x / rect.width) * 100;
-            const reflectY = (y / rect.height) * 100;
-            card.style.setProperty('--reflect-x', `${reflectX}%`);
-            card.style.setProperty('--reflect-y', `${reflectY}%`);
-          });
+          // Apply tilt
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          
+          const rotateX = ((y - centerY) / centerY) * -8;
+          const rotateY = ((x - centerX) / centerX) * 8;
+          
+          card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+          
+          // Reflection follows cursor
+          const reflectX = (x / rect.width) * 100;
+          const reflectY = (y / rect.height) * 100;
+          card.style.setProperty('--reflect-x', `${reflectX}%`);
+          card.style.setProperty('--reflect-y', `${reflectY}%`);
+        } else {
+          // Left all cards
+          if (currentTiltCard) {
+            currentTiltCard.classList.remove('tilting');
+            currentTiltCard.style.transform = '';
+            currentTiltCard.style.setProperty('--reflect-x', '50%');
+            currentTiltCard.style.setProperty('--reflect-y', '50%');
+            currentTiltCard = null;
+          }
         }
-      }
-      
+      });
+    }
+    
+    function initTiltEffect() {
       // Mobile: Initialize 3D mode button
       init3DMode();
     }

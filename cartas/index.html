@@ -2365,7 +2365,7 @@
     });
 
     // ============================================
-    // Tilt Effect (Gyroscope & Hover)
+    // Tilt Effect (Desktop) + Gyroscope (Mobile)
     // ============================================
     let gyroPermissionGranted = false;
     let smoothBeta = 0;
@@ -2374,21 +2374,25 @@
     let gyroRefBeta = null;
     let gyroRefGamma = null;
     
-    function initTiltEffect() {
-      const cards = document.querySelectorAll('.card');
-      
-      cards.forEach(card => {
-        // Desktop: Mouse hover tilt
-        card.addEventListener('mouseenter', () => card.classList.add('tilting'));
-        card.addEventListener('mouseleave', () => {
-          card.classList.remove('tilting');
-          card.style.transform = '';
-          card.style.setProperty('--reflect-x', '50%');
-          card.style.setProperty('--reflect-y', '50%');
-        });
+    // Desktop tilt - document level listener
+    const isDesktop = window.innerWidth >= 768 && !('ontouchstart' in window);
+    let currentTiltCard = null;
+    
+    if (isDesktop) {
+      document.addEventListener('mousemove', (e) => {
+        const card = e.target.closest('.card');
         
-        card.addEventListener('mousemove', (e) => {
-          if (window.innerWidth < 768) return; // Skip on mobile
+        if (card) {
+          if (currentTiltCard !== card) {
+            if (currentTiltCard) {
+              currentTiltCard.classList.remove('tilting');
+              currentTiltCard.style.transform = '';
+              currentTiltCard.style.setProperty('--reflect-x', '50%');
+              currentTiltCard.style.setProperty('--reflect-y', '50%');
+            }
+            currentTiltCard = card;
+            card.classList.add('tilting');
+          }
           
           const rect = card.getBoundingClientRect();
           const x = e.clientX - rect.left;
@@ -2396,19 +2400,28 @@
           const centerX = rect.width / 2;
           const centerY = rect.height / 2;
           
-          const rotateX = ((y - centerY) / centerY) * -6;
-          const rotateY = ((x - centerX) / centerX) * 6;
+          const rotateX = ((y - centerY) / centerY) * -8;
+          const rotateY = ((x - centerX) / centerX) * 8;
           
           card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
           
-          // Reflection follows cursor
           const reflectX = (x / rect.width) * 100;
           const reflectY = (y / rect.height) * 100;
           card.style.setProperty('--reflect-x', `${reflectX}%`);
           card.style.setProperty('--reflect-y', `${reflectY}%`);
-        });
+        } else {
+          if (currentTiltCard) {
+            currentTiltCard.classList.remove('tilting');
+            currentTiltCard.style.transform = '';
+            currentTiltCard.style.setProperty('--reflect-x', '50%');
+            currentTiltCard.style.setProperty('--reflect-y', '50%');
+            currentTiltCard = null;
+          }
+        }
       });
-      
+    }
+    
+    function initTiltEffect() {
       // Mobile: Gyroscope tilt
       if (window.DeviceOrientationEvent && 'ontouchstart' in window) {
         requestGyroPermission();
@@ -2417,7 +2430,6 @@
     
     function requestGyroPermission() {
       if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-        // iOS 13+ requires permission
         document.body.addEventListener('click', async function requestOnClick() {
           try {
             const permission = await DeviceOrientationEvent.requestPermission();
@@ -2431,7 +2443,6 @@
           document.body.removeEventListener('click', requestOnClick);
         }, { once: true });
       } else {
-        // Non-iOS devices
         gyroPermissionGranted = true;
         initGyroscope();
       }
@@ -2444,28 +2455,23 @@
         const rawBeta = e.beta || 0;
         const rawGamma = e.gamma || 0;
         
-        // Set reference on first reading
         if (gyroRefBeta === null) {
           gyroRefBeta = rawBeta;
           gyroRefGamma = rawGamma;
         }
         
-        // Calculate tilt relative to starting position
         let targetBeta = rawBeta - gyroRefBeta;
         let targetGamma = rawGamma - gyroRefGamma;
         
-        // Clamp range
         targetBeta = Math.max(-20, Math.min(20, targetBeta));
         targetGamma = Math.max(-20, Math.min(20, targetGamma));
         
-        // Smooth interpolation
         smoothBeta += (targetBeta - smoothBeta) * GYRO_SMOOTHING;
         smoothGamma += (targetGamma - smoothGamma) * GYRO_SMOOTHING;
         
         const rotateX = smoothBeta * -0.6;
         const rotateY = smoothGamma * 0.6;
         
-        // Reflection follows tilt
         const reflectX = 50 - (smoothGamma * 1.5);
         const reflectY = 50 - (smoothBeta * 1.5);
         
@@ -4933,7 +4939,7 @@
     });
 
     // ============================================
-    // Tilt Effect (Gyroscope & Hover)
+    // Tilt Effect (Desktop) + Gyroscope (Mobile)
     // ============================================
     let gyroPermissionGranted = false;
     let smoothBeta = 0;
@@ -4942,21 +4948,25 @@
     let gyroRefBeta = null;
     let gyroRefGamma = null;
     
-    function initTiltEffect() {
-      const cards = document.querySelectorAll('.card');
-      
-      cards.forEach(card => {
-        // Desktop: Mouse hover tilt
-        card.addEventListener('mouseenter', () => card.classList.add('tilting'));
-        card.addEventListener('mouseleave', () => {
-          card.classList.remove('tilting');
-          card.style.transform = '';
-          card.style.setProperty('--reflect-x', '50%');
-          card.style.setProperty('--reflect-y', '50%');
-        });
+    // Desktop tilt - document level listener
+    const isDesktop = window.innerWidth >= 768 && !('ontouchstart' in window);
+    let currentTiltCard = null;
+    
+    if (isDesktop) {
+      document.addEventListener('mousemove', (e) => {
+        const card = e.target.closest('.card');
         
-        card.addEventListener('mousemove', (e) => {
-          if (window.innerWidth < 768) return; // Skip on mobile
+        if (card) {
+          if (currentTiltCard !== card) {
+            if (currentTiltCard) {
+              currentTiltCard.classList.remove('tilting');
+              currentTiltCard.style.transform = '';
+              currentTiltCard.style.setProperty('--reflect-x', '50%');
+              currentTiltCard.style.setProperty('--reflect-y', '50%');
+            }
+            currentTiltCard = card;
+            card.classList.add('tilting');
+          }
           
           const rect = card.getBoundingClientRect();
           const x = e.clientX - rect.left;
@@ -4964,19 +4974,28 @@
           const centerX = rect.width / 2;
           const centerY = rect.height / 2;
           
-          const rotateX = ((y - centerY) / centerY) * -6;
-          const rotateY = ((x - centerX) / centerX) * 6;
+          const rotateX = ((y - centerY) / centerY) * -8;
+          const rotateY = ((x - centerX) / centerX) * 8;
           
           card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
           
-          // Reflection follows cursor
           const reflectX = (x / rect.width) * 100;
           const reflectY = (y / rect.height) * 100;
           card.style.setProperty('--reflect-x', `${reflectX}%`);
           card.style.setProperty('--reflect-y', `${reflectY}%`);
-        });
+        } else {
+          if (currentTiltCard) {
+            currentTiltCard.classList.remove('tilting');
+            currentTiltCard.style.transform = '';
+            currentTiltCard.style.setProperty('--reflect-x', '50%');
+            currentTiltCard.style.setProperty('--reflect-y', '50%');
+            currentTiltCard = null;
+          }
+        }
       });
-      
+    }
+    
+    function initTiltEffect() {
       // Mobile: Gyroscope tilt
       if (window.DeviceOrientationEvent && 'ontouchstart' in window) {
         requestGyroPermission();
@@ -4985,7 +5004,6 @@
     
     function requestGyroPermission() {
       if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-        // iOS 13+ requires permission
         document.body.addEventListener('click', async function requestOnClick() {
           try {
             const permission = await DeviceOrientationEvent.requestPermission();
@@ -4999,7 +5017,6 @@
           document.body.removeEventListener('click', requestOnClick);
         }, { once: true });
       } else {
-        // Non-iOS devices
         gyroPermissionGranted = true;
         initGyroscope();
       }
@@ -5012,28 +5029,23 @@
         const rawBeta = e.beta || 0;
         const rawGamma = e.gamma || 0;
         
-        // Set reference on first reading
         if (gyroRefBeta === null) {
           gyroRefBeta = rawBeta;
           gyroRefGamma = rawGamma;
         }
         
-        // Calculate tilt relative to starting position
         let targetBeta = rawBeta - gyroRefBeta;
         let targetGamma = rawGamma - gyroRefGamma;
         
-        // Clamp range
         targetBeta = Math.max(-20, Math.min(20, targetBeta));
         targetGamma = Math.max(-20, Math.min(20, targetGamma));
         
-        // Smooth interpolation
         smoothBeta += (targetBeta - smoothBeta) * GYRO_SMOOTHING;
         smoothGamma += (targetGamma - smoothGamma) * GYRO_SMOOTHING;
         
         const rotateX = smoothBeta * -0.6;
         const rotateY = smoothGamma * 0.6;
         
-        // Reflection follows tilt
         const reflectX = 50 - (smoothGamma * 1.5);
         const reflectY = 50 - (smoothBeta * 1.5);
         
