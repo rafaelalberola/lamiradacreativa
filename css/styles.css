@@ -2341,7 +2341,7 @@ section[id] {
    ============================================ */
 .app-access-section {
   background: linear-gradient(135deg, #19132F 0%, #0C0520 100%);
-  padding: var(--space-2xl) 0;
+  padding: var(--space-lg) 0;
 }
 
 .btn--accent {
