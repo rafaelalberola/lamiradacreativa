@@ -2184,27 +2184,34 @@
     (function() {
       const urlParams = new URLSearchParams(window.location.search);
       const sessionId = urlParams.get('session_id');
-      if (sessionId && typeof gtag !== 'undefined') {
-        // Get price from localStorage (saved during begin_checkout)
-        let price = 12;
+      if (sessionId) {
+        // Reset to first card for new purchase
         try {
-          const savedPrice = localStorage.getItem('checkout_price');
-          if (savedPrice) {
-            price = parseFloat(savedPrice) || 12;
-            localStorage.removeItem('checkout_price');
-          }
+          localStorage.setItem('lmc_current_index', '0');
         } catch(e) {}
         
-        // Track purchase event in Google Analytics
-        gtag('event', 'purchase', {
-          transaction_id: sessionId,
-          currency: 'EUR',
-          value: price
-        });
+        if (typeof gtag !== 'undefined') {
+          // Get price from localStorage (saved during begin_checkout)
+          let price = 39;
+          try {
+            const savedPrice = localStorage.getItem('checkout_price');
+            if (savedPrice) {
+              price = parseFloat(savedPrice) || 39;
+              localStorage.removeItem('checkout_price');
+            }
+          } catch(e) {}
+          
+          // Track purchase event in Google Analytics
+          gtag('event', 'purchase', {
+            transaction_id: sessionId,
+            currency: 'EUR',
+            value: price
+          });
+        }
         // Track purchase event in Facebook Pixel
         if (typeof fbq !== 'undefined') {
           fbq('track', 'Purchase', {
-            value: price,
+            value: 39,
             currency: 'EUR'
           });
         }
