@@ -2167,11 +2167,21 @@
       const urlParams = new URLSearchParams(window.location.search);
       const sessionId = urlParams.get('session_id');
       if (sessionId && typeof gtag !== 'undefined') {
+        // Get price from localStorage (saved during begin_checkout)
+        let price = 12;
+        try {
+          const savedPrice = localStorage.getItem('checkout_price');
+          if (savedPrice) {
+            price = parseFloat(savedPrice) || 12;
+            localStorage.removeItem('checkout_price');
+          }
+        } catch(e) {}
+        
         // Track purchase event in Google Analytics
         gtag('event', 'purchase', {
           transaction_id: sessionId,
           currency: 'EUR',
-          value: 12
+          value: price
         });
         // Clean URL to prevent duplicate tracking on refresh
         window.history.replaceState({}, document.title, window.location.pathname);

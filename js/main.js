@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   async function initCheckout() {
     if (!stripe) {
-      stripe = Stripe('pk_test_51RbTz6FlqCLMJz4qJaIVEWqnQmb5w26x3qKsPuwPKTj5hJLf1UMJ6t6Pfo39FBmJPcXyGxCMkX9v2kw8wIXWdwMg00DFYKaIaZ');
+      stripe = Stripe('pk_live_51SloOzROPcCIICCTXoAHSYEv1n4McmijkNODqcNKRIQfTqYoe9qfYMQHLaInoQhPOnW4XCciQMfdKiJ9vFDmDPgV00jKTBhoxw');
     }
     
     try {
@@ -313,9 +313,17 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       // Track begin_checkout event in Google Analytics
       if (typeof gtag !== 'undefined') {
+        // Get price dynamically from the page
+        const priceElement = document.querySelector('.price-current');
+        const priceText = priceElement ? priceElement.textContent : '12 €';
+        const price = parseFloat(priceText.replace(/[^\d.,]/g, '').replace(',', '.')) || 12;
+        
+        // Save price for purchase tracking
+        try { localStorage.setItem('checkout_price', price); } catch(e) {}
+        
         gtag('event', 'begin_checkout', {
           currency: 'EUR',
-          value: 12
+          value: price
         });
       }
       openCheckoutModal();
