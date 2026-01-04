@@ -3555,12 +3555,12 @@
           cardEl.style.transform = 'none';
           cardEl.style.position = 'relative';
 
-          // Small delay to ensure styles are applied (reduced for speed)
-          await new Promise(resolve => setTimeout(resolve, 8));
+          // Small delay to ensure styles are applied
+          await new Promise(resolve => setTimeout(resolve, 15));
 
-          // Capture to canvas (scale 1.5 for speed/quality balance)
+          // Capture to canvas (scale 3 for high quality)
           const canvas = await html2canvas(cardEl, {
-            scale: 1.5,
+            scale: 3,
             backgroundColor: '#1a1025',
             useCORS: true,
             logging: false,
@@ -3570,8 +3570,8 @@
           // Add page (except for first)
           if (i > 0) pdf.addPage();
 
-          // Add image to PDF (0.85 quality for speed/size balance)
-          const imgData = canvas.toDataURL('image/jpeg', 0.85);
+          // Add image to PDF (0.95 quality for optimal output)
+          const imgData = canvas.toDataURL('image/jpeg', 0.95);
           pdf.addImage(imgData, 'JPEG', 0, 0, cardWidth, cardHeight);
         }
 
