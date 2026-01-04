@@ -238,7 +238,7 @@ header {
 nav {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: 8px;
 }
 
 @media (min-width: 768px) {
