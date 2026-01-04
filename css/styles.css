@@ -2098,7 +2098,7 @@ footer {
    Legal Pages
    ============================================ */
 .legal-page {
-  padding: calc(var(--space-xl) + 70px) 0 var(--space-xl);
+  padding: calc(var(--space-md) + 70px) 0 var(--space-xl);
 }
 
 .legal-content {
