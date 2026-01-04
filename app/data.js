@@ -110,7 +110,7 @@ window.CARDS = [
   // ═══════════════════════════════════════════════════════════════
   // PORTADA
   // ═══════════════════════════════════════════════════════════════
-  {id:0,type:'cover',style:'cover',title:'LA MIRADA CREATIVA',subtitle:'365 días de entrenamiento visual',icon:'visibility',desc:'Un sistema diario para entrenar tu mirada y generar ideas cuando estás en blanco.'},
+  {id:0,type:'cover',style:'cover',title:'LA MIRADA CREATIVA',subtitle:'365 días de entrenamiento visual',icon:'visibility',desc:'Un sistema para entrenar tu mirada y generar ideas cuando estás en blanco.'},
 
   // ═══════════════════════════════════════════════════════════════
   // PRESENTACIÓN (2 páginas)
