@@ -1478,6 +1478,10 @@ nav a:hover {
   border-top: 1px solid var(--color-border-light);
 }
 
+.features-list li:last-child {
+  border-bottom: none;
+}
+
 .features-list .material-symbols-sharp {
   color: var(--color-accent);
   font-size: 28px;
@@ -2418,10 +2422,11 @@ section[id] {
 
 .what-is-content p {
   margin-bottom: var(--space-sm);
+  font-size: 1rem;
 }
 
 .what-is-highlight {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--color-text);
   margin-top: var(--space-md);
@@ -2449,10 +2454,10 @@ section[id] {
 }
 
 .profile-icon {
-  width: 56px;
-  height: 56px;
-  background: var(--color-bg-alt);
-  border-radius: 12px;
+  width: 64px;
+  height: 64px;
+  background: var(--color-accent);
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2460,8 +2465,8 @@ section[id] {
 }
 
 .profile-icon .material-symbols-sharp {
-  font-size: 28px;
-  color: var(--color-accent);
+  font-size: 32px;
+  color: #fff;
 }
 
 .profile-title {
@@ -2482,7 +2487,7 @@ section[id] {
   list-style: none;
   padding: 0;
   max-width: 400px;
-  margin: var(--space-sm) auto 0;
+  margin: 0 auto;
   text-align: left;
 }
 
@@ -2508,13 +2513,21 @@ section[id] {
 
 .how-it-works-content p {
   margin-bottom: var(--space-sm);
+  font-size: 1rem;
 }
 
 .how-it-works-highlight {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--color-text);
   margin-top: var(--space-md);
+}
+
+/* CTA Mid Description */
+.cta-mid-desc {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
 }
 
 /* Objections Grid */
@@ -2554,10 +2567,18 @@ section[id] {
 
 /* Emotional Close */
 .emotional-close {
+  font-family: var(--font-headline);
   font-size: 1.75rem;
   font-weight: 600;
+  letter-spacing: -0.02em;
   color: var(--color-text);
   margin-bottom: var(--space-xs);
+}
+
+@media (min-width: 768px) {
+  .emotional-close {
+    font-size: 2.25rem;
+  }
 }
 
 .emotional-subclose {
