@@ -2456,7 +2456,7 @@ section[id] {
 .profile-icon {
   width: 64px;
   height: 64px;
-  background: var(--color-accent);
+  background: var(--color-bg-alt);
   border-radius: 16px;
   display: flex;
   align-items: center;
@@ -2465,8 +2465,8 @@ section[id] {
 }
 
 .profile-icon .material-symbols-sharp {
-  font-size: 32px;
-  color: #fff;
+  font-size: 36px;
+  color: var(--color-accent);
 }
 
 .profile-title {
