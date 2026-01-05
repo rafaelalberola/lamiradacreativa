@@ -2459,7 +2459,7 @@ section[id] {
 @media (max-width: 767px) {
   .profile-grid {
     grid-template-columns: 1fr;
-    gap: var(--space-md);
+    gap: 0;
     margin-top: 0;
   }
 }
