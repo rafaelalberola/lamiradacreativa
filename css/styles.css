@@ -165,12 +165,12 @@ p:last-child {
 }
 
 section {
-  padding: var(--space-xl) 0;
+  padding: var(--space-lg) 0;
 }
 
 @media (min-width: 768px) {
   section {
-    padding: var(--space-2xl) 0;
+    padding: var(--space-xl) 0;
   }
 }
 
@@ -2412,7 +2412,7 @@ section[id] {
 
 /* What Is Section */
 .what-is-content {
-  max-width: 540px;
+  max-width: 480px;
   margin: 0 auto;
 }
 
@@ -2421,7 +2421,7 @@ section[id] {
 }
 
 .what-is-highlight {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 500;
   color: var(--color-text);
   margin-top: var(--space-md);
@@ -2439,6 +2439,7 @@ section[id] {
   .profile-grid {
     grid-template-columns: 1fr;
     gap: var(--space-md);
+    margin-top: 0;
   }
 }
 
@@ -2474,11 +2475,6 @@ section[id] {
   font-size: 0.9375rem;
   color: var(--color-text-secondary);
   line-height: 1.5;
-}
-
-/* Benefits Section */
-#beneficios {
-  padding: var(--space-lg) 0;
 }
 
 /* Benefits List */
@@ -2521,11 +2517,6 @@ section[id] {
   margin-top: var(--space-md);
 }
 
-/* Objections Section */
-#objeciones {
-  padding: var(--space-lg) 0;
-}
-
 /* Objections Grid */
 .objections-grid {
   display: grid;
@@ -2559,11 +2550,6 @@ section[id] {
 .objection-answer {
   font-size: 0.9375rem;
   color: var(--color-text-secondary);
-}
-
-/* Precio Section */
-#precio {
-  padding: var(--space-lg) 0;
 }
 
 /* Emotional Close */
