@@ -2425,11 +2425,16 @@ section[id] {
   font-size: 1rem;
 }
 
+.what-is-content p:last-child {
+  margin-bottom: 0;
+}
+
 .what-is-highlight {
   font-size: 1rem;
   font-weight: 500;
   color: var(--color-text);
   margin-top: var(--space-md);
+  margin-bottom: 0;
 }
 
 /* Profile Grid */
@@ -2516,11 +2521,16 @@ section[id] {
   font-size: 1rem;
 }
 
+.how-it-works-content p:last-child {
+  margin-bottom: 0;
+}
+
 .how-it-works-highlight {
   font-size: 1rem;
   font-weight: 500;
   color: var(--color-text);
   margin-top: var(--space-md);
+  margin-bottom: 0;
 }
 
 /* CTA Mid Description */
