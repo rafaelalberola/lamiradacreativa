@@ -2372,22 +2372,42 @@ section[id] {
   list-style: none;
   padding: 0;
   margin: var(--space-md) auto;
-  max-width: 400px;
+  max-width: 420px;
   text-align: left;
 }
 
 .identification-list li {
-  font-size: 1.125rem;
+  font-size: 1rem;
   color: var(--color-text);
   padding: var(--space-xs) 0;
-  font-style: italic;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+.identification-list li::before {
+  content: "•";
+  color: var(--color-accent);
+  font-weight: 600;
 }
 
 .identification-closing {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 600;
   color: var(--color-text);
   margin-top: var(--space-md);
+  text-align: left;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 767px) {
+  .identification-list,
+  .identification-closing {
+    max-width: 100%;
+    padding: 0 var(--space-sm);
+  }
 }
 
 /* What Is Section */
@@ -2412,7 +2432,7 @@ section[id] {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-lg);
-  margin-top: var(--space-xl);
+  margin-top: var(--space-md);
 }
 
 @media (max-width: 767px) {
@@ -2456,12 +2476,17 @@ section[id] {
   line-height: 1.5;
 }
 
+/* Benefits Section */
+#beneficios {
+  padding: var(--space-lg) 0;
+}
+
 /* Benefits List */
 .benefits-list {
   list-style: none;
   padding: 0;
   max-width: 400px;
-  margin: var(--space-lg) auto 0;
+  margin: var(--space-sm) auto 0;
   text-align: left;
 }
 
@@ -2475,7 +2500,8 @@ section[id] {
 
 .benefits-list .material-symbols-sharp {
   color: var(--color-accent);
-  font-size: 20px;
+  font-size: 24px;
+  font-weight: 600;
 }
 
 /* How It Works */
@@ -2495,12 +2521,17 @@ section[id] {
   margin-top: var(--space-md);
 }
 
+/* Objections Section */
+#objeciones {
+  padding: var(--space-lg) 0;
+}
+
 /* Objections Grid */
 .objections-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-lg);
-  margin-top: var(--space-lg);
+  margin-top: var(--space-sm);
 }
 
 @media (max-width: 767px) {
@@ -2530,6 +2561,11 @@ section[id] {
   color: var(--color-text-secondary);
 }
 
+/* Precio Section */
+#precio {
+  padding: var(--space-lg) 0;
+}
+
 /* Emotional Close */
 .emotional-close {
   font-size: 1.75rem;
@@ -2541,5 +2577,5 @@ section[id] {
 .emotional-subclose {
   font-size: 1.125rem;
   color: var(--color-text-secondary);
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
