@@ -2530,6 +2530,10 @@ section[id] {
   margin-top: var(--space-xs);
 }
 
+#cta-mid .hero-actions {
+  justify-content: center;
+}
+
 /* Objections Grid */
 .objections-grid {
   display: grid;
