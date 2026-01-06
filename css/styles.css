@@ -721,7 +721,7 @@ nav a:hover {
 
 @media (min-width: 768px) {
   .hero-cards-caption {
-    margin-top: var(--space-md);
+    margin-top: 50px;
     text-align: center;
   }
 }
@@ -1037,7 +1037,7 @@ nav a:hover {
 
 @media (min-width: 768px) {
   .blocks-deck-caption {
-    margin-top: var(--space-md);
+    margin-top: 50px;
   }
 }
 
