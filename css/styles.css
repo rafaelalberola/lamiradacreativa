@@ -185,7 +185,7 @@ section {
   }
   
   #que-es {
-    padding-bottom: var(--space-2xl);
+    padding-bottom: 0;
   }
 }
 
