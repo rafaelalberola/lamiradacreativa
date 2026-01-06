@@ -722,6 +722,7 @@ nav a:hover {
 @media (min-width: 768px) {
   .hero-cards-caption {
     margin-top: var(--space-lg);
+    text-align: center;
   }
 }
 
