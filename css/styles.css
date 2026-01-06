@@ -1028,6 +1028,13 @@ nav a:hover {
   }
 }
 
+.blocks-deck-caption {
+  font-size: 0.7rem;
+  color: #999;
+  text-align: center;
+  margin-top: var(--space-lg);
+}
+
 .block-card {
   position: absolute;
   width: 100%;
