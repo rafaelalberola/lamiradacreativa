@@ -183,6 +183,10 @@ section {
   section {
     padding: var(--space-xl) 0;
   }
+  
+  #que-es {
+    padding-bottom: var(--space-2xl);
+  }
 }
 
 .section-alt {
