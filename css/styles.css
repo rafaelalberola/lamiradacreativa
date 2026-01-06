@@ -1443,7 +1443,7 @@ nav a:hover {
 }
 
 .block-item {
-  background-color: var(--color-bg);
+  background-color: var(--color-bg-alt);
   padding: var(--space-lg) var(--space-md);
   text-align: center;
   min-width: 0;
