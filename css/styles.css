@@ -177,6 +177,10 @@ section {
   .section-alt {
     padding-top: calc(var(--space-lg) + 12px);
   }
+  
+  #el-sistema {
+    padding-top: 0;
+  }
 }
 
 @media (min-width: 768px) {
