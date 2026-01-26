@@ -49,7 +49,7 @@ exports.handler = async (event, context) => {
         },
       ],
       mode: 'payment',
-      return_url: `${origin}/app?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: `${origin}/gracias?session_id={CHECKOUT_SESSION_ID}`,
       automatic_tax: { enabled: false },
       // Collect billing address which includes name
       billing_address_collection: 'required',
