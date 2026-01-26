@@ -1850,6 +1850,12 @@ nav a:hover {
   text-align: center;
 }
 
+@media (max-width: 767px) {
+  .pricing-main {
+    margin-top: 0;
+  }
+}
+
 .pricing-main-content {
   padding: var(--space-lg) var(--space-md);
 }
@@ -2734,7 +2740,102 @@ section[id] {
   font-size: 1rem;
   font-weight: 500;
   color: var(--color-text-secondary);
+  margin: 0 0 var(--space-md) 0;
+}
+
+/* Testimonials Carousel */
+.testimonials-carousel {
+  display: flex;
+  gap: var(--space-md);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--space-sm) 0;
+  margin: 0 calc(-1 * var(--space-md));
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+}
+
+.testimonials-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.testimonials-carousel {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (min-width: 768px) {
+  .testimonials-carousel {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    overflow: visible;
+    margin: 0;
+    padding: var(--space-sm) 0;
+  }
+}
+
+.testimonial-card {
+  flex: 0 0 280px;
+  scroll-snap-align: start;
+  background: var(--color-bg);
+  border-radius: 12px;
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--color-border-light);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+@media (min-width: 768px) {
+  .testimonial-card {
+    flex: 1;
+  }
+}
+
+.testimonial-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.testimonial-content {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-text);
   margin: 0;
+  flex: 1;
+}
+
+.testimonial-author {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: auto;
+  padding-top: var(--space-xs);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.testimonial-name {
+  font-family: var(--font-headline);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.testimonial-role {
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary);
 }
 
 /* Sistema Tagline */
