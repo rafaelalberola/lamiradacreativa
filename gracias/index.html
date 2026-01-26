@@ -193,7 +193,7 @@
     // ============================================
     // PURCHASE TRACKING
     // ============================================
-    (function() {
+    function trackPurchase() {
       const urlParams = new URLSearchParams(window.location.search);
       const sessionId = urlParams.get('session_id');
       
@@ -226,23 +226,35 @@
       
       console.log('[Tracking] Tracking purchase for session:', sessionId, 'price:', price);
       
-      // Track in Google Analytics
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'purchase', {
-          transaction_id: sessionId,
-          currency: 'EUR',
-          value: price,
-          items: [{
-            item_id: 'la_mirada_creativa',
-            item_name: 'La Mirada Creativa',
-            price: price,
-            quantity: 1
-          }]
-        });
-        console.log('[Tracking] GA4 purchase event sent');
-      } else {
-        console.warn('[Tracking] gtag not available');
-      }
+      // Track in Google Analytics (with delay to ensure script is ready)
+      setTimeout(function() {
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'purchase', {
+            send_to: 'G-2HEEKVP1BF',
+            transaction_id: sessionId,
+            currency: 'EUR',
+            value: price,
+            items: [{
+              item_id: 'la_mirada_creativa',
+              item_name: 'La Mirada Creativa',
+              price: price,
+              quantity: 1
+            }]
+          });
+          console.log('[Tracking] GA4 purchase event sent');
+        } else {
+          console.warn('[Tracking] gtag not available');
+          // Fallback: push to dataLayer directly
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
+            'event': 'purchase',
+            'transaction_id': sessionId,
+            'currency': 'EUR',
+            'value': price
+          });
+          console.log('[Tracking] Pushed to dataLayer as fallback');
+        }
+      }, 500);
       
       // Track in Facebook Pixel
       if (typeof fbq !== 'undefined') {
@@ -263,7 +275,14 @@
         // Reset card index for new user
         localStorage.setItem('lmc_current_index', '0');
       } catch(e) {}
-    })();
+    }
+    
+    // Wait for window load to ensure all scripts are ready
+    if (document.readyState === 'complete') {
+      trackPurchase();
+    } else {
+      window.addEventListener('load', trackPurchase);
+    }
     
     // ============================================
     // COUNTDOWN & REDIRECT
