@@ -228,10 +228,15 @@ header {
   top: 0;
   left: 0;
   right: 0;
+  width: 100%;
   padding: 12px 0;
   background: var(--color-bg);
   border-bottom: 1px solid var(--color-border-light);
   z-index: 100;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .header-inner {
@@ -2756,12 +2761,103 @@ section#testimonios {
   margin: 0 0 var(--space-md) 0;
 }
 
+/* Testimonials Wrapper */
+.testimonials-wrapper {
+  position: relative;
+}
+
+/* Gradient overlays */
+.testimonials-wrapper::before,
+.testimonials-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.testimonials-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, var(--color-bg-alt), transparent);
+}
+
+.testimonials-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, var(--color-bg-alt), transparent);
+}
+
+/* Navigation buttons */
+.testimonials-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  cursor: pointer;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.testimonials-nav:hover {
+  background: var(--color-bg-alt);
+  border-color: var(--color-text-tertiary);
+}
+
+.testimonials-nav .material-symbols-sharp {
+  font-size: 24px;
+  color: var(--color-text);
+}
+
+.testimonials-nav--prev {
+  left: -20px;
+}
+
+.testimonials-nav--next {
+  right: -20px;
+}
+
+@media (max-width: 767px) {
+  .testimonials-wrapper::before,
+  .testimonials-wrapper::after {
+    width: 40px;
+  }
+  
+  .testimonials-nav {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .testimonials-wrapper::before,
+  .testimonials-wrapper::after {
+    display: none;
+  }
+  
+  .testimonials-nav--prev {
+    left: -50px;
+  }
+  
+  .testimonials-nav--next {
+    right: -50px;
+  }
+}
+
 /* Testimonials Carousel */
 .testimonials-carousel {
   display: flex;
   gap: var(--space-md);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   padding: var(--space-sm) 0;
   /* Center first card with padding on sides */

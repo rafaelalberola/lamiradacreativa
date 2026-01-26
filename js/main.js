@@ -367,4 +367,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
+  // ============================================
+  // Testimonials Carousel Navigation
+  // ============================================
+  const testimonialsCarousel = document.getElementById('testimonialsCarousel');
+  const prevBtn = document.querySelector('.testimonials-nav--prev');
+  const nextBtn = document.querySelector('.testimonials-nav--next');
+  
+  if (testimonialsCarousel && prevBtn && nextBtn) {
+    const cardWidth = 280 + 24; // card width + gap
+    
+    prevBtn.addEventListener('click', () => {
+      testimonialsCarousel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+    });
+    
+    nextBtn.addEventListener('click', () => {
+      testimonialsCarousel.scrollBy({ left: cardWidth, behavior: 'smooth' });
+    });
+  }
+  
 });
