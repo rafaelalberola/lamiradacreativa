@@ -2640,8 +2640,13 @@ section[id] {
 }
 
 @media (min-width: 768px) {
+  #objeciones .container {
+    max-width: 900px;
+  }
+  
   .objections-grid {
-    max-width: 1000px;
+    max-width: 1250px;
+    gap: 12px;
   }
   
   .objection-item {
