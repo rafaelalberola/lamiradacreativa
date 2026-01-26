@@ -2626,7 +2626,7 @@ section[id] {
 @media (max-width: 767px) {
   .objections-grid {
     grid-template-columns: 1fr;
-    gap: var(--space-md);
+    gap: 12px;
   }
 }
 
@@ -2742,6 +2742,25 @@ section[id] {
 /* Social Proof Section */
 .social-proof-section {
   padding: var(--space-md) 0;
+}
+
+section#testimonios {
+  padding: 60px 0;
+}
+
+/* Scroll indicator for testimonials on mobile */
+@media (max-width: 767px) {
+  .testimonials-carousel::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    background: linear-gradient(to left, transparent, var(--color-bg-alt));
+    pointer-events: none;
+    z-index: 1;
+  }
 }
 
 .social-proof-text {
