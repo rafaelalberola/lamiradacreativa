@@ -2651,3 +2651,190 @@ section[id] {
   color: var(--color-text-secondary);
   margin-bottom: var(--space-md);
 }
+
+/* ============================================
+   Conversion Optimized Styles
+   ============================================ */
+
+/* Urgency Badge on Sticky Banner */
+.promo-banner-urgency {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #fff;
+  background: var(--color-accent);
+  padding: 0.25rem 0.5rem;
+  border-radius: 2px;
+  margin-left: var(--space-xs);
+  animation: pulse-urgency 2s ease-in-out infinite;
+}
+
+@keyframes pulse-urgency {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Hero Price Note */
+.hero-price-note {
+  font-size: 0.8125rem;
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-sm);
+}
+
+.hero-price-old {
+  text-decoration: line-through;
+  margin-right: 0.25rem;
+}
+
+/* Extra Large Button */
+.btn--xlarge {
+  padding: 1.25rem 2.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+/* Enhanced Button Styles */
+.btn--primary {
+  box-shadow: 0 4px 14px rgba(255, 80, 6, 0.3);
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 80, 6, 0.4);
+}
+
+.btn--large {
+  padding: 1.1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Social Proof Section */
+.social-proof-section {
+  padding: var(--space-md) 0;
+}
+
+.social-proof-text {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Sistema Tagline */
+.sistema-tagline {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  margin: 0 auto;
+  max-width: 400px;
+}
+
+/* CTA Mid Inline */
+.cta-mid-inline {
+  margin-top: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.cta-price-note {
+  font-size: 0.8125rem;
+  color: var(--color-text-tertiary);
+  text-decoration: line-through;
+}
+
+/* Price Urgency Badge */
+.price-urgency-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-accent);
+  margin-bottom: var(--space-sm);
+}
+
+.price-urgency-badge .material-symbols-sharp {
+  font-size: 18px;
+  animation: pulse-fire 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-fire {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+/* Larger Price Display */
+.pricing-main .price-current {
+  font-size: 4.5rem;
+}
+
+@media (max-width: 767px) {
+  .pricing-main .price-current {
+    font-size: 3.5rem;
+  }
+}
+
+/* Objection Items - No background on non-alt section */
+#objeciones:not(.section-alt) .objection-item {
+  background: var(--color-bg-alt);
+}
+
+#objeciones.section-alt .objection-item {
+  background: var(--color-bg);
+}
+
+/* Mobile Nav Price Note */
+.mobile-nav-price-note {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-xs);
+  text-align: center;
+}
+
+/* Reduced Spacing */
+@media (max-width: 767px) {
+  section {
+    padding: var(--space-md) 0;
+  }
+  
+  .hero {
+    padding-top: calc(var(--space-xl) + 60px);
+    padding-bottom: var(--space-md);
+    min-height: auto;
+  }
+  
+  .blocks-deck-wrapper {
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-md);
+  }
+}
+
+@media (min-width: 768px) {
+  section {
+    padding: var(--space-lg) 0;
+  }
+  
+  .hero {
+    min-height: auto;
+    padding-top: calc(var(--space-xl) + 60px);
+    padding-bottom: var(--space-lg);
+  }
+}
+
+/* Emotional Close - Bigger */
+.emotional-close {
+  font-size: 2rem;
+  margin-bottom: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .emotional-close {
+    font-size: 2.5rem;
+  }
+}

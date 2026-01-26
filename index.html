@@ -7,7 +7,7 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-2HEEKVP1BF', { 'debug_mode': true });
+    gtag('config', 'G-2HEEKVP1BF');
   </script>
   
   <!-- Meta Pixel Code -->
@@ -167,13 +167,10 @@
     <div class="header-inner">
       <a href="/" class="logo"><img src="assets/images/logo.jpg" alt="Logo" class="logo-img">La Mirada Creativa</a>
       <nav>
-        <a href="#que-es" class="nav-hide-mobile">Qué es</a>
-        <a href="#sistema" class="nav-hide-mobile">Para quién</a>
-        <a href="#beneficios" class="nav-hide-mobile">Beneficios</a>
-        <a href="#como-funciona" class="nav-hide-mobile">Cómo funciona</a>
+        <a href="#el-sistema" class="nav-hide-mobile">El sistema</a>
+        <a href="#incluye" class="nav-hide-mobile">Qué incluye</a>
         <a href="#precio" class="nav-hide-mobile">Precio</a>
-        <a href="/app" class="nav-hide-mobile">App</a>
-        <button class="btn btn--primary btn--small nav-hide-mobile btn-checkout">Acceder</button>
+        <button class="btn btn--primary btn--small nav-hide-mobile btn-checkout">Comprar</button>
         <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
           <span class="material-symbols-sharp">menu</span>
         </button>
@@ -184,12 +181,13 @@
   <!-- Sticky Promo Banner -->
   <div class="promo-banner-sticky">
     <div class="promo-banner-sticky-content">
-      <span class="promo-banner-icon material-symbols-sharp">card_giftcard</span>
+      <span class="promo-banner-icon material-symbols-sharp">local_fire_department</span>
       <span class="promo-banner-title">Precio de lanzamiento</span>
       <div class="promo-banner-price">
         <span class="promo-banner-current">12 €</span>
         <span class="promo-banner-old">29 €</span>
       </div>
+      <span class="promo-banner-urgency">Sube pronto</span>
     </div>
   </div>
   
@@ -203,17 +201,15 @@
     </div>
     <div class="mobile-nav-content">
       <div class="mobile-nav-links">
-        <a href="#que-es" class="mobile-nav-link">Qué es</a>
-        <a href="#sistema" class="mobile-nav-link">Para quién</a>
-        <a href="#beneficios" class="mobile-nav-link">Beneficios</a>
-        <a href="#como-funciona" class="mobile-nav-link">Cómo funciona</a>
+        <a href="#el-sistema" class="mobile-nav-link">El sistema</a>
+        <a href="#incluye" class="mobile-nav-link">Qué incluye</a>
         <a href="#precio" class="mobile-nav-link">Precio</a>
-        <a href="/app" class="mobile-nav-link">Acceder</a>
       </div>
       <div class="mobile-nav-cta">
-        <button class="btn btn--primary btn--price btn-checkout">
-          Acceder ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span>
+        <button class="btn btn--primary btn--large btn-checkout">
+          Empezar hoy por 12 €
         </button>
+        <span class="mobile-nav-price-note">antes 29 € — precio sube pronto</span>
       </div>
     </div>
   </div>
@@ -223,15 +219,15 @@
     <div class="container container--wide">
       <div class="hero-grid hero-grid--stacked">
         <div class="hero-content">
-          <span class="small">Sistema creativo diario</span>
-          <h1>Nunca más <br>te quedes sin ideas</h1>
-          <p class="hero-subtitle"><strong>Un sistema visual de 5 minutos al día para<br class="desktop-break"> entrenar tu creatividad y desbloquear ideas.</strong></p>
+          <span class="small">365 ejercicios visuales</span>
+          <h1>Deja de esperar<br>la inspiración</h1>
+          <p class="hero-subtitle"><strong>5 minutos al día. Ideas todos los días.</strong></p>
           <div class="hero-actions">
-            <button class="btn btn--primary btn--price btn-checkout">
-              Acceder ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span>
+            <button class="btn btn--primary btn--large btn-checkout">
+              Empezar hoy por 12 €
             </button>
           </div>
-          
+          <p class="hero-price-note"><span class="hero-price-old">29 €</span> Precio de lanzamiento — sube pronto</p>
         </div>
         <div class="hero-cards">
           <div class="card-deck">
@@ -305,31 +301,17 @@
   </section>
 
   <!-- Identification -->
-  <section class="section-alt">
+  <section class="section-alt" id="identificacion">
     <div class="container">
       <div class="text-center">
-        <h2>Esto es para ti<br class="mobile-break"> si alguna vez has pensado:</h2>
+        <h2>Si alguna vez has pensado:</h2>
         <ul class="identification-list">
-          <li>Hoy no se me ocurre nada</li>
-          <li>Siempre recurro a las mismas referencias</li>
-          <li>Siento que mi creatividad va a trompicones</li>
-          <li>Publico, diseño o creo sin una idea clara</li>
+          <li>"Hoy no se me ocurre nada"</li>
+          <li>"Siempre recurro a las mismas ideas"</li>
+          <li>"Mi creatividad va a trompicones"</li>
+          <li>"Creo sin saber qué estoy haciendo"</li>
         </ul>
-        <p class="identification-closing">No es falta de talento.<br>Es falta de entrenamiento diario.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Qué es -->
-  <section id="que-es">
-    <div class="container">
-      <div class="text-center">
-        <span class="small">El sistema</span>
-        <h2>¿Qué es La Mirada Creativa?</h2>
-        <div class="what-is-content">
-          <p>La Mirada Creativa es un sistema con 365 ejercicios visuales que entrena tu forma de observar y generar nuevas ideas.</p>
-          <p class="what-is-highlight">Cinco minutos al día.<br>Un estímulo.<br>Una idea.</p>
-        </div>
+        <p class="identification-closing">Tu creatividad no está rota.<br>Solo necesita sistema.</p>
       </div>
     </div>
   </section>
@@ -399,111 +381,17 @@
           </div>
           <p class="blocks-deck-caption">Bloques del sistema</p>
         </div>
-        <h2>Un ejercicio al día.<br>Cinco minutos.<br>Durante un año.</h2>
-        <p style="max-width: 540px; margin: 0 auto;">
-          El sistema se estructura en 365 días, divididos en 4 bloques.<br class="desktop-break"> Cada bloque entrena una capa distinta de tu forma de observar.
-        </p>
-      </div>
-      
-      <div class="blocks-grid">
-        <div class="block-item">
-          <div class="block-number">01</div>
-          <div class="block-title">Mirada Técnica</div>
-          <p class="block-desc">Composición, luz,<br class="desktop-break"> forma y estructura.</p>
-        </div>
-        <div class="block-item">
-          <div class="block-number">02</div>
-          <div class="block-title">Mirada Sensible</div>
-          <p class="block-desc">Emoción, atmósfera,<br class="desktop-break"> color y conexión.</p>
-        </div>
-        <div class="block-item">
-          <div class="block-number">03</div>
-          <div class="block-title">Mirada Conceptual</div>
-          <p class="block-desc">Narrativa, simbolismo<br class="desktop-break"> y significado.</p>
-        </div>
-        <div class="block-item">
-          <div class="block-number">04</div>
-          <div class="block-title">Mirada Propia</div>
-          <p class="block-desc">Estilo personal, intuición<br class="desktop-break"> y voz propia.</p>
-        </div>
+        <h2>Un año de entrenamiento.<br>5 minutos al día.</h2>
+        <p class="sistema-tagline">4 bloques. 365 ejercicios. Tu mirada transformada.</p>
       </div>
     </div>
   </section>
 
-  <!-- Segmentación por perfil -->
-  <section id="sistema" class="section-alt">
-    <div class="container container--wide">
-      <div class="text-center">
-        <span class="small">Para quién es</span>
-        <h2>Da igual quién seas,<br class="mobile-break"> esto te ayuda si creas.</h2>
-      </div>
-      
-      <div class="profile-grid">
-        <div class="profile-item">
-          <div class="profile-icon">
-            <span class="material-symbols-sharp">design_services</span>
-          </div>
-          <div class="profile-title">Diseñadores</div>
-          <p class="profile-desc">Entrena tu criterio visual, reduce el bloqueo y convierte referencias en ideas propias.</p>
-        </div>
-        <div class="profile-item">
-          <div class="profile-icon">
-            <span class="material-symbols-sharp">videocam</span>
-          </div>
-          <div class="profile-title">Creadores de contenido</div>
-          <p class="profile-desc">Genera ideas constantes para posts, reels y formatos sin depender de la inspiración.</p>
-        </div>
-        <div class="profile-item">
-          <div class="profile-icon">
-            <span class="material-symbols-sharp">storefront</span>
-          </div>
-          <div class="profile-title">Emprendedores visuales</div>
-          <p class="profile-desc">Mejora cómo comunicas, conecta mejor con tu audiencia y deja de improvisar.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Beneficios -->
-  <section id="beneficios">
+  <!-- Social Proof -->
+  <section class="section-alt social-proof-section">
     <div class="container">
       <div class="text-center">
-        <span class="small">Beneficios</span>
-        <h2>Qué consigues</h2>
-      </div>
-      
-      <ul class="benefits-list">
-        <li>
-          <span class="material-symbols-sharp">check</span>
-          Generar ideas con menos esfuerzo
-        </li>
-        <li>
-          <span class="material-symbols-sharp">check</span>
-          Pensar y observar mejor
-        </li>
-        <li>
-          <span class="material-symbols-sharp">check</span>
-          Crear con más seguridad
-        </li>
-        <li>
-          <span class="material-symbols-sharp">check</span>
-          Mantener constancia sin quemarte
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Cómo funciona -->
-  <section id="como-funciona" class="section-alt">
-    <div class="container">
-      <div class="text-center">
-        <span class="small">Cómo funciona</span>
-        <h2>¿Cómo funciona?</h2>
-        <div class="how-it-works-content">
-          <p>Accedes a la App o descargas el PDF.<br>Lees el ejercicio del día.<br>Lo aplicas en 5 minutos.</p>
-          <p><strong>Eso activa conexiones nuevas.<br>Eso desbloquea ideas reales.</strong></p>
-          <p class="how-it-works-highlight">Cinco minutos que cambian<br class="mobile-break"> cómo miras el resto del día.</p>
-        </div>
+        <p class="social-proof-text">+100 creativos ya entrenan su mirada</p>
       </div>
     </div>
   </section>
@@ -512,8 +400,7 @@
   <section id="incluye">
     <div class="container">
       <div class="text-center">
-        <span class="small">Qué recibes</span>
-        <h2>El sistema completo</h2>
+        <h2>Qué recibes hoy</h2>
         
         <ul class="features-list">
           <li>
@@ -530,75 +417,63 @@
           </li>
           <li>
             <span class="material-symbols-sharp">check_circle</span>
-            Sin teoría innecesaria
-          </li>
-          <li>
-            <span class="material-symbols-sharp">check_circle</span>
             Tuyo para siempre
           </li>
         </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA Intermedio -->
-  <section id="cta-mid" class="section-alt">
-    <div class="container">
-      <div class="text-center">
-        <h2>Accede al sistema completo</h2>
-        <p class="cta-mid-desc">Acceso completo a la app.<br class="mobile-break"> 365 ejercicios en PDF.</p>
-        <div class="hero-actions" style="margin-top: var(--space-md);">
-          <button class="btn btn--primary btn--price btn-checkout">
-            Acceder ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span>
+        
+        <div class="cta-mid-inline">
+          <button class="btn btn--primary btn--large btn-checkout">
+            Empezar hoy por 12 €
           </button>
+          <span class="cta-price-note">antes 29 €</span>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Objeciones -->
-  <section id="objeciones">
+  <section id="objeciones" class="section-alt">
     <div class="container">
       <div class="text-center">
-        <span class="small">Dudas frecuentes</span>
         <h2>Puede que estés pensando...</h2>
-        <p class="section-desc">Respuestas directas a lo que<br class="mobile-break"> probablemente te está frenando.</p>
       </div>
       
       <div class="objections-grid">
         <div class="objection-item">
           <h3 class="objection-question">"No tengo tiempo"</h3>
-          <p class="objection-answer">Cinco minutos. Menos que abrir redes.</p>
+          <p class="objection-answer">5 minutos. Menos que un café.</p>
         </div>
         <div class="objection-item">
           <h3 class="objection-question">"No soy creativo"</h3>
-          <p class="objection-answer">La creatividad no es un don.<br class="mobile-break"> Es un músculo.</p>
+          <p class="objection-answer">Por eso necesitas esto.</p>
         </div>
         <div class="objection-item">
           <h3 class="objection-question">"No sé si me servirá"</h3>
-          <p class="objection-answer">Empiezas hoy y lo compruebas tú.</p>
+          <p class="objection-answer">Por 12 €, lo descubres hoy.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Cierre emocional y CTA final -->
-  <section id="precio" class="section-alt">
+  <section id="precio">
     <div class="container">
       <div class="text-center">
         <p class="emotional-close">Las ideas no llegan solas.<br>Se provocan.</p>
-        <p class="emotional-subclose">Entrenar tu mirada hoy cambia<br class="mobile-break"> cómo crearás mañana.</p>
         
         <div class="pricing-main" id="comprar">
           <div class="pricing-main-content">
-            <span class="price-label">Precio de lanzamiento</span>
-            <div class="pricing-main-price">
-<span class="price-current">12 €</span>
-            <span class="price-future">29 €</span>
+            <div class="price-urgency-badge">
+              <span class="material-symbols-sharp">local_fire_department</span>
+              Precio de lanzamiento — sube pronto
             </div>
-            <p class="pricing-main-note">Pago único. Acceso inmediato.</p>
+            <div class="pricing-main-price">
+              <span class="price-current">12 €</span>
+              <span class="price-future">29 €</span>
+            </div>
+            <p class="pricing-main-note">Pago único. Acceso inmediato. Tuyo para siempre.</p>
             
-            <button class="btn btn--primary btn--large btn--price btn-checkout">Acceder ahora <span class="btn-price-current">12 €</span> <span class="btn-price-old">29 €</span></button>
+            <button class="btn btn--primary btn--xlarge btn-checkout">Empezar hoy por 12 €</button>
           </div>
         </div>
       </div>
@@ -606,26 +481,12 @@
   </section>
 
 
-  <!-- App Access -->
-  <section id="app" class="app-access-section">
-    <div class="container">
-      <div class="text-center">
-        <span class="small" style="color: rgba(255, 255, 255, 0.6);">¿Ya tienes acceso?</span>
-        <h2 style="color: #fff;">Accede a la app</h2>
-        <p class="section-desc" style="color: rgba(255, 255, 255, 0.7);">Si ya tienes La Mirada Creativa,<br class="mobile-break"> entra con el email de compra.</p>
-        
-        <a href="/app" class="btn" style="margin-top: 1.5rem; background: #FF5006; color: #fff;">
-          Acceder
-        </a>
-      </div>
-    </div>
-  </section>
-
   <!-- Footer -->
   <footer>
     <div class="container container--wide">
       <div class="footer-inner">
         <div class="footer-links">
+          <a href="/app">¿Ya tienes acceso? Entra aquí</a>
           <a href="/privacidad.html">Privacidad</a>
           <a href="/terminos.html">Términos</a>
         </div>
