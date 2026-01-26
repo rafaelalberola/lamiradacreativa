@@ -311,21 +311,39 @@ document.addEventListener('DOMContentLoaded', function() {
       if (mobileNav && mobileNav.classList.contains('active')) {
         closeMobileNav();
       }
+      
+      // Get price dynamically from the page
+      const priceElement = document.querySelector('.price-current');
+      const priceText = priceElement ? priceElement.textContent : '12 €';
+      const price = parseFloat(priceText.replace(/[^\d.,]/g, '').replace(',', '.')) || 12;
+      
+      // Save price for purchase tracking on success page
+      try { localStorage.setItem('checkout_price', price); } catch(e) {}
+      
       // Track begin_checkout event in Google Analytics
       if (typeof gtag !== 'undefined') {
-        // Get price dynamically from the page
-        const priceElement = document.querySelector('.price-current');
-        const priceText = priceElement ? priceElement.textContent : '12 €';
-        const price = parseFloat(priceText.replace(/[^\d.,]/g, '').replace(',', '.')) || 12;
-        
-        // Save price for purchase tracking
-        try { localStorage.setItem('checkout_price', price); } catch(e) {}
-        
         gtag('event', 'begin_checkout', {
           currency: 'EUR',
-          value: price
+          value: price,
+          items: [{
+            item_id: 'la_mirada_creativa',
+            item_name: 'La Mirada Creativa',
+            price: price,
+            quantity: 1
+          }]
         });
       }
+      
+      // Track InitiateCheckout event in Facebook Pixel
+      if (typeof fbq !== 'undefined') {
+        fbq('track', 'InitiateCheckout', {
+          value: price,
+          currency: 'EUR',
+          content_ids: ['la_mirada_creativa'],
+          content_type: 'product'
+        });
+      }
+      
       openCheckoutModal();
     });
   });

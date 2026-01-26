@@ -2202,38 +2202,75 @@
       const urlParams = new URLSearchParams(window.location.search);
       const sessionId = urlParams.get('session_id');
       if (sessionId) {
+        // Prevent duplicate tracking - check if we already tracked this session
+        const trackedSession = localStorage.getItem('lmc_tracked_session');
+        if (trackedSession === sessionId) {
+          // Already tracked, just clean URL
+          window.history.replaceState({}, document.title, window.location.pathname);
+          return;
+        }
+        
         // Reset to first card for new purchase
         try {
           localStorage.setItem('lmc_current_index', '0');
         } catch(e) {}
         
-        if (typeof gtag !== 'undefined') {
-          // Get price from localStorage (saved during begin_checkout)
-          let price = 39;
+        // Get price from localStorage (saved during begin_checkout)
+        let price = 12;
+        try {
+          const savedPrice = localStorage.getItem('checkout_price');
+          if (savedPrice) {
+            price = parseFloat(savedPrice) || 12;
+            localStorage.removeItem('checkout_price');
+          }
+        } catch(e) {}
+        
+        // Function to track purchase events
+        function trackPurchase() {
+          // Track in Google Analytics
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'purchase', {
+              transaction_id: sessionId,
+              currency: 'EUR',
+              value: price,
+              items: [{
+                item_id: 'la_mirada_creativa',
+                item_name: 'La Mirada Creativa',
+                price: price,
+                quantity: 1
+              }]
+            });
+            console.log('[Tracking] GA4 purchase event sent:', sessionId, price);
+          }
+          
+          // Track in Facebook Pixel
+          if (typeof fbq !== 'undefined') {
+            fbq('track', 'Purchase', {
+              value: price,
+              currency: 'EUR',
+              content_ids: ['la_mirada_creativa'],
+              content_type: 'product'
+            });
+            console.log('[Tracking] FB Pixel purchase event sent:', price);
+          }
+          
+          // Mark this session as tracked to prevent duplicates
           try {
-            const savedPrice = localStorage.getItem('checkout_price');
-            if (savedPrice) {
-              price = parseFloat(savedPrice) || 39;
-              localStorage.removeItem('checkout_price');
-            }
+            localStorage.setItem('lmc_tracked_session', sessionId);
           } catch(e) {}
           
-          // Track purchase event in Google Analytics
-          gtag('event', 'purchase', {
-            transaction_id: sessionId,
-            currency: 'EUR',
-            value: price
-          });
+          // Clean URL after a short delay to ensure events are sent
+          setTimeout(function() {
+            window.history.replaceState({}, document.title, window.location.pathname);
+          }, 1000);
         }
-        // Track purchase event in Facebook Pixel
-        if (typeof fbq !== 'undefined') {
-          fbq('track', 'Purchase', {
-            value: 39,
-            currency: 'EUR'
-          });
+        
+        // Wait for page to be fully loaded before tracking
+        if (document.readyState === 'complete') {
+          trackPurchase();
+        } else {
+          window.addEventListener('load', trackPurchase);
         }
-        // Clean URL to prevent duplicate tracking on refresh
-        window.history.replaceState({}, document.title, window.location.pathname);
       }
     })();
     
