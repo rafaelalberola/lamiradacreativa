@@ -2748,20 +2748,6 @@ section#testimonios {
   padding: 60px 0;
 }
 
-/* Scroll indicator for testimonials on mobile */
-@media (max-width: 767px) {
-  .testimonials-carousel::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 40px;
-    background: linear-gradient(to left, transparent, var(--color-bg-alt));
-    pointer-events: none;
-    z-index: 1;
-  }
-}
 
 .social-proof-text {
   font-size: 1rem;
@@ -2772,38 +2758,21 @@ section#testimonios {
 
 /* Testimonials Carousel */
 .testimonials-carousel {
-  position: relative;
   display: flex;
   gap: var(--space-md);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   padding: var(--space-sm) 0;
-  margin: 0;
-  padding-left: 0;
-  padding-right: var(--space-md);
-}
-
-.testimonials-carousel::before {
-  content: '';
-  position: sticky;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  min-width: 20px;
-  flex-shrink: 0;
-  pointer-events: none;
-  z-index: 2;
-  background: linear-gradient(to right, var(--color-bg-alt) 0%, transparent 100%);
+  /* Center first card with padding on sides */
+  padding-left: calc(50% - 140px);
+  padding-right: calc(50% - 140px);
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .testimonials-carousel::-webkit-scrollbar {
   display: none;
-}
-
-.testimonials-carousel {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }
 
 @media (min-width: 768px) {
@@ -2812,18 +2781,13 @@ section#testimonios {
     grid-template-columns: repeat(3, 1fr);
     gap: var(--space-md);
     overflow: visible;
-    margin: 0;
     padding: var(--space-sm) 0;
-  }
-  
-  .testimonials-carousel::before {
-    display: none;
   }
 }
 
 .testimonial-card {
   flex: 0 0 280px;
-  scroll-snap-align: start;
+  scroll-snap-align: center;
   background: var(--color-bg);
   border-radius: 12px;
   padding: var(--space-md);
