@@ -216,11 +216,11 @@
       }
       
       // Get price from localStorage (saved during begin_checkout)
-      let price = 12;
+      let price = 24;
       try {
         const savedPrice = localStorage.getItem('checkout_price');
         if (savedPrice) {
-          price = parseFloat(savedPrice) || 12;
+          price = parseFloat(savedPrice) || 24;
           localStorage.removeItem('checkout_price');
         }
       } catch(e) {}
