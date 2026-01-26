@@ -164,6 +164,10 @@ p:last-child {
   max-width: var(--max-width-wide);
 }
 
+.container.container--wide {
+  padding-top: 80px;
+}
+
 section {
   padding: var(--space-lg) 0;
 }
