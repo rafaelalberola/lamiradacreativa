@@ -2259,10 +2259,11 @@
             localStorage.setItem('lmc_tracked_session', sessionId);
           } catch(e) {}
           
-          // Clean URL after a short delay to ensure events are sent
+          // Clean URL after delay to ensure events are sent
+          // Using 2.5s to give tracking pixels time to fully transmit
           setTimeout(function() {
             window.history.replaceState({}, document.title, window.location.pathname);
-          }, 1000);
+          }, 2500);
         }
         
         // Wait for page to be fully loaded before tracking
