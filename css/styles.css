@@ -1020,6 +1020,7 @@ nav a:hover {
    Block Cards Deck
    ============================================ */
 .blocks-deck-wrapper {
+  padding-top: 32px;
   margin-bottom: var(--space-lg);
   padding-bottom: var(--space-lg);
 }
@@ -1535,7 +1536,7 @@ nav a:hover {
 }
 
 .features-list li:first-child {
-  border-top: 1px solid var(--color-border-light);
+  border-top: none;
 }
 
 .features-list li:last-child {
