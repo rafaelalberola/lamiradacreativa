@@ -2808,7 +2808,7 @@ section[id] {
   }
   
   .hero {
-    padding-top: calc(var(--space-xl) + 60px);
+    padding-top: 32px;
     padding-bottom: var(--space-md);
     min-height: auto;
   }
