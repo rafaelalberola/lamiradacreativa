@@ -2,13 +2,14 @@
 <html lang="es">
 <head>
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2HEEKVP1BF"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-2HEEKVP1BF');
+    window.ga4Ready = false;
   </script>
+  <script src="https://www.googletagmanager.com/gtag/js?id=G-2HEEKVP1BF" onload="window.ga4Ready=true;console.log('[GA4] Script loaded')"></script>
   
   <!-- Meta Pixel Code -->
   <script>
@@ -226,8 +227,12 @@
       
       console.log('[Tracking] Tracking purchase for session:', sessionId, 'price:', price);
       
-      // Track in Google Analytics (with delay to ensure script is ready)
-      setTimeout(function() {
+      // Track in Google Analytics
+      function sendGA4Purchase() {
+        console.log('[GA4] Attempting to send purchase event...');
+        console.log('[GA4] gtag defined:', typeof gtag !== 'undefined');
+        console.log('[GA4] ga4Ready:', window.ga4Ready);
+        
         if (typeof gtag !== 'undefined') {
           gtag('event', 'purchase', {
             send_to: 'G-2HEEKVP1BF',
@@ -241,20 +246,40 @@
               quantity: 1
             }]
           });
-          console.log('[Tracking] GA4 purchase event sent');
+          console.log('[GA4] Purchase event sent successfully');
         } else {
-          console.warn('[Tracking] gtag not available');
-          // Fallback: push to dataLayer directly
+          console.warn('[GA4] gtag not available, using dataLayer fallback');
           window.dataLayer = window.dataLayer || [];
           window.dataLayer.push({
             'event': 'purchase',
-            'transaction_id': sessionId,
-            'currency': 'EUR',
-            'value': price
+            'ecommerce': {
+              'transaction_id': sessionId,
+              'currency': 'EUR',
+              'value': price,
+              'items': [{
+                'item_id': 'la_mirada_creativa',
+                'item_name': 'La Mirada Creativa',
+                'price': price,
+                'quantity': 1
+              }]
+            }
           });
-          console.log('[Tracking] Pushed to dataLayer as fallback');
+          console.log('[GA4] Pushed to dataLayer');
         }
-      }, 500);
+      }
+      
+      // Wait for GA4 script to be ready
+      function waitForGA4() {
+        if (window.ga4Ready) {
+          sendGA4Purchase();
+        } else {
+          console.log('[GA4] Script not ready, waiting...');
+          setTimeout(waitForGA4, 200);
+        }
+      }
+      
+      // Start checking after a small delay
+      setTimeout(waitForGA4, 300);
       
       // Track in Facebook Pixel
       if (typeof fbq !== 'undefined') {
