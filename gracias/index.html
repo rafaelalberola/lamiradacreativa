@@ -40,8 +40,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Inter+Tight:wght@500;600&display=swap" rel="stylesheet">
   
-  <!-- Material Symbols -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100,0,0&display=swap">
+  <!-- Material Symbols (with FILL for solid icons) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0&display=swap">
   
   <style>
     *, *::before, *::after {
@@ -96,6 +96,7 @@
     .success-icon .material-symbols-sharp {
       font-size: 48px;
       color: white;
+      font-variation-settings: 'FILL' 0, 'wght' 700;
     }
     
     @keyframes scaleIn {
@@ -123,46 +124,51 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 16px 32px;
+      padding: 0.875rem 1.75rem;
       background: var(--color-accent);
       color: white;
-      font-family: var(--font-headline);
-      font-size: 1rem;
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
       font-weight: 500;
       text-decoration: none;
-      border-radius: 8px;
-      transition: transform 0.2s, box-shadow 0.2s;
+      border-radius: 2px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
     
     .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(255, 80, 6, 0.3);
+      background: #E5480A;
     }
     
-    .btn .material-symbols-sharp {
-      font-size: 20px;
+    .redirect-section {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .redirect-spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--color-text-secondary);
+      border-top-color: var(--color-accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
     
     .redirect-notice {
-      margin-top: 24px;
       font-size: 0.875rem;
       color: var(--color-text-secondary);
     }
     
     .redirect-notice span {
       font-weight: 500;
-    }
-    
-    .logo {
-      margin-top: 48px;
-      opacity: 0.5;
-    }
-    
-    .logo img {
-      width: 32px;
-      height: 32px;
-      border-radius: 6px;
     }
   </style>
 </head>
@@ -175,15 +181,11 @@
     <h1>¡Gracias por tu compra!</h1>
     <p class="subtitle">Ya tienes acceso a La Mirada Creativa.<br>365 días de ejercicios te esperan.</p>
     
-    <a href="/app" class="btn" id="accessBtn">
-      Acceder a la app
-      <span class="material-symbols-sharp">arrow_forward</span>
-    </a>
+    <a href="/app" class="btn" id="accessBtn">Acceder a la app</a>
     
-    <p class="redirect-notice">Serás redirigido automáticamente en <span id="countdown">5</span> segundos</p>
-    
-    <div class="logo">
-      <img src="../assets/images/logo.jpg" alt="La Mirada Creativa">
+    <div class="redirect-section">
+      <div class="redirect-spinner"></div>
+      <p class="redirect-notice">Redirigiendo en <span id="countdown">5</span> segundos</p>
     </div>
   </div>
   
