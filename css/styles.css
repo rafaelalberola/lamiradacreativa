@@ -2138,6 +2138,16 @@ footer {
   gap: var(--space-md);
 }
 
+@media (max-width: 767px) {
+  .footer-links {
+    flex-direction: column;
+  }
+  
+  footer .container.container--wide {
+    padding-top: 0;
+  }
+}
+
 .footer-links a {
   font-size: 0.875rem;
   color: var(--color-text-tertiary);
