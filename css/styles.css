@@ -2626,12 +2626,26 @@ section[id] {
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-lg);
   margin-top: var(--space-sm);
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media (max-width: 767px) {
   .objections-grid {
     grid-template-columns: 1fr;
     gap: 12px;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .objections-grid {
+    max-width: 1000px;
+  }
+  
+  .objection-item {
+    padding: var(--space-lg);
   }
 }
 
@@ -2848,12 +2862,8 @@ section#testimonios {
     display: none;
   }
   
-  .testimonials-nav--prev {
-    left: 16px;
-  }
-  
-  .testimonials-nav--next {
-    right: 16px;
+  .testimonials-nav {
+    display: none;
   }
 }
 
@@ -3036,8 +3046,8 @@ section#testimonios {
   
   .hero {
     min-height: auto;
-    padding-top: calc(var(--space-xl) + 60px);
-    padding-bottom: var(--space-lg);
+    padding-top: 80px;
+    padding-bottom: 80px;
   }
 }
 
