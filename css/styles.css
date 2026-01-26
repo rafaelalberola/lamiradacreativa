@@ -2633,8 +2633,16 @@ section[id] {
 .objection-item {
   text-align: center;
   padding: var(--space-md);
-  background: var(--color-bg-alt);
+  background: var(--color-bg);
   border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--color-border-light);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.objection-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .objection-question {
@@ -2745,15 +2753,29 @@ section[id] {
 
 /* Testimonials Carousel */
 .testimonials-carousel {
+  position: relative;
   display: flex;
   gap: var(--space-md);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   padding: var(--space-sm) 0;
-  margin: 0 calc(-1 * var(--space-md));
-  padding-left: var(--space-md);
+  margin: 0;
+  padding-left: 0;
   padding-right: var(--space-md);
+}
+
+.testimonials-carousel::before {
+  content: '';
+  position: sticky;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  min-width: 20px;
+  flex-shrink: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(to right, var(--color-bg-alt) 0%, transparent 100%);
 }
 
 .testimonials-carousel::-webkit-scrollbar {
@@ -2773,6 +2795,10 @@ section[id] {
     overflow: visible;
     margin: 0;
     padding: var(--space-sm) 0;
+  }
+  
+  .testimonials-carousel::before {
+    display: none;
   }
 }
 
@@ -2890,14 +2916,6 @@ section[id] {
   }
 }
 
-/* Objection Items - No background on non-alt section */
-#objeciones:not(.section-alt) .objection-item {
-  background: var(--color-bg-alt);
-}
-
-#objeciones.section-alt .objection-item {
-  background: var(--color-bg);
-}
 
 /* Mobile Nav Price Note */
 .mobile-nav-price-note {
