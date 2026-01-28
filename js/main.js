@@ -2,6 +2,20 @@
    La Mirada Creativa - Main JavaScript
    ============================================ */
 
+// ============================================
+// Page Loader - Hide on load
+// ============================================
+window.addEventListener('load', function() {
+  const pageLoader = document.getElementById('pageLoader');
+  if (pageLoader) {
+    pageLoader.classList.add('hidden');
+    // Remove from DOM after transition
+    setTimeout(() => {
+      pageLoader.remove();
+    }, 300);
+  }
+});
+
 document.addEventListener('DOMContentLoaded', function() {
   
   // ============================================
@@ -384,6 +398,107 @@ document.addEventListener('DOMContentLoaded', function() {
     nextBtn.addEventListener('click', () => {
       testimonialsCarousel.scrollBy({ left: cardWidth, behavior: 'smooth' });
     });
+  }
+  
+  // ============================================
+  // Fixed Bottom CTA - Show/Hide on Scroll
+  // ============================================
+  const fixedCta = document.getElementById('fixedCta');
+  
+  if (fixedCta) {
+    const showThreshold = 400; // Show after scrolling 400px
+    let lastScrollY = 0;
+    let ticking = false;
+    
+    function updateFixedCta() {
+      const scrollY = window.scrollY;
+      
+      if (scrollY > showThreshold) {
+        fixedCta.classList.add('visible');
+      } else {
+        fixedCta.classList.remove('visible');
+      }
+      
+      lastScrollY = scrollY;
+      ticking = false;
+    }
+    
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateFixedCta);
+        ticking = true;
+      }
+    }, { passive: true });
+    
+    // Initial check
+    updateFixedCta();
+  }
+  
+  // ============================================
+  // Social Proof Toast - Simulated Purchases
+  // ============================================
+  const socialProofToast = document.getElementById('socialProofToast');
+  const buyerNameEl = document.getElementById('buyerName');
+  const buyerCityEl = document.getElementById('buyerCity');
+  
+  if (socialProofToast && buyerNameEl && buyerCityEl) {
+    const names = [
+      'María G.', 'Carlos R.', 'Laura M.', 'Pablo S.', 'Ana L.',
+      'Jorge P.', 'Elena V.', 'David F.', 'Marta C.', 'Sergio H.',
+      'Carmen B.', 'Andrés T.', 'Lucía N.', 'Miguel A.', 'Sara D.'
+    ];
+    
+    const cities = [
+      'Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Bilbao',
+      'Málaga', 'Zaragoza', 'Alicante', 'Granada', 'San Sebastián',
+      'Palma', 'Las Palmas', 'Murcia', 'Santander', 'Valladolid'
+    ];
+    
+    let hasScrolled = false;
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 200) {
+        hasScrolled = true;
+      }
+    }, { passive: true });
+    
+    function getRandomItem(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+    
+    function getRandomInterval() {
+      return Math.floor(Math.random() * 20000) + 25000;
+    }
+    
+    function showToast() {
+      if (checkoutModal && checkoutModal.classList.contains('active')) {
+        scheduleNextToast();
+        return;
+      }
+      
+      if (!hasScrolled) {
+        scheduleNextToast();
+        return;
+      }
+      
+      buyerNameEl.textContent = getRandomItem(names);
+      buyerCityEl.textContent = getRandomItem(cities);
+      
+      socialProofToast.classList.add('visible');
+      
+      setTimeout(() => {
+        socialProofToast.classList.remove('visible');
+        scheduleNextToast();
+      }, 4000);
+    }
+    
+    function scheduleNextToast() {
+      setTimeout(showToast, getRandomInterval());
+    }
+    
+    setTimeout(() => {
+      scheduleNextToast();
+    }, 10000);
   }
   
 });

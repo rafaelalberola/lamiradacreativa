@@ -58,7 +58,7 @@
   <link rel="preload" href="css/styles.css" as="style">
   
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Inter+Tight:wght@500;600&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Inter:wght@400;500&family=Inter+Tight:wght@500;600&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500&display=swap" rel="stylesheet">
   
   <!-- Material Symbols -->
@@ -159,8 +159,45 @@
       to { transform: rotate(360deg); }
     }
   </style>
+  
+  <!-- Page Loader Styles (inline for immediate display) -->
+  <style>
+    .page-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .page-loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .page-loader-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #f0f0f0;
+      border-top-color: #FF5006;
+      border-radius: 50%;
+      animation: loader-spin 0.8s linear infinite;
+    }
+    @keyframes loader-spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
+
+  <!-- Page Loader -->
+  <div class="page-loader" id="pageLoader">
+    <div class="page-loader-spinner"></div>
+  </div>
 
   <!-- Header -->
   <header>
@@ -170,7 +207,7 @@
         <a href="#el-sistema" class="nav-hide-mobile">El sistema</a>
         <a href="#incluye" class="nav-hide-mobile">Qué incluye</a>
         <a href="#precio" class="nav-hide-mobile">Precio</a>
-        <button class="btn btn--primary btn--small nav-hide-mobile btn-checkout">Comprar</button>
+        <button class="btn btn--primary btn--nav nav-hide-mobile btn-checkout">Comprar · 24 € <span class="btn-old-price">49 €</span></button>
         <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
           <span class="material-symbols-sharp">menu</span>
         </button>
@@ -194,10 +231,9 @@
         <a href="#precio" class="mobile-nav-link">Precio</a>
       </div>
       <div class="mobile-nav-cta">
-        <button class="btn btn--primary btn--large btn-checkout">
-          Empezar hoy por 24 €
+        <button class="btn btn--primary btn--cta btn-checkout">
+          Comprar acceso · 24 € <span class="btn-old-price">49 €</span>
         </button>
-        <span class="mobile-nav-price-note">antes 49 € — sube pronto</span>
       </div>
     </div>
   </div>
@@ -209,15 +245,18 @@
         <div class="hero-content">
           <span class="small">365 ejercicios visuales</span>
           <h1>Deja de esperar<br>la inspiración</h1>
-          <p class="hero-subtitle"><strong>5 minutos al día. Ideas todos los días.</strong></p>
-          <div class="hero-actions">
-            <button class="btn btn--primary btn--large btn-checkout">
-              Empezar hoy por 24 €
-            </button>
-          </div>
-          <p class="hero-price-note"><span class="hero-price-old">antes 49 €</span> — sube pronto</p>
+          <p class="hero-subtitle">Un ejercicio visual al día para entrenar tu mirada creativa.</p>
         </div>
         <div class="hero-cards">
+          <div class="hero-cards-header">
+            <p class="hero-cards-intro">Así es un día dentro de La Mirada Creativa.</p>
+            <svg class="hand-drawn-arrow" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 8 C15 6, 25 10, 35 18 C42 24, 48 30, 52 35" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" stroke-dasharray="0" pathLength="100">
+                <animate attributeName="stroke-dashoffset" from="100" to="0" dur="1.5s" fill="freeze" calcMode="spline" keySplines="0.4 0 0.2 1"/>
+              </path>
+              <path d="M46 30 C48 32, 52 35, 52 35 C52 35, 50 28, 48 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </div>
           <div class="card-deck">
             <div class="card" data-index="0">
               <div class="card-header">
@@ -283,6 +322,13 @@
             </div>
           </div>
           <p class="hero-cards-caption">Ejemplos reales de ejercicios</p>
+          <svg class="hand-drawn-bracket" viewBox="0 0 80 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 6 C12 14, 28 18, 40 18 C52 18, 68 14, 76 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          </svg>
+          <div class="hero-cards-footer">
+            <p class="hero-cards-description">Cada día una carta.<br>Un único ejercicio visual.<br>Menos de 5 minutos.</p>
+            <p class="hero-cards-tagline">Sin teoría. Sin cursos. Solo mirar y hacer.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -473,10 +519,9 @@
         </ul>
         
         <div class="cta-mid-inline">
-          <button class="btn btn--primary btn--large btn-checkout">
-            Empezar hoy por 24 €
+          <button class="btn btn--primary btn--cta btn-checkout">
+            Comprar acceso · 24 € <span class="btn-old-price">49 €</span>
           </button>
-          <p class="cta-price-note"><span class="hero-price-old">antes 49 €</span></p>
         </div>
       </div>
     </div>
@@ -525,7 +570,7 @@
             </div>
             <p class="pricing-main-note">Pago único. Acceso inmediato.<br class="mobile-break"> Tuyo para siempre.</p>
             
-            <button class="btn btn--primary btn--xlarge btn-checkout">Empezar hoy por 24 €</button>
+            <button class="btn btn--primary btn--cta btn-checkout">Comprar acceso · 24 € <span class="btn-old-price">49 €</span></button>
           </div>
         </div>
       </div>
@@ -560,6 +605,25 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Fixed Bottom CTA -->
+  <div class="fixed-cta" id="fixedCta">
+    <div class="fixed-cta-inner">
+      <button class="btn btn--primary btn--cta btn-checkout">
+        Comprar acceso · 24 € <span class="btn-old-price">49 €</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Social Proof Toast -->
+  <div class="social-proof-toast" id="socialProofToast">
+    <span class="social-proof-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+    </span>
+    <span class="social-proof-text">
+      <strong id="buyerName">María G.</strong> de <span id="buyerCity">Madrid</span> acaba de comprar
+    </span>
   </div>
 
   <!-- Scripts -->
