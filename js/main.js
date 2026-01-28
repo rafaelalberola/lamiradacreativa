@@ -3,16 +3,19 @@
    ============================================ */
 
 // ============================================
-// Page Loader - Hide on load
+// Page Loader - Hide on DOMContentLoaded (faster than load)
 // ============================================
-window.addEventListener('load', function() {
+document.addEventListener('DOMContentLoaded', function() {
   const pageLoader = document.getElementById('pageLoader');
   if (pageLoader) {
-    pageLoader.classList.add('hidden');
-    // Remove from DOM after transition
+    // Small delay to ensure styles are applied
     setTimeout(() => {
-      pageLoader.remove();
-    }, 300);
+      pageLoader.classList.add('hidden');
+      // Remove from DOM after transition
+      setTimeout(() => {
+        pageLoader.remove();
+      }, 300);
+    }, 100);
   }
 });
 
