@@ -538,7 +538,7 @@ nav a:hover {
 
 @media (min-width: 768px) {
   .hero-grid--stacked {
-    max-width: 700px;
+    max-width: 900px;
   }
 }
 
