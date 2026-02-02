@@ -2054,14 +2054,8 @@ nav a:hover {
    ============================================ */
 .pricing-main {
   max-width: 480px;
-  margin: var(--space-lg) auto 0;
+  margin: 32px auto 0;
   text-align: center;
-}
-
-@media (max-width: 767px) {
-  .pricing-main {
-    margin-top: 0;
-  }
 }
 
 .pricing-main-content {
