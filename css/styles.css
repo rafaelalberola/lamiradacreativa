@@ -3910,7 +3910,7 @@ section#testimonios {
 
 .chat-bubble--question {
   align-self: flex-start;
-  background: var(--color-bg-alt);
+  background: var(--color-bg);
   color: var(--color-text);
   border-bottom-left-radius: 4px;
   font-style: italic;
