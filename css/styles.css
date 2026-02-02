@@ -182,6 +182,10 @@ section {
   text-align: center;
 }
 
+.section-desc {
+  margin-bottom: 0;
+}
+
 .desktop-only {
   display: none;
 }
