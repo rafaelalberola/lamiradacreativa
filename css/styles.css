@@ -2061,12 +2061,12 @@ nav a:hover {
 }
 
 .pricing-main-content {
-  padding: var(--space-md) 0;
+  padding: 0;
 }
 
 @media (min-width: 768px) {
   .pricing-main-content {
-    padding: var(--space-lg) var(--space-md);
+    padding: 0;
   }
 }
 
