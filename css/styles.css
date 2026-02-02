@@ -3579,7 +3579,7 @@ section#testimonios {
 .system-block {
   text-align: center;
   padding: var(--space-md) var(--space-sm);
-  background: var(--color-bg-alt);
+  background: var(--color-bg);
   border-radius: 8px;
 }
 
