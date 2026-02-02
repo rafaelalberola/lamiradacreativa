@@ -2051,7 +2051,6 @@ nav a:hover {
 .pricing-main {
   max-width: 480px;
   margin: var(--space-lg) auto 0;
-  background-color: var(--color-bg);
   text-align: center;
 }
 
@@ -3750,6 +3749,8 @@ section#testimonios {
   align-items: center;
   text-align: center;
   gap: var(--space-md);
+  margin-top: 0;
+  padding: 0;
 }
 
 .author-mini-avatar {
@@ -3875,7 +3876,7 @@ section#testimonios {
 
 .chat-bubble--question {
   align-self: flex-start;
-  background: var(--color-bg);
+  background: var(--color-bg-alt);
   color: var(--color-text);
   border-bottom-left-radius: 4px;
   font-style: italic;
