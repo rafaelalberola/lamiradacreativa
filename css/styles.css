@@ -3614,7 +3614,7 @@ section#testimonios {
 
 .features-list-compact li {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-sm);
   padding: var(--space-sm) 0;
   border-bottom: 1px solid var(--color-border-light);
@@ -3626,9 +3626,9 @@ section#testimonios {
 
 .features-list-compact .material-symbols-sharp {
   color: var(--color-accent);
-  font-size: 24px;
+  font-size: 48px;
   flex-shrink: 0;
-  margin-top: 2px;
+  font-variation-settings: 'wght' 500;
 }
 
 .features-list-compact div {
