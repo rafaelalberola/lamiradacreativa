@@ -3262,7 +3262,7 @@ section#testimonios {
 /* Reduced Spacing */
 @media (max-width: 767px) {
   section {
-    padding: var(--space-md) 0;
+    padding: 60px 0;
   }
   
   .hero {
