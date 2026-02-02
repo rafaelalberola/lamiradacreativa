@@ -169,50 +169,17 @@ p:last-child {
   max-width: var(--max-width-wide);
 }
 
-.container.container--wide {
-  padding-top: 80px;
-}
-
 section {
-  padding: var(--space-lg) 0;
+  padding: 48px 0;
 }
 
-@media (max-width: 767px) {
-  #que-es,
-  #sistema,
-  #como-funciona,
-  #incluye,
-  #precio,
-  .section-alt {
-    padding-top: calc(var(--space-lg) + 12px);
-  }
-  
-  #el-sistema {
-    padding-top: 0;
-  }
-}
-
-@media (min-width: 768px) {
-  section {
-    padding: var(--space-xl) 0;
-  }
-  
-  #que-es {
-    padding-bottom: 0;
-  }
-  
-  #el-sistema {
-    padding-top: 40px;
-  }
-}
-
+/* Section alt - gray background */
 .section-alt {
   background-color: var(--color-bg-alt);
 }
 
 .text-center {
   text-align: center;
-  padding-bottom: var(--space-md);
 }
 
 .desktop-only {
@@ -3408,8 +3375,8 @@ section#testimonios {
 
 /* Hero - Compact Mobile */
 .hero {
-  padding-top: 70px;
-  padding-bottom: var(--space-md);
+  padding-top: 100px;
+  padding-bottom: 48px;
   min-height: auto;
   display: flex;
   align-items: flex-start;
@@ -3418,8 +3385,6 @@ section#testimonios {
 @media (min-width: 768px) {
   .hero {
     padding-top: 120px;
-    padding-bottom: var(--space-lg);
-    min-height: auto;
   }
 }
 
@@ -3939,11 +3904,10 @@ section#testimonios {
   margin-top: var(--space-xs);
 }
 
-/* Adjust hero for mobile - fit in viewport */
+/* Mobile hero adjustments */
 @media (max-width: 767px) {
   .hero {
-    padding-top: 60px;
-    padding-bottom: var(--space-sm);
+    padding-top: 80px;
   }
   
   .hero h1 {
@@ -3963,23 +3927,6 @@ section#testimonios {
   .hero-cta-mobile .btn {
     padding: 0.875rem 1.5rem;
     font-size: 0.9375rem;
-  }
-  
-  .social-proof-mini {
-    padding: var(--space-sm) 0;
-  }
-  
-  .mini-testimonial {
-    padding: var(--space-xs) var(--space-sm);
-  }
-  
-  .mini-avatar {
-    width: 36px;
-    height: 36px;
-  }
-  
-  .mini-content p {
-    font-size: 0.8125rem;
   }
 }
 
