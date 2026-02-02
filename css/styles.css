@@ -2335,7 +2335,7 @@ footer {
 
 @media (min-width: 768px) {
   footer {
-    padding-bottom: var(--space-lg);
+    padding-bottom: 120px;
   }
 }
 
