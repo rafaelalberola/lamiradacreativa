@@ -3906,7 +3906,7 @@ section#testimonios {
 /* Mobile hero adjustments */
 @media (max-width: 767px) {
   .hero {
-    padding-top: 80px;
+    padding-top: 120px;
   }
   
   .hero h1 {
