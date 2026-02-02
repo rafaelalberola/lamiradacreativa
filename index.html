@@ -445,9 +445,98 @@
             <p>Tu estilo y voz personal.</p>
           </div>
         </div>
+        
+        <button class="btn btn--secondary btn--demo" id="btnVerDemo" style="margin-top: var(--space-lg);">
+          <span class="material-symbols-sharp">visibility</span>
+          Ver ejemplo de cada bloque
+        </button>
       </div>
     </div>
   </section>
+  
+  <!-- Modal Demo Bloques -->
+  <div class="modal" id="modalBloques">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content modal-content--demo">
+      <button class="modal-close" id="modalBloquesClose">
+        <span class="material-symbols-sharp">close</span>
+      </button>
+      <div class="modal-header">
+        <h3>Los 4 bloques</h3>
+      </div>
+      <div class="modal-body">
+        <div class="blocks-deck-wrapper">
+          <div class="blocks-deck" id="blocksDeckDemo">
+            <!-- Bloque 1: Mirada Técnica -->
+            <div class="block-card" data-index="0">
+              <div class="block-card-header">
+                <span class="block-card-logo">La Mirada Creativa</span>
+                <span class="block-card-type">Bloque 01</span>
+              </div>
+              <div class="block-card-content">
+                <h3 class="block-card-title">Mirada Técnica</h3>
+                <p class="block-card-subtitle">Punto en blanco</p>
+                <div class="block-card-icon">
+                  <span class="material-symbols-sharp">radio_button_unchecked</span>
+                </div>
+                <p class="block-card-desc">Busca una superficie lisa: una pared blanca, un folio vacío. Encuentra un único punto que rompa esa monotonía.</p>
+              </div>
+              <p class="block-card-tip">💡 Entrena los fundamentos: punto, línea, forma y luz.</p>
+            </div>
+            <!-- Bloque 2: Mirada Sensible -->
+            <div class="block-card" data-index="1">
+              <div class="block-card-header">
+                <span class="block-card-logo">La Mirada Creativa</span>
+                <span class="block-card-type">Bloque 02</span>
+              </div>
+              <div class="block-card-content">
+                <h3 class="block-card-title">Mirada Sensible</h3>
+                <p class="block-card-subtitle">Luz que abraza</p>
+                <div class="block-card-icon">
+                  <span class="material-symbols-sharp">wb_twilight</span>
+                </div>
+                <p class="block-card-desc">Encuentra un momento donde la luz envuelva algo o a alguien. Observa cómo transforma la atmósfera.</p>
+              </div>
+              <p class="block-card-tip">💡 Desarrolla la sensibilidad: atmósfera, emoción y conexión.</p>
+            </div>
+            <!-- Bloque 3: Mirada Conceptual -->
+            <div class="block-card" data-index="2">
+              <div class="block-card-header">
+                <span class="block-card-logo">La Mirada Creativa</span>
+                <span class="block-card-type">Bloque 03</span>
+              </div>
+              <div class="block-card-content">
+                <h3 class="block-card-title">Mirada Conceptual</h3>
+                <p class="block-card-subtitle">Objeto que habla</p>
+                <div class="block-card-icon">
+                  <span class="material-symbols-sharp">chat_bubble</span>
+                </div>
+                <p class="block-card-desc">Elige un objeto cotidiano. ¿Qué historia cuenta? ¿Qué simboliza más allá de su función?</p>
+              </div>
+              <p class="block-card-tip">💡 Explora la narrativa: simbolismo y significado.</p>
+            </div>
+            <!-- Bloque 4: Mirada Propia -->
+            <div class="block-card" data-index="3">
+              <div class="block-card-header">
+                <span class="block-card-logo">La Mirada Creativa</span>
+                <span class="block-card-type">Bloque 04</span>
+              </div>
+              <div class="block-card-content">
+                <h3 class="block-card-title">Mirada Propia</h3>
+                <p class="block-card-subtitle">Tu filtro único</p>
+                <div class="block-card-icon">
+                  <span class="material-symbols-sharp">fingerprint</span>
+                </div>
+                <p class="block-card-desc">Captura algo que solo tú notarías. Algo que define cómo ves el mundo de forma diferente.</p>
+              </div>
+              <p class="block-card-tip">💡 Descubre tu estilo y voz personal.</p>
+            </div>
+          </div>
+          <p class="blocks-deck-caption">Desliza para ver un ejemplo de cada bloque</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Qué incluye -->
   <section id="incluye">

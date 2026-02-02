@@ -239,9 +239,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
-  // Initialize card decks
+  // Initialize card decks (exclude ones inside modals)
   document.querySelectorAll('.card-deck, .blocks-deck').forEach(deck => {
-    new CardDeck(deck);
+    // Skip decks inside modals - they'll be initialized when modal opens
+    if (!deck.closest('.modal')) {
+      new CardDeck(deck);
+    }
   });
   
   // ============================================
@@ -381,6 +384,54 @@ document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && checkoutModal.classList.contains('active')) {
       closeCheckoutModal();
+    }
+  });
+  
+  // ============================================
+  // Modal Demo Bloques
+  // ============================================
+  const btnVerDemo = document.getElementById('btnVerDemo');
+  const modalBloques = document.getElementById('modalBloques');
+  const modalBloquesClose = document.getElementById('modalBloquesClose');
+  const modalBloquesBackdrop = modalBloques ? modalBloques.querySelector('.modal-backdrop') : null;
+  let blocksDeckInstance = null;
+  
+  function openModalBloques() {
+    if (modalBloques) {
+      modalBloques.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      
+      // Initialize the blocks deck if not already done
+      const blocksDeck = document.getElementById('blocksDeckDemo');
+      if (blocksDeck && !blocksDeckInstance) {
+        blocksDeckInstance = new CardDeck(blocksDeck);
+      }
+    }
+  }
+  
+  function closeModalBloques() {
+    if (modalBloques) {
+      modalBloques.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+  
+  if (btnVerDemo) {
+    btnVerDemo.addEventListener('click', openModalBloques);
+  }
+  
+  if (modalBloquesClose) {
+    modalBloquesClose.addEventListener('click', closeModalBloques);
+  }
+  
+  if (modalBloquesBackdrop) {
+    modalBloquesBackdrop.addEventListener('click', closeModalBloques);
+  }
+  
+  // Close modal on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalBloques && modalBloques.classList.contains('active')) {
+      closeModalBloques();
     }
   });
   
