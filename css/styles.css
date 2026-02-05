@@ -46,6 +46,13 @@
   
   --max-width: 800px;
   --max-width-wide: 1200px;
+
+  /* Gradient Colors */
+  --gradient-purple: #7C3AED;
+  --gradient-blue: #3B82F6;
+  --gradient-cyan: #06B6D4;
+  --gradient-pink: #EC4899;
+  --gradient-orange: #F97316;
 }
 
 /* ============================================
@@ -175,7 +182,58 @@ section {
 
 /* Section alt - gray background */
 .section-alt {
-  background-color: var(--color-bg-alt);
+  background-color: var(--color-bg);
+}
+
+/* ============================================
+   Dark Section Base - GitHub/Stripe Style
+   ============================================ */
+.section-dark {
+  background: linear-gradient(180deg, #0F0A1E 0%, #1A1333 50%, #0F0A1E 100%);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.section-dark::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, transparent 70%);
+  top: -200px;
+  right: -150px;
+  pointer-events: none;
+}
+
+.section-dark::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+  bottom: -100px;
+  left: -100px;
+  pointer-events: none;
+}
+
+.section-dark > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.section-dark h2,
+.section-dark .section-desc,
+.section-dark p,
+.section-dark strong {
+  color: #fff;
+}
+
+.section-dark .section-desc {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .text-center {
@@ -511,6 +569,37 @@ nav a:hover {
   min-height: 100vh;
   display: flex;
   align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Gradient Mesh Background - GitHub/Stripe Style */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(124, 58, 237, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 80% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 45%),
+    radial-gradient(circle at 40% 80%, rgba(236, 72, 153, 0.08) 0%, transparent 40%);
+  z-index: 0;
+  animation: gradientMove 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes gradientMove {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(2%, 2%) rotate(1deg); }
+  50% { transform: translate(-1%, 3%) rotate(-1deg); }
+  75% { transform: translate(3%, -2%) rotate(2deg); }
 }
 
 @media (min-width: 768px) {
@@ -1061,11 +1150,14 @@ nav a:hover {
 
 .card-block {
   font-family: var(--font-body);
-  font-size: 0.625rem;
+  font-size: 0.55rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--color-accent);
+  padding: 2px 6px;
+  background: rgba(255, 80, 6, 0.1);
+  border-radius: 4px;
 }
 
 .card-content {
@@ -3652,6 +3744,128 @@ section#testimonios {
   line-height: 1.4;
 }
 
+/* ============================================
+   Section Gradients - GitHub/Stripe Style
+   ============================================ */
+
+/* ============================================
+   Dark Section Specific Styles
+   ============================================ */
+
+/* Producto - Cards in dark mode */
+#producto .card {
+  background: #F5F5F5;
+  border: 1px solid #e0e0e0;
+}
+
+#producto .card-header,
+#producto .card-day {
+  color: var(--color-text-tertiary);
+}
+
+#producto .card-title {
+  color: var(--color-text);
+}
+
+#producto .card-subtitle {
+  color: var(--color-text-secondary);
+}
+
+#producto .card-desc {
+  color: var(--color-text-secondary);
+}
+
+#producto .card-icon svg {
+  stroke: var(--color-accent);
+}
+
+
+#producto .preview-cards-intro,
+#producto .preview-cards-caption,
+#producto .preview-cards-description,
+#producto .preview-cards-tagline {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+#producto .hand-drawn-arrow,
+#producto .hand-drawn-bracket {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Para quién - Audience items in dark mode */
+#para-quien .audience-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#para-quien .audience-item .material-symbols-sharp {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* El Sistema - System blocks in dark mode */
+#para-quien .system-block {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+#para-quien .system-block-num {
+  color: var(--gradient-purple);
+}
+
+#para-quien .system-block h3 {
+  color: #fff;
+}
+
+#para-quien .system-block p {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+#para-quien .btn--secondary {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+#para-quien .btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Autor - Author section in dark mode */
+#autor .author-mini-text {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+#autor .author-mini-avatar {
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Precio Section - Subtle Glow */
+#precio {
+  position: relative;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F8F7FF 50%, #F0EEFF 100%);
+  overflow: hidden;
+}
+
+#precio::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.08) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+#precio > .container {
+  position: relative;
+  z-index: 1;
+}
+
 /* Audience Grid - Para quién es */
 .audience-grid {
   display: flex;
@@ -3931,6 +4145,223 @@ section#testimonios {
   font-size: 0.75rem;
   color: var(--color-text-tertiary);
   margin-top: var(--space-md);
+}
+
+/* ============================================
+   Hero Cards Preview - Linear.app Style Animation
+   ============================================ */
+.hero-cards-preview {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  perspective: 1000px;
+}
+
+.hero-card {
+  width: 140px;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--color-border-light);
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  animation: heroCardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-card:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Mini card content */
+.hero-card-inner {
+  padding: 12px;
+}
+
+.hero-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.hero-card-day {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hero-card-block {
+  font-size: 0.55rem;
+  padding: 2px 6px;
+  background: rgba(255, 80, 6, 0.1);
+  border-radius: 4px;
+  color: var(--color-accent);
+}
+
+.hero-card-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: var(--color-text);
+}
+
+.hero-card-subtitle {
+  font-size: 0.65rem;
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+.hero-card-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+  margin: 12px 0;
+}
+
+.hero-card-icon svg {
+  width: 32px;
+  height: 32px;
+  stroke: var(--color-accent);
+  stroke-width: 2;
+  fill: none;
+  color: var(--color-accent);
+}
+
+/* Stagger effect */
+.hero-card--1 { animation-delay: 0.1s; }
+.hero-card--2 { animation-delay: 0.2s; }
+.hero-card--3 { animation-delay: 0.3s; }
+
+/* Fan layout - rotación sutil */
+.hero-cards-preview--fan .hero-card--1 {
+  transform-origin: bottom right;
+  animation-name: heroCardAppearLeft;
+}
+
+.hero-cards-preview--fan .hero-card--1:hover {
+  transform: translateY(-8px) scale(1.02) rotate(-3deg);
+}
+
+.hero-cards-preview--fan .hero-card--3 {
+  transform-origin: bottom left;
+  animation-name: heroCardAppearRight;
+}
+
+.hero-cards-preview--fan .hero-card--3:hover {
+  transform: translateY(-8px) scale(1.02) rotate(3deg);
+}
+
+@keyframes heroCardAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes heroCardAppearLeft {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95) rotate(-6deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(-3deg);
+  }
+}
+
+@keyframes heroCardAppearRight {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95) rotate(6deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(3deg);
+  }
+}
+
+/* Text appear animation */
+.hero h1 {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: textAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+}
+
+.hero .hero-subtitle {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: textAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+}
+
+.hero .hero-cta-mobile {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: textAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+}
+
+@keyframes textAppear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .hero-cards-preview {
+    gap: var(--space-md);
+  }
+
+  .hero-card {
+    width: 180px;
+  }
+
+  .hero-card-inner {
+    padding: 16px;
+  }
+
+  .hero-card-day {
+    font-size: 0.65rem;
+  }
+
+  .hero-card-title {
+    font-size: 0.95rem;
+  }
+
+  .hero-card-icon {
+    height: 56px;
+  }
+
+  .hero-card-icon svg {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .hero-card,
+  .hero h1,
+  .hero .hero-subtitle,
+  .hero .hero-cta-mobile {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .hero::before {
+    animation: none;
+  }
 }
 
 /* ============================================
