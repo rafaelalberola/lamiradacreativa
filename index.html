@@ -244,8 +244,51 @@
     <div class="container container--wide">
       <div class="hero-grid hero-grid--stacked">
         <div class="hero-content">
-          <h1>Desarrolla tu ojo fotográfico<br>en 5 minutos al día</h1>
-          <p class="hero-subtitle">365 ejercicios visuales para fotógrafos. De fotos genéricas a fotos con personalidad.</p>
+          <!-- Cards Preview - Linear.app Style Animation -->
+          <div class="hero-cards-preview hero-cards-preview--fan">
+            <div class="hero-card hero-card--1">
+              <div class="hero-card-inner">
+                <div class="hero-card-header">
+                  <span class="hero-card-day">Día 1</span>
+                  <span class="hero-card-block">Técnica</span>
+                </div>
+                <h4 class="hero-card-title">Punto en blanco</h4>
+                <p class="hero-card-subtitle">Interrupción mínima</p>
+                <div class="hero-card-icon">
+                  <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="14" stroke-width="2" fill="none"/><circle cx="24" cy="24" r="3" fill="currentColor"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="hero-card hero-card--2">
+              <div class="hero-card-inner">
+                <div class="hero-card-header">
+                  <span class="hero-card-day">Día 47</span>
+                  <span class="hero-card-block">Sensibilidad</span>
+                </div>
+                <h4 class="hero-card-title">Luz que abraza</h4>
+                <p class="hero-card-subtitle">Calidez visual</p>
+                <div class="hero-card-icon">
+                  <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="12" stroke-width="2"/><path d="M24 6v4M24 38v4M6 24h4M38 24h4" stroke-width="2" stroke-linecap="round"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="hero-card hero-card--3">
+              <div class="hero-card-inner">
+                <div class="hero-card-header">
+                  <span class="hero-card-day">Día 183</span>
+                  <span class="hero-card-block">Narrativa</span>
+                </div>
+                <h4 class="hero-card-title">Antes y después</h4>
+                <p class="hero-card-subtitle">Tiempo implícito</p>
+                <div class="hero-card-icon">
+                  <svg viewBox="0 0 48 48"><rect x="8" y="16" width="12" height="16" rx="2" stroke-width="2"/><rect x="28" y="16" width="12" height="16" rx="2" stroke-width="2"/><path d="M20 24h8" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 2"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h1>La app para desarrollar<br class="mobile-break">tu ojo fotográfico <br class="mobile-break">en 5 minutos al día</h1>
+          <p class="hero-subtitle">365 ejercicios visuales para fotógrafos. <br class="mobile-break">De fotos genéricas a fotos con personalidad.</p>
           <div class="hero-cta-mobile">
             <button class="btn btn--primary btn--cta btn-checkout">
               Comprar acceso · 24 €
@@ -288,7 +331,7 @@
   </section>
 
   <!-- Product Preview -->
-  <section class="section-alt" id="producto">
+  <section class="section-dark" id="producto">
     <div class="container">
       <div class="text-center">
         <h2>Así funciona</h2>
@@ -317,6 +360,7 @@
                 <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="14"/></svg>
               </div>
               <p class="card-desc">Busca una superficie lisa: una pared blanca, un folio vacío, una mesa despejada. Encuentra un único punto que rompa esa monotonía.</p>
+              <p class="card-cta">Ahora sal y dispara</p>
             </div>
           </div>
           <div class="card" data-index="1">
@@ -331,6 +375,7 @@
                 <svg viewBox="0 0 48 48"><line x1="8" y1="24" x2="40" y2="24"/></svg>
               </div>
               <p class="card-desc">Busca una línea aislada sobre un fondo limpio. Observa cómo esa línea divide el espacio en dos.</p>
+              <p class="card-cta">Ya estás listo para tu foto</p>
             </div>
           </div>
           <div class="card" data-index="2">
@@ -345,6 +390,7 @@
                 <svg viewBox="0 0 48 48"><path d="M32 24c0 7.7-6.3 14-14 14S4 31.7 4 24s6.3-14 14-14"/></svg>
               </div>
               <p class="card-desc">Encuentra una sombra proyectada. Ignora el objeto y concéntrate solo en la forma oscura.</p>
+              <p class="card-cta">Coge la cámara y practica</p>
             </div>
           </div>
           <div class="card" data-index="3">
@@ -365,6 +411,7 @@
                 </svg>
               </div>
               <p class="card-desc">Busca un objeto pequeño centrado en una superficie simple. Observa cómo el espacio vacío amplifica su presencia.</p>
+              <p class="card-cta">Búscalo en tu próxima salida</p>
             </div>
           </div>
         </div>
@@ -417,7 +464,7 @@
   </section>
 
   <!-- Para quién es -->
-  <section class="section-alt" id="para-quien">
+  <section class="section-dark" id="para-quien">
     <div class="container">
       <div class="text-center">
         <h2>Para todo tipo de fotógrafos</h2>
@@ -469,15 +516,8 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- El sistema -->
-  <section id="el-sistema">
-    <div class="container">
-      <div class="text-center">
-        <h2>365 días de entrenamiento</h2>
+        <h2 id="el-sistema" style="margin-top: var(--space-xl);">365 días de entrenamiento</h2>
         <p class="section-desc">4 bloques progresivos. 5 minutos al día.</p>
         
         <div class="system-blocks">
@@ -524,69 +564,69 @@
       <div class="modal-body">
         <div class="blocks-deck-wrapper">
           <div class="blocks-deck" id="blocksDeckDemo">
-            <!-- Bloque 1: Mirada Técnica -->
+            <!-- Bloque 1: Mirada Técnica - Día 1 -->
             <div class="block-card" data-index="0">
               <div class="block-card-header">
-                <span class="block-card-logo">La Mirada Creativa</span>
-                <span class="block-card-type">Bloque 01</span>
+                <span class="block-card-day">Día 1 / 365</span>
+                <span class="block-card-block">Mirada Técnica</span>
               </div>
               <div class="block-card-content">
-                <h3 class="block-card-title">Mirada Técnica</h3>
-                <p class="block-card-subtitle">Punto en blanco</p>
+                <h3 class="block-card-title">Punto en blanco</h3>
+                <p class="block-card-subtitle">Interrupción mínima</p>
                 <div class="block-card-icon">
                   <span class="material-symbols-sharp">radio_button_unchecked</span>
                 </div>
                 <p class="block-card-desc">Busca una superficie lisa: una pared blanca, un folio vacío. Encuentra un único punto que rompa esa monotonía.</p>
+                <p class="block-card-cta">Ahora sal y dispara</p>
               </div>
-              <p class="block-card-tip">💡 Entrena los fundamentos: punto, línea, forma y luz.</p>
             </div>
-            <!-- Bloque 2: Mirada Sensible -->
+            <!-- Bloque 2: Mirada Sensible - Día 91 -->
             <div class="block-card" data-index="1">
               <div class="block-card-header">
-                <span class="block-card-logo">La Mirada Creativa</span>
-                <span class="block-card-type">Bloque 02</span>
+                <span class="block-card-day">Día 91 / 365</span>
+                <span class="block-card-block">Mirada Sensible</span>
               </div>
               <div class="block-card-content">
-                <h3 class="block-card-title">Mirada Sensible</h3>
-                <p class="block-card-subtitle">Luz que abraza</p>
+                <h3 class="block-card-title">Calma visual</h3>
+                <p class="block-card-subtitle">Serenidad encontrada</p>
                 <div class="block-card-icon">
-                  <span class="material-symbols-sharp">wb_twilight</span>
+                  <span class="material-symbols-sharp">spa</span>
                 </div>
-                <p class="block-card-desc">Encuentra un momento donde la luz envuelva algo o a alguien. Observa cómo transforma la atmósfera.</p>
+                <p class="block-card-desc">Busca una escena que te transmita calma: agua quieta, líneas horizontales, espacios amplios donde la mirada descansa.</p>
+                <p class="block-card-cta">Captura esa emoción</p>
               </div>
-              <p class="block-card-tip">💡 Desarrolla la sensibilidad: atmósfera, emoción y conexión.</p>
             </div>
-            <!-- Bloque 3: Mirada Conceptual -->
+            <!-- Bloque 3: Mirada Narrativa - Día 183 -->
             <div class="block-card" data-index="2">
               <div class="block-card-header">
-                <span class="block-card-logo">La Mirada Creativa</span>
-                <span class="block-card-type">Bloque 03</span>
+                <span class="block-card-day">Día 183 / 365</span>
+                <span class="block-card-block">Mirada Narrativa</span>
               </div>
               <div class="block-card-content">
-                <h3 class="block-card-title">Mirada Conceptual</h3>
-                <p class="block-card-subtitle">Objeto que habla</p>
+                <h3 class="block-card-title">Metáfora visual</h3>
+                <p class="block-card-subtitle">Una cosa es otra</p>
                 <div class="block-card-icon">
-                  <span class="material-symbols-sharp">chat_bubble</span>
+                  <span class="material-symbols-sharp">compare_arrows</span>
                 </div>
-                <p class="block-card-desc">Elige un objeto cotidiano. ¿Qué historia cuenta? ¿Qué simboliza más allá de su función?</p>
+                <p class="block-card-desc">Crea o encuentra una metáfora visual: un camino que representa la vida, una puerta que representa oportunidad.</p>
+                <p class="block-card-cta">Dispara con intención narrativa</p>
               </div>
-              <p class="block-card-tip">💡 Explora la narrativa: simbolismo y significado.</p>
             </div>
-            <!-- Bloque 4: Mirada Propia -->
+            <!-- Bloque 4: Mirada Propia - Día 271 -->
             <div class="block-card" data-index="3">
               <div class="block-card-header">
-                <span class="block-card-logo">La Mirada Creativa</span>
-                <span class="block-card-type">Bloque 04</span>
+                <span class="block-card-day">Día 271 / 365</span>
+                <span class="block-card-block">Mirada Propia</span>
               </div>
               <div class="block-card-content">
-                <h3 class="block-card-title">Mirada Propia</h3>
-                <p class="block-card-subtitle">Tu filtro único</p>
+                <h3 class="block-card-title">Qué te atrae</h3>
+                <p class="block-card-subtitle">Tu imán visual</p>
                 <div class="block-card-icon">
-                  <span class="material-symbols-sharp">fingerprint</span>
+                  <span class="material-symbols-sharp">favorite</span>
                 </div>
-                <p class="block-card-desc">Captura algo que solo tú notarías. Algo que define cómo ves el mundo de forma diferente.</p>
+                <p class="block-card-desc">Presta atención a lo que te atrae sin pensar: ¿qué colores captan tu mirada? ¿qué formas te gustan?</p>
+                <p class="block-card-cta">Haz la foto a tu manera</p>
               </div>
-              <p class="block-card-tip">💡 Descubre tu estilo y voz personal.</p>
             </div>
           </div>
           <p class="blocks-deck-caption">Desliza para ver un ejemplo de cada bloque</p>
@@ -659,7 +699,7 @@
   </section>
 
   <!-- Autor -->
-  <section class="section-alt" id="autor">
+  <section class="section-dark" id="autor">
     <div class="container">
       <div class="author-mini author-mini--centered">
         <img src="assets/images/logo.jpg" alt="Creador" class="author-mini-avatar">

@@ -495,6 +495,10 @@ nav a:hover {
   border-color: var(--color-text);
 }
 
+.btn--demo {
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+}
 
 .btn--small {
   padding: 0.5rem 1rem;
@@ -1038,7 +1042,7 @@ nav a:hover {
 .card-deck {
   position: relative;
   width: 225px;
-  height: 400px;
+  height: 364px;
   margin: 0 auto var(--space-sm);
   perspective: 1000px;
   cursor: grab;
@@ -1048,7 +1052,7 @@ nav a:hover {
 @media (min-width: 768px) {
   .card-deck {
     width: 270px;
-    height: 480px;
+    height: 412px;
     margin: 0;
   }
 }
@@ -1217,21 +1221,21 @@ nav a:hover {
 
 .swipe-card-wrapper .card,
 .scroll-card-wrapper .card {
-  max-height: 500px;
+  max-height: 420px;
 }
 
 @media (max-width: 480px) {
   .swipe-card-wrapper .card,
   .scroll-card-wrapper .card {
     max-width: 300px;
-    max-height: 500px;
+    max-height: 420px;
   }
 }
 
 @media (min-width: 768px) {
   .swipe-card-wrapper .card,
   .scroll-card-wrapper .card {
-    max-height: 550px;
+    max-height: 460px;
   }
   
   .card-desc {
@@ -1355,17 +1359,17 @@ nav a:hover {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: linear-gradient(180deg, #19132F 0%, #0C0520 100%);
+  background-color: #F5F5F5;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   padding: 1rem;
-  color: #ffffff;
+  color: var(--color-text);
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
   backface-visibility: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid #e0e0e0;
   transform-style: preserve-3d;
 }
 
@@ -1377,7 +1381,7 @@ nav a:hover {
   transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
-  background-image: url('../assets/images/lines-white.png');
+  background-image: url('../assets/images/lines-black.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -1403,26 +1407,29 @@ nav a:hover {
   align-items: center;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.block-card-logo {
-  font-family: 'Inter', sans-serif;
-  font-size: 10px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.5);
-  white-space: nowrap;
-}
-
-.block-card-type {
+.block-card-day {
   font-family: var(--font-body);
   font-size: 0.625rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #06BDFF;
+  color: rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+}
+
+.block-card-block {
+  font-family: var(--font-body);
+  font-size: 0.55rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-accent);
+  padding: 2px 6px;
+  background: rgba(255, 80, 6, 0.1);
+  border-radius: 4px;
   white-space: nowrap;
 }
 
@@ -1430,8 +1437,8 @@ nav a:hover {
 @media (max-width: 767px) {
   .card-day,
   .card-block,
-  .block-card-type,
-  .block-card-logo {
+  .block-card-day,
+  .block-card-block {
     font-size: 0.525rem;
   }
 }
@@ -1455,14 +1462,14 @@ nav a:hover {
   text-transform: uppercase;
   letter-spacing: -0.03em;
   margin-bottom: 0.25rem;
-  color: #ffffff;
+  color: var(--color-text);
 }
 
 .block-card-subtitle {
   font-family: 'Space Mono', monospace;
   font-size: 0.825rem;
   letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(0, 0, 0, 0.5);
   margin-bottom: 1rem;
 }
 
@@ -1478,14 +1485,14 @@ nav a:hover {
 .block-card-icon svg {
   width: 64px;
   height: 64px;
-  stroke: #06BDFF;
+  stroke: var(--color-accent);
   stroke-width: 1.5;
   fill: none;
 }
 
 .block-card-icon .material-symbols-sharp {
   font-size: 64px;
-  color: #06BDFF;
+  color: var(--color-accent);
   font-variation-settings:
     'FILL' 0,
     'wght' 200,
@@ -1503,7 +1510,7 @@ nav a:hover {
 }
 
 .block-card:hover .block-card-icon {
-  filter: drop-shadow(0 0 20px #06BDFF) drop-shadow(0 0 40px rgba(6, 189, 255, 0.5));
+  filter: drop-shadow(0 0 20px var(--color-accent)) drop-shadow(0 0 40px rgba(255, 80, 6, 0.5));
 }
 
 @media (min-width: 768px) {
@@ -1520,21 +1527,21 @@ nav a:hover {
 .block-card-desc {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.90rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(0, 0, 0, 0.7);
   line-height: 1.4;
   margin-bottom: 0.5rem;
 }
 
-.block-card-tip {
-  font-family: 'Satoshi', sans-serif;
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.9);
-  line-height: 1.35;
-  background-color: #fdfdfd1c;
-  padding: 0.4rem 0.5rem;
-  border-radius: 3px;
-  margin-top: 16px;
-  text-align: left;
+.block-card-cta {
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  font-weight: 600;
+  margin-top: 12px;
+  background: #f7e5df;
+  padding: 0px 12px;
+  width: fit-content;
+  border-radius: 4px;
+  margin: 12px auto 0;
 }
 
 /* Block Card Stack Positions */
@@ -2743,19 +2750,22 @@ footer {
 }
 
 .modal-content--demo .blocks-deck {
-  width: 220px;
-  height: 390px;
+  width: 244px;
+  height: 400px;
 }
 
 @media (min-width: 768px) {
+  .modal-content--demo {
+    max-width: 560px;
+  }
+
   .modal-content--demo .modal-body {
     height: 600px;
-    max-width: 500px;
   }
-  
+
   .modal-content--demo .blocks-deck {
-    width: 260px;
-    height: 460px;
+    width: 272px;
+    height: 436px;
   }
 }
 
@@ -3744,6 +3754,14 @@ section#testimonios {
   line-height: 1.4;
 }
 
+.system-block-cta {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--color-accent);
+  margin-top: var(--space-xs);
+  font-weight: 500;
+}
+
 /* ============================================
    Section Gradients - GitHub/Stripe Style
    ============================================ */
@@ -3773,6 +3791,18 @@ section#testimonios {
 
 #producto .card-desc {
   color: var(--color-text-secondary);
+}
+
+#producto .card-cta {
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  font-weight: 600;
+  margin-top: 12px;
+  background: #f7e5df;
+  padding: 0px 12px;
+  width: fit-content;
+  border-radius: 4px;
+  margin: 12px auto 0;
 }
 
 #producto .card-icon svg {
@@ -3838,7 +3868,7 @@ section#testimonios {
 }
 
 #autor .author-mini-avatar {
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: none;
 }
 
 /* Precio Section - Subtle Glow */
@@ -3871,7 +3901,7 @@ section#testimonios {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0;
+  gap: 12px;
   margin-top: var(--space-lg);
 }
 
@@ -3879,18 +3909,20 @@ section#testimonios {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0;
+  gap: 12px;
 }
 
 .audience-item {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-xs);
   padding: var(--space-xs) var(--space-md);
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 100px;
   font-size: 0.875rem;
+  width: 160px;
 }
 
 .audience-item .material-symbols-sharp {
@@ -4054,7 +4086,7 @@ section#testimonios {
 .author-mini-avatar {
   width: 48px;
   height: 48px;
-  border-radius: 25%;
+  border-radius: 30%;
   flex-shrink: 0;
 }
 
@@ -4159,7 +4191,8 @@ section#testimonios {
 }
 
 .hero-card {
-  width: 140px;
+  width: 150px;
+  height: 164px;
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
@@ -4320,10 +4353,12 @@ section#testimonios {
 @media (min-width: 768px) {
   .hero-cards-preview {
     gap: var(--space-md);
+    transform: scale(0.9);
   }
 
   .hero-card {
-    width: 180px;
+    width: 160px;
+    height: 180px;
   }
 
   .hero-card-inner {
