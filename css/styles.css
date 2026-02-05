@@ -3626,7 +3626,7 @@ section#testimonios {
 .system-block {
   text-align: center;
   padding: var(--space-md) var(--space-sm);
-  background: var(--color-bg);
+  background: #F5F5F7;
   border-radius: 8px;
 }
 
@@ -3676,8 +3676,9 @@ section#testimonios {
 }
 
 .audience-item .material-symbols-sharp {
-  font-size: 18px;
-  opacity: 0.7;
+  font-size: 28px;
+  opacity: 1;
+  font-variation-settings: 'wght' 400;
 }
 
 .audience-item strong {
