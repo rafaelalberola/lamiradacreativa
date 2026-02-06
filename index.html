@@ -225,7 +225,7 @@
         <a href="#el-sistema" class="nav-hide-mobile">El sistema</a>
         <a href="#incluye" class="nav-hide-mobile">Qué incluye</a>
         <a href="#precio" class="nav-hide-mobile">Precio</a>
-        <button class="btn btn--primary btn--nav nav-hide-mobile btn-checkout">Comprar · 24 €</button>
+        <button class="btn btn--primary btn--nav nav-hide-mobile btn-checkout" data-location="header">Comprar · 24 €</button>
         <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
           <span class="material-symbols-sharp">menu</span>
         </button>
@@ -249,7 +249,7 @@
         <a href="#precio" class="mobile-nav-link">Precio</a>
       </div>
       <div class="mobile-nav-cta">
-        <button class="btn btn--primary btn--cta btn-checkout">
+        <button class="btn btn--primary btn--cta btn-checkout" data-location="mobile-nav">
           Comprar acceso · 24 €
         </button>
         <p class="mobile-nav-note">Pago único · Acceso inmediato</p>
@@ -308,7 +308,7 @@
           <h1>La app para desarrollar <br class="mobile-break">tu ojo fotográfico <br class="mobile-break">en 5 minutos al día</h1>
           <p class="hero-subtitle">365 ejercicios visuales para fotógrafos. <br class="mobile-break">De fotos genéricas a fotos con personalidad.</p>
           <div class="hero-cta-mobile">
-            <button class="btn btn--primary btn--cta btn-checkout">
+            <button class="btn btn--primary btn--cta btn-checkout" data-location="hero">
               Comprar acceso · 24 €
             </button>
             <p class="hero-product-note">Producto digital · Acceso inmediato · Pago único</p>
@@ -708,8 +708,8 @@
             </div>
             <p class="pricing-value-context">365 ejercicios = 0,07 € por ejercicio</p>
             <p class="pricing-main-note">Pago único · Acceso inmediato · Tuyo para siempre</p>
-            
-            <button class="btn btn--primary btn--cta btn-checkout">Comprar acceso · 24 €</button>
+
+            <button class="btn btn--primary btn--cta btn-checkout" data-location="pricing">Comprar acceso · 24 €</button>
           </div>
         </div>
       </div>
@@ -758,7 +758,7 @@
   <!-- Fixed Bottom CTA -->
   <div class="fixed-cta" id="fixedCta">
     <div class="fixed-cta-inner">
-      <button class="btn btn--primary btn--cta btn-checkout">
+      <button class="btn btn--primary btn--cta btn-checkout" data-location="fixed-bottom">
         Comprar acceso · 24 €
       </button>
     </div>
@@ -776,6 +776,33 @@
 
   <!-- Scripts -->
   <script src="js/main.js"></script>
+
+  <!-- Analytics: Track Comprar Button Clicks -->
+  <script>
+    document.querySelectorAll('.btn-checkout').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var location = this.getAttribute('data-location') || 'unknown';
+
+        // Amplitude
+        if (window.amplitude) {
+          amplitude.track('Checkout Button Clicked', {
+            button_location: location,
+            product: 'La Mirada Creativa',
+            price: 24
+          });
+        }
+
+        // Mixpanel
+        if (window.mixpanel) {
+          mixpanel.track('Checkout Button Clicked', {
+            button_location: location,
+            product: 'La Mirada Creativa',
+            price: 24
+          });
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>
