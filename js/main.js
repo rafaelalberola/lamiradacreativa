@@ -20,7 +20,30 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-  
+
+  // ============================================
+  // Countdown Timer - Shows next Sunday date
+  // ============================================
+  const countdownEl = document.getElementById('countdownTimer');
+
+  if (countdownEl) {
+    const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+    function getNextSunday() {
+      const now = new Date();
+      const dayOfWeek = now.getDay();
+      const daysUntilSunday = dayOfWeek === 0 ? 7 : 7 - dayOfWeek;
+      const nextSunday = new Date(now);
+      nextSunday.setDate(nextSunday.getDate() + daysUntilSunday);
+      return nextSunday;
+    }
+
+    const nextSunday = getNextSunday();
+    const dayNumber = nextSunday.getDate();
+    const monthName = meses[nextSunday.getMonth()];
+    countdownEl.textContent = dayNumber + ' de ' + monthName;
+  }
+
   // ============================================
   // Accordion functionality
   // ============================================
@@ -507,69 +530,180 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial check
     updateFixedCta();
   }
-  
+
+  // ============================================
+  // Header Text Color - Adapt to Background
+  // ============================================
+  const header = document.querySelector('header');
+  const darkSections = document.querySelectorAll('.section-dark');
+
+  if (header && darkSections.length > 0) {
+    function updateHeaderTextColor() {
+      const headerBottom = header.offsetHeight;
+      let isOverDark = false;
+
+      darkSections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < headerBottom && rect.bottom > 0) {
+          isOverDark = true;
+        }
+      });
+
+      if (isOverDark) {
+        header.classList.add('header--light-text');
+      } else {
+        header.classList.remove('header--light-text');
+      }
+    }
+
+    let headerTicking = false;
+    window.addEventListener('scroll', () => {
+      if (!headerTicking) {
+        window.requestAnimationFrame(() => {
+          updateHeaderTextColor();
+          headerTicking = false;
+        });
+        headerTicking = true;
+      }
+    }, { passive: true });
+
+    updateHeaderTextColor();
+  }
+
   // ============================================
   // Social Proof Toast - Simulated Purchases
   // ============================================
   const socialProofToast = document.getElementById('socialProofToast');
+  const socialProofClose = document.getElementById('socialProofClose');
   const buyerNameEl = document.getElementById('buyerName');
   const buyerCityEl = document.getElementById('buyerCity');
-  
+
   if (socialProofToast && buyerNameEl && buyerCityEl) {
     const names = [
       'María G.', 'Carlos R.', 'Laura M.', 'Pablo S.', 'Ana L.',
       'Jorge P.', 'Elena V.', 'David F.', 'Marta C.', 'Sergio H.',
       'Carmen B.', 'Andrés T.', 'Lucía N.', 'Miguel A.', 'Sara D.'
     ];
-    
+
     const cities = [
       'Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Bilbao',
       'Málaga', 'Zaragoza', 'Alicante', 'Granada', 'San Sebastián',
       'Palma', 'Las Palmas', 'Murcia', 'Santander', 'Valladolid'
     ];
-    
+
     let hasScrolled = false;
-    
+    let toastTimeout = null;
+    let toastStartX = 0;
+    let toastCurrentX = 0;
+    let toastIsDragging = false;
+
     window.addEventListener('scroll', () => {
       if (window.scrollY > 200) {
         hasScrolled = true;
       }
     }, { passive: true });
-    
+
     function getRandomItem(array) {
       return array[Math.floor(Math.random() * array.length)];
     }
-    
+
     function getRandomInterval() {
       return Math.floor(Math.random() * 20000) + 25000;
     }
-    
+
+    function hideToast() {
+      if (toastTimeout) {
+        clearTimeout(toastTimeout);
+        toastTimeout = null;
+      }
+      socialProofToast.classList.remove('visible', 'swiping');
+      socialProofToast.style.transform = '';
+    }
+
+    function dismissToast(direction) {
+      if (toastTimeout) {
+        clearTimeout(toastTimeout);
+        toastTimeout = null;
+      }
+      socialProofToast.classList.remove('swiping');
+      socialProofToast.classList.add('dismissing');
+      const translateX = direction === 'left' ? '-120%' : '120%';
+      socialProofToast.style.transform = `translateX(${translateX})`;
+      socialProofToast.style.opacity = '0';
+
+      setTimeout(() => {
+        socialProofToast.classList.remove('visible', 'dismissing');
+        socialProofToast.style.transform = '';
+        socialProofToast.style.opacity = '';
+        scheduleNextToast();
+      }, 300);
+    }
+
     function showToast() {
       if (checkoutModal && checkoutModal.classList.contains('active')) {
         scheduleNextToast();
         return;
       }
-      
+
       if (!hasScrolled) {
         scheduleNextToast();
         return;
       }
-      
+
       buyerNameEl.textContent = getRandomItem(names);
       buyerCityEl.textContent = getRandomItem(cities);
-      
+
       socialProofToast.classList.add('visible');
-      
-      setTimeout(() => {
-        socialProofToast.classList.remove('visible');
+
+      toastTimeout = setTimeout(() => {
+        hideToast();
         scheduleNextToast();
       }, 4000);
     }
-    
+
     function scheduleNextToast() {
       setTimeout(showToast, getRandomInterval());
     }
-    
+
+    // Close button
+    if (socialProofClose) {
+      socialProofClose.addEventListener('click', (e) => {
+        e.stopPropagation();
+        hideToast();
+        scheduleNextToast();
+      });
+    }
+
+    // Swipe to dismiss (mobile)
+    socialProofToast.addEventListener('touchstart', (e) => {
+      toastStartX = e.touches[0].clientX;
+      toastCurrentX = 0;
+      toastIsDragging = true;
+      socialProofToast.classList.add('swiping');
+    }, { passive: true });
+
+    socialProofToast.addEventListener('touchmove', (e) => {
+      if (!toastIsDragging) return;
+      toastCurrentX = e.touches[0].clientX - toastStartX;
+      socialProofToast.style.transform = `translateX(${toastCurrentX}px)`;
+      socialProofToast.style.opacity = Math.max(0, 1 - Math.abs(toastCurrentX) / 200);
+    }, { passive: true });
+
+    socialProofToast.addEventListener('touchend', () => {
+      if (!toastIsDragging) return;
+      toastIsDragging = false;
+
+      const threshold = 80;
+      if (Math.abs(toastCurrentX) > threshold) {
+        dismissToast(toastCurrentX < 0 ? 'left' : 'right');
+      } else {
+        // Snap back
+        socialProofToast.classList.remove('swiping');
+        socialProofToast.style.transform = '';
+        socialProofToast.style.opacity = '';
+      }
+    });
+
     setTimeout(() => {
       scheduleNextToast();
     }, 10000);

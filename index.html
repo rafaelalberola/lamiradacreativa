@@ -270,7 +270,7 @@
         <a href="#el-sistema" class="nav-hide-mobile">El sistema</a>
         <a href="#incluye" class="nav-hide-mobile">Qué incluye</a>
         <a href="#precio" class="nav-hide-mobile">Precio</a>
-        <button class="btn btn--primary btn--nav nav-hide-mobile btn-checkout" data-location="header">Comprar · 24 €</button>
+        <button class="btn btn--primary btn--nav nav-hide-mobile btn-checkout" data-location="header">Comprar · 24 € <span class="price-old">49 €</span></button>
         <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
           <span class="material-symbols-sharp">menu</span>
         </button>
@@ -295,7 +295,7 @@
       </div>
       <div class="mobile-nav-cta">
         <button class="btn btn--primary btn--cta btn-checkout" data-location="mobile-nav">
-          Comprar acceso · 24 €
+          Comprar acceso · 24 € <span class="price-old">49 €</span>
         </button>
         <p class="mobile-nav-note">Pago único · Acceso inmediato</p>
       </div>
@@ -354,9 +354,10 @@
           <p class="hero-subtitle">365 ejercicios visuales para fotógrafos. <br class="mobile-break">De fotos genéricas a fotos con personalidad.</p>
           <div class="hero-cta-mobile">
             <button class="btn btn--primary btn--cta btn-checkout" data-location="hero">
-              Comprar acceso · 24 €
+              Comprar acceso · 24 € <span class="price-old">49 €</span>
             </button>
             <p class="hero-product-note">Producto digital · Acceso inmediato · Pago único</p>
+            <p class="countdown-text">🔥 Oferta disponible hasta el <span id="countdownTimer">8 de febrero</span></p>
           </div>
         </div>
         <!-- Testimonios en Hero -->
@@ -833,32 +834,30 @@
             <p class="pricing-value-context">365 ejercicios = 0,07 € por ejercicio</p>
             <p class="pricing-main-note">Pago único · Acceso inmediato · Tuyo para siempre</p>
 
-            <button class="btn btn--primary btn--cta btn-checkout" data-location="pricing">Comprar acceso · 24 €</button>
+            <button class="btn btn--primary btn--cta btn-checkout" data-location="pricing">Comprar acceso · 24 € <span class="price-old">49 €</span></button>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Autor -->
-  <section class="section-dark" id="autor">
+  <!-- Footer -->
+  <footer class="section-dark" id="autor">
     <div class="container">
       <div class="author-mini author-mini--centered">
         <img src="assets/images/logo.jpg" alt="Creador" class="author-mini-avatar">
         <p class="author-mini-text">Creado por un fotógrafo que llevaba años buscando una forma de entrenar el ojo sin cursos interminables. Esto es lo que funciona.</p>
       </div>
     </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
     <div class="container container--wide">
+      <hr class="footer-separator">
       <div class="footer-inner">
         <div class="footer-links">
           <a href="/app">¿Ya tienes acceso? Entra aquí</a>
           <a href="/privacidad.html">Privacidad</a>
           <a href="/terminos.html">Términos</a>
         </div>
+        <hr class="footer-separator footer-separator--mobile">
         <p class="footer-copy">© 2025 La Mirada Creativa</p>
       </div>
     </div>
@@ -883,13 +882,16 @@
   <div class="fixed-cta" id="fixedCta">
     <div class="fixed-cta-inner">
       <button class="btn btn--primary btn--cta btn-checkout" data-location="fixed-bottom">
-        Comprar acceso · 24 €
+        Comprar acceso · 24 € <span class="price-old">49 €</span>
       </button>
     </div>
   </div>
 
   <!-- Social Proof Toast -->
   <div class="social-proof-toast" id="socialProofToast">
+    <button class="social-proof-close" id="socialProofClose" aria-label="Cerrar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
     <span class="social-proof-icon">
       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
     </span>
