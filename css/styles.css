@@ -3526,20 +3526,11 @@ section#testimonios {
   transform: translateY(120%);
   opacity: 0;
   transition: transform 0.4s ease, opacity 0.4s ease;
-  touch-action: pan-x;
 }
 
 .social-proof-toast.visible {
   transform: translateY(0);
   opacity: 1;
-}
-
-.social-proof-toast.swiping {
-  transition: none;
-}
-
-.social-proof-toast.dismissing {
-  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .social-proof-close {

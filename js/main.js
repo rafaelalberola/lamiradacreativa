@@ -593,9 +593,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let hasScrolled = false;
     let toastTimeout = null;
-    let toastStartX = 0;
-    let toastCurrentX = 0;
-    let toastIsDragging = false;
 
     window.addEventListener('scroll', () => {
       if (window.scrollY > 200) {
@@ -616,27 +613,7 @@ document.addEventListener('DOMContentLoaded', function() {
         clearTimeout(toastTimeout);
         toastTimeout = null;
       }
-      socialProofToast.classList.remove('visible', 'swiping');
-      socialProofToast.style.transform = '';
-    }
-
-    function dismissToast(direction) {
-      if (toastTimeout) {
-        clearTimeout(toastTimeout);
-        toastTimeout = null;
-      }
-      socialProofToast.classList.remove('swiping');
-      socialProofToast.classList.add('dismissing');
-      const translateX = direction === 'left' ? '-120%' : '120%';
-      socialProofToast.style.transform = `translateX(${translateX})`;
-      socialProofToast.style.opacity = '0';
-
-      setTimeout(() => {
-        socialProofToast.classList.remove('visible', 'dismissing');
-        socialProofToast.style.transform = '';
-        socialProofToast.style.opacity = '';
-        scheduleNextToast();
-      }, 300);
+      socialProofToast.classList.remove('visible');
     }
 
     function showToast() {
@@ -673,36 +650,6 @@ document.addEventListener('DOMContentLoaded', function() {
         scheduleNextToast();
       });
     }
-
-    // Swipe to dismiss (mobile)
-    socialProofToast.addEventListener('touchstart', (e) => {
-      toastStartX = e.touches[0].clientX;
-      toastCurrentX = 0;
-      toastIsDragging = true;
-      socialProofToast.classList.add('swiping');
-    }, { passive: true });
-
-    socialProofToast.addEventListener('touchmove', (e) => {
-      if (!toastIsDragging) return;
-      toastCurrentX = e.touches[0].clientX - toastStartX;
-      socialProofToast.style.transform = `translateX(${toastCurrentX}px)`;
-      socialProofToast.style.opacity = Math.max(0, 1 - Math.abs(toastCurrentX) / 200);
-    }, { passive: true });
-
-    socialProofToast.addEventListener('touchend', () => {
-      if (!toastIsDragging) return;
-      toastIsDragging = false;
-
-      const threshold = 80;
-      if (Math.abs(toastCurrentX) > threshold) {
-        dismissToast(toastCurrentX < 0 ? 'left' : 'right');
-      } else {
-        // Snap back
-        socialProofToast.classList.remove('swiping');
-        socialProofToast.style.transform = '';
-        socialProofToast.style.opacity = '';
-      }
-    });
 
     setTimeout(() => {
       scheduleNextToast();
