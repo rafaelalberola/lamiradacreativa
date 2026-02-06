@@ -332,7 +332,7 @@ exports.handler = async (event, context) => {
       utm_content: metadata.utm_content || null,
       fbclid: metadata.fbclid || null,
       gclid: metadata.gclid || null,
-      is_paid: trafficSource !== 'organic'
+      acquisition_type: trafficSource !== 'organic' ? 'Paid' : 'Organic'
     }, email);
 
     // Create or update user in Auth0

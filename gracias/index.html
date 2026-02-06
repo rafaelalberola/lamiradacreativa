@@ -102,7 +102,7 @@
         utm_content: utmData.utm_content || null,
         fbclid: utmData.fbclid || null,
         gclid: utmData.gclid || null,
-        is_paid: trafficSource !== 'organic'
+        acquisition_type: trafficSource !== 'organic' ? 'Paid' : 'Organic'
       };
 
       // Track purchase event in both platforms
