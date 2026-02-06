@@ -71,14 +71,22 @@
       }
 
       // Capture Amplitude device_id for server-side event linking
-      // Wait for Amplitude to initialize, then save device_id
-      setTimeout(function() {
-        try {
+      // Retry every 100ms until captured (max 2 seconds)
+      (function captureDeviceId() {
+        function capture() {
           if (window.amplitude && amplitude.getDeviceId) {
-            localStorage.setItem('lmc_amplitude_device_id', amplitude.getDeviceId());
+            var id = amplitude.getDeviceId();
+            if (id) { localStorage.setItem('lmc_amplitude_device_id', id); return true; }
           }
-        } catch(e) {}
-      }, 1000);
+          return false;
+        }
+        if (!capture()) {
+          var attempts = 0;
+          var interval = setInterval(function() {
+            if (capture() || ++attempts >= 20) clearInterval(interval);
+          }, 100);
+        }
+      })();
     })();
   </script>
   <!-- End UTM Tracking -->

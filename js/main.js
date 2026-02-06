@@ -272,10 +272,15 @@ document.addEventListener('DOMContentLoaded', function() {
       } catch(e) {}
 
       // Get Amplitude device_id for server-side event linking
+      // Priority: get directly from Amplitude (most reliable), fallback to localStorage
       let amplitudeDeviceId = null;
       try {
-        amplitudeDeviceId = localStorage.getItem('lmc_amplitude_device_id') ||
-                           (window.amplitude && amplitude.getDeviceId ? amplitude.getDeviceId() : null);
+        if (window.amplitude && typeof amplitude.getDeviceId === 'function') {
+          amplitudeDeviceId = amplitude.getDeviceId();
+        }
+        if (!amplitudeDeviceId) {
+          amplitudeDeviceId = localStorage.getItem('lmc_amplitude_device_id');
+        }
       } catch(e) {}
 
       // Create checkout session with UTM data and device_id
