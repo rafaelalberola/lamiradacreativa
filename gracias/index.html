@@ -32,12 +32,6 @@
   <!-- Amplitude Analytics -->
   <script src="https://cdn.eu.amplitude.com/script/96fdd3ad4d76df488f862da2f26efd5c.js"></script>
   <script>window.amplitude.add(window.sessionReplay.plugin({sampleRate: 1}));window.amplitude.init('96fdd3ad4d76df488f862da2f26efd5c', {"fetchRemoteConfig":true,"serverZone":"EU","autocapture":{"attribution":true,"fileDownloads":true,"formInteractions":true,"pageViews":true,"sessions":true,"elementInteractions":true,"networkTracking":true,"webVitals":true,"frustrationInteractions":{"errorClicks":true,"deadClicks":true,"rageClicks":true}}});</script>
-  <script>
-    amplitude.track('Purchase Completed', {
-      product: 'La Mirada Creativa',
-      price: 24
-    });
-  </script>
   <!-- End Amplitude Analytics -->
 
   <!-- Mixpanel Analytics -->
@@ -52,6 +46,45 @@
     })
   </script>
   <!-- End Mixpanel Analytics -->
+
+  <!-- Identify user and track purchase -->
+  <script>
+    (async function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const sessionId = urlParams.get('session_id');
+
+      let userEmail = null;
+
+      if (sessionId) {
+        try {
+          const response = await fetch('/.netlify/functions/get-session?session_id=' + sessionId);
+          const data = await response.json();
+          if (data.email) {
+            userEmail = data.email;
+            // Identify user in Amplitude (links anonymous device_id to email)
+            amplitude.setUserId(userEmail);
+            // Identify user in Mixpanel
+            mixpanel.identify(userEmail);
+          }
+        } catch (e) {
+          console.error('Error getting session:', e);
+        }
+      }
+
+      // Track purchase event in both platforms
+      amplitude.track('Purchase Completed', {
+        product: 'La Mirada Creativa',
+        price: 24,
+        email: userEmail
+      });
+
+      mixpanel.track('Purchase Completed', {
+        product: 'La Mirada Creativa',
+        price: 24,
+        email: userEmail
+      });
+    })();
+  </script>
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
