@@ -4063,12 +4063,30 @@ section#testimonios {
   border-radius: 100px;
   font-size: 0.875rem;
   width: 160px;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.audience-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .audience-item .material-symbols-sharp {
   font-size: 28px;
   opacity: 1;
   font-variation-settings: 'wght' 400;
+  transition: transform 0.3s ease;
+}
+
+.audience-item:hover .material-symbols-sharp {
+  transform: scale(1.15);
+  animation: iconPulse 0.6s ease;
+}
+
+@keyframes iconPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1.15); }
 }
 
 .audience-item strong {
