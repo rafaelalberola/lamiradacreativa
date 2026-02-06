@@ -1,8 +1,69 @@
 // Stripe Webhook Handler
 // Creates Auth0 users when a Stripe checkout is completed
 // Uses passwordless (magic links) - no password needed
+// Also tracks events to Amplitude and Mixpanel
 
 const crypto = require('crypto');
+
+// ============================================
+// Analytics Tracking
+// ============================================
+
+const AMPLITUDE_API_KEY = '96fdd3ad4d76df488f862da2f26efd5c';
+const MIXPANEL_TOKEN = 'c53f6532b5dbeda5ccde0ace3fb52c66';
+
+async function trackAmplitudeEvent(eventName, eventProperties, userEmail) {
+  try {
+    const response = await fetch('https://api.eu.amplitude.com/2/httpapi', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        api_key: AMPLITUDE_API_KEY,
+        events: [{
+          event_type: eventName,
+          user_id: userEmail,
+          event_properties: eventProperties,
+          time: Date.now()
+        }]
+      })
+    });
+    console.log(`[Amplitude] ${eventName}:`, response.status);
+  } catch (error) {
+    console.error('[Amplitude] Error:', error.message);
+  }
+}
+
+async function trackMixpanelEvent(eventName, eventProperties, userEmail) {
+  try {
+    const eventData = {
+      event: eventName,
+      properties: {
+        token: MIXPANEL_TOKEN,
+        distinct_id: userEmail,
+        time: Math.floor(Date.now() / 1000),
+        ...eventProperties
+      }
+    };
+
+    const base64Data = Buffer.from(JSON.stringify([eventData])).toString('base64');
+
+    const response = await fetch('https://api-eu.mixpanel.com/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `data=${base64Data}`
+    });
+    console.log(`[Mixpanel] ${eventName}:`, response.status);
+  } catch (error) {
+    console.error('[Mixpanel] Error:', error.message);
+  }
+}
+
+async function trackEvent(eventName, properties, userEmail) {
+  await Promise.all([
+    trackAmplitudeEvent(eventName, properties, userEmail),
+    trackMixpanelEvent(eventName, properties, userEmail)
+  ]);
+}
 
 // Verify Stripe signature
 function verifyStripeSignature(payload, signature, secret) {
@@ -151,22 +212,89 @@ exports.handler = async (event, context) => {
   
   try {
     const stripeEvent = JSON.parse(event.body);
-    
-    // Only process completed checkouts
-    if (stripeEvent.type !== 'checkout.session.completed') {
+    const eventType = stripeEvent.type;
+    const eventObject = stripeEvent.data.object;
+
+    console.log('Received Stripe event:', eventType);
+
+    // ============================================
+    // Handle different Stripe events
+    // ============================================
+
+    // Payment Intent Created - User clicked "Pay" button
+    if (eventType === 'payment_intent.created') {
+      const email = eventObject.receipt_email || eventObject.metadata?.email || 'anonymous';
+      const amount = eventObject.amount / 100;
+
+      await trackEvent('Payment Started', {
+        product: 'La Mirada Creativa',
+        price: amount,
+        currency: eventObject.currency,
+        payment_method: eventObject.payment_method_types?.[0] || 'unknown',
+        stripe_payment_intent_id: eventObject.id
+      }, email);
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ received: true, event: 'payment_intent.created' })
+      };
+    }
+
+    // Payment Intent Processing - Payment is being processed
+    if (eventType === 'payment_intent.processing') {
+      const email = eventObject.receipt_email || eventObject.metadata?.email || 'anonymous';
+      const amount = eventObject.amount / 100;
+
+      await trackEvent('Payment Processing', {
+        product: 'La Mirada Creativa',
+        price: amount,
+        currency: eventObject.currency,
+        stripe_payment_intent_id: eventObject.id
+      }, email);
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ received: true, event: 'payment_intent.processing' })
+      };
+    }
+
+    // Payment Intent Failed - Payment failed
+    if (eventType === 'payment_intent.payment_failed') {
+      const email = eventObject.receipt_email || eventObject.metadata?.email || 'anonymous';
+      const amount = eventObject.amount / 100;
+      const errorMessage = eventObject.last_payment_error?.message || 'Unknown error';
+
+      await trackEvent('Payment Failed', {
+        product: 'La Mirada Creativa',
+        price: amount,
+        currency: eventObject.currency,
+        error_message: errorMessage,
+        stripe_payment_intent_id: eventObject.id
+      }, email);
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ received: true, event: 'payment_intent.payment_failed' })
+      };
+    }
+
+    // Checkout Session Completed - Successful purchase
+    if (eventType !== 'checkout.session.completed') {
       return {
         statusCode: 200,
         body: JSON.stringify({ received: true, ignored: true })
       };
     }
-    
-    const session = stripeEvent.data.object;
-    
+
+    const session = eventObject;
+
     // Extract customer data
     const email = session.customer_details?.email || session.customer_email;
     const name = session.customer_details?.name || '';
     const stripeCustomerId = session.customer;
-    
+    const amount = session.amount_total / 100;
+    const paymentMethod = session.payment_method_types?.[0] || 'unknown';
+
     if (!email) {
       console.error('No email found in checkout session');
       return {
@@ -174,20 +302,31 @@ exports.handler = async (event, context) => {
         body: JSON.stringify({ error: 'No email found' })
       };
     }
-    
+
     console.log('Processing purchase for:', email);
-    
+
+    // Track successful purchase in analytics
+    await trackEvent('Purchase Completed (Server)', {
+      product: 'La Mirada Creativa',
+      price: amount,
+      currency: session.currency,
+      payment_method: paymentMethod,
+      customer_email: email,
+      customer_name: name,
+      stripe_session_id: session.id
+    }, email);
+
     // Create or update user in Auth0
     const result = await createAuth0User(email, name, stripeCustomerId);
-    
+
     return {
       statusCode: 200,
-      body: JSON.stringify({ 
-        success: true, 
+      body: JSON.stringify({
+        success: true,
         ...result
       })
     };
-    
+
   } catch (error) {
     console.error('Error processing webhook:', error);
     return {
