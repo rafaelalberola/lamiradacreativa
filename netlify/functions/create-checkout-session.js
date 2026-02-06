@@ -39,6 +39,34 @@ exports.handler = async (event, context) => {
     // Get the origin for return URL
     const origin = event.headers.origin || event.headers.referer?.replace(/\/$/, '') || 'https://lamiradacreativa.com';
 
+    // Parse UTM data from request body
+    let utm = {};
+    try {
+      const body = JSON.parse(event.body || '{}');
+      utm = body.utm || {};
+    } catch(e) {}
+
+    // Build metadata with UTM parameters
+    const metadata = {};
+    if (utm.utm_source) metadata.utm_source = utm.utm_source;
+    if (utm.utm_medium) metadata.utm_medium = utm.utm_medium;
+    if (utm.utm_campaign) metadata.utm_campaign = utm.utm_campaign;
+    if (utm.utm_term) metadata.utm_term = utm.utm_term;
+    if (utm.utm_content) metadata.utm_content = utm.utm_content;
+    if (utm.fbclid) metadata.fbclid = utm.fbclid;
+    if (utm.gclid) metadata.gclid = utm.gclid;
+
+    // Determine traffic source type
+    if (utm.fbclid || utm.utm_source === 'facebook') {
+      metadata.traffic_source = 'facebook_ads';
+    } else if (utm.gclid || utm.utm_source === 'google') {
+      metadata.traffic_source = 'google_ads';
+    } else if (utm.utm_source) {
+      metadata.traffic_source = 'paid';
+    } else {
+      metadata.traffic_source = 'organic';
+    }
+
     // Create checkout session with embedded mode
     const session = await stripe.checkout.sessions.create({
       ui_mode: 'embedded',
@@ -53,6 +81,8 @@ exports.handler = async (event, context) => {
       automatic_tax: { enabled: false },
       // Collect billing address which includes name
       billing_address_collection: 'required',
+      // Store UTM data in session metadata
+      metadata: metadata,
     });
 
     return {

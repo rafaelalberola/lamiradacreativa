@@ -305,7 +305,16 @@ exports.handler = async (event, context) => {
 
     console.log('Processing purchase for:', email);
 
-    // Track successful purchase in analytics
+    // Extract UTM data from session metadata
+    const metadata = session.metadata || {};
+    const trafficSource = metadata.traffic_source || 'organic';
+    const utmSource = metadata.utm_source || null;
+    const utmMedium = metadata.utm_medium || null;
+    const utmCampaign = metadata.utm_campaign || null;
+
+    console.log('Traffic source:', trafficSource, '| UTM:', utmSource, utmMedium, utmCampaign);
+
+    // Track successful purchase in analytics with campaign data
     await trackEvent('Purchase Completed (Server)', {
       product: 'La Mirada Creativa',
       price: amount,
@@ -313,7 +322,17 @@ exports.handler = async (event, context) => {
       payment_method: paymentMethod,
       customer_email: email,
       customer_name: name,
-      stripe_session_id: session.id
+      stripe_session_id: session.id,
+      // Campaign tracking
+      traffic_source: trafficSource,
+      utm_source: utmSource,
+      utm_medium: utmMedium,
+      utm_campaign: utmCampaign,
+      utm_term: metadata.utm_term || null,
+      utm_content: metadata.utm_content || null,
+      fbclid: metadata.fbclid || null,
+      gclid: metadata.gclid || null,
+      is_paid: trafficSource !== 'organic'
     }, email);
 
     // Create or update user in Auth0

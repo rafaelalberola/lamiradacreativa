@@ -46,6 +46,33 @@
   </script>
   <!-- End Mixpanel Analytics -->
 
+  <!-- UTM Tracking - Capture campaign parameters -->
+  <script>
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'fbclid', 'gclid'];
+      var hasUtm = false;
+      var utmData = {};
+
+      utmKeys.forEach(function(key) {
+        var value = params.get(key);
+        if (value) {
+          utmData[key] = value;
+          hasUtm = true;
+        }
+      });
+
+      if (hasUtm) {
+        // Save UTMs to localStorage (persists during checkout flow)
+        try {
+          localStorage.setItem('lmc_utm_data', JSON.stringify(utmData));
+          localStorage.setItem('lmc_utm_timestamp', Date.now().toString());
+        } catch(e) {}
+      }
+    })();
+  </script>
+  <!-- End UTM Tracking -->
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>La Mirada Creativa — Entrenamiento visual para fotógrafos</title>

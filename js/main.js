@@ -264,10 +264,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     try {
-      // Create checkout session
+      // Get UTM data from localStorage
+      let utmData = {};
+      try {
+        const stored = localStorage.getItem('lmc_utm_data');
+        if (stored) utmData = JSON.parse(stored);
+      } catch(e) {}
+
+      // Create checkout session with UTM data
       const response = await fetch('/.netlify/functions/create-checkout-session', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ utm: utmData })
       });
       
       if (!response.ok) {
