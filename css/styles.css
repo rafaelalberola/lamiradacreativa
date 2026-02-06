@@ -4075,18 +4075,102 @@ section#testimonios {
   font-size: 28px;
   opacity: 1;
   font-variation-settings: 'wght' 400;
-  transition: transform 0.3s ease;
 }
 
-.audience-item:hover .material-symbols-sharp {
-  transform: scale(1.15);
-  animation: iconPulse 0.6s ease;
+/* Icon-specific animations */
+.audience-item[data-icon="walk"] .material-symbols-sharp {
+  animation: iconWalk 1s ease-in-out infinite;
 }
 
-@keyframes iconPulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1.15); }
+.audience-item[data-icon="heart"] .material-symbols-sharp {
+  animation: iconHeartbeat 1.2s ease-in-out infinite;
+}
+
+.audience-item[data-icon="ball"] .material-symbols-sharp {
+  animation: iconBounce 0.8s ease-in-out infinite;
+}
+
+.audience-item[data-icon="star"] .material-symbols-sharp {
+  animation: iconTwinkle 2s ease-in-out infinite;
+}
+
+.audience-item[data-icon="camera"] .material-symbols-sharp {
+  animation: iconFlash 3s ease-in-out infinite;
+}
+
+.audience-item[data-icon="face"] .material-symbols-sharp {
+  animation: iconNod 2s ease-in-out infinite;
+}
+
+.audience-item[data-icon="landscape"] .material-symbols-sharp {
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+.audience-item[data-icon="school"] .material-symbols-sharp {
+  animation: iconBob 2s ease-in-out infinite;
+}
+
+.audience-item[data-icon="work"] .material-symbols-sharp {
+  animation: iconSwing 2.5s ease-in-out infinite;
+}
+
+.audience-item[data-icon="product"] .material-symbols-sharp {
+  animation: iconRotate 4s ease-in-out infinite;
+}
+
+@keyframes iconWalk {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(2px) rotate(3deg); }
+  75% { transform: translateX(-2px) rotate(-3deg); }
+}
+
+@keyframes iconHeartbeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.15); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.1); }
+}
+
+@keyframes iconBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes iconTwinkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.95); }
+}
+
+@keyframes iconFlash {
+  0%, 90%, 100% { opacity: 1; }
+  95% { opacity: 0.5; }
+}
+
+@keyframes iconNod {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  75% { transform: rotate(-5deg); }
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes iconBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+@keyframes iconSwing {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(8deg); }
+  75% { transform: rotate(-8deg); }
+}
+
+@keyframes iconRotate {
+  0%, 100% { transform: rotateY(0deg); }
+  50% { transform: rotateY(15deg); }
 }
 
 .audience-item strong {
