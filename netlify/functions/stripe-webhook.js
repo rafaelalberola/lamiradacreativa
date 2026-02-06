@@ -12,22 +12,29 @@ const crypto = require('crypto');
 const AMPLITUDE_API_KEY = '96fdd3ad4d76df488f862da2f26efd5c';
 const MIXPANEL_TOKEN = 'c53f6532b5dbeda5ccde0ace3fb52c66';
 
-async function trackAmplitudeEvent(eventName, eventProperties, userEmail) {
+async function trackAmplitudeEvent(eventName, eventProperties, userEmail, deviceId = null) {
   try {
+    const eventPayload = {
+      event_type: eventName,
+      user_id: userEmail,
+      event_properties: eventProperties,
+      time: Date.now()
+    };
+
+    // Include device_id to link with anonymous client-side events
+    if (deviceId) {
+      eventPayload.device_id = deviceId;
+    }
+
     const response = await fetch('https://api.eu.amplitude.com/2/httpapi', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         api_key: AMPLITUDE_API_KEY,
-        events: [{
-          event_type: eventName,
-          user_id: userEmail,
-          event_properties: eventProperties,
-          time: Date.now()
-        }]
+        events: [eventPayload]
       })
     });
-    console.log(`[Amplitude] ${eventName}:`, response.status);
+    console.log(`[Amplitude] ${eventName}:`, response.status, deviceId ? `(device_id: ${deviceId})` : '');
   } catch (error) {
     console.error('[Amplitude] Error:', error.message);
   }
@@ -58,9 +65,9 @@ async function trackMixpanelEvent(eventName, eventProperties, userEmail) {
   }
 }
 
-async function trackEvent(eventName, properties, userEmail) {
+async function trackEvent(eventName, properties, userEmail, deviceId = null) {
   await Promise.all([
-    trackAmplitudeEvent(eventName, properties, userEmail),
+    trackAmplitudeEvent(eventName, properties, userEmail, deviceId),
     trackMixpanelEvent(eventName, properties, userEmail)
   ]);
 }
@@ -305,16 +312,19 @@ exports.handler = async (event, context) => {
 
     console.log('Processing purchase for:', email);
 
-    // Extract UTM data from session metadata
+    // Extract UTM data and device_id from session metadata
     const metadata = session.metadata || {};
     const trafficSource = metadata.traffic_source || 'organic';
     const utmSource = metadata.utm_source || null;
     const utmMedium = metadata.utm_medium || null;
     const utmCampaign = metadata.utm_campaign || null;
+    const amplitudeDeviceId = metadata.amplitude_device_id || null;
 
     console.log('Traffic source:', trafficSource, '| UTM:', utmSource, utmMedium, utmCampaign);
+    console.log('Amplitude device_id:', amplitudeDeviceId);
 
     // Track successful purchase in analytics with campaign data
+    // Include device_id to link server event with client-side anonymous events
     await trackEvent('Purchase Completed (Server)', {
       product: 'La Mirada Creativa',
       price: amount,
@@ -332,8 +342,9 @@ exports.handler = async (event, context) => {
       utm_content: metadata.utm_content || null,
       fbclid: metadata.fbclid || null,
       gclid: metadata.gclid || null,
-      acquisition_type: trafficSource !== 'organic' ? 'Paid' : 'Organic'
-    }, email);
+      acquisition_type: trafficSource !== 'organic' ? 'Paid' : 'Organic',
+      tracking_version: '2'
+    }, email, amplitudeDeviceId);
 
     // Create or update user in Auth0
     const result = await createAuth0User(email, name, stripeCustomerId);

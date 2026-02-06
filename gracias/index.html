@@ -47,72 +47,34 @@
   </script>
   <!-- End Mixpanel Analytics -->
 
-  <!-- Identify user and track purchase -->
+  <!-- Identify user for analytics linking -->
   <script>
     (async function() {
       const urlParams = new URLSearchParams(window.location.search);
       const sessionId = urlParams.get('session_id');
 
-      let userEmail = null;
-
-      // Get UTM data from localStorage
-      let utmData = {};
-      let trafficSource = 'organic';
-      try {
-        const stored = localStorage.getItem('lmc_utm_data');
-        if (stored) {
-          utmData = JSON.parse(stored);
-          // Determine traffic source
-          if (utmData.fbclid || utmData.utm_source === 'facebook') {
-            trafficSource = 'facebook_ads';
-          } else if (utmData.gclid || utmData.utm_source === 'google') {
-            trafficSource = 'google_ads';
-          } else if (utmData.utm_source) {
-            trafficSource = 'paid';
-          }
-        }
-      } catch(e) {}
-
+      // Link anonymous device_id to email for funnel tracking
+      // Purchase event is tracked server-side via webhook for accuracy
       if (sessionId) {
         try {
           const response = await fetch('/.netlify/functions/get-session?session_id=' + sessionId);
           const data = await response.json();
           if (data.email) {
-            userEmail = data.email;
             // Identify user in Amplitude (links anonymous device_id to email)
-            amplitude.setUserId(userEmail);
+            amplitude.setUserId(data.email);
             // Identify user in Mixpanel
-            mixpanel.identify(userEmail);
+            mixpanel.identify(data.email);
           }
         } catch (e) {
           console.error('Error getting session:', e);
         }
       }
 
-      // Build event properties with campaign data
-      const eventProps = {
-        product: 'La Mirada Creativa',
-        price: 24,
-        email: userEmail,
-        traffic_source: trafficSource,
-        utm_source: utmData.utm_source || null,
-        utm_medium: utmData.utm_medium || null,
-        utm_campaign: utmData.utm_campaign || null,
-        utm_term: utmData.utm_term || null,
-        utm_content: utmData.utm_content || null,
-        fbclid: utmData.fbclid || null,
-        gclid: utmData.gclid || null,
-        acquisition_type: trafficSource !== 'organic' ? 'Paid' : 'Organic'
-      };
-
-      // Track purchase event in both platforms
-      amplitude.track('Purchase Completed', eventProps);
-      mixpanel.track('Purchase Completed', eventProps);
-
-      // Clean up UTM data after successful purchase tracking
+      // Clean up tracking data after purchase
       try {
         localStorage.removeItem('lmc_utm_data');
         localStorage.removeItem('lmc_utm_timestamp');
+        localStorage.removeItem('lmc_amplitude_device_id');
       } catch(e) {}
     })();
   </script>

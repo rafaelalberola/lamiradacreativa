@@ -271,11 +271,18 @@ document.addEventListener('DOMContentLoaded', function() {
         if (stored) utmData = JSON.parse(stored);
       } catch(e) {}
 
-      // Create checkout session with UTM data
+      // Get Amplitude device_id for server-side event linking
+      let amplitudeDeviceId = null;
+      try {
+        amplitudeDeviceId = localStorage.getItem('lmc_amplitude_device_id') ||
+                           (window.amplitude && amplitude.getDeviceId ? amplitude.getDeviceId() : null);
+      } catch(e) {}
+
+      // Create checkout session with UTM data and device_id
       const response = await fetch('/.netlify/functions/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ utm: utmData })
+        body: JSON.stringify({ utm: utmData, amplitude_device_id: amplitudeDeviceId })
       });
       
       if (!response.ok) {

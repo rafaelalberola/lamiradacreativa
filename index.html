@@ -69,6 +69,16 @@
           localStorage.setItem('lmc_utm_timestamp', Date.now().toString());
         } catch(e) {}
       }
+
+      // Capture Amplitude device_id for server-side event linking
+      // Wait for Amplitude to initialize, then save device_id
+      setTimeout(function() {
+        try {
+          if (window.amplitude && amplitude.getDeviceId) {
+            localStorage.setItem('lmc_amplitude_device_id', amplitude.getDeviceId());
+          }
+        } catch(e) {}
+      }, 1000);
     })();
   </script>
   <!-- End UTM Tracking -->
@@ -815,7 +825,8 @@
           amplitude.track('Checkout Button Clicked', {
             button_location: location,
             product: 'La Mirada Creativa',
-            price: 24
+            price: 24,
+            tracking_version: '2'
           });
         }
 
@@ -824,7 +835,8 @@
           mixpanel.track('Checkout Button Clicked', {
             button_location: location,
             product: 'La Mirada Creativa',
-            price: 24
+            price: 24,
+            tracking_version: '2'
           });
         }
       });
