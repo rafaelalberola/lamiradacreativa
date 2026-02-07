@@ -3661,7 +3661,7 @@ section#testimonios {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
   margin-top: var(--space-md);
 }
 
@@ -4458,7 +4458,7 @@ section#testimonios {
   display: flex;
   justify-content: center;
   gap: var(--space-sm);
-  margin-bottom: var(--space-lg);
+  margin-bottom: 48px;
   perspective: 1000px;
 }
 
@@ -4764,16 +4764,16 @@ section#testimonios {
 /* Mobile hero adjustments */
 @media (max-width: 767px) {
   .hero {
-    padding-top: 120px;
+    padding-top: 100px;
   }
   
   .hero h1 {
     font-size: 2.65rem;
     margin-bottom: 12px;
-    max-width: 70%;
+    max-width: 65%;
     line-height: 1;
-    letter-spacing: -0.6px;
-    font-weight: 800;
+    letter-spacing: -2px;
+    font-weight: 700;
     font-family: 'Inter';
   }
   
@@ -4783,9 +4783,13 @@ section#testimonios {
   }
   
   .hero-cta-mobile {
-    margin-top: 40px;
+    margin-top: 32px;
   }
-  
+
+  .countdown-text {
+    margin-top: 12px;
+  }
+
   .hero-cta-mobile .btn {
     padding: 0.875rem 1.5rem;
     font-size: 0.9375rem;
