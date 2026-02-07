@@ -700,5 +700,50 @@ document.addEventListener('DOMContentLoaded', function() {
       scheduleNextToast();
     }, 10000);
   }
-  
+
+  // ============================================
+  // Early Metrics - Counter Animation
+  // ============================================
+  var metricNumbers = document.querySelectorAll('.early-metrics__number[data-target]');
+  if (metricNumbers.length > 0) {
+    var metricsAnimated = false;
+
+    function animateCounter(el) {
+      var target = parseFloat(el.getAttribute('data-target'));
+      var suffix = el.getAttribute('data-suffix') || '';
+      var decimals = parseInt(el.getAttribute('data-decimals')) || 0;
+      var duration = 1200;
+      var start = performance.now();
+
+      function update(now) {
+        var progress = Math.min((now - start) / duration, 1);
+        // Ease out cubic
+        var eased = 1 - Math.pow(1 - progress, 3);
+        var current = eased * target;
+        el.textContent = current.toFixed(decimals) + suffix;
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+      requestAnimationFrame(update);
+    }
+
+    var metricsObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting && !metricsAnimated) {
+          metricsAnimated = true;
+          metricNumbers.forEach(function(el) {
+            animateCounter(el);
+          });
+          metricsObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+
+    var metricsSection = document.querySelector('.early-metrics');
+    if (metricsSection) {
+      metricsObserver.observe(metricsSection);
+    }
+  }
+
 });

@@ -130,6 +130,7 @@ h1, h2, h3 {
 
 h1 {
   font-size: clamp(2.25rem, 5vw, 3.5rem);
+  max-width: 80%;
   margin-bottom: 16px;
 }
 
@@ -666,7 +667,7 @@ nav a:hover {
 @media (min-width: 768px) {
   .hero-grid {
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-xl);
+    gap: 0;
   }
 }
 
@@ -2021,6 +2022,31 @@ nav a:hover {
   color: var(--color-text-secondary);
   font-size: 1rem;
   line-height: 1.4;
+}
+
+/* FAQ Accordion Variant */
+.accordion--faq {
+  max-width: 700px;
+}
+
+.accordion--faq .accordion-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.accordion-body--faq {
+  padding-left: 0;
+  line-height: 1.7;
+}
+
+.accordion-body--faq a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.accordion-body--faq a:hover {
+  text-decoration: none;
 }
 
 /* Highlight Box */
@@ -4035,15 +4061,6 @@ section#testimonios {
   background: rgba(255, 255, 255, 0.15);
 }
 
-/* Autor - Author section in dark mode */
-#autor .author-mini-text {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-#autor .author-mini-avatar {
-  border: none;
-}
-
 /* Precio Section - Subtle Glow */
 #precio {
   position: relative;
@@ -4234,6 +4251,47 @@ section#testimonios {
   line-height: 1.4;
 }
 
+/* Guarantee Standalone (below pricing CTA) */
+.guarantee-standalone {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 500px;
+  margin: 24px auto 0;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border-light);
+  border-radius: 10px;
+  text-align: left;
+}
+
+.guarantee-standalone-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.guarantee-standalone-text strong {
+  font-family: var(--font-headline);
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.guarantee-standalone-text p {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .guarantee-standalone {
+    padding: var(--space-sm) var(--space-md);
+    max-width: 100%;
+  }
+}
+
 /* Author Mini */
 .author-mini {
   display: flex;
@@ -4273,84 +4331,125 @@ section#testimonios {
 }
 
 /* ============================================
+   About Creator - Quién hay detrás
+   ============================================ */
+.about-creator-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+.about-creator-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: var(--space-sm);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.about-creator-column h2 {
+  font-family: var(--font-headline);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.about-creator-name-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: var(--space-sm);
+}
+
+.about-creator-name {
+  font-family: var(--font-headline);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+
+.about-creator-bio {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 0 var(--space-sm) 0;
+  text-align: justify;
+}
+
+.about-creator-credentials {
+  display: block;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.02em;
+}
+
+.about-creator-signature {
+  width: 120px;
+  margin-top: var(--space-xs);
+  opacity: 0.85;
+}
+
+/* ============================================
    Testimonials Grid V2
    ============================================ */
-.testimonials-grid-clean {
+/* Early Metrics - Primeros usuarios */
+.early-metrics {
+  margin-top: var(--space-lg);
+  width: 100%;
+}
+
+.early-metrics__grid {
   display: grid;
   gap: var(--space-sm);
   max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
 }
 
 @media (min-width: 768px) {
-  .testimonials-grid-clean {
+  .early-metrics__grid {
     grid-template-columns: repeat(3, 1fr);
     gap: var(--space-md);
   }
 }
 
-.testimonial-card-v2 {
+.early-metrics__card {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: var(--space-md);
+  padding: var(--space-md) var(--space-sm);
   background: var(--color-bg);
   border-radius: 12px;
   border: 1px solid var(--color-border-light);
 }
 
-.testimonial-avatar-v2 {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: var(--space-sm);
+.early-metrics__icon {
+  font-size: 1.5rem;
+  margin-bottom: var(--space-xs);
 }
 
-.testimonial-quote-v2 {
-  font-size: 0.9375rem;
-  line-height: 1.5;
-  color: var(--color-text);
-  margin: 0 0 var(--space-sm) 0;
-  flex: 1;
-}
-
-.testimonial-meta-v2 {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.testimonial-name-v2 {
+.early-metrics__number {
   font-family: var(--font-headline);
-  font-size: 0.8125rem;
-  font-weight: 600;
+  font-size: 2rem;
+  font-weight: 700;
   color: var(--color-text);
+  line-height: 1.1;
 }
 
-.testimonial-role-v2 {
-  font-size: 0.6875rem;
-  color: var(--color-text-tertiary);
+.early-metrics__label {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+  line-height: 1.4;
 }
 
-/* Hero Testimonials */
-.hero-testimonials {
-  margin-top: var(--space-lg);
-  width: 100%;
-}
-
-.hero-testimonials .testimonials-grid-clean {
-  margin-top: 0;
-}
-
-.hero-testimonials-note {
-  text-align: center;
-  font-size: 0.75rem;
-  color: var(--color-text-tertiary);
-  margin-top: var(--space-md);
-}
 
 /* ============================================
    Hero Cards Preview - Linear.app Style Animation
@@ -4669,8 +4768,13 @@ section#testimonios {
   }
   
   .hero h1 {
-    font-size: 1.75rem;
+    font-size: 2.65rem;
     margin-bottom: 12px;
+    max-width: 70%;
+    line-height: 1;
+    letter-spacing: -0.6px;
+    font-weight: 800;
+    font-family: 'Inter';
   }
   
   .hero-subtitle {
