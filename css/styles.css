@@ -20,6 +20,22 @@
 }
 
 /* ============================================
+   Image Protection - Prevent drag/copy/download
+   ============================================ */
+img {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  pointer-events: auto;
+}
+
+/* ============================================
    CSS Variables
    ============================================ */
 :root {
@@ -3711,15 +3727,32 @@ section#testimonios {
   aspect-ratio: 9 / 14;
 }
 
-.gallery-item img {
+.gallery-item img,
+.gallery-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   transition: transform 0.3s ease;
 }
 
-.gallery-item:hover img {
+.gallery-item:hover img,
+.gallery-item:hover .gallery-image {
   transform: scale(1.05);
+}
+
+/* Overlay protection */
+.gallery-image::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  pointer-events: auto;
 }
 
 #galeria .gallery-item {

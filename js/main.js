@@ -22,6 +22,51 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
 
   // ============================================
+  // Site Protection - Disable right-click, shortcuts & image drag
+  // ============================================
+
+  // Disable right-click
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    return false;
+  });
+
+  // Disable keyboard shortcuts
+  document.addEventListener('keydown', function(e) {
+    // F12
+    if (e.key === 'F12') {
+      e.preventDefault();
+      return false;
+    }
+    // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+    if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+      e.preventDefault();
+      return false;
+    }
+    // Ctrl+S, Ctrl+U
+    if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
+      e.preventDefault();
+      return false;
+    }
+  });
+
+  // Disable image drag
+  document.querySelectorAll('img').forEach(function(img) {
+    img.setAttribute('draggable', 'false');
+    img.addEventListener('dragstart', function(e) {
+      e.preventDefault();
+      return false;
+    });
+  });
+
+  // Load protected gallery images
+  document.querySelectorAll('.gallery-image[data-src]').forEach(function(el) {
+    var decoded = atob(el.getAttribute('data-src'));
+    el.style.backgroundImage = "url('" + decoded + "')";
+    el.removeAttribute('data-src');
+  });
+
+  // ============================================
   // Countdown Timer - Shows next Sunday date
   // ============================================
   const countdownEl = document.getElementById('countdownTimer');
