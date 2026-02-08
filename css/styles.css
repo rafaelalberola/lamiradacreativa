@@ -300,6 +300,7 @@ header {
 
 header.header--light-text .logo,
 header.header--light-text nav a,
+header.header--light-text .nav-login,
 header.header--light-text .menu-toggle .material-symbols-sharp {
   color: #fff;
   transition: color 0.3s ease;
@@ -374,6 +375,18 @@ nav a:hover {
     display: inline-flex !important;
   }
 }
+
+.nav-login {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav-login:hover {
+  color: var(--color-text);
+}
+
 
 /* ============================================
    Mobile Menu
