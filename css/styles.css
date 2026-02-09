@@ -510,7 +510,7 @@ nav a:hover {
 
 @media (min-width: 600px) {
   .btn {
-    width: auto;
+    width: 320px;
   }
 }
 
@@ -539,8 +539,7 @@ nav a:hover {
 }
 
 .btn--demo {
-  padding-top: 0.625rem;
-  padding-bottom: 0.625rem;
+  padding: 1rem 1.75rem;
 }
 
 .btn--small {
@@ -574,6 +573,7 @@ nav a:hover {
   padding: 0.5rem 1rem;
   font-size: 0.8125rem;
   font-weight: 500;
+  width: auto;
 }
 
 .btn--medium {
@@ -1052,7 +1052,7 @@ nav a:hover {
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border-top: 1px solid rgba(255, 255, 255, 0.25);
-  padding: 12px 16px;
+  padding: 12px 22px;
   z-index: 90;
   transform: translateY(100%);
   opacity: 0;
@@ -1973,7 +1973,7 @@ nav a:hover {
   width: 100%;
   background: none;
   border: none;
-  padding: var(--space-md) 0;
+  padding: var(--space-sm) 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1990,7 +1990,7 @@ nav a:hover {
 }
 
 .accordion-header-left .material-symbols-sharp {
-  font-size: 36px;
+  font-size: 44px;
   color: var(--color-accent);
   flex-shrink: 0;
   font-variation-settings:
@@ -2002,14 +2002,14 @@ nav a:hover {
 
 .accordion-title {
   font-family: var(--font-headline);
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 500;
   color: var(--color-text);
   letter-spacing: -0.01em;
 }
 
 .accordion-icon {
-  font-size: 36px;
+  font-size: 42px;
   color: var(--color-text-tertiary);
   transition: transform 0.3s ease;
   flex-shrink: 0;
@@ -2285,12 +2285,6 @@ nav a:hover {
   font-weight: 500;
   color: var(--color-text-tertiary);
   text-decoration: line-through;
-}
-
-.pricing-main-note {
-  font-size: 0.875rem;
-  color: var(--color-text-tertiary);
-  margin-bottom: var(--space-lg);
 }
 
 .pricing-main-features {
@@ -3532,7 +3526,7 @@ section#testimonios {
 
 @media (min-width: 768px) {
   section {
-    padding: var(--space-lg) 0;
+    padding: var(--space-xl) 0;
   }
   
   .hero {
@@ -3673,9 +3667,18 @@ section#testimonios {
 .hero-cta-mobile {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
+  width: 100%;
+  max-width: 72%;
   gap: 16px;
   margin-top: var(--space-md);
+}
+
+@media (min-width: 600px) {
+  .hero-cta-mobile {
+    align-items: center;
+    width: auto;
+  }
 }
 
 .hero-product-note {
@@ -3683,6 +3686,72 @@ section#testimonios {
   color: var(--color-text-tertiary);
   margin: 0;
 }
+
+/* CTA Group */
+.cta-group {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+}
+
+@media (min-width: 600px) {
+  .cta-group {
+    align-items: center;
+  }
+}
+
+.cta-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+
+@media (min-width: 600px) {
+  .cta-buttons {
+    align-items: center;
+  }
+}
+
+/* Value Proposition Pills */
+.value-props {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.value-prop {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+.value-prop svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.value-props--lg {
+  gap: 16px;
+}
+
+.value-props--lg .value-prop {
+  font-size: 0.875rem;
+}
+
+
 
 /* Social Proof Mini Section */
 .social-proof-mini {
@@ -4226,7 +4295,7 @@ section#testimonios {
   font-size: 0.875rem;
   color: var(--color-accent);
   font-weight: 500;
-  margin: 0 0 var(--space-xs) 0;
+  margin: 0 0 var(--space-lg) 0;
 }
 
 /* Guarantee Box */
@@ -4270,7 +4339,7 @@ section#testimonios {
   align-items: flex-start;
   gap: 12px;
   max-width: 500px;
-  margin: 24px auto 0;
+  margin: 0;
   padding: var(--space-md) var(--space-lg);
   border: 1px solid var(--color-border-light);
   border-radius: 10px;
@@ -4764,14 +4833,6 @@ section#testimonios {
   font-weight: 600;
   color: var(--color-text);
   margin-top: var(--space-xl);
-}
-
-/* Mobile Nav Note */
-.mobile-nav-note {
-  font-size: 0.75rem;
-  color: var(--color-text-tertiary);
-  text-align: center;
-  margin-top: 24px;
 }
 
 /* Mobile hero adjustments */
