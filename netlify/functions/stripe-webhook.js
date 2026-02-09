@@ -198,35 +198,38 @@ function buildEmailHtml(name, email) {
 
   return `<!DOCTYPE html>
 <html lang="es">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background:#111111;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#111111;padding:40px 16px;">
-<tr><td align="center">
-<table width="520" cellpadding="0" cellspacing="0" style="max-width:520px;">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0;padding:0;background-color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;padding:40px 0;">
+<tr><td align="center" style="padding:0 16px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;">
 
 <!-- Logo -->
 <tr><td style="padding:0 0 32px;text-align:center;">
-  <span style="font-family:'Courier New',monospace;font-size:13px;font-weight:600;color:#888888;letter-spacing:2px;text-transform:uppercase;">La Mirada Creativa</span>
+  <span style="font-family:'Courier New',monospace;font-size:13px;font-weight:600;color:#888888;letter-spacing:2px;text-transform:uppercase;">LA MIRADA CREATIVA</span>
 </td></tr>
 
 <!-- Card -->
-<tr><td style="background:#1a1a1a;border-radius:12px;border:1px solid #2a2a2a;overflow:hidden;">
+<tr><td style="background-color:#ffffff;border-radius:12px;border:1px solid #e0e0e0;">
   <table width="100%" cellpadding="0" cellspacing="0">
 
   <!-- Body -->
-  <tr><td style="padding:40px 36px;">
-    <p style="font-size:15px;color:#f5f5f7;margin:0 0 8px;line-height:1.5;">${greeting}</p>
-    <p style="font-size:15px;color:#a0a0a0;margin:0 0 32px;line-height:1.6;">Ya tienes acceso a <span style="color:#f5f5f7;">La Mirada Creativa</span>: 365 ejercicios visuales para desarrollar tu ojo fotogr\u00e1fico.</p>
+  <tr><td style="padding:40px 24px;">
+    <p style="font-size:15px;color:#111111;margin:0 0 8px;line-height:1.5;">${greeting}</p>
+    <p style="font-size:15px;color:#555555;margin:0 0 32px;line-height:1.6;">Ya tienes acceso a <span style="color:#111111;font-weight:600;">La Mirada Creativa</span>: 365 ejercicios visuales para desarrollar tu ojo fotogr\u00e1fico.</p>
 
     <!-- PDF -->
     <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 16px;">
-    <tr><td style="background:#222222;border-radius:8px;padding:20px 24px;">
+    <tr><td style="background-color:#f5f5f5;border-radius:8px;padding:20px 24px;">
       <table width="100%" cellpadding="0" cellspacing="0"><tr>
         <td style="width:36px;vertical-align:top;">
           <span style="font-size:20px;">📄</span>
         </td>
         <td style="vertical-align:top;">
-          <p style="font-size:14px;color:#f5f5f7;margin:0 0 4px;font-weight:600;">PDF adjunto</p>
+          <p style="font-size:14px;color:#111111;margin:0 0 4px;font-weight:600;">PDF adjunto</p>
           <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">Gu\u00e1rdalo en tu dispositivo para tenerlo siempre a mano.</p>
         </td>
       </tr></table>
@@ -235,14 +238,14 @@ function buildEmailHtml(name, email) {
 
     <!-- App -->
     <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
-    <tr><td style="background:#222222;border-radius:8px;padding:20px 24px;">
+    <tr><td style="background-color:#f5f5f5;border-radius:8px;padding:20px 24px;">
       <table width="100%" cellpadding="0" cellspacing="0"><tr>
         <td style="width:36px;vertical-align:top;">
           <span style="font-size:20px;">📱</span>
         </td>
         <td style="vertical-align:top;">
-          <p style="font-size:14px;color:#f5f5f7;margin:0 0 4px;font-weight:600;">App interactiva</p>
-          <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">Entra con tu email <span style="color:#f5f5f7;">${email}</span> y recibir\u00e1s un c\u00f3digo de acceso.</p>
+          <p style="font-size:14px;color:#111111;margin:0 0 4px;font-weight:600;">App interactiva</p>
+          <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">Entra con tu email <span style="color:#111111;font-weight:600;">${email}</span> y recibir\u00e1s un c\u00f3digo de acceso.</p>
         </td>
       </tr></table>
     </td></tr>
@@ -250,7 +253,7 @@ function buildEmailHtml(name, email) {
 
     <!-- CTA -->
     <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
-      <a href="https://lamiradacreativa.com/app" style="display:inline-block;background:#FF5006;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:6px;">Acceder a la app</a>
+      <a href="https://lamiradacreativa.com/app" style="display:inline-block;background-color:#FF5006;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:6px;">Acceder a la app</a>
     </td></tr></table>
   </td></tr>
 
@@ -259,7 +262,7 @@ function buildEmailHtml(name, email) {
 
 <!-- Footer -->
 <tr><td style="padding:24px 0 0;text-align:center;">
-  <p style="font-size:11px;color:#555555;margin:0;">Si tienes alguna duda, responde directamente a este email.</p>
+  <p style="font-size:11px;color:#aaaaaa;margin:0;">Si tienes alguna duda, responde directamente a este email.</p>
 </td></tr>
 
 </table>
