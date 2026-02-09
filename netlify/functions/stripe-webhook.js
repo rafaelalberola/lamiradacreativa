@@ -197,50 +197,69 @@ function buildEmailHtml(name, email) {
   const greeting = firstName ? `Hola ${firstName},` : 'Hola,';
 
   return `<!DOCTYPE html>
-<html>
+<html lang="es">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background:#f4f4f4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:32px 16px;">
+<body style="margin:0;padding:0;background:#111111;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#111111;padding:40px 16px;">
 <tr><td align="center">
-<table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:4px;overflow:hidden;max-width:600px;">
+<table width="520" cellpadding="0" cellspacing="0" style="max-width:520px;">
 
-<!-- Header -->
-<tr><td style="background:#111111;padding:32px 40px;text-align:center;">
-  <span style="font-family:monospace;font-size:20px;font-weight:bold;color:#F5F5F7;letter-spacing:1px;">LA MIRADA CREATIVA</span>
+<!-- Logo -->
+<tr><td style="padding:0 0 32px;text-align:center;">
+  <span style="font-family:'Courier New',monospace;font-size:13px;font-weight:600;color:#888888;letter-spacing:2px;text-transform:uppercase;">La Mirada Creativa</span>
 </td></tr>
 
-<!-- Body -->
-<tr><td style="padding:40px;">
-  <p style="font-size:16px;color:#111111;margin:0 0 20px;line-height:1.6;">${greeting}</p>
-  <p style="font-size:15px;color:#111111;margin:0 0 24px;line-height:1.6;">Gracias por tu compra. Ya tienes acceso a <strong>La Mirada Creativa</strong>: 365 dias de entrenamiento visual para desarrollar tu ojo fotografico.</p>
+<!-- Card -->
+<tr><td style="background:#1a1a1a;border-radius:12px;border:1px solid #2a2a2a;overflow:hidden;">
+  <table width="100%" cellpadding="0" cellspacing="0">
 
-  <!-- PDF Section -->
-  <div style="background:#f9f9f9;border:1px solid #e0e0e0;border-radius:4px;padding:24px;margin:0 0 28px;">
-    <p style="font-size:14px;color:#111111;margin:0 0 8px;font-weight:600;">PDF adjunto</p>
-    <p style="font-size:13px;color:#555555;margin:0;line-height:1.5;">Hemos adjuntado el PDF con los 365 ejercicios a este email. Guardalo en tu dispositivo para tenerlo siempre a mano.</p>
-  </div>
+  <!-- Body -->
+  <tr><td style="padding:40px 36px;">
+    <p style="font-size:15px;color:#f5f5f7;margin:0 0 8px;line-height:1.5;">${greeting}</p>
+    <p style="font-size:15px;color:#a0a0a0;margin:0 0 32px;line-height:1.6;">Ya tienes acceso a <span style="color:#f5f5f7;">La Mirada Creativa</span>: 365 ejercicios visuales para desarrollar tu ojo fotogr\u00e1fico.</p>
 
-  <!-- App Access Section -->
-  <div style="background:#f9f9f9;border:1px solid #e0e0e0;border-radius:4px;padding:24px;margin:0 0 28px;">
-    <p style="font-size:14px;color:#111111;margin:0 0 12px;font-weight:600;">Accede a la app</p>
-    <p style="font-size:13px;color:#555555;margin:0 0 16px;line-height:1.5;">Tambien puedes usar la app interactiva desde el navegador:</p>
-    <ol style="font-size:13px;color:#555555;margin:0 0 16px;padding-left:20px;line-height:1.8;">
-      <li>Entra en <a href="https://lamiradacreativa.com/app" style="color:#FF5006;">lamiradacreativa.com/app</a></li>
-      <li>Introduce tu email de compra: <strong style="color:#111111;">${email}</strong></li>
-      <li>Recibiras un codigo de verificacion en tu bandeja</li>
-      <li>Introduce el codigo y listo</li>
-    </ol>
-    <table cellpadding="0" cellspacing="0" style="margin:0 auto;"><tr><td>
-      <a href="https://lamiradacreativa.com/app" style="display:inline-block;background:#FF5006;color:#ffffff;font-size:14px;font-weight:500;text-decoration:none;padding:12px 28px;border-radius:2px;">Acceder a la app</a>
+    <!-- PDF -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 16px;">
+    <tr><td style="background:#222222;border-radius:8px;padding:20px 24px;">
+      <table width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td style="width:36px;vertical-align:top;">
+          <span style="font-size:20px;">📄</span>
+        </td>
+        <td style="vertical-align:top;">
+          <p style="font-size:14px;color:#f5f5f7;margin:0 0 4px;font-weight:600;">PDF adjunto</p>
+          <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">Gu\u00e1rdalo en tu dispositivo para tenerlo siempre a mano.</p>
+        </td>
+      </tr></table>
+    </td></tr>
+    </table>
+
+    <!-- App -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
+    <tr><td style="background:#222222;border-radius:8px;padding:20px 24px;">
+      <table width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td style="width:36px;vertical-align:top;">
+          <span style="font-size:20px;">📱</span>
+        </td>
+        <td style="vertical-align:top;">
+          <p style="font-size:14px;color:#f5f5f7;margin:0 0 4px;font-weight:600;">App interactiva</p>
+          <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">Entra con tu email <span style="color:#f5f5f7;">${email}</span> y recibir\u00e1s un c\u00f3digo de acceso.</p>
+        </td>
+      </tr></table>
+    </td></tr>
+    </table>
+
+    <!-- CTA -->
+    <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
+      <a href="https://lamiradacreativa.com/app" style="display:inline-block;background:#FF5006;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:6px;">Acceder a la app</a>
     </td></tr></table>
-  </div>
+  </td></tr>
 
-  <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">Si tienes alguna duda, responde a este email directamente.</p>
+  </table>
 </td></tr>
 
 <!-- Footer -->
-<tr><td style="padding:24px 40px;border-top:1px solid #e0e0e0;">
-  <p style="font-size:12px;color:#888888;margin:0;text-align:center;">La Mirada Creativa &mdash; Rafael A.</p>
+<tr><td style="padding:24px 0 0;text-align:center;">
+  <p style="font-size:11px;color:#555555;margin:0;">Si tienes alguna duda, responde directamente a este email.</p>
 </td></tr>
 
 </table>
