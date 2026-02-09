@@ -84,6 +84,8 @@ exports.handler = async (event, context) => {
       automatic_tax: { enabled: false },
       // Collect billing address which includes name
       billing_address_collection: 'required',
+      // Allow discount codes
+      allow_promotion_codes: true,
       // Store UTM data in session metadata
       metadata: metadata,
     });
