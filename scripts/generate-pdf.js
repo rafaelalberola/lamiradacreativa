@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 // Generate PDF from La Mirada Creativa exercise data
-// 1 card = 1 page, matching the visual style from the app
+// 1 card = 1 page, identical to the app's card design
+// Rounded corners, gradients, Material Symbols icons, exact layout
 // Usage: node scripts/generate-pdf.js
 
 const PDFDocument = require('pdfkit');
@@ -24,8 +25,18 @@ if (!CARDS || !CARDS.length) {
   console.error('No cards found in data.js');
   process.exit(1);
 }
-
 console.log(`Loaded ${CARDS.length} cards`);
+
+// ============================================
+// LOAD ICON CODEPOINTS
+// ============================================
+const codepointsPath = path.join(__dirname, 'codepoints.txt');
+const ICON_MAP = {};
+fs.readFileSync(codepointsPath, 'utf8').split('\n').forEach(line => {
+  const parts = line.trim().split(/\s+/);
+  if (parts.length === 2) ICON_MAP[parts[0]] = parseInt(parts[1], 16);
+});
+console.log(`Loaded ${Object.keys(ICON_MAP).length} icon codepoints`);
 
 // ============================================
 // CONFIGURATION
@@ -34,18 +45,37 @@ const FONTS_DIR = path.join(__dirname, '..', 'assets', 'fonts');
 const OUTPUT_DIR = path.join(__dirname, '..', 'netlify', 'functions', 'assets');
 const OUTPUT_PATH = path.join(OUTPUT_DIR, 'la-mirada-creativa.pdf');
 
-// Card proportions matching the app (9:16-ish ratio)
-const PAGE_W = 360;
-const PAGE_H = 560;
-const MARGIN = 28;
-const CONTENT_W = PAGE_W - MARGIN * 2;
-const RADIUS = 0; // No rounded corners on PDF pages
+// Card dimensions (matching app: max-width 340, max-height 550)
+const CARD_W = 340;
+const CARD_H = 550;
+const PAGE_PAD = 18;
+const PAGE_W = CARD_W + PAGE_PAD * 2;   // 376
+const PAGE_H = CARD_H + PAGE_PAD * 2;   // 586
+const CARD_X = PAGE_PAD;
+const CARD_Y = PAGE_PAD;
+const CARD_R = 12;        // border-radius
+const CARD_PAD = 24;      // 1.5rem inner padding
+
+// Content area inside card
+const CX = CARD_X + CARD_PAD;
+const CY = CARD_Y + CARD_PAD;
+const CW = CARD_W - CARD_PAD * 2;       // 292
+const CB = CARD_Y + CARD_H - CARD_PAD;  // content bottom
+
+const PAGE_BG = '#f4f4f4';
+
+// Font sizes (proportional to 340px card, matching CSS rem values)
+const F_DAY = 11;        // 0.6875rem
+const F_BLOCK = 11;      // 0.6875rem
+const F_TITLE = 24;      // 1.5rem
+const F_TITLE_COVER = 32;// 2rem
+const F_SUBTITLE = 14;   // 0.875rem
+const F_DESC = 14.4;     // 0.90rem
+const F_ICON = 64;       // 80px scaled for PDF clarity
 
 // ============================================
 // HELPERS
 // ============================================
-
-// Parse hex color to RGB components
 function hexToRGB(hex) {
   hex = hex.replace('#', '');
   return {
@@ -55,7 +85,6 @@ function hexToRGB(hex) {
   };
 }
 
-// Mix two hex colors at a given ratio (0 = color1, 1 = color2)
 function mixColors(hex1, hex2, ratio) {
   const c1 = hexToRGB(hex1);
   const c2 = hexToRGB(hex2);
@@ -66,9 +95,10 @@ function mixColors(hex1, hex2, ratio) {
 }
 
 function cleanDesc(desc) {
+  if (!desc) return '';
   return desc
     .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]/gu, '')
-    .replace(/[◻️📐🧭📚🧱🔷🎯👁️💡✨🎉🎓🛤️❤️🚀🔥🏆⭐🌟💪🎨📷🖼️🌅🏙️🌿🪞🧩🔑]/g, '')
+    .replace(/[◻️📐🧭📚🧱🔷🎯👁️💡✨🎉🎓🛤️❤️🚀🔥🏆⭐🌟💪🎨📷🖼️🌅🏙️🌿🪞🧩🔑⚡🪴🌊🧲🫧🪶]/g, '')
     .trim();
 }
 
@@ -76,71 +106,327 @@ function getStyle(card) {
   return CARD_STYLES[card.style] || CARD_STYLES['exercise-light'];
 }
 
-// Draw gradient background (simulated with horizontal bands)
-function drawGradientBg(style) {
-  const bg = style.bg || '#FFFFFF';
-  const bgEnd = style.bgEnd || bg;
-
-  // Simulate linear-gradient(to top left, bg 0%, bgEnd 100%)
-  // Draw in horizontal strips for smooth gradient
-  const strips = 60;
-  const stripH = PAGE_H / strips;
-  for (let i = 0; i < strips; i++) {
-    const ratio = i / strips; // 0 = top (bgEnd), 1 = bottom (bg)
-    const color = mixColors(bgEnd, bg, ratio);
-    doc.rect(0, i * stripH, PAGE_W, stripH + 1).fill(color);
-  }
+function isLightTheme(style) {
+  return style.theme === 'light';
 }
 
-// Render text with paragraph support (\n\n = paragraph break with extra space)
-function renderParagraphs(text, x, y, options = {}) {
-  const {
-    width = CONTENT_W,
-    fontSize = 9.5,
-    font = 'Inter',
-    color = '#111111',
-    opacity = 0.85,
-    align = 'left',
-    lineGap = 3,
-    paragraphGap = 10
-  } = options;
-
-  const cleaned = cleanDesc(text);
-  const paragraphs = cleaned.split('\n\n');
-
-  doc.font(font).fontSize(fontSize).fillColor(color).opacity(opacity);
-
-  let currentY = y;
-  for (let i = 0; i < paragraphs.length; i++) {
-    const lines = paragraphs[i].split('\n').map(l => l.trim()).filter(l => l.length > 0).join('\n');
-    if (!lines) continue;
-
-    doc.text(lines, x, currentY, { width, align, lineGap });
-    currentY = doc.y + (i < paragraphs.length - 1 ? paragraphGap : 0);
-  }
-
-  doc.opacity(1);
-  return doc.y;
-}
-
-// Draw a thin separator line
-function drawSeparator(y, color, width = 30, centered = false) {
-  const x = centered ? (PAGE_W / 2 - width / 2) : MARGIN;
-  doc.rect(x, y, width, 1.5).fill(color);
+// Get day label matching the app's createCardHTML logic
+function getDayLabel(card) {
+  if (card.day) return `Día ${card.day} / 365`;
+  if (card.type === 'cover') return '';
+  if (card.type === 'presentation') return 'ME PRESENTO';
+  if (card.type === 'syllabus' || card.title === 'MI SISTEMA' || card.title === 'REGLAS BÁSICAS') return 'LA MIRADA CREATIVA';
+  if (card.type === 'rules') return 'LA MIRADA CREATIVA';
+  if (card.type === 'intro') return 'INTRODUCCIÓN';
+  if (card.type === 'ready') return 'ESTÁS PREPARADO';
+  if (card.type === 'block-cover') return `BLOQUE ${card.blockNumber || ''}`;
+  if (card.type === 'special') return 'MISIÓN ESPECIAL';
+  if (card.type === 'congrats') return 'FELICIDADES';
+  if (card.type === 'closing') return 'CIERRE';
+  return '';
 }
 
 // ============================================
-// PDF SETUP
+// DRAWING PRIMITIVES
+// ============================================
+
+function drawPageBg() {
+  doc.rect(0, 0, PAGE_W, PAGE_H).fill(PAGE_BG);
+}
+
+function drawCardShadow() {
+  // No shadow — clean flat look
+}
+
+function drawCardGradient(style) {
+  const bg = style.bg || '#FFFFFF';
+  const bgEnd = style.bgEnd || bg;
+
+  doc.save();
+  doc.roundedRect(CARD_X, CARD_Y, CARD_W, CARD_H, CARD_R).clip();
+
+  // Gradient: top-left (bgEnd) → bottom-right (bg)
+  const strips = 50;
+  const stripH = CARD_H / strips;
+  for (let i = 0; i < strips; i++) {
+    const ratio = i / strips;
+    const color = mixColors(bgEnd, bg, ratio);
+    doc.rect(CARD_X, CARD_Y + i * stripH, CARD_W, stripH + 1).fill(color);
+  }
+
+  doc.restore();
+}
+
+function drawCardBorder(style) {
+  const light = isLightTheme(style);
+  // Approximate border color
+  const borderColor = light ? '#d0d0d0' : '#3a3a3a';
+  doc.roundedRect(CARD_X, CARD_Y, CARD_W, CARD_H, CARD_R)
+    .lineWidth(1).strokeColor(borderColor).stroke();
+}
+
+function drawSpecialBorder(style) {
+  if (style.theme === 'mission') {
+    // special: 2px solid rgba(255,255,255,0.3) on orange
+    doc.roundedRect(CARD_X, CARD_Y, CARD_W, CARD_H, CARD_R)
+      .lineWidth(2).strokeColor('#ff9966').stroke();
+  } else if (style.theme === 'success') {
+    // congrats: 2px solid rgba(76,175,80,0.3) on dark green
+    doc.roundedRect(CARD_X, CARD_Y, CARD_W, CARD_H, CARD_R)
+      .lineWidth(2).strokeColor('#1a5e1d').stroke();
+  }
+}
+
+// ============================================
+// CONTENT RENDERERS
+// ============================================
+
+function renderHeader(card, style, centered) {
+  const dayLabel = getDayLabel(card);
+  const blockLabel = card.block || '';
+  const hasContent = dayLabel || blockLabel;
+  const light = isLightTheme(style);
+
+  if (!hasContent) {
+    // No-separator header: just a small gap
+    return CY + 8;
+  }
+
+  // Day label (left or center)
+  doc.font('Inter').fontSize(F_DAY).fillColor(style.text).opacity(0.6);
+  if (centered) {
+    doc.text(dayLabel, CX, CY, { width: CW, align: 'center' });
+  } else {
+    doc.text(dayLabel, CX, CY, { width: CW });
+  }
+  doc.opacity(1);
+
+  // Block label (right, accent color) — only for exercise cards
+  if (blockLabel && !centered) {
+    doc.font('Inter').fontSize(F_BLOCK).fillColor(style.accent);
+    doc.text(blockLabel, CX, CY, { width: CW, align: 'right' });
+  }
+
+  // Separator line: light cards get dark sep, dark/colored cards get light sep
+  const sepY = CY + F_DAY + 12; // padding-bottom 0.75rem ≈ 12
+  if (light) {
+    doc.rect(CX, sepY, CW, 0.5).fill('#d0d0d0');
+  } else {
+    // rgba(255,255,255,0.1) — approximate as white at low opacity
+    doc.rect(CX, sepY, CW, 0.5).fillColor('#ffffff').opacity(0.15).fill();
+    doc.opacity(1);
+  }
+
+  // Return Y position after header (margin-bottom 1rem ≈ 16)
+  return sepY + 16;
+}
+
+function renderTitle(card, style, y, centered, coverSize) {
+  const fontSize = coverSize ? F_TITLE_COVER : F_TITLE;
+  doc.font('InterTight').fontSize(fontSize).fillColor(style.text);
+  const opts = { width: CW };
+  if (centered) opts.align = 'center';
+  doc.text(card.title, CX, y, opts);
+  return doc.y + 4; // margin-bottom 0.25rem ≈ 4
+}
+
+function renderSubtitle(card, style, y, centered) {
+  if (!card.subtitle) return y;
+  doc.font('Inter').fontSize(F_SUBTITLE).fillColor(style.text).opacity(0.7);
+  const opts = { width: CW };
+  if (centered) opts.align = 'center';
+  doc.text(card.subtitle, CX, y, opts);
+  doc.opacity(1);
+  return doc.y + 16; // margin-bottom 1rem ≈ 16
+}
+
+function renderIcon(card, style, centerY) {
+  if (!card.icon || !ICON_MAP[card.icon]) return;
+
+  const codepoint = ICON_MAP[card.icon];
+  const char = String.fromCodePoint(codepoint);
+
+  doc.font('MaterialSymbols').fontSize(F_ICON).fillColor(style.accent);
+
+  // Measure icon width for centering
+  const iconWidth = doc.widthOfString(char);
+  const iconX = CX + (CW - iconWidth) / 2;
+  const iconY = centerY - F_ICON / 2;
+
+  doc.text(char, iconX, iconY, { width: iconWidth + 4 });
+  doc.fillColor(style.text); // Reset
+}
+
+function measureDesc(text, width, lineGap) {
+  const cleaned = cleanDesc(text);
+  if (!cleaned) return { height: 0, text: '' };
+
+  // Split paragraphs and measure each
+  const paragraphs = cleaned.split('\n\n').map(p =>
+    p.split('\n').map(l => l.trim()).filter(l => l.length > 0).join('\n')
+  ).filter(p => p.length > 0);
+
+  doc.font('Inter').fontSize(F_DESC);
+
+  let totalHeight = 0;
+  for (let i = 0; i < paragraphs.length; i++) {
+    totalHeight += doc.heightOfString(paragraphs[i], { width, lineGap });
+    if (i < paragraphs.length - 1) totalHeight += 14; // paragraph gap
+  }
+
+  return { height: totalHeight, paragraphs };
+}
+
+function renderDesc(paragraphs, x, y, width, style, align, lineGap) {
+  doc.font('Inter').fontSize(F_DESC).fillColor(style.text).opacity(0.85);
+
+  let currentY = y;
+  for (let i = 0; i < paragraphs.length; i++) {
+    doc.text(paragraphs[i], x, currentY, { width, align, lineGap });
+    currentY = doc.y + (i < paragraphs.length - 1 ? 14 : 0);
+  }
+  doc.opacity(1);
+}
+
+// ============================================
+// CARD TYPE RENDERERS
+// ============================================
+
+function renderExerciseCard(card, style) {
+  const centered = false;
+  const align = 'left';
+  const lineGap = 3;
+
+  // Header
+  const afterHeader = renderHeader(card, style, centered);
+
+  // Title + Subtitle
+  const afterTitle = renderTitle(card, style, afterHeader, centered, false);
+  const afterSubtitle = renderSubtitle(card, style, afterTitle, centered);
+
+  // Measure description to anchor it at bottom
+  const { height: descH, paragraphs } = measureDesc(card.desc, CW, lineGap);
+  const descY = CB - descH;
+
+  // Icon centered between subtitle and description
+  if (descY > afterSubtitle + F_ICON + 20) {
+    const iconCenterY = afterSubtitle + (descY - 16 - afterSubtitle) / 2;
+    renderIcon(card, style, iconCenterY);
+  }
+
+  // Description at bottom
+  if (paragraphs && paragraphs.length > 0) {
+    renderDesc(paragraphs, CX, descY, CW, style, align, lineGap);
+  }
+}
+
+function renderCenteredCard(card, style) {
+  const centered = false;
+  const align = 'left';
+  const lineGap = 3;
+
+  // Header
+  const afterHeader = renderHeader(card, style, centered);
+
+  // Title + Subtitle
+  const isCover = card.type === 'cover' || card.type === 'block-cover';
+  const afterTitle = renderTitle(card, style, afterHeader, centered, isCover);
+  const afterSubtitle = renderSubtitle(card, style, afterTitle, centered);
+
+  // Measure description
+  const { height: descH, paragraphs } = measureDesc(card.desc, CW, lineGap);
+  const descY = CB - descH;
+
+  // Icon centered between subtitle and description
+  if (descY > afterSubtitle + F_ICON + 20) {
+    const iconCenterY = afterSubtitle + (descY - 16 - afterSubtitle) / 2;
+    renderIcon(card, style, iconCenterY);
+  }
+
+  // Description at bottom
+  if (paragraphs && paragraphs.length > 0) {
+    renderDesc(paragraphs, CX, descY, CW, style, align, lineGap);
+  }
+}
+
+function renderCoverCard(card, style) {
+  // Special cover: Monograf Bold title, centered, no icon
+  const afterHeader = renderHeader(card, style, true);
+
+  // Main title with Monograf
+  const titleY = CARD_Y + CARD_H * 0.3;
+  doc.font('Monograf').fontSize(F_TITLE_COVER).fillColor(style.text);
+  doc.text('LA MIRADA', CX, titleY, { width: CW, align: 'center' });
+  doc.text('CREATIVA', CX, doc.y + 2, { width: CW, align: 'center' });
+
+  // Separator
+  const lineY = doc.y + 20;
+  const lineW = 50;
+  doc.rect(CARD_X + CARD_W / 2 - lineW / 2, lineY, lineW, 2).fill(style.accent);
+
+  // Subtitle
+  if (card.subtitle) {
+    doc.font('Inter').fontSize(F_SUBTITLE).fillColor(style.text).opacity(0.7);
+    const subtitleText = card.subtitle.replace('días de', 'días\nde');
+    doc.text(subtitleText, CX, lineY + 18, { width: CW, align: 'center', lineGap: 3 });
+    doc.opacity(1);
+  }
+
+  // Author at bottom
+  doc.font('Inter').fontSize(10).fillColor(style.text).opacity(0.4);
+  doc.text('Rafael A.', CX, CB - 14, { width: CW, align: 'center' });
+  doc.opacity(1);
+}
+
+// ============================================
+// MAIN RENDER PIPELINE
+// ============================================
+function renderCard(card) {
+  const style = getStyle(card);
+
+  doc.addPage();
+
+  // 1. Page background
+  drawPageBg();
+
+  // 2. Card shadow
+  drawCardShadow();
+
+  // 3. Card gradient background (clipped to rounded rect)
+  drawCardGradient(style);
+
+  // 4. Card border
+  drawCardBorder(style);
+
+  // 5. Special borders for special/congrats
+  if (card.type === 'special' || card.type === 'congrats') {
+    drawSpecialBorder(style);
+  }
+
+  // 6. Card content
+  if (card.type === 'cover') {
+    renderCoverCard(card, style);
+  } else if (card.type === 'exercise') {
+    renderExerciseCard(card, style);
+  } else {
+    // All other types: centered layout
+    // (presentation, intro, rules, syllabus, ready, block-cover, special, congrats, closing)
+    renderCenteredCard(card, style);
+  }
+}
+
+// ============================================
+// PDF SETUP & GENERATION
 // ============================================
 fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
 const doc = new PDFDocument({
   size: [PAGE_W, PAGE_H],
-  margins: { top: MARGIN, bottom: MARGIN, left: MARGIN, right: MARGIN },
+  margin: 0,
   info: {
-    Title: 'La Mirada Creativa - 365 dias de entrenamiento visual',
+    Title: 'La Mirada Creativa - 365 días de entrenamiento visual',
     Author: 'Rafael A.',
-    Subject: 'Entrenamiento visual fotografico',
+    Subject: 'Entrenamiento visual fotográfico',
     Creator: 'La Mirada Creativa'
   },
   autoFirstPage: false
@@ -153,235 +439,13 @@ doc.pipe(stream);
 doc.registerFont('Inter', path.join(FONTS_DIR, 'Inter-Regular.ttf'));
 doc.registerFont('InterTight', path.join(FONTS_DIR, 'InterTight-SemiBold.ttf'));
 doc.registerFont('Monograf', path.join(FONTS_DIR, 'MonografBold.ttf'));
+doc.registerFont('MaterialSymbols', path.join(FONTS_DIR, 'MaterialSymbolsSharp.ttf'));
 
-// ============================================
-// CARD RENDERERS — 1 card per page
-// ============================================
-
-function renderCover(card, style) {
-  const text = style.text;
-  const accent = style.accent;
-
-  // Title
-  doc.font('Monograf').fontSize(28).fillColor(text);
-  doc.text('LA MIRADA', MARGIN, PAGE_H * 0.34, { width: CONTENT_W, align: 'center' });
-  doc.text('CREATIVA', MARGIN, doc.y + 2, { width: CONTENT_W, align: 'center' });
-
-  // Separator
-  const lineY = doc.y + 20;
-  drawSeparator(lineY, accent, 50, true);
-
-  // Subtitle
-  doc.font('Inter').fontSize(9.5).fillColor(text).opacity(0.7);
-  doc.text(card.subtitle, MARGIN, lineY + 18, { width: CONTENT_W, align: 'center', lineGap: 3 });
-  doc.opacity(1);
-
-  // Author at bottom
-  doc.font('Inter').fontSize(8).fillColor(text).opacity(0.4);
-  doc.text('Rafael A.', MARGIN, PAGE_H - MARGIN - 14, { width: CONTENT_W, align: 'center' });
-  doc.opacity(1);
-}
-
-function renderBlockCover(card, style) {
-  const text = style.text;
-  const accent = style.accent;
-
-  // Block number label
-  doc.font('Inter').fontSize(8).fillColor(accent).opacity(0.8);
-  doc.text(`BLOQUE ${card.blockNumber || ''}`, MARGIN, PAGE_H * 0.32, {
-    width: CONTENT_W, align: 'center', characterSpacing: 2
-  });
-  doc.opacity(1);
-
-  // Title
-  doc.font('InterTight').fontSize(22).fillColor(text);
-  doc.text(card.subtitle || card.title, MARGIN, doc.y + 10, { width: CONTENT_W, align: 'center' });
-
-  // Separator
-  const lineY = doc.y + 16;
-  drawSeparator(lineY, accent, 36, true);
-
-  // Description
-  renderParagraphs(card.desc, MARGIN + 12, lineY + 22, {
-    width: CONTENT_W - 24,
-    fontSize: 9.5,
-    color: text,
-    opacity: 0.8,
-    align: 'center',
-    lineGap: 4,
-    paragraphGap: 12
-  });
-}
-
-function renderExercise(card, style) {
-  const text = style.text;
-  const accent = style.accent;
-  const isDark = style.theme !== 'light';
-
-  // Header row: day (left) + block (right)
-  const headerY = MARGIN;
-
-  // Day label (left)
-  doc.font('Inter').fontSize(7).fillColor(text).opacity(0.5);
-  doc.text(`DIA ${card.day}`, MARGIN, headerY, { width: CONTENT_W });
-  doc.opacity(1);
-
-  // Block label (right, overlapping same line)
-  doc.font('Inter').fontSize(7).fillColor(accent);
-  doc.text(card.block, MARGIN, headerY, { width: CONTENT_W, align: 'right' });
-
-  // Header separator line
-  const headerLineY = headerY + 16;
-  doc.rect(MARGIN, headerLineY, CONTENT_W, 0.5).fill(isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)');
-
-  // Title
-  const titleY = headerLineY + 20;
-  doc.font('InterTight').fontSize(19).fillColor(text);
-  doc.text(card.title, MARGIN, titleY, { width: CONTENT_W });
-
-  // Subtitle
-  doc.font('Inter').fontSize(9).fillColor(text).opacity(0.6);
-  doc.text(card.subtitle, MARGIN, doc.y + 4, { width: CONTENT_W });
-  doc.opacity(1);
-
-  // Accent separator
-  const sepY = doc.y + 14;
-  drawSeparator(sepY, accent, 30, false);
-
-  // Description with paragraph spacing
-  renderParagraphs(card.desc, MARGIN, sepY + 16, {
-    width: CONTENT_W,
-    fontSize: 9.5,
-    color: text,
-    opacity: 0.85,
-    align: 'left',
-    lineGap: 3.5,
-    paragraphGap: 12
-  });
-}
-
-function renderSpecial(card, style) {
-  const text = style.text;
-  const accent = style.accent;
-
-  let startY = PAGE_H * 0.28;
-
-  // Day label
-  if (card.day) {
-    doc.font('Inter').fontSize(8).fillColor(text).opacity(0.7);
-    doc.text(`DIA ${card.day}`, MARGIN, startY, {
-      width: CONTENT_W, align: 'center', characterSpacing: 2
-    });
-    doc.opacity(1);
-    startY = doc.y + 8;
-  }
-
-  // Title
-  doc.font('InterTight').fontSize(18).fillColor(text);
-  doc.text(card.title, MARGIN, startY, { width: CONTENT_W, align: 'center' });
-
-  // Subtitle
-  if (card.subtitle) {
-    doc.font('Inter').fontSize(9.5).fillColor(text).opacity(0.7);
-    doc.text(card.subtitle, MARGIN, doc.y + 6, { width: CONTENT_W, align: 'center' });
-    doc.opacity(1);
-  }
-
-  // Separator
-  const lineY = doc.y + 16;
-  doc.rect(PAGE_W / 2 - 18, lineY, 36, 1.5).fill(text).opacity(0.3);
-  doc.opacity(1);
-
-  // Description
-  renderParagraphs(card.desc, MARGIN + 10, lineY + 20, {
-    width: CONTENT_W - 20,
-    fontSize: 9.5,
-    color: text,
-    opacity: 0.9,
-    align: 'center',
-    lineGap: 3.5,
-    paragraphGap: 12
-  });
-}
-
-function renderGeneric(card, style) {
-  // For: presentation, intro, rules, ready, congrats, closing
-  const text = style.text;
-  const accent = style.accent;
-
-  let startY = PAGE_H * 0.28;
-
-  // Subtitle label (uppercase, accent color)
-  if (card.subtitle) {
-    doc.font('Inter').fontSize(7.5).fillColor(accent).opacity(0.9);
-    doc.text(card.subtitle.toUpperCase(), MARGIN, startY, {
-      width: CONTENT_W, align: 'center', characterSpacing: 1.5
-    });
-    doc.opacity(1);
-    startY = doc.y + 8;
-  }
-
-  // Title
-  doc.font('InterTight').fontSize(20).fillColor(text);
-  doc.text(card.title, MARGIN, startY, { width: CONTENT_W, align: 'center' });
-
-  // Separator
-  const lineY = doc.y + 16;
-  drawSeparator(lineY, accent, 36, true);
-
-  // Description
-  renderParagraphs(card.desc, MARGIN + 10, lineY + 22, {
-    width: CONTENT_W - 20,
-    fontSize: 9.5,
-    color: text,
-    opacity: 0.85,
-    align: 'center',
-    lineGap: 3.5,
-    paragraphGap: 12
-  });
-}
-
-// ============================================
-// MAIN RENDERER
-// ============================================
-function renderCard(card) {
-  const style = getStyle(card);
-
-  doc.addPage();
-
-  // Gradient background
-  drawGradientBg(style);
-
-  // Route to the right renderer
-  switch (card.type) {
-    case 'cover':
-      renderCover(card, style);
-      break;
-    case 'block-cover':
-      renderBlockCover(card, style);
-      break;
-    case 'exercise':
-      renderExercise(card, style);
-      break;
-    case 'special':
-      renderSpecial(card, style);
-      break;
-    default:
-      renderGeneric(card, style);
-      break;
-  }
-}
-
-// ============================================
-// RENDER ALL CARDS
-// ============================================
+// Render all cards
 for (const card of CARDS) {
   renderCard(card);
 }
 
-// ============================================
-// FINALIZE
-// ============================================
 doc.end();
 
 stream.on('finish', () => {
