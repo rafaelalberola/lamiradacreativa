@@ -2,9 +2,11 @@
   "name": "la-mirada-creativa",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "generate-pdf": "node scripts/generate-pdf.js"
+  },
   "dependencies": {
+    "pdfkit": "^0.17.2",
     "stripe": "^14.0.0"
   }
 }
-
-

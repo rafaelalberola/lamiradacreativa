@@ -186,6 +186,121 @@ async function createAuth0User(email, name, stripeCustomerId) {
   return { created: true, email, user_id: newUser.user_id };
 }
 
+// ============================================
+// POST-PURCHASE EMAIL (Resend + PDF attachment)
+// ============================================
+const fs = require('fs');
+const path = require('path');
+
+function buildEmailHtml(name, email) {
+  const firstName = name ? name.split(' ')[0] : '';
+  const greeting = firstName ? `Hola ${firstName},` : 'Hola,';
+
+  return `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:32px 16px;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:4px;overflow:hidden;max-width:600px;">
+
+<!-- Header -->
+<tr><td style="background:#111111;padding:32px 40px;text-align:center;">
+  <span style="font-family:monospace;font-size:20px;font-weight:bold;color:#F5F5F7;letter-spacing:1px;">LA MIRADA CREATIVA</span>
+</td></tr>
+
+<!-- Body -->
+<tr><td style="padding:40px;">
+  <p style="font-size:16px;color:#111111;margin:0 0 20px;line-height:1.6;">${greeting}</p>
+  <p style="font-size:15px;color:#111111;margin:0 0 24px;line-height:1.6;">Gracias por tu compra. Ya tienes acceso a <strong>La Mirada Creativa</strong>: 365 dias de entrenamiento visual para desarrollar tu ojo fotografico.</p>
+
+  <!-- PDF Section -->
+  <div style="background:#f9f9f9;border:1px solid #e0e0e0;border-radius:4px;padding:24px;margin:0 0 28px;">
+    <p style="font-size:14px;color:#111111;margin:0 0 8px;font-weight:600;">PDF adjunto</p>
+    <p style="font-size:13px;color:#555555;margin:0;line-height:1.5;">Hemos adjuntado el PDF con los 365 ejercicios a este email. Guardalo en tu dispositivo para tenerlo siempre a mano.</p>
+  </div>
+
+  <!-- App Access Section -->
+  <div style="background:#f9f9f9;border:1px solid #e0e0e0;border-radius:4px;padding:24px;margin:0 0 28px;">
+    <p style="font-size:14px;color:#111111;margin:0 0 12px;font-weight:600;">Accede a la app</p>
+    <p style="font-size:13px;color:#555555;margin:0 0 16px;line-height:1.5;">Tambien puedes usar la app interactiva desde el navegador:</p>
+    <ol style="font-size:13px;color:#555555;margin:0 0 16px;padding-left:20px;line-height:1.8;">
+      <li>Entra en <a href="https://lamiradacreativa.com/app" style="color:#FF5006;">lamiradacreativa.com/app</a></li>
+      <li>Introduce tu email de compra: <strong style="color:#111111;">${email}</strong></li>
+      <li>Recibiras un codigo de verificacion en tu bandeja</li>
+      <li>Introduce el codigo y listo</li>
+    </ol>
+    <table cellpadding="0" cellspacing="0" style="margin:0 auto;"><tr><td>
+      <a href="https://lamiradacreativa.com/app" style="display:inline-block;background:#FF5006;color:#ffffff;font-size:14px;font-weight:500;text-decoration:none;padding:12px 28px;border-radius:2px;">Acceder a la app</a>
+    </td></tr></table>
+  </div>
+
+  <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">Si tienes alguna duda, responde a este email directamente.</p>
+</td></tr>
+
+<!-- Footer -->
+<tr><td style="padding:24px 40px;border-top:1px solid #e0e0e0;">
+  <p style="font-size:12px;color:#888888;margin:0;text-align:center;">La Mirada Creativa &mdash; Rafael A.</p>
+</td></tr>
+
+</table>
+</td></tr>
+</table>
+</body>
+</html>`;
+}
+
+async function sendPurchaseEmail(email, name) {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('[Email] RESEND_API_KEY not configured, skipping email');
+    return;
+  }
+
+  try {
+    // Read PDF for attachment
+    const pdfPath = path.join(__dirname, 'assets', 'la-mirada-creativa.pdf');
+    let pdfBase64 = null;
+
+    try {
+      const pdfBuffer = fs.readFileSync(pdfPath);
+      pdfBase64 = pdfBuffer.toString('base64');
+      console.log('[Email] PDF loaded, size:', Math.round(pdfBuffer.length / 1024), 'KB');
+    } catch (pdfErr) {
+      console.error('[Email] Could not read PDF:', pdfErr.message);
+    }
+
+    const emailPayload = {
+      from: process.env.RESEND_FROM || 'La Mirada Creativa <hola@lamiradacreativa.com>',
+      to: [email],
+      subject: 'Tu copia de La Mirada Creativa',
+      html: buildEmailHtml(name, email)
+    };
+
+    // Attach PDF if available
+    if (pdfBase64) {
+      emailPayload.attachments = [{
+        filename: 'La-Mirada-Creativa.pdf',
+        content: pdfBase64
+      }];
+    }
+
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(emailPayload)
+    });
+
+    const result = await response.json();
+    console.log('[Email] Resend response:', response.status, JSON.stringify(result));
+  } catch (error) {
+    console.error('[Email] Error sending email:', error.message);
+    // Do NOT throw - email failure should not fail the webhook
+  }
+}
+
 exports.handler = async (event, context) => {
   // Only accept POST
   if (event.httpMethod !== 'POST') {
@@ -348,6 +463,9 @@ exports.handler = async (event, context) => {
 
     // Create or update user in Auth0
     const result = await createAuth0User(email, name, stripeCustomerId);
+
+    // Send purchase confirmation email with PDF (non-blocking on failure)
+    await sendPurchaseEmail(email, name);
 
     return {
       statusCode: 200,
