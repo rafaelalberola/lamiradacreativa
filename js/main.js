@@ -328,6 +328,15 @@ document.addEventListener('DOMContentLoaded', function() {
   
   async function initCheckout() {
     if (!stripe) {
+      // Wait for Stripe.js to load (async script)
+      if (typeof Stripe === 'undefined') {
+        await new Promise(function(resolve, reject) {
+          var el = document.querySelector('script[src*="stripe"]');
+          if (!el) return reject(new Error('Stripe script not found'));
+          el.addEventListener('load', resolve);
+          el.addEventListener('error', reject);
+        });
+      }
       stripe = Stripe('pk_live_51SloOzROPcCIICCTXoAHSYEv1n4McmijkNODqcNKRIQfTqYoe9qfYMQHLaInoQhPOnW4XCciQMfdKiJ9vFDmDPgV00jKTBhoxw');
     }
     
