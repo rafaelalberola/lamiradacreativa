@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email Preview</title>
+<style>
+  body { margin: 0; padding: 40px 20px; background: #0a0a0a; font-family: -apple-system, sans-serif; }
+  .preview-label { text-align: center; color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 16px; }
+  .preview-container { max-width: 580px; margin: 0 auto 60px; }
+  hr.divider { border: none; border-top: 1px solid #222; margin: 60px auto; max-width: 200px; }
+</style>
+</head>
+<body>
+
+<!-- ========== EMAIL 1: OTP ========== -->
+<div class="preview-container">
+  <p class="preview-label">Email 1 — Código OTP (Auth0)</p>
+  <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background:#111111;padding:40px 16px;">
+    <tr>
+      <td align="center">
+        <table width="520" cellpadding="0" cellspacing="0" role="presentation" style="max-width:520px;">
+          <tr>
+            <td style="padding:0 0 32px;text-align:center;">
+              <span style="font-family:'Courier New',monospace;font-size:13px;font-weight:600;color:#888888;letter-spacing:2px;text-transform:uppercase;">La Mirada Creativa</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="background:#1a1a1a;border-radius:12px;border:1px solid #2a2a2a;overflow:hidden;">
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                <tr>
+                  <td style="padding:40px 36px;">
+                    <p style="font-size:15px;color:#f5f5f7;margin:0 0 8px;line-height:1.5;text-align:center;">Verifica tu identidad</p>
+                    <p style="font-size:14px;color:#888888;margin:0 0 28px;line-height:1.5;text-align:center;">Usa este código para acceder a tu cuenta:</p>
+                    <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 28px;">
+                      <tr>
+                        <td style="background:#222222;border-radius:8px;padding:20px;text-align:center;">
+                          <span style="font-family:'Courier New',monospace;font-size:32px;font-weight:700;color:#f5f5f7;letter-spacing:6px;">738399</span>
+                        </td>
+                      </tr>
+                    </table>
+                    <p style="font-size:13px;color:#555555;margin:0;line-height:1.5;text-align:center;">Este código expira en 10 minutos. Si no lo solicitaste, ignora este email.</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:24px 0 0;text-align:center;">
+              <p style="font-size:11px;color:#555555;margin:0;">Si tienes alguna duda, contacta con nosotros respondiendo a este email.</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<hr class="divider">
+
+<!-- ========== EMAIL 2: PURCHASE ========== -->
+<div class="preview-container">
+  <p class="preview-label">Email 2 — Confirmación de compra (Resend)</p>
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#111111;padding:40px 16px;">
+    <tr>
+      <td align="center">
+        <table width="520" cellpadding="0" cellspacing="0" style="max-width:520px;">
+          <tr>
+            <td style="padding:0 0 32px;text-align:center;">
+              <span style="font-family:'Courier New',monospace;font-size:13px;font-weight:600;color:#888888;letter-spacing:2px;text-transform:uppercase;">La Mirada Creativa</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="background:#1a1a1a;border-radius:12px;border:1px solid #2a2a2a;overflow:hidden;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding:40px 36px;">
+                    <p style="font-size:15px;color:#f5f5f7;margin:0 0 8px;line-height:1.5;">Hola Rafael,</p>
+                    <p style="font-size:15px;color:#a0a0a0;margin:0 0 32px;line-height:1.6;">Ya tienes acceso a <span style="color:#f5f5f7;">La Mirada Creativa</span>: 365 ejercicios visuales para desarrollar tu ojo fotográfico.</p>
+
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 16px;">
+                      <tr>
+                        <td style="background:#222222;border-radius:8px;padding:20px 24px;">
+                          <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td style="width:36px;vertical-align:top;">
+                                <span style="font-size:20px;">📄</span>
+                              </td>
+                              <td style="vertical-align:top;">
+                                <p style="font-size:14px;color:#f5f5f7;margin:0 0 4px;font-weight:600;">PDF adjunto</p>
+                                <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">Guárdalo en tu dispositivo para tenerlo siempre a mano.</p>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
+                      <tr>
+                        <td style="background:#222222;border-radius:8px;padding:20px 24px;">
+                          <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td style="width:36px;vertical-align:top;">
+                                <span style="font-size:20px;">📱</span>
+                              </td>
+                              <td style="vertical-align:top;">
+                                <p style="font-size:14px;color:#f5f5f7;margin:0 0 4px;font-weight:600;">App interactiva</p>
+                                <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">Entra con tu email <span style="color:#f5f5f7;">rafael@ejemplo.com</span> y recibirás un código de acceso.</p>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td align="center">
+                          <a href="#" style="display:inline-block;background:#FF5006;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:6px;">Acceder a la app</a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:24px 0 0;text-align:center;">
+              <p style="font-size:11px;color:#555555;margin:0;">Si tienes alguna duda, responde directamente a este email.</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<hr class="divider">
+
+<!-- ========== EMAIL 3: FEEDBACK (7 DAYS) ========== -->
+<div class="preview-container">
+  <p class="preview-label">Email 3 — Feedback 7 d&iacute;as (Resend scheduled)</p>
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#111111;padding:40px 16px;">
+    <tr>
+      <td align="center">
+        <table width="520" cellpadding="0" cellspacing="0" style="max-width:520px;">
+          <tr>
+            <td style="padding:0 0 32px;text-align:center;">
+              <span style="font-family:'Courier New',monospace;font-size:13px;font-weight:600;color:#888888;letter-spacing:2px;text-transform:uppercase;">La Mirada Creativa</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="background:#1a1a1a;border-radius:12px;border:1px solid #2a2a2a;overflow:hidden;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding:40px 36px;">
+                    <p style="font-size:15px;color:#f5f5f7;margin:0 0 8px;line-height:1.5;">Hola Rafael,</p>
+                    <p style="font-size:15px;color:#a0a0a0;margin:0 0 32px;line-height:1.6;">Ha pasado una semana desde que empezaste con La Mirada Creativa y me encantar&iacute;a saber c&oacute;mo te va.</p>
+
+                    <!-- Experience -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 16px;">
+                      <tr>
+                        <td style="background:#222222;border-radius:8px;padding:20px 24px;">
+                          <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td style="width:36px;vertical-align:top;">
+                                <span style="font-size:20px;">&#x1F4AC;</span>
+                              </td>
+                              <td style="vertical-align:top;">
+                                <p style="font-size:14px;color:#f5f5f7;margin:0 0 4px;font-weight:600;">Tu experiencia hasta ahora</p>
+                                <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">&iquest;C&oacute;mo te est&aacute; resultando? &iquest;Has notado que miras las cosas de forma diferente?</p>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Exercises & App -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 16px;">
+                      <tr>
+                        <td style="background:#222222;border-radius:8px;padding:20px 24px;">
+                          <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td style="width:36px;vertical-align:top;">
+                                <span style="font-size:20px;">&#x1F4CB;</span>
+                              </td>
+                              <td style="vertical-align:top;">
+                                <p style="font-size:14px;color:#f5f5f7;margin:0 0 4px;font-weight:600;">Sobre los ejercicios y la app</p>
+                                <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">&iquest;Los ejercicios te parecen claros? &iquest;La app funciona bien en tu dispositivo? &iquest;Hay algo que mejorar&iacute;as?</p>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Testimonial -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
+                      <tr>
+                        <td style="background:#222222;border-radius:8px;padding:20px 24px;">
+                          <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td style="width:36px;vertical-align:top;">
+                                <span style="font-size:20px;">&#x2B50;</span>
+                              </td>
+                              <td style="vertical-align:top;">
+                                <p style="font-size:14px;color:#f5f5f7;margin:0 0 4px;font-weight:600;">Una &uacute;ltima cosa</p>
+                                <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">Si La Mirada Creativa te est&aacute; aportando algo, me ayudar&iacute;a mucho que me lo contaras en unas l&iacute;neas. Los testimonios de personas reales son lo que m&aacute;s ayuda a otros fot&oacute;grafos a decidirse.</p>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <p style="font-size:14px;color:#a0a0a0;margin:0 0 8px;line-height:1.6;">No hace falta nada elaborado &mdash; responde a este email con lo que te salga. Cada opini&oacute;n cuenta.</p>
+                    <p style="font-size:14px;color:#a0a0a0;margin:0;line-height:1.6;">Gracias por tu tiempo,<br><span style="color:#f5f5f7;font-weight:600;">Rafa</span></p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:24px 0 0;text-align:center;">
+              <p style="font-size:11px;color:#555555;margin:0;">Responde directamente a este email &mdash; lo leo todo personalmente.</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

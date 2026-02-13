@@ -272,6 +272,148 @@ function buildEmailHtml(name, email) {
 </html>`;
 }
 
+// ============================================
+// FEEDBACK EMAIL (7 days after purchase)
+// ============================================
+
+function buildFeedbackEmailHtml(name) {
+  const firstName = name ? name.split(' ')[0] : '';
+  const greeting = firstName ? `Hola ${firstName},` : 'Hola,';
+  const intro = firstName
+    ? `Ha pasado una semana desde que empezaste con La Mirada Creativa y me encantar\u00eda saber c\u00f3mo te va.`
+    : `Ha pasado una semana desde que empezaste con La Mirada Creativa y me encantar\u00eda saber c\u00f3mo te va.`;
+
+  return `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0;padding:0;background-color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;padding:40px 0;">
+<tr><td align="center" style="padding:0 16px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;">
+
+<!-- Logo -->
+<tr><td style="padding:0 0 32px;text-align:center;">
+  <span style="font-family:'Courier New',monospace;font-size:13px;font-weight:600;color:#888888;letter-spacing:2px;text-transform:uppercase;">LA MIRADA CREATIVA</span>
+</td></tr>
+
+<!-- Card -->
+<tr><td style="background-color:#ffffff;border-radius:12px;border:1px solid #e0e0e0;">
+  <table width="100%" cellpadding="0" cellspacing="0">
+
+  <!-- Body -->
+  <tr><td style="padding:40px 24px;">
+    <p style="font-size:15px;color:#111111;margin:0 0 8px;line-height:1.5;">${greeting}</p>
+    <p style="font-size:15px;color:#555555;margin:0 0 32px;line-height:1.6;">${intro}</p>
+
+    <!-- Experience -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 16px;">
+    <tr><td style="background-color:#f5f5f5;border-radius:8px;padding:20px 24px;">
+      <table width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td style="width:36px;vertical-align:top;">
+          <span style="font-size:20px;">\ud83d\udcac</span>
+        </td>
+        <td style="vertical-align:top;">
+          <p style="font-size:14px;color:#111111;margin:0 0 4px;font-weight:600;">Tu experiencia hasta ahora</p>
+          <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">\u00bfC\u00f3mo te est\u00e1 resultando? \u00bfHas notado que miras las cosas de forma diferente?</p>
+        </td>
+      </tr></table>
+    </td></tr>
+    </table>
+
+    <!-- Exercises & App -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 16px;">
+    <tr><td style="background-color:#f5f5f5;border-radius:8px;padding:20px 24px;">
+      <table width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td style="width:36px;vertical-align:top;">
+          <span style="font-size:20px;">\ud83d\udccb</span>
+        </td>
+        <td style="vertical-align:top;">
+          <p style="font-size:14px;color:#111111;margin:0 0 4px;font-weight:600;">Sobre los ejercicios y la app</p>
+          <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">\u00bfLos ejercicios te parecen claros? \u00bfLa app funciona bien en tu dispositivo? \u00bfHay algo que mejorar\u00edas?</p>
+        </td>
+      </tr></table>
+    </td></tr>
+    </table>
+
+    <!-- Testimonial -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
+    <tr><td style="background-color:#f5f5f5;border-radius:8px;padding:20px 24px;">
+      <table width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td style="width:36px;vertical-align:top;">
+          <span style="font-size:20px;">\u2b50</span>
+        </td>
+        <td style="vertical-align:top;">
+          <p style="font-size:14px;color:#111111;margin:0 0 4px;font-weight:600;">Una \u00faltima cosa</p>
+          <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">Si La Mirada Creativa te est\u00e1 aportando algo, me ayudar\u00eda mucho que me lo contaras en unas l\u00edneas. Los testimonios de personas reales son lo que m\u00e1s ayuda a otros fot\u00f3grafos a decidirse.</p>
+        </td>
+      </tr></table>
+    </td></tr>
+    </table>
+
+    <p style="font-size:14px;color:#555555;margin:0 0 8px;line-height:1.6;">No hace falta nada elaborado \u2014 responde a este email con lo que te salga. Cada opini\u00f3n cuenta.</p>
+    <p style="font-size:14px;color:#555555;margin:0;line-height:1.6;">Gracias por tu tiempo,<br><span style="color:#111111;font-weight:600;">Rafa</span></p>
+  </td></tr>
+
+  </table>
+</td></tr>
+
+<!-- Footer -->
+<tr><td style="padding:24px 0 0;text-align:center;">
+  <p style="font-size:11px;color:#aaaaaa;margin:0;">Responde directamente a este email \u2014 lo leo todo personalmente.</p>
+</td></tr>
+
+</table>
+</td></tr>
+</table>
+</body>
+</html>`;
+}
+
+async function sendFeedbackEmail(email, name) {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('[Feedback Email] RESEND_API_KEY not configured, skipping');
+    return;
+  }
+
+  try {
+    const firstName = name ? name.split(' ')[0] : '';
+    const subject = firstName
+      ? `${firstName}, \u00bfqu\u00e9 tal tu primera semana?`
+      : '\u00bfQu\u00e9 tal tu primera semana con La Mirada Creativa?';
+
+    // Schedule for 7 days from now
+    const scheduledAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+
+    const emailPayload = {
+      from: process.env.RESEND_FROM || 'La Mirada Creativa <hola@lamiradacreativa.com>',
+      to: [email],
+      reply_to: 'hola@lamiradacreativa.com',
+      subject: subject,
+      scheduled_at: scheduledAt,
+      html: buildFeedbackEmailHtml(name)
+    };
+
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(emailPayload)
+    });
+
+    const result = await response.json();
+    console.log('[Feedback Email] Scheduled for', scheduledAt, '| Resend response:', response.status, JSON.stringify(result));
+    return result;
+  } catch (error) {
+    console.error('[Feedback Email] Error scheduling feedback email:', error.message);
+    // Do NOT throw - feedback email failure should not fail the webhook
+  }
+}
+
 async function sendPurchaseEmail(email, name) {
   if (!process.env.RESEND_API_KEY) {
     console.warn('[Email] RESEND_API_KEY not configured, skipping email');
@@ -488,6 +630,21 @@ exports.handler = async (event, context) => {
 
     // Send purchase confirmation email with PDF (non-blocking on failure)
     await sendPurchaseEmail(email, name);
+
+    // Schedule 7-day feedback email (non-blocking)
+    try {
+      const feedbackResult = await sendFeedbackEmail(email, name);
+      if (feedbackResult?.id) {
+        await trackEvent('Feedback Email Scheduled', {
+          product: 'La Mirada Creativa',
+          customer_email: email,
+          scheduled_email_id: feedbackResult.id,
+          scheduled_for: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+        }, email, amplitudeDeviceId);
+      }
+    } catch (feedbackError) {
+      console.error('[Feedback Email] Failed to schedule:', feedbackError.message);
+    }
 
     return {
       statusCode: 200,
