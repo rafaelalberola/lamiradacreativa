@@ -1,0 +1,2180 @@
+[
+  {
+    "day": 1,
+    "title": "PUNTO EN BLANCO",
+    "subtitle": "Interrupción mínima",
+    "block": "técnica"
+  },
+  {
+    "day": 2,
+    "title": "LÍNEA SOLITARIA",
+    "subtitle": "Dirección pura",
+    "block": "técnica"
+  },
+  {
+    "day": 3,
+    "title": "SOMBRA PEQUEÑA",
+    "subtitle": "Forma sin objeto",
+    "block": "técnica"
+  },
+  {
+    "day": 4,
+    "title": "OBJETO CENTRADO",
+    "subtitle": "Claridad absoluta",
+    "block": "técnica"
+  },
+  {
+    "day": 5,
+    "title": "LUZ Y FORMA",
+    "subtitle": "Volumen revelado",
+    "block": "técnica"
+  },
+  {
+    "day": 6,
+    "title": "ESPACIO NEGATIVO",
+    "subtitle": "Lo que no está",
+    "block": "técnica"
+  },
+  {
+    "day": 7,
+    "title": "TEXTURA CERCANA",
+    "subtitle": "Superficie táctil",
+    "block": "técnica"
+  },
+  {
+    "day": 8,
+    "title": "REFLEJO PARCIAL",
+    "subtitle": "Realidad duplicada",
+    "block": "técnica"
+  },
+  {
+    "day": 9,
+    "title": "CONTRASTE MÁXIMO",
+    "subtitle": "Blanco y negro",
+    "block": "técnica"
+  },
+  {
+    "day": 10,
+    "title": "RITMO VISUAL",
+    "subtitle": "Repetición con variación",
+    "block": "técnica"
+  },
+  {
+    "day": 11,
+    "title": "MARCO NATURAL",
+    "subtitle": "Encuadre encontrado",
+    "block": "técnica"
+  },
+  {
+    "day": 12,
+    "title": "DIAGONAL DOMINANTE",
+    "subtitle": "Energía direccional",
+    "block": "técnica"
+  },
+  {
+    "day": 13,
+    "title": "MINIMALISMO",
+    "subtitle": "Menos es más",
+    "block": "técnica"
+  },
+  {
+    "day": 14,
+    "title": "COLOR AISLADO",
+    "subtitle": "Punto de atención",
+    "block": "técnica"
+  },
+  {
+    "day": 15,
+    "title": "PROFUNDIDAD",
+    "subtitle": "Capas visuales",
+    "block": "técnica"
+  },
+  {
+    "day": 16,
+    "title": "SIMETRÍA",
+    "subtitle": "Espejo perfecto",
+    "block": "técnica"
+  },
+  {
+    "day": 17,
+    "title": "ASIMETRÍA",
+    "subtitle": "Equilibrio dinámico",
+    "block": "técnica"
+  },
+  {
+    "day": 18,
+    "title": "ESCALA",
+    "subtitle": "Grande y pequeño",
+    "block": "técnica"
+  },
+  {
+    "day": 19,
+    "title": "GEOMETRÍA",
+    "subtitle": "Formas puras",
+    "block": "técnica"
+  },
+  {
+    "day": 20,
+    "title": "PERSPECTIVA",
+    "subtitle": "Punto de fuga",
+    "block": "técnica"
+  },
+  {
+    "day": 21,
+    "title": "MOMENTO FUGAZ",
+    "subtitle": "Instante decisivo",
+    "block": "técnica"
+  },
+  {
+    "day": 22,
+    "title": "HORIZONTE BAJO",
+    "subtitle": "Cielo protagonista",
+    "block": "técnica"
+  },
+  {
+    "day": 23,
+    "title": "HORIZONTE ALTO",
+    "subtitle": "Suelo protagonista",
+    "block": "técnica"
+  },
+  {
+    "day": 24,
+    "title": "CONTRALUZ",
+    "subtitle": "Silueta pura",
+    "block": "técnica"
+  },
+  {
+    "day": 25,
+    "title": "LUZ LATERAL",
+    "subtitle": "Volumen dramático",
+    "block": "técnica"
+  },
+  {
+    "day": 26,
+    "title": "PATRÓN ROTO",
+    "subtitle": "Anomalía visual",
+    "block": "técnica"
+  },
+  {
+    "day": 27,
+    "title": "DETALLE REVELADOR",
+    "subtitle": "La parte por el todo",
+    "block": "técnica"
+  },
+  {
+    "day": 28,
+    "title": "VISTA DE PÁJARO",
+    "subtitle": "Desde arriba",
+    "block": "técnica"
+  },
+  {
+    "day": 29,
+    "title": "VISTA DE GUSANO",
+    "subtitle": "Desde abajo",
+    "block": "técnica"
+  },
+  {
+    "day": 30,
+    "title": "MISIÓN DÍA 30",
+    "subtitle": "Tu primer reto",
+    "block": "técnica"
+  },
+  {
+    "day": 31,
+    "title": "PUNTO DE FUGA",
+    "subtitle": "Hacia el infinito",
+    "block": "técnica"
+  },
+  {
+    "day": 32,
+    "title": "CURVA SUAVE",
+    "subtitle": "Flujo orgánico",
+    "block": "técnica"
+  },
+  {
+    "day": 33,
+    "title": "PESO VISUAL",
+    "subtitle": "Equilibrio asimétrico",
+    "block": "técnica"
+  },
+  {
+    "day": 34,
+    "title": "TENSIÓN VISUAL",
+    "subtitle": "Fuerzas opuestas",
+    "block": "técnica"
+  },
+  {
+    "day": 35,
+    "title": "DIRECCIÓN IMPLÍCITA",
+    "subtitle": "Hacia dónde mira",
+    "block": "técnica"
+  },
+  {
+    "day": 36,
+    "title": "TERCIOS",
+    "subtitle": "División clásica",
+    "block": "técnica"
+  },
+  {
+    "day": 37,
+    "title": "CENTRO EXACTO",
+    "subtitle": "Simetría total",
+    "block": "técnica"
+  },
+  {
+    "day": 38,
+    "title": "BORDE ACTIVO",
+    "subtitle": "Tensión en el límite",
+    "block": "técnica"
+  },
+  {
+    "day": 39,
+    "title": "ESPACIO PARA RESPIRAR",
+    "subtitle": "Aire alrededor",
+    "block": "técnica"
+  },
+  {
+    "day": 40,
+    "title": "LLENADO TOTAL",
+    "subtitle": "Sin aire",
+    "block": "técnica"
+  },
+  {
+    "day": 41,
+    "title": "SEPARACIÓN CLARA",
+    "subtitle": "Figura y fondo",
+    "block": "técnica"
+  },
+  {
+    "day": 42,
+    "title": "FUSIÓN DELIBERADA",
+    "subtitle": "Figura en fondo",
+    "block": "técnica"
+  },
+  {
+    "day": 43,
+    "title": "PRIMER PLANO",
+    "subtitle": "Muy cerca",
+    "block": "técnica"
+  },
+  {
+    "day": 44,
+    "title": "PLANO GENERAL",
+    "subtitle": "Muy lejos",
+    "block": "técnica"
+  },
+  {
+    "day": 45,
+    "title": "RECORTE AUDAZ",
+    "subtitle": "Cortar sin miedo",
+    "block": "técnica"
+  },
+  {
+    "day": 46,
+    "title": "FORMATO VERTICAL",
+    "subtitle": "Arriba y abajo",
+    "block": "técnica"
+  },
+  {
+    "day": 47,
+    "title": "FORMATO HORIZONTAL",
+    "subtitle": "Izquierda y derecha",
+    "block": "técnica"
+  },
+  {
+    "day": 48,
+    "title": "FORMATO CUADRADO",
+    "subtitle": "Equilibrio total",
+    "block": "técnica"
+  },
+  {
+    "day": 49,
+    "title": "ENTRADA VISUAL",
+    "subtitle": "Por dónde entrar",
+    "block": "técnica"
+  },
+  {
+    "day": 50,
+    "title": "SALIDA VISUAL",
+    "subtitle": "Por dónde salir",
+    "block": "técnica"
+  },
+  {
+    "day": 51,
+    "title": "RECORRIDO CIRCULAR",
+    "subtitle": "Mirada que vuelve",
+    "block": "técnica"
+  },
+  {
+    "day": 52,
+    "title": "LÍNEAS CONVERGENTES",
+    "subtitle": "Hacia un punto",
+    "block": "técnica"
+  },
+  {
+    "day": 53,
+    "title": "LÍNEAS DIVERGENTES",
+    "subtitle": "Desde un punto",
+    "block": "técnica"
+  },
+  {
+    "day": 54,
+    "title": "LÍNEAS PARALELAS",
+    "subtitle": "Nunca se tocan",
+    "block": "técnica"
+  },
+  {
+    "day": 55,
+    "title": "TRIÁNGULO IMPLÍCITO",
+    "subtitle": "Forma estable",
+    "block": "técnica"
+  },
+  {
+    "day": 56,
+    "title": "CÍRCULO IMPLÍCITO",
+    "subtitle": "Forma envolvente",
+    "block": "técnica"
+  },
+  {
+    "day": 57,
+    "title": "ESPIRAL",
+    "subtitle": "Movimiento continuo",
+    "block": "técnica"
+  },
+  {
+    "day": 58,
+    "title": "PROPORCIÓN ÁUREA",
+    "subtitle": "Armonía natural",
+    "block": "técnica"
+  },
+  {
+    "day": 59,
+    "title": "NÚMEROS IMPARES",
+    "subtitle": "Asimetría equilibrada",
+    "block": "técnica"
+  },
+  {
+    "day": 60,
+    "title": "MISIÓN DÍA 60",
+    "subtitle": "Tu segundo reto",
+    "block": "técnica"
+  },
+  {
+    "day": 61,
+    "title": "ELEMENTO ÚNICO",
+    "subtitle": "Soledad visual",
+    "block": "técnica"
+  },
+  {
+    "day": 62,
+    "title": "MULTITUD",
+    "subtitle": "Muchos elementos",
+    "block": "técnica"
+  },
+  {
+    "day": 63,
+    "title": "CONTRASTE DE TAMAÑO",
+    "subtitle": "Grande y pequeño",
+    "block": "técnica"
+  },
+  {
+    "day": 64,
+    "title": "GRADACIÓN",
+    "subtitle": "De más a menos",
+    "block": "técnica"
+  },
+  {
+    "day": 65,
+    "title": "AGRUPACIÓN",
+    "subtitle": "Juntos pero distintos",
+    "block": "técnica"
+  },
+  {
+    "day": 66,
+    "title": "AISLAMIENTO",
+    "subtitle": "Separado del grupo",
+    "block": "técnica"
+  },
+  {
+    "day": 67,
+    "title": "CONTINUIDAD",
+    "subtitle": "La mirada completa",
+    "block": "técnica"
+  },
+  {
+    "day": 68,
+    "title": "CONTRASTE DE FORMA",
+    "subtitle": "Redondo y angular",
+    "block": "técnica"
+  },
+  {
+    "day": 69,
+    "title": "CONTRASTE DE TEXTURA",
+    "subtitle": "Liso y rugoso",
+    "block": "técnica"
+  },
+  {
+    "day": 70,
+    "title": "VELOCIDAD VISUAL",
+    "subtitle": "Rápido y lento",
+    "block": "técnica"
+  },
+  {
+    "day": 71,
+    "title": "PESO FORMAL",
+    "subtitle": "Pesado y ligero",
+    "block": "técnica"
+  },
+  {
+    "day": 72,
+    "title": "TEMPERATURA VISUAL",
+    "subtitle": "Cálido y frío",
+    "block": "técnica"
+  },
+  {
+    "day": 73,
+    "title": "SATURACIÓN",
+    "subtitle": "Intenso y apagado",
+    "block": "técnica"
+  },
+  {
+    "day": 74,
+    "title": "VALOR TONAL",
+    "subtitle": "Claro y oscuro",
+    "block": "técnica"
+  },
+  {
+    "day": 75,
+    "title": "MONOCROMÍA",
+    "subtitle": "Un solo color",
+    "block": "técnica"
+  },
+  {
+    "day": 76,
+    "title": "COMPLEMENTARIOS",
+    "subtitle": "Opuestos que atraen",
+    "block": "técnica"
+  },
+  {
+    "day": 77,
+    "title": "ANÁLOGOS",
+    "subtitle": "Vecinos armónicos",
+    "block": "técnica"
+  },
+  {
+    "day": 78,
+    "title": "ACENTO CROMÁTICO",
+    "subtitle": "Toque de color",
+    "block": "técnica"
+  },
+  {
+    "day": 79,
+    "title": "LUZ DURA",
+    "subtitle": "Sombras definidas",
+    "block": "técnica"
+  },
+  {
+    "day": 80,
+    "title": "LUZ SUAVE",
+    "subtitle": "Sombras difusas",
+    "block": "técnica"
+  },
+  {
+    "day": 81,
+    "title": "HORA DORADA",
+    "subtitle": "Luz del atardecer",
+    "block": "técnica"
+  },
+  {
+    "day": 82,
+    "title": "HORA AZUL",
+    "subtitle": "Entre día y noche",
+    "block": "técnica"
+  },
+  {
+    "day": 83,
+    "title": "MEDIODÍA",
+    "subtitle": "Luz cenital",
+    "block": "técnica"
+  },
+  {
+    "day": 84,
+    "title": "LUZ ARTIFICIAL",
+    "subtitle": "Creada por humanos",
+    "block": "técnica"
+  },
+  {
+    "day": 85,
+    "title": "BLANCO Y NEGRO",
+    "subtitle": "Ausencia de color",
+    "block": "técnica"
+  },
+  {
+    "day": 86,
+    "title": "ALTO CONTRASTE",
+    "subtitle": "Sin grises",
+    "block": "técnica"
+  },
+  {
+    "day": 87,
+    "title": "BAJO CONTRASTE",
+    "subtitle": "Todo gris",
+    "block": "técnica"
+  },
+  {
+    "day": 88,
+    "title": "CLAVE ALTA",
+    "subtitle": "Dominan los claros",
+    "block": "técnica"
+  },
+  {
+    "day": 89,
+    "title": "CLAVE BAJA",
+    "subtitle": "Dominan los oscuros",
+    "block": "técnica"
+  },
+  {
+    "day": 90,
+    "title": "MISIÓN DÍA 90",
+    "subtitle": "Tu misión final del bloque",
+    "block": "técnica"
+  },
+  {
+    "day": 91,
+    "title": "CALMA VISUAL",
+    "subtitle": "Serenidad encontrada",
+    "block": "sensible"
+  },
+  {
+    "day": 92,
+    "title": "TENSIÓN CONTENIDA",
+    "subtitle": "A punto de estallar",
+    "block": "sensible"
+  },
+  {
+    "day": 93,
+    "title": "MELANCOLÍA",
+    "subtitle": "Tristeza hermosa",
+    "block": "sensible"
+  },
+  {
+    "day": 94,
+    "title": "ALEGRÍA VISUAL",
+    "subtitle": "Felicidad evidente",
+    "block": "sensible"
+  },
+  {
+    "day": 95,
+    "title": "MISTERIO",
+    "subtitle": "Lo que no se ve",
+    "block": "sensible"
+  },
+  {
+    "day": 96,
+    "title": "INTIMIDAD",
+    "subtitle": "Cercanía emocional",
+    "block": "sensible"
+  },
+  {
+    "day": 97,
+    "title": "SOLEDAD",
+    "subtitle": "Estar solo",
+    "block": "sensible"
+  },
+  {
+    "day": 98,
+    "title": "CONEXIÓN",
+    "subtitle": "Unidos visualmente",
+    "block": "sensible"
+  },
+  {
+    "day": 99,
+    "title": "FRAGILIDAD",
+    "subtitle": "A punto de romperse",
+    "block": "sensible"
+  },
+  {
+    "day": 100,
+    "title": "FUERZA",
+    "subtitle": "Solidez visual",
+    "block": "sensible"
+  },
+  {
+    "day": 101,
+    "title": "MOVIMIENTO IMPLÍCITO",
+    "subtitle": "Quieto pero en marcha",
+    "block": "sensible"
+  },
+  {
+    "day": 102,
+    "title": "QUIETUD ABSOLUTA",
+    "subtitle": "Nada se mueve",
+    "block": "sensible"
+  },
+  {
+    "day": 103,
+    "title": "CAOS ORDENADO",
+    "subtitle": "Desorden con sentido",
+    "block": "sensible"
+  },
+  {
+    "day": 104,
+    "title": "ORDEN RÍGIDO",
+    "subtitle": "Control total",
+    "block": "sensible"
+  },
+  {
+    "day": 105,
+    "title": "NOSTALGIA",
+    "subtitle": "Memoria del pasado",
+    "block": "sensible"
+  },
+  {
+    "day": 106,
+    "title": "ESPERANZA",
+    "subtitle": "Luz en la oscuridad",
+    "block": "sensible"
+  },
+  {
+    "day": 107,
+    "title": "CURIOSIDAD",
+    "subtitle": "Ganas de saber más",
+    "block": "sensible"
+  },
+  {
+    "day": 108,
+    "title": "ASOMBRO",
+    "subtitle": "Maravilla visual",
+    "block": "sensible"
+  },
+  {
+    "day": 109,
+    "title": "PROTECCIÓN",
+    "subtitle": "Refugio visual",
+    "block": "sensible"
+  },
+  {
+    "day": 110,
+    "title": "EXPOSICIÓN",
+    "subtitle": "Sin defensa",
+    "block": "sensible"
+  },
+  {
+    "day": 111,
+    "title": "ABUNDANCIA",
+    "subtitle": "Mucho de todo",
+    "block": "sensible"
+  },
+  {
+    "day": 112,
+    "title": "ESCASEZ",
+    "subtitle": "Poco de todo",
+    "block": "sensible"
+  },
+  {
+    "day": 113,
+    "title": "LO COTIDIANO",
+    "subtitle": "Belleza ordinaria",
+    "block": "sensible"
+  },
+  {
+    "day": 114,
+    "title": "LO EXTRAORDINARIO",
+    "subtitle": "Fuera de lo común",
+    "block": "sensible"
+  },
+  {
+    "day": 115,
+    "title": "IMPERFECCIÓN",
+    "subtitle": "Belleza en lo roto",
+    "block": "sensible"
+  },
+  {
+    "day": 116,
+    "title": "HUMANIDAD",
+    "subtitle": "Rastro de personas",
+    "block": "sensible"
+  },
+  {
+    "day": 117,
+    "title": "NATURALEZA PURA",
+    "subtitle": "Sin intervención humana",
+    "block": "sensible"
+  },
+  {
+    "day": 118,
+    "title": "JUEGO",
+    "subtitle": "Diversión visual",
+    "block": "sensible"
+  },
+  {
+    "day": 119,
+    "title": "TRABAJO",
+    "subtitle": "Esfuerzo visible",
+    "block": "sensible"
+  },
+  {
+    "day": 120,
+    "title": "MISIÓN DÍA 120",
+    "subtitle": "Primer reto sensible",
+    "block": "sensible"
+  },
+  {
+    "day": 121,
+    "title": "DESCANSO",
+    "subtitle": "Pausa necesaria",
+    "block": "sensible"
+  },
+  {
+    "day": 122,
+    "title": "RITUAL",
+    "subtitle": "Acción repetida",
+    "block": "sensible"
+  },
+  {
+    "day": 123,
+    "title": "ESPONTANEIDAD",
+    "subtitle": "Sin planificar",
+    "block": "sensible"
+  },
+  {
+    "day": 124,
+    "title": "ANTICIPACIÓN",
+    "subtitle": "Antes de que pase",
+    "block": "sensible"
+  },
+  {
+    "day": 125,
+    "title": "RECUERDO",
+    "subtitle": "Después de que pasó",
+    "block": "sensible"
+  },
+  {
+    "day": 126,
+    "title": "SILENCIO VISUAL",
+    "subtitle": "Ausencia de ruido",
+    "block": "sensible"
+  },
+  {
+    "day": 127,
+    "title": "RUIDO VISUAL",
+    "subtitle": "Saturación de estímulos",
+    "block": "sensible"
+  },
+  {
+    "day": 128,
+    "title": "TERNURA",
+    "subtitle": "Suavidad emocional",
+    "block": "sensible"
+  },
+  {
+    "day": 129,
+    "title": "DUREZA",
+    "subtitle": "Rigidez emocional",
+    "block": "sensible"
+  },
+  {
+    "day": 130,
+    "title": "CALIDEZ",
+    "subtitle": "Temperatura emocional alta",
+    "block": "sensible"
+  },
+  {
+    "day": 131,
+    "title": "FRIALDAD",
+    "subtitle": "Temperatura emocional baja",
+    "block": "sensible"
+  },
+  {
+    "day": 132,
+    "title": "INOCENCIA",
+    "subtitle": "Pureza original",
+    "block": "sensible"
+  },
+  {
+    "day": 133,
+    "title": "EXPERIENCIA",
+    "subtitle": "Sabiduría visible",
+    "block": "sensible"
+  },
+  {
+    "day": 134,
+    "title": "CONTRASTE EMOCIONAL",
+    "subtitle": "Opuestos juntos",
+    "block": "sensible"
+  },
+  {
+    "day": 135,
+    "title": "PERTENENCIA",
+    "subtitle": "Formar parte",
+    "block": "sensible"
+  },
+  {
+    "day": 136,
+    "title": "ALIENACIÓN",
+    "subtitle": "No encajar",
+    "block": "sensible"
+  },
+  {
+    "day": 137,
+    "title": "LIBERTAD",
+    "subtitle": "Sin restricciones",
+    "block": "sensible"
+  },
+  {
+    "day": 138,
+    "title": "RESTRICCIÓN",
+    "subtitle": "Límites visibles",
+    "block": "sensible"
+  },
+  {
+    "day": 139,
+    "title": "CLARIDAD",
+    "subtitle": "Todo evidente",
+    "block": "sensible"
+  },
+  {
+    "day": 140,
+    "title": "AMBIGÜEDAD",
+    "subtitle": "Puede ser muchas cosas",
+    "block": "sensible"
+  },
+  {
+    "day": 141,
+    "title": "PRESENCIA",
+    "subtitle": "Aquí y ahora",
+    "block": "sensible"
+  },
+  {
+    "day": 142,
+    "title": "AUSENCIA",
+    "subtitle": "Lo que falta",
+    "block": "sensible"
+  },
+  {
+    "day": 143,
+    "title": "PESO EMOCIONAL",
+    "subtitle": "Carga visible",
+    "block": "sensible"
+  },
+  {
+    "day": 144,
+    "title": "LIGEREZA",
+    "subtitle": "Sin carga",
+    "block": "sensible"
+  },
+  {
+    "day": 145,
+    "title": "GRAVEDAD",
+    "subtitle": "Seriedad visual",
+    "block": "sensible"
+  },
+  {
+    "day": 146,
+    "title": "HUMOR",
+    "subtitle": "Risa visual",
+    "block": "sensible"
+  },
+  {
+    "day": 147,
+    "title": "SORPRESA",
+    "subtitle": "Lo inesperado",
+    "block": "sensible"
+  },
+  {
+    "day": 148,
+    "title": "FAMILIARIDAD",
+    "subtitle": "Lo conocido",
+    "block": "sensible"
+  },
+  {
+    "day": 149,
+    "title": "EXTRAÑEZA",
+    "subtitle": "Lo desconocido",
+    "block": "sensible"
+  },
+  {
+    "day": 150,
+    "title": "MISIÓN DÍA 150",
+    "subtitle": "Segundo reto sensible",
+    "block": "sensible"
+  },
+  {
+    "day": 151,
+    "title": "VULNERABILIDAD",
+    "subtitle": "Sin armadura",
+    "block": "sensible"
+  },
+  {
+    "day": 152,
+    "title": "RESILIENCIA",
+    "subtitle": "Fuerza en la adversidad",
+    "block": "sensible"
+  },
+  {
+    "day": 153,
+    "title": "DECADENCIA",
+    "subtitle": "Belleza en el deterioro",
+    "block": "sensible"
+  },
+  {
+    "day": 154,
+    "title": "RENOVACIÓN",
+    "subtitle": "Nuevo comienzo",
+    "block": "sensible"
+  },
+  {
+    "day": 155,
+    "title": "CICLO",
+    "subtitle": "Lo que vuelve",
+    "block": "sensible"
+  },
+  {
+    "day": 156,
+    "title": "RUPTURA",
+    "subtitle": "Fin de un ciclo",
+    "block": "sensible"
+  },
+  {
+    "day": 157,
+    "title": "CONTINUIDAD",
+    "subtitle": "Sin interrupciones",
+    "block": "sensible"
+  },
+  {
+    "day": 158,
+    "title": "COMPLEJIDAD",
+    "subtitle": "Muchas capas",
+    "block": "sensible"
+  },
+  {
+    "day": 159,
+    "title": "SIMPLICIDAD",
+    "subtitle": "Solo lo esencial",
+    "block": "sensible"
+  },
+  {
+    "day": 160,
+    "title": "FLUJO",
+    "subtitle": "Movimiento natural",
+    "block": "sensible"
+  },
+  {
+    "day": 161,
+    "title": "ESTANCAMIENTO",
+    "subtitle": "Sin movimiento",
+    "block": "sensible"
+  },
+  {
+    "day": 162,
+    "title": "TRANSFORMACIÓN",
+    "subtitle": "Cambio de estado",
+    "block": "sensible"
+  },
+  {
+    "day": 163,
+    "title": "ESENCIA",
+    "subtitle": "Lo que define",
+    "block": "sensible"
+  },
+  {
+    "day": 164,
+    "title": "CONTEXTO",
+    "subtitle": "Lo que rodea",
+    "block": "sensible"
+  },
+  {
+    "day": 165,
+    "title": "RITMO DE VIDA",
+    "subtitle": "Velocidad del entorno",
+    "block": "sensible"
+  },
+  {
+    "day": 166,
+    "title": "PAUSA",
+    "subtitle": "Momento de quietud",
+    "block": "sensible"
+  },
+  {
+    "day": 167,
+    "title": "SINTONÍA",
+    "subtitle": "Estar en fase",
+    "block": "sensible"
+  },
+  {
+    "day": 168,
+    "title": "DISONANCIA",
+    "subtitle": "Fuera de fase",
+    "block": "sensible"
+  },
+  {
+    "day": 169,
+    "title": "GRATITUD VISUAL",
+    "subtitle": "Agradecer lo que ves",
+    "block": "sensible"
+  },
+  {
+    "day": 170,
+    "title": "RESPIRACIÓN",
+    "subtitle": "Ritmo vital",
+    "block": "sensible"
+  },
+  {
+    "day": 171,
+    "title": "LATIDO",
+    "subtitle": "Pulso visual",
+    "block": "sensible"
+  },
+  {
+    "day": 172,
+    "title": "EQUILIBRIO EMOCIONAL",
+    "subtitle": "Ni muy alto ni muy bajo",
+    "block": "sensible"
+  },
+  {
+    "day": 173,
+    "title": "EXTREMO EMOCIONAL",
+    "subtitle": "Al límite",
+    "block": "sensible"
+  },
+  {
+    "day": 174,
+    "title": "TRANSICIÓN EMOCIONAL",
+    "subtitle": "Entre dos estados",
+    "block": "sensible"
+  },
+  {
+    "day": 175,
+    "title": "ECO EMOCIONAL",
+    "subtitle": "Lo que resuena",
+    "block": "sensible"
+  },
+  {
+    "day": 176,
+    "title": "ESPEJO EMOCIONAL",
+    "subtitle": "Reflejo interior",
+    "block": "sensible"
+  },
+  {
+    "day": 177,
+    "title": "CONTRASTE INTERIOR-EXTERIOR",
+    "subtitle": "Dentro vs fuera",
+    "block": "sensible"
+  },
+  {
+    "day": 178,
+    "title": "UMBRAL",
+    "subtitle": "Entre dos mundos",
+    "block": "sensible"
+  },
+  {
+    "day": 179,
+    "title": "ATMÓSFERA",
+    "subtitle": "El aire que se respira",
+    "block": "sensible"
+  },
+  {
+    "day": 180,
+    "title": "MISIÓN DÍA 180",
+    "subtitle": "Misión final sensible",
+    "block": "sensible"
+  },
+  {
+    "day": 181,
+    "title": "SÍMBOLO UNIVERSAL",
+    "subtitle": "Significado compartido",
+    "block": "conceptual"
+  },
+  {
+    "day": 182,
+    "title": "SÍMBOLO PERSONAL",
+    "subtitle": "Significado propio",
+    "block": "conceptual"
+  },
+  {
+    "day": 183,
+    "title": "METÁFORA VISUAL",
+    "subtitle": "Una cosa es otra",
+    "block": "conceptual"
+  },
+  {
+    "day": 184,
+    "title": "IRONÍA",
+    "subtitle": "Lo contrario de lo que parece",
+    "block": "conceptual"
+  },
+  {
+    "day": 185,
+    "title": "PARADOJA",
+    "subtitle": "Contradicción verdadera",
+    "block": "conceptual"
+  },
+  {
+    "day": 186,
+    "title": "ANALOGÍA",
+    "subtitle": "Similar en estructura",
+    "block": "conceptual"
+  },
+  {
+    "day": 187,
+    "title": "CONTRASTE CONCEPTUAL",
+    "subtitle": "Ideas opuestas",
+    "block": "conceptual"
+  },
+  {
+    "day": 188,
+    "title": "NARRATIVA IMPLÍCITA",
+    "subtitle": "Historia sin contar",
+    "block": "conceptual"
+  },
+  {
+    "day": 189,
+    "title": "MOMENTO DECISIVO",
+    "subtitle": "El instante que cambia todo",
+    "block": "conceptual"
+  },
+  {
+    "day": 190,
+    "title": "ANTES Y DESPUÉS",
+    "subtitle": "El paso del tiempo",
+    "block": "conceptual"
+  },
+  {
+    "day": 191,
+    "title": "CAUSA Y EFECTO",
+    "subtitle": "Relación visible",
+    "block": "conceptual"
+  },
+  {
+    "day": 192,
+    "title": "PREGUNTA VISUAL",
+    "subtitle": "Imagen que interroga",
+    "block": "conceptual"
+  },
+  {
+    "day": 193,
+    "title": "RESPUESTA VISUAL",
+    "subtitle": "Imagen que afirma",
+    "block": "conceptual"
+  },
+  {
+    "day": 194,
+    "title": "DOBLE SENTIDO",
+    "subtitle": "Dos lecturas",
+    "block": "conceptual"
+  },
+  {
+    "day": 195,
+    "title": "SUBTEXTO",
+    "subtitle": "Lo que no se dice",
+    "block": "conceptual"
+  },
+  {
+    "day": 196,
+    "title": "ABSTRACCIÓN",
+    "subtitle": "Del objeto a la idea",
+    "block": "conceptual"
+  },
+  {
+    "day": 197,
+    "title": "CONCRECIÓN",
+    "subtitle": "De la idea al objeto",
+    "block": "conceptual"
+  },
+  {
+    "day": 198,
+    "title": "ARQUETIPO",
+    "subtitle": "Figura universal",
+    "block": "conceptual"
+  },
+  {
+    "day": 199,
+    "title": "CLICHÉ",
+    "subtitle": "Lo ya visto",
+    "block": "conceptual"
+  },
+  {
+    "day": 200,
+    "title": "ORIGINALIDAD",
+    "subtitle": "Lo nunca visto",
+    "block": "conceptual"
+  },
+  {
+    "day": 201,
+    "title": "REFERENCIA",
+    "subtitle": "Cita visual",
+    "block": "conceptual"
+  },
+  {
+    "day": 202,
+    "title": "HOMENAJE",
+    "subtitle": "Tributo visual",
+    "block": "conceptual"
+  },
+  {
+    "day": 203,
+    "title": "PARODIA",
+    "subtitle": "Imitación crítica",
+    "block": "conceptual"
+  },
+  {
+    "day": 204,
+    "title": "CRÍTICA VISUAL",
+    "subtitle": "Señalar un problema",
+    "block": "conceptual"
+  },
+  {
+    "day": 205,
+    "title": "CELEBRACIÓN",
+    "subtitle": "Destacar lo positivo",
+    "block": "conceptual"
+  },
+  {
+    "day": 206,
+    "title": "DOCUMENTACIÓN",
+    "subtitle": "Registro objetivo",
+    "block": "conceptual"
+  },
+  {
+    "day": 207,
+    "title": "INTERPRETACIÓN",
+    "subtitle": "Registro subjetivo",
+    "block": "conceptual"
+  },
+  {
+    "day": 208,
+    "title": "PERSPECTIVA AJENA",
+    "subtitle": "Ver como otro",
+    "block": "conceptual"
+  },
+  {
+    "day": 209,
+    "title": "PERSPECTIVA PROPIA",
+    "subtitle": "Tu punto de vista único",
+    "block": "conceptual"
+  },
+  {
+    "day": 210,
+    "title": "MISIÓN DÍA 210",
+    "subtitle": "Primer reto conceptual",
+    "block": "conceptual"
+  },
+  {
+    "day": 211,
+    "title": "MEMORIA COLECTIVA",
+    "subtitle": "Lo que todos recuerdan",
+    "block": "conceptual"
+  },
+  {
+    "day": 212,
+    "title": "MEMORIA PERSONAL",
+    "subtitle": "Lo que solo tú recuerdas",
+    "block": "conceptual"
+  },
+  {
+    "day": 213,
+    "title": "FUTURO IMAGINADO",
+    "subtitle": "Lo que podría ser",
+    "block": "conceptual"
+  },
+  {
+    "day": 214,
+    "title": "UTOPÍA",
+    "subtitle": "El mundo ideal",
+    "block": "conceptual"
+  },
+  {
+    "day": 215,
+    "title": "DISTOPÍA",
+    "subtitle": "El mundo temido",
+    "block": "conceptual"
+  },
+  {
+    "day": 216,
+    "title": "REALIDAD",
+    "subtitle": "Lo que es ahora",
+    "block": "conceptual"
+  },
+  {
+    "day": 217,
+    "title": "FICCIÓN",
+    "subtitle": "Lo que no es pero podría ser",
+    "block": "conceptual"
+  },
+  {
+    "day": 218,
+    "title": "EVIDENCIA",
+    "subtitle": "Prueba visual",
+    "block": "conceptual"
+  },
+  {
+    "day": 219,
+    "title": "ESPECULACIÓN",
+    "subtitle": "Hipótesis visual",
+    "block": "conceptual"
+  },
+  {
+    "day": 220,
+    "title": "VERDAD",
+    "subtitle": "Lo innegable",
+    "block": "conceptual"
+  },
+  {
+    "day": 221,
+    "title": "AMBIVALENCIA",
+    "subtitle": "Ni sí ni no",
+    "block": "conceptual"
+  },
+  {
+    "day": 222,
+    "title": "CONVICCIÓN",
+    "subtitle": "Certeza total",
+    "block": "conceptual"
+  },
+  {
+    "day": 223,
+    "title": "PREGUNTA ABIERTA",
+    "subtitle": "Sin respuesta única",
+    "block": "conceptual"
+  },
+  {
+    "day": 224,
+    "title": "DECLARACIÓN",
+    "subtitle": "Afirmación clara",
+    "block": "conceptual"
+  },
+  {
+    "day": 225,
+    "title": "INVITACIÓN",
+    "subtitle": "Llamada a participar",
+    "block": "conceptual"
+  },
+  {
+    "day": 226,
+    "title": "EXCLUSIÓN",
+    "subtitle": "Mantener fuera",
+    "block": "conceptual"
+  },
+  {
+    "day": 227,
+    "title": "PODER",
+    "subtitle": "Quién manda",
+    "block": "conceptual"
+  },
+  {
+    "day": 228,
+    "title": "JERARQUÍA VISUAL",
+    "subtitle": "Qué es más importante",
+    "block": "conceptual"
+  },
+  {
+    "day": 229,
+    "title": "IGUALDAD VISUAL",
+    "subtitle": "Todo igual de importante",
+    "block": "conceptual"
+  },
+  {
+    "day": 230,
+    "title": "PROTAGONISTA",
+    "subtitle": "El centro de la historia",
+    "block": "conceptual"
+  },
+  {
+    "day": 231,
+    "title": "ANTAGONISTA",
+    "subtitle": "La fuerza opuesta",
+    "block": "conceptual"
+  },
+  {
+    "day": 232,
+    "title": "CONTEXTO NARRATIVO",
+    "subtitle": "Dónde sucede",
+    "block": "conceptual"
+  },
+  {
+    "day": 233,
+    "title": "TIEMPO NARRATIVO",
+    "subtitle": "Cuándo sucede",
+    "block": "conceptual"
+  },
+  {
+    "day": 234,
+    "title": "ATEMPORALIDAD",
+    "subtitle": "Fuera del tiempo",
+    "block": "conceptual"
+  },
+  {
+    "day": 235,
+    "title": "SECUENCIA",
+    "subtitle": "Orden de eventos",
+    "block": "conceptual"
+  },
+  {
+    "day": 236,
+    "title": "IMAGEN ÚNICA",
+    "subtitle": "Todo en una",
+    "block": "conceptual"
+  },
+  {
+    "day": 237,
+    "title": "DÍPTICO",
+    "subtitle": "Dos imágenes relacionadas",
+    "block": "conceptual"
+  },
+  {
+    "day": 238,
+    "title": "SERIE",
+    "subtitle": "Múltiples imágenes relacionadas",
+    "block": "conceptual"
+  },
+  {
+    "day": 240,
+    "title": "MISIÓN DÍA 240",
+    "subtitle": "Segundo reto conceptual",
+    "block": "conceptual"
+  },
+  {
+    "day": 241,
+    "title": "VARIACIÓN",
+    "subtitle": "El mismo tema, diferente forma",
+    "block": "conceptual"
+  },
+  {
+    "day": 242,
+    "title": "REPETICIÓN",
+    "subtitle": "Lo mismo una y otra vez",
+    "block": "conceptual"
+  },
+  {
+    "day": 243,
+    "title": "EVOLUCIÓN",
+    "subtitle": "Cambio gradual",
+    "block": "conceptual"
+  },
+  {
+    "day": 244,
+    "title": "REVOLUCIÓN",
+    "subtitle": "Cambio radical",
+    "block": "conceptual"
+  },
+  {
+    "day": 245,
+    "title": "TRADICIÓN",
+    "subtitle": "Lo que se hereda",
+    "block": "conceptual"
+  },
+  {
+    "day": 246,
+    "title": "INNOVACIÓN",
+    "subtitle": "Lo nunca hecho",
+    "block": "conceptual"
+  },
+  {
+    "day": 247,
+    "title": "APROPIACIÓN",
+    "subtitle": "Tomar y transformar",
+    "block": "conceptual"
+  },
+  {
+    "day": 248,
+    "title": "PALIMPSESTO",
+    "subtitle": "Capas de tiempo",
+    "block": "conceptual"
+  },
+  {
+    "day": 249,
+    "title": "HUELLA",
+    "subtitle": "Marca de presencia",
+    "block": "conceptual"
+  },
+  {
+    "day": 250,
+    "title": "BORRADO",
+    "subtitle": "Lo que se eliminó",
+    "block": "conceptual"
+  },
+  {
+    "day": 251,
+    "title": "ACUMULACIÓN",
+    "subtitle": "Sumar y sumar",
+    "block": "conceptual"
+  },
+  {
+    "day": 252,
+    "title": "SUSTRACCIÓN",
+    "subtitle": "Quitar y quitar",
+    "block": "conceptual"
+  },
+  {
+    "day": 253,
+    "title": "INVERSIÓN",
+    "subtitle": "Al revés",
+    "block": "conceptual"
+  },
+  {
+    "day": 254,
+    "title": "FRAGMENTACIÓN",
+    "subtitle": "Romper en partes",
+    "block": "conceptual"
+  },
+  {
+    "day": 255,
+    "title": "TOTALIDAD",
+    "subtitle": "El todo completo",
+    "block": "conceptual"
+  },
+  {
+    "day": 256,
+    "title": "ZOOM IN CONCEPTUAL",
+    "subtitle": "Acercarse al detalle",
+    "block": "conceptual"
+  },
+  {
+    "day": 257,
+    "title": "ZOOM OUT CONCEPTUAL",
+    "subtitle": "Alejarse del detalle",
+    "block": "conceptual"
+  },
+  {
+    "day": 258,
+    "title": "CONEXIÓN OCULTA",
+    "subtitle": "Lo que une sin verse",
+    "block": "conceptual"
+  },
+  {
+    "day": 259,
+    "title": "SINCRONÍA",
+    "subtitle": "Al mismo tiempo",
+    "block": "conceptual"
+  },
+  {
+    "day": 260,
+    "title": "ANACRONISMO",
+    "subtitle": "Fuera de su tiempo",
+    "block": "conceptual"
+  },
+  {
+    "day": 261,
+    "title": "UNIVERSALIDAD",
+    "subtitle": "Lo que todos entienden",
+    "block": "conceptual"
+  },
+  {
+    "day": 262,
+    "title": "LOCALIDAD",
+    "subtitle": "Lo específico de aquí",
+    "block": "conceptual"
+  },
+  {
+    "day": 263,
+    "title": "TENSIÓN CONCEPTUAL",
+    "subtitle": "Ideas en conflicto",
+    "block": "conceptual"
+  },
+  {
+    "day": 264,
+    "title": "RESOLUCIÓN",
+    "subtitle": "Conflicto resuelto",
+    "block": "conceptual"
+  },
+  {
+    "day": 265,
+    "title": "CAPAS DE SIGNIFICADO",
+    "subtitle": "Más allá de lo obvio",
+    "block": "conceptual"
+  },
+  {
+    "day": 266,
+    "title": "SIMPLICIDAD PROFUNDA",
+    "subtitle": "Simple pero complejo",
+    "block": "conceptual"
+  },
+  {
+    "day": 267,
+    "title": "EL MENSAJE",
+    "subtitle": "Qué quieres decir",
+    "block": "conceptual"
+  },
+  {
+    "day": 268,
+    "title": "EL MEDIO",
+    "subtitle": "Cómo lo dices",
+    "block": "conceptual"
+  },
+  {
+    "day": 270,
+    "title": "MISIÓN DÍA 270",
+    "subtitle": "Misión final conceptual",
+    "block": "conceptual"
+  },
+  {
+    "day": 271,
+    "title": "QUÉ TE ATRAE",
+    "subtitle": "Tu imán visual",
+    "block": "propia"
+  },
+  {
+    "day": 272,
+    "title": "QUÉ TE REPELE",
+    "subtitle": "Tu rechazo visual",
+    "block": "propia"
+  },
+  {
+    "day": 273,
+    "title": "TU PALETA",
+    "subtitle": "Colores que te representan",
+    "block": "propia"
+  },
+  {
+    "day": 274,
+    "title": "TUS FORMAS",
+    "subtitle": "Geometrías preferidas",
+    "block": "propia"
+  },
+  {
+    "day": 275,
+    "title": "TU LUZ",
+    "subtitle": "Iluminación preferida",
+    "block": "propia"
+  },
+  {
+    "day": 276,
+    "title": "TUS TEMAS",
+    "subtitle": "De qué hablas",
+    "block": "propia"
+  },
+  {
+    "day": 277,
+    "title": "TU DISTANCIA",
+    "subtitle": "Cerca o lejos",
+    "block": "propia"
+  },
+  {
+    "day": 278,
+    "title": "TU ÁNGULO",
+    "subtitle": "Desde dónde miras",
+    "block": "propia"
+  },
+  {
+    "day": 279,
+    "title": "TU MOMENTO",
+    "subtitle": "Cuándo prefieres observar",
+    "block": "propia"
+  },
+  {
+    "day": 280,
+    "title": "INFLUENCIAS",
+    "subtitle": "De quién aprendes",
+    "block": "propia"
+  },
+  {
+    "day": 281,
+    "title": "ANTI-INFLUENCIAS",
+    "subtitle": "De quién te alejas",
+    "block": "propia"
+  },
+  {
+    "day": 282,
+    "title": "TU VOZ",
+    "subtitle": "Cómo suenas visualmente",
+    "block": "propia"
+  },
+  {
+    "day": 283,
+    "title": "TU SILENCIO",
+    "subtitle": "Qué no dices",
+    "block": "propia"
+  },
+  {
+    "day": 284,
+    "title": "CONSISTENCIA",
+    "subtitle": "Lo que siempre haces",
+    "block": "propia"
+  },
+  {
+    "day": 285,
+    "title": "TU PROCESO",
+    "subtitle": "Cómo trabajas",
+    "block": "propia"
+  },
+  {
+    "day": 286,
+    "title": "TU INTENCIÓN",
+    "subtitle": "Para qué creas",
+    "block": "propia"
+  },
+  {
+    "day": 287,
+    "title": "TU AUDIENCIA",
+    "subtitle": "Para quién creas",
+    "block": "propia"
+  },
+  {
+    "day": 288,
+    "title": "TU MENSAJE",
+    "subtitle": "Qué quieres decir",
+    "block": "propia"
+  },
+  {
+    "day": 289,
+    "title": "TU ESTÉTICA",
+    "subtitle": "Tu belleza particular",
+    "block": "propia"
+  },
+  {
+    "day": 290,
+    "title": "TU ÉTICA",
+    "subtitle": "Tus límites morales",
+    "block": "propia"
+  },
+  {
+    "day": 291,
+    "title": "AUTORRETRATO",
+    "subtitle": "Tú en imagen",
+    "block": "propia"
+  },
+  {
+    "day": 292,
+    "title": "TU MUNDO",
+    "subtitle": "El universo que habitas",
+    "block": "propia"
+  },
+  {
+    "day": 293,
+    "title": "TUS OBSESIONES",
+    "subtitle": "Lo que no puedes dejar de mirar",
+    "block": "propia"
+  },
+  {
+    "day": 294,
+    "title": "TUS MIEDOS",
+    "subtitle": "Lo que evitas mirar",
+    "block": "propia"
+  },
+  {
+    "day": 295,
+    "title": "TU COMODIDAD",
+    "subtitle": "Donde te sientes seguro",
+    "block": "propia"
+  },
+  {
+    "day": 296,
+    "title": "TU RIESGO",
+    "subtitle": "Donde te expones",
+    "block": "propia"
+  },
+  {
+    "day": 297,
+    "title": "TUS ERRORES",
+    "subtitle": "Lo que sale mal",
+    "block": "propia"
+  },
+  {
+    "day": 298,
+    "title": "TUS ACIERTOS",
+    "subtitle": "Lo que sale bien",
+    "block": "propia"
+  },
+  {
+    "day": 299,
+    "title": "EXPERIMENTAR",
+    "subtitle": "Probar sin miedo",
+    "block": "propia"
+  },
+  {
+    "day": 300,
+    "title": "MISIÓN DÍA 300",
+    "subtitle": "Primer reto personal",
+    "block": "propia"
+  },
+  {
+    "day": 301,
+    "title": "CONSOLIDAR",
+    "subtitle": "Reforzar lo que funciona",
+    "block": "propia"
+  },
+  {
+    "day": 302,
+    "title": "DESAPRENDER",
+    "subtitle": "Olvidar lo que sabes",
+    "block": "propia"
+  },
+  {
+    "day": 303,
+    "title": "INTEGRAR",
+    "subtitle": "Unir lo aprendido",
+    "block": "propia"
+  },
+  {
+    "day": 304,
+    "title": "TU RITUAL",
+    "subtitle": "Cómo empiezas a crear",
+    "block": "propia"
+  },
+  {
+    "day": 305,
+    "title": "TU CIERRE",
+    "subtitle": "Cómo terminas",
+    "block": "propia"
+  },
+  {
+    "day": 306,
+    "title": "TU SELECCIÓN",
+    "subtitle": "Cómo eliges",
+    "block": "propia"
+  },
+  {
+    "day": 307,
+    "title": "TU PRESENTACIÓN",
+    "subtitle": "Cómo muestras",
+    "block": "propia"
+  },
+  {
+    "day": 308,
+    "title": "TU NARRATIVA",
+    "subtitle": "La historia que cuentas sobre ti",
+    "block": "propia"
+  },
+  {
+    "day": 309,
+    "title": "TU MARCA",
+    "subtitle": "Cómo te reconocen",
+    "block": "propia"
+  },
+  {
+    "day": 310,
+    "title": "TU EVOLUCIÓN",
+    "subtitle": "Cómo has cambiado",
+    "block": "propia"
+  },
+  {
+    "day": 311,
+    "title": "TU FUTURO",
+    "subtitle": "Hacia dónde vas",
+    "block": "propia"
+  },
+  {
+    "day": 312,
+    "title": "PROYECTO PERSONAL",
+    "subtitle": "Tu tema profundo",
+    "block": "propia"
+  },
+  {
+    "day": 313,
+    "title": "SERIE PERSONAL",
+    "subtitle": "Tu cuerpo de trabajo",
+    "block": "propia"
+  },
+  {
+    "day": 314,
+    "title": "MANIFESTO VISUAL",
+    "subtitle": "Tu declaración de principios",
+    "block": "propia"
+  },
+  {
+    "day": 315,
+    "title": "TU LEGADO",
+    "subtitle": "Qué quieres dejar",
+    "block": "propia"
+  },
+  {
+    "day": 316,
+    "title": "HONESTIDAD",
+    "subtitle": "Ser verdadero",
+    "block": "propia"
+  },
+  {
+    "day": 317,
+    "title": "AUTENTICIDAD",
+    "subtitle": "Ser genuino",
+    "block": "propia"
+  },
+  {
+    "day": 318,
+    "title": "VULNERABILIDAD",
+    "subtitle": "Mostrar tu fragilidad",
+    "block": "propia"
+  },
+  {
+    "day": 319,
+    "title": "CORAJE",
+    "subtitle": "Atreverte",
+    "block": "propia"
+  },
+  {
+    "day": 320,
+    "title": "PACIENCIA",
+    "subtitle": "Esperar el momento",
+    "block": "propia"
+  },
+  {
+    "day": 321,
+    "title": "URGENCIA",
+    "subtitle": "Actuar ahora",
+    "block": "propia"
+  },
+  {
+    "day": 322,
+    "title": "INTUICIÓN",
+    "subtitle": "Saber sin saber",
+    "block": "propia"
+  },
+  {
+    "day": 323,
+    "title": "ANÁLISIS",
+    "subtitle": "Entender por qué",
+    "block": "propia"
+  },
+  {
+    "day": 324,
+    "title": "JUEGO LIBRE",
+    "subtitle": "Sin objetivo",
+    "block": "propia"
+  },
+  {
+    "day": 325,
+    "title": "DISCIPLINA",
+    "subtitle": "Constancia diaria",
+    "block": "propia"
+  },
+  {
+    "day": 326,
+    "title": "FLEXIBILIDAD",
+    "subtitle": "Adaptarte",
+    "block": "propia"
+  },
+  {
+    "day": 327,
+    "title": "PERSISTENCIA",
+    "subtitle": "No rendirse",
+    "block": "propia"
+  },
+  {
+    "day": 328,
+    "title": "DESCANSO",
+    "subtitle": "Parar para seguir",
+    "block": "propia"
+  },
+  {
+    "day": 329,
+    "title": "GRATITUD",
+    "subtitle": "Agradecer lo aprendido",
+    "block": "propia"
+  },
+  {
+    "day": 330,
+    "title": "MISIÓN DÍA 330",
+    "subtitle": "Segundo reto personal",
+    "block": "propia"
+  },
+  {
+    "day": 331,
+    "title": "GENEROSIDAD",
+    "subtitle": "Compartir lo aprendido",
+    "block": "propia"
+  },
+  {
+    "day": 332,
+    "title": "HUMILDAD",
+    "subtitle": "Siempre aprendiz",
+    "block": "propia"
+  },
+  {
+    "day": 333,
+    "title": "CONFIANZA",
+    "subtitle": "Creer en ti",
+    "block": "propia"
+  },
+  {
+    "day": 334,
+    "title": "DUDA PRODUCTIVA",
+    "subtitle": "Cuestionar para mejorar",
+    "block": "propia"
+  },
+  {
+    "day": 335,
+    "title": "ACEPTACIÓN",
+    "subtitle": "Estar bien con lo que es",
+    "block": "propia"
+  },
+  {
+    "day": 336,
+    "title": "ASPIRACIÓN",
+    "subtitle": "Querer más",
+    "block": "propia"
+  },
+  {
+    "day": 337,
+    "title": "PRESENCIA",
+    "subtitle": "Estar aquí ahora",
+    "block": "propia"
+  },
+  {
+    "day": 338,
+    "title": "RETROSPECTIVA",
+    "subtitle": "Mirar hacia atrás",
+    "block": "propia"
+  },
+  {
+    "day": 339,
+    "title": "PROSPECTIVA",
+    "subtitle": "Mirar hacia adelante",
+    "block": "propia"
+  },
+  {
+    "day": 340,
+    "title": "TU MEJOR TRABAJO",
+    "subtitle": "Lo que más te enorgullece",
+    "block": "propia"
+  },
+  {
+    "day": 341,
+    "title": "TU PEOR TRABAJO",
+    "subtitle": "Lo que preferirías olvidar",
+    "block": "propia"
+  },
+  {
+    "day": 342,
+    "title": "CELEBRACIÓN",
+    "subtitle": "Reconocer el logro",
+    "block": "propia"
+  },
+  {
+    "day": 343,
+    "title": "REFLEXIÓN TÉCNICA",
+    "subtitle": "Repaso del Bloque 1",
+    "block": "propia"
+  },
+  {
+    "day": 344,
+    "title": "REFLEXIÓN SENSIBLE",
+    "subtitle": "Repaso del Bloque 2",
+    "block": "propia"
+  },
+  {
+    "day": 345,
+    "title": "REFLEXIÓN CONCEPTUAL",
+    "subtitle": "Repaso del Bloque 3",
+    "block": "propia"
+  },
+  {
+    "day": 346,
+    "title": "INTEGRACIÓN TOTAL",
+    "subtitle": "Todo junto",
+    "block": "propia"
+  },
+  {
+    "day": 347,
+    "title": "OBSERVACIÓN LIBRE",
+    "subtitle": "Sin guía",
+    "block": "propia"
+  },
+  {
+    "day": 348,
+    "title": "CREACIÓN LIBRE",
+    "subtitle": "Crea lo que quieras",
+    "block": "propia"
+  },
+  {
+    "day": 349,
+    "title": "EXPERIMENTACIÓN RADICAL",
+    "subtitle": "Prueba algo nuevo",
+    "block": "propia"
+  },
+  {
+    "day": 350,
+    "title": "VUELTA A LO BÁSICO",
+    "subtitle": "Simplicidad radical",
+    "block": "propia"
+  },
+  {
+    "day": 351,
+    "title": "COMPLEJIDAD MÁXIMA",
+    "subtitle": "Todo lo que sabes",
+    "block": "propia"
+  },
+  {
+    "day": 352,
+    "title": "TU OBRA MAESTRA",
+    "subtitle": "Lo mejor que puedas",
+    "block": "propia"
+  },
+  {
+    "day": 353,
+    "title": "TU FIRMA",
+    "subtitle": "Lo que te hace único",
+    "block": "propia"
+  },
+  {
+    "day": 354,
+    "title": "TU MENSAJE FINAL",
+    "subtitle": "Si solo pudieras decir una cosa",
+    "block": "propia"
+  },
+  {
+    "day": 355,
+    "title": "AGRADECIMIENTO",
+    "subtitle": "Gracias a tu mirada",
+    "block": "propia"
+  },
+  {
+    "day": 356,
+    "title": "CONTINUIDAD",
+    "subtitle": "Esto no termina",
+    "block": "propia"
+  },
+  {
+    "day": 357,
+    "title": "COMPROMISO",
+    "subtitle": "Promesa a ti mismo",
+    "block": "propia"
+  },
+  {
+    "day": 358,
+    "title": "DÍA 358",
+    "subtitle": "Más allá del año",
+    "block": "propia"
+  },
+  {
+    "day": 359,
+    "title": "DÍA 359",
+    "subtitle": "Tu propio ejercicio",
+    "block": "propia"
+  },
+  {
+    "day": 360,
+    "title": "DÍA 360",
+    "subtitle": "Enseña a alguien",
+    "block": "propia"
+  },
+  {
+    "day": 361,
+    "title": "MISIÓN DÍA 361",
+    "subtitle": "Penúltimo reto",
+    "block": "propia"
+  },
+  {
+    "day": 362,
+    "title": "DÍA 362",
+    "subtitle": "Víspera cercana",
+    "block": "propia"
+  },
+  {
+    "day": 363,
+    "title": "DÍA 363",
+    "subtitle": "Penúltimo día",
+    "block": "propia"
+  },
+  {
+    "day": 364,
+    "title": "DÍA 364",
+    "subtitle": "Víspera del final",
+    "block": "propia"
+  },
+  {
+    "day": 365,
+    "title": "DÍA 365",
+    "subtitle": "Un año de mirada",
+    "block": "propia"
+  }
+]

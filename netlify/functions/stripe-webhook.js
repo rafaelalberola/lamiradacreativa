@@ -646,6 +646,29 @@ exports.handler = async (event, context) => {
       console.error('[Feedback Email] Failed to schedule:', feedbackError.message);
     }
 
+    // --- Marcar conversión en free_users si existía como lead ---
+    try {
+      const { createClient } = require('@supabase/supabase-js');
+      const supabase = createClient(
+        process.env.SUPABASE_URL,
+        process.env.SUPABASE_SERVICE_ROLE_KEY
+      );
+
+      const { data, error } = await supabase
+        .from('free_users')
+        .update({ converted: true })
+        .eq('email', email);
+
+      if (data && data.length > 0) {
+        console.log(`[Stripe Webhook] Lead convertido: ${email}`);
+      }
+      // Si el email no existe en free_users, el update no hace nada — no es error
+    } catch (supabaseError) {
+      // No romper el flujo de compra si Supabase falla
+      console.error('[Stripe Webhook] Error marcando conversión en Supabase:', supabaseError);
+    }
+    // --- Fin marcado de conversión ---
+
     return {
       statusCode: 200,
       body: JSON.stringify({

@@ -2071,6 +2071,11 @@
                   <span class="material-symbols-sharp">picture_as_pdf</span>
                   <span>Descargar todas las cartas (PDF)</span>
                 </button>
+                <div class="options-separator"></div>
+                <button class="options-item" id="notifSettingsBtn">
+                  <span class="material-symbols-sharp">notifications</span>
+                  <span>Recordatorio diario</span>
+                </button>
               </div>
             </div>
           </div>
@@ -2119,7 +2124,12 @@
             <span class="material-symbols-sharp">picture_as_pdf</span>
             Descargar todas (PDF)
           </button>
-          
+
+          <button class="mobile-option-item" id="mobileNotifSettingsBtn">
+            <span class="material-symbols-sharp">notifications</span>
+            Recordatorio diario
+          </button>
+
           <div class="mobile-options-separator"></div>
           
           <button class="mobile-option-item danger" id="mobileLogoutBtn">
@@ -2191,6 +2201,51 @@
       <div class="mode-3d-hint">
         <span class="material-symbols-sharp">phone_iphone</span>
         Mueve el dispositivo
+      </div>
+    </div>
+
+    <!-- Notification Settings Modal -->
+    <div class="notif-modal" id="notifModal">
+      <div class="notif-modal-backdrop" id="notifModalBackdrop"></div>
+      <div class="notif-modal-content">
+        <div class="notif-modal-header">
+          <h3 class="notif-modal-title">Recordatorio diario</h3>
+          <button class="notif-modal-close" id="notifModalClose">
+            <span class="material-symbols-sharp">close</span>
+          </button>
+        </div>
+        <div class="notif-modal-body">
+          <p class="notif-desc">Recibe tu ejercicio del día por email a la hora que elijas.</p>
+          <label class="notif-toggle-label">
+            <span class="notif-toggle-text">Activar recordatorio</span>
+            <div class="notif-switch">
+              <input type="checkbox" id="notifEnabled" checked>
+              <span class="notif-switch-slider"></span>
+            </div>
+          </label>
+          <div class="notif-hour-row" id="notifHourRow">
+            <label class="notif-hour-label" for="notifHour">Hora del recordatorio:</label>
+            <select class="notif-hour-select" id="notifHour">
+              <option value="7">7:00</option>
+              <option value="8">8:00</option>
+              <option value="9" selected>9:00</option>
+              <option value="10">10:00</option>
+              <option value="11">11:00</option>
+              <option value="12">12:00</option>
+              <option value="13">13:00</option>
+              <option value="14">14:00</option>
+              <option value="15">15:00</option>
+              <option value="16">16:00</option>
+              <option value="17">17:00</option>
+              <option value="18">18:00</option>
+              <option value="19">19:00</option>
+              <option value="20">20:00</option>
+              <option value="21">21:00</option>
+              <option value="22">22:00</option>
+            </select>
+          </div>
+          <div class="notif-status" id="notifStatus"></div>
+        </div>
       </div>
     </div>
 
@@ -3988,9 +4043,140 @@
           ProgressSystem.createCalendarModal();
           ProgressSystem.loadProgress();
         }
+
+        // Auto-init notification preferences on first load
+        initNotificationPreferences();
       } catch (err) {
         console.error('Error initializing cards app:', err);
       }
+    }
+
+    // ============================================
+    // NOTIFICATION PREFERENCES (Agente F)
+    // ============================================
+    const notifModal = document.getElementById('notifModal');
+    const notifModalBackdrop = document.getElementById('notifModalBackdrop');
+    const notifModalClose = document.getElementById('notifModalClose');
+    const notifEnabled = document.getElementById('notifEnabled');
+    const notifHour = document.getElementById('notifHour');
+    const notifHourRow = document.getElementById('notifHourRow');
+    const notifStatus = document.getElementById('notifStatus');
+    const notifSettingsBtn = document.getElementById('notifSettingsBtn');
+    const mobileNotifSettingsBtn = document.getElementById('mobileNotifSettingsBtn');
+
+    let notifSaveTimeout = null;
+    let notifPrefsLoaded = false;
+
+    function openNotifModal() {
+      if (notifModal) {
+        notifModal.classList.add('active');
+        // Close mobile options if open
+        const mobileOptionsModal = document.getElementById('mobileOptionsModal');
+        if (mobileOptionsModal) mobileOptionsModal.classList.remove('active');
+      }
+    }
+
+    function closeNotifModal() {
+      if (notifModal) notifModal.classList.remove('active');
+    }
+
+    if (notifSettingsBtn) notifSettingsBtn.addEventListener('click', openNotifModal);
+    if (mobileNotifSettingsBtn) mobileNotifSettingsBtn.addEventListener('click', openNotifModal);
+    if (notifModalBackdrop) notifModalBackdrop.addEventListener('click', closeNotifModal);
+    if (notifModalClose) notifModalClose.addEventListener('click', closeNotifModal);
+
+    function showNotifStatus(text, type) {
+      if (!notifStatus) return;
+      notifStatus.textContent = text;
+      notifStatus.className = 'notif-status notif-status-' + type;
+      if (type === 'success') {
+        setTimeout(() => { notifStatus.className = 'notif-status'; }, 2000);
+      }
+    }
+
+    async function getAuthToken() {
+      if (!auth0Client) return null;
+      try {
+        return await auth0Client.getTokenSilently();
+      } catch {
+        return null;
+      }
+    }
+
+    async function loadNotifPreferences() {
+      const token = await getAuthToken();
+      if (!token) return;
+
+      try {
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Madrid';
+        const res = await fetch(`/.netlify/functions/get-preferences?timezone=${encodeURIComponent(tz)}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) return;
+
+        const data = await res.json();
+        const prefs = data.preferences;
+
+        if (notifEnabled) notifEnabled.checked = prefs.daily_notification;
+        if (notifHour) notifHour.value = prefs.notification_hour.toString();
+        if (notifHourRow) notifHourRow.style.opacity = prefs.daily_notification ? '1' : '0.4';
+
+        notifPrefsLoaded = true;
+      } catch (err) {
+        console.error('Error loading notification preferences:', err);
+      }
+    }
+
+    async function saveNotifPreferences() {
+      const token = await getAuthToken();
+      if (!token) return;
+
+      showNotifStatus('Guardando...', 'saving');
+
+      try {
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Madrid';
+        const res = await fetch('/.netlify/functions/save-preferences', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            daily_notification: notifEnabled ? notifEnabled.checked : true,
+            notification_hour: notifHour ? parseInt(notifHour.value) : 9,
+            timezone: tz
+          })
+        });
+
+        if (res.ok) {
+          showNotifStatus('Guardado \u2713', 'success');
+        } else {
+          showNotifStatus('Error al guardar', 'error');
+        }
+      } catch {
+        showNotifStatus('Error al guardar', 'error');
+      }
+    }
+
+    function debounceSaveNotif() {
+      if (notifSaveTimeout) clearTimeout(notifSaveTimeout);
+      notifSaveTimeout = setTimeout(saveNotifPreferences, 500);
+    }
+
+    if (notifEnabled) {
+      notifEnabled.addEventListener('change', () => {
+        if (notifHourRow) notifHourRow.style.opacity = notifEnabled.checked ? '1' : '0.4';
+        debounceSaveNotif();
+      });
+    }
+
+    if (notifHour) {
+      notifHour.addEventListener('change', debounceSaveNotif);
+    }
+
+    async function initNotificationPreferences() {
+      if (notifPrefsLoaded) return;
+      await loadNotifPreferences();
     }
 
   </script>
