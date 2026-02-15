@@ -1,0 +1,628 @@
+/* ============================================
+   Free Trial — Component-specific styles
+   Base styles come from styles.css
+   ============================================ */
+
+/* ============================================
+   Utilities
+   ============================================ */
+.mobile-only {
+  display: inline;
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none;
+  }
+}
+
+/* ============================================
+   Free Trial Form
+   ============================================ */
+.ft-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 420px;
+  width: 100%;
+  margin: 0;
+}
+
+
+.ft-form input[type="email"] {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 14px 16px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s;
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-width: 0;
+}
+
+.ft-form input[type="email"]:focus {
+  border-color: var(--color-accent);
+}
+
+.ft-form input[type="email"]::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.ft-form .btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ft-form-error {
+  color: #DC2626;
+  font-size: 0.8125rem;
+  text-align: center;
+  display: none;
+}
+
+.ft-form-error.visible {
+  display: block;
+}
+
+/* ============================================
+   Existing user callout
+   ============================================ */
+.ft-callout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  padding: 24px 20px;
+  max-width: 420px;
+  width: 100%;
+}
+
+.ft-callout-title {
+  font-family: var(--font-headline);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.ft-callout-desc {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.ft-callout-btn {
+  width: 100%;
+  text-decoration: none;
+  text-align: center;
+}
+
+.ft-callout-help {
+  font-size: 0.8125rem;
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+.ft-callout-help a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+/* ============================================
+   Hero layout — flex + gap
+   ============================================ */
+.container.container--wide {
+  padding-top: 220px;
+}
+
+.hero-cards-wrapper {
+  position: absolute;
+  top: 110px;
+  left: 0;
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  z-index: 0 !important;
+  pointer-events: none;
+}
+
+.hero-cards-wrapper .hero-cards-preview {
+  margin: 0;
+  padding: 0;
+}
+
+.hero-cards-wrapper .hero-card {
+  pointer-events: auto;
+}
+
+.hero .hero-content {
+  gap: 24px;
+  width: 100%;
+}
+
+.hero .hero-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 90%;
+}
+
+.hero .hero-text h1 {
+  margin-bottom: 0;
+}
+
+.hero .hero-text .hero-subtitle {
+  margin-bottom: 0;
+}
+
+.hero .hero-cta-mobile {
+  width: 100%;
+  max-width: 420px;
+}
+
+.hero .ft-form {
+  max-width: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+.ft-form .btn {
+  width: 100%;
+}
+
+/* Fix hero cards overflowing mobile viewport */
+.hero-grid--stacked {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* ============================================
+   Hero h1 — mobile (match main landing)
+   ============================================ */
+@media (max-width: 767px) {
+  .hero .hero-text h1 {
+    max-width: 95%;
+    line-height: 1;
+    letter-spacing: -2px;
+    font-weight: 700;
+    font-family: 'Inter';
+    font-size: 2.65rem;
+  }
+
+  .hero-cta-mobile {
+    margin-top: 0;
+  }
+}
+
+/* ============================================
+   Hero h1 — desktop
+   ============================================ */
+@media (min-width: 768px) {
+  .hero .hero-text h1 {
+    max-width: 60%;
+  }
+}
+
+/* ============================================
+   Section layout — all sections use flex + gap
+   ============================================ */
+section > .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+section > .container > .text-center {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+section > .container > .text-center h2 {
+  margin-bottom: 0;
+}
+
+section > .container > .text-center .section-desc {
+  margin-bottom: 0;
+}
+
+/* Dark sections: larger gap for card deck separation */
+.section-dark > .container {
+  gap: 32px;
+}
+
+/* Reset margins now handled by gap */
+.chat-bubbles {
+  margin-top: 0;
+}
+
+.ft-final-note {
+  margin-top: 0;
+}
+
+/* ============================================
+   How It Works (steps)
+   ============================================ */
+.ft-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 700px;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .ft-steps-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 360px;
+  }
+}
+
+.ft-step {
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.ft-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: #fff;
+  font-family: var(--font-headline);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.ft-step-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ft-step-title {
+  font-family: var(--font-headline);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  margin-bottom: 0;
+}
+
+.ft-step-desc {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+/* ============================================
+   Final CTA note
+   ============================================ */
+.ft-final-note {
+  font-size: 0.875rem;
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   Confirmation Page
+   ============================================ */
+.ft-confirm {
+  min-height: calc(100vh - 64px);
+  min-height: calc(100dvh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 0;
+}
+
+.ft-confirm-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  display: block;
+  color: #22C55E;
+}
+
+.ft-confirm h1 {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  max-width: 100%;
+  margin-bottom: 12px;
+}
+
+.ft-confirm-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 24px;
+  align-items: center;
+}
+
+.ft-confirm-actions a {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+.ft-confirm-actions .ft-btn-primary {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.ft-confirm-actions .ft-btn-primary:hover {
+  background: #E5480A;
+}
+
+.ft-confirm-actions .ft-btn-secondary {
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.ft-confirm-actions .ft-btn-secondary:hover {
+  border-color: var(--color-text);
+  color: var(--color-text);
+}
+
+/* ============================================
+   Exercise Viewer
+   ============================================ */
+.ft-exercise {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 0;
+}
+
+.ft-exercise-card {
+  background-color: #F5F5F5;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 32px 24px;
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.ft-exercise-card::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%; height: 100%;
+  background-image: url('../assets/images/lines-black.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.5;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ft-exercise-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.ft-exercise-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 12px;
+}
+
+.ft-exercise-day {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.ft-exercise-block {
+  font-family: var(--font-body);
+  font-size: 0.55rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-accent);
+  background: rgba(255, 80, 6, 0.1);
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+
+.ft-exercise-title {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: bold;
+  color: var(--color-text);
+  margin-bottom: 4px;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.ft-exercise-subtitle {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 24px;
+}
+
+.ft-exercise-desc {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin-bottom: 24px;
+  white-space: pre-line;
+}
+
+.ft-exercise-cta-text {
+  font-family: var(--font-headline);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--color-accent);
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.ft-exercise-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  gap: 12px;
+}
+
+.ft-exercise-nav a {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ft-nav-prev {
+  color: var(--color-text-secondary);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.ft-nav-prev:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.ft-nav-next {
+  background: var(--color-accent);
+  color: #fff;
+  margin-left: auto;
+}
+
+.ft-nav-next:hover {
+  background: #E5480A;
+}
+
+/* Exercise locked / CTA state */
+.ft-exercise-locked {
+  text-align: center;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.ft-exercise-locked h2 {
+  margin-bottom: 12px;
+}
+
+.ft-exercise-locked p {
+  margin-bottom: 20px;
+}
+
+.ft-exercise-locked .btn {
+  display: inline-block;
+  text-decoration: none;
+}
+
+/* ============================================
+   Progress dots (exercise viewer)
+   ============================================ */
+.ft-progress {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.ft-progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border);
+  transition: background 0.2s;
+}
+
+.ft-progress-dot.active {
+  background: var(--color-accent);
+}
+
+.ft-progress-dot.completed {
+  background: var(--color-text);
+}
+
+/* ============================================
+   Dark section — card color overrides
+   (cards have light bg, text must stay dark)
+   ============================================ */
+.section-dark .card {
+  background: #F5F5F5;
+  border: 1px solid #e0e0e0;
+}
+
+.section-dark .card-day {
+  color: var(--color-text-tertiary);
+}
+
+.section-dark .card-title {
+  color: var(--color-text);
+}
+
+.section-dark .card-subtitle {
+  color: var(--color-text-secondary);
+}
+
+.section-dark .card-desc {
+  color: var(--color-text-secondary);
+}
+
+.section-dark .card-cta {
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  font-weight: 600;
+  margin: 12px auto 0;
+  background: #f7e5df;
+  padding: 0 12px;
+  width: fit-content;
+  border-radius: 4px;
+}
+
+.section-dark .card-icon svg {
+  stroke: var(--color-accent);
+}
+
+.section-dark .preview-cards-caption {
+  color: rgba(255, 255, 255, 0.8);
+}

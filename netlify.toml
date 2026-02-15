@@ -115,3 +115,10 @@
   from = "/cartas/*"
   to = "/app"
   status = 301
+
+# ============================================
+# Scheduled Functions
+# ============================================
+
+[functions."free-send-sequence"]
+  schedule = "*/15 * * * *"

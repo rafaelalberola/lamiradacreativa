@@ -14,8 +14,8 @@
   <link rel="preconnect" href="https://js.stripe.com" crossorigin>
 
   <!-- Preload + load critical CSS -->
-  <link rel="preload" href="css/styles.css?v=20260213" as="style">
-  <link rel="stylesheet" href="css/styles.css?v=20260213">
+  <link rel="preload" href="css/styles.css?v=20260215d" as="style">
+  <link rel="stylesheet" href="css/styles.css?v=20260215d">
 
   <!-- Checkout Modal Styles -->
   <style>
@@ -297,7 +297,7 @@
         <a href="#el-sistema" class="nav-hide-mobile">El sistema</a>
         <a href="#incluye" class="nav-hide-mobile">Qué incluye</a>
         <a href="#precio" class="nav-hide-mobile">Precio</a>
-        <a href="/app" class="nav-hide-mobile nav-login">Acceder</a>
+        <a href="/app/" class="nav-hide-mobile nav-login">Acceder</a>
         <button class="btn btn--primary btn--nav nav-hide-mobile btn-checkout" data-location="header">Comprar · 29 € <span class="price-old">67 €</span></button>
         <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
           <span class="material-symbols-sharp">menu</span>
@@ -320,7 +320,7 @@
         <a href="#el-sistema" class="mobile-nav-link">El sistema</a>
         <a href="#incluye" class="mobile-nav-link">Qué incluye</a>
         <a href="#precio" class="mobile-nav-link">Precio</a>
-        <a href="/app" class="mobile-nav-link">Acceder</a>
+        <a href="/app/" class="mobile-nav-link">Acceder</a>
       </div>
       <div class="mobile-nav-cta">
         <div class="cta-group">
@@ -398,7 +398,6 @@
                 <span class="value-prop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>Versión PDF</span>
               </div>
             </div>
-            <p class="countdown-text">🔥 Oferta disponible hasta el <span id="countdownTimer">8 de febrero</span></p>
           </div>
         </div>
         <!-- Primeros usuarios -->
@@ -863,7 +862,7 @@
   </section>
 
   <!-- Precio y CTA final -->
-  <section id="precio">
+  <section class="section-light" id="precio">
     <div class="container">
       <div class="text-center">
         <h2>Empieza hoy</h2>
@@ -902,7 +901,7 @@
   </section>
 
   <!-- FAQ -->
-  <section class="section-alt" id="faq">
+  <section class="section-dark" id="faq">
     <div class="container">
       <div class="text-center">
         <h2>Preguntas frecuentes</h2>
@@ -969,7 +968,7 @@
   </section>
 
   <!-- Footer -->
-  <footer class="section-dark" id="autor">
+  <footer class="section-light" id="autor">
     <div class="container">
       <div class="text-center">
         <h2>Quién hay detrás</h2>
@@ -989,7 +988,7 @@
       <hr class="footer-separator">
       <div class="footer-inner">
         <div class="footer-links">
-          <a href="/app">¿Ya tienes acceso? Entra aquí</a>
+          <a href="/app/">¿Ya tienes acceso? Entra aquí</a>
           <a href="/privacidad.html">Privacidad</a>
           <a href="/terminos.html">Términos</a>
         </div>
@@ -1024,7 +1023,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="js/main.js?v=20260213"></script>
+  <script src="js/main.js?v=20260215c"></script>
 
   <!-- Analytics: Track Comprar Button Clicks -->
   <script>
@@ -1053,6 +1052,95 @@
         }
       });
     });
+  </script>
+
+  <!-- Email Capture Form Logic (Agente C) -->
+  <script>
+    (function() {
+      var form = document.getElementById('captureForm');
+      if (!form) return;
+
+      var input = document.getElementById('captureEmail');
+      var btn = document.getElementById('captureBtn');
+      var btnText = btn.querySelector('.capture-btn-text');
+      var btnLoading = btn.querySelector('.capture-btn-loading');
+      var errorEl = document.getElementById('captureError');
+
+      function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      }
+
+      function showError(msg) {
+        errorEl.textContent = msg;
+        errorEl.style.display = 'block';
+        input.classList.add('capture-input--error');
+      }
+
+      function clearError() {
+        errorEl.textContent = '';
+        errorEl.style.display = 'none';
+        input.classList.remove('capture-input--error');
+      }
+
+      function setLoading(loading) {
+        btn.disabled = loading;
+        btnText.style.display = loading ? 'none' : '';
+        btnLoading.style.display = loading ? 'inline-flex' : 'none';
+      }
+
+      input.addEventListener('input', clearError);
+
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        clearError();
+
+        var email = input.value.trim();
+        if (!email || !isValidEmail(email)) {
+          showError('Introduce un email válido');
+          return;
+        }
+
+        setLoading(true);
+
+        try {
+          var utmParams = {};
+          try {
+            var stored = localStorage.getItem('lmc_utm_data');
+            if (stored) utmParams = JSON.parse(stored);
+          } catch(err) {}
+          // Also capture current URL params as fallback
+          var params = new URLSearchParams(window.location.search);
+          ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'fbclid', 'gclid'].forEach(function(key) {
+            var val = params.get(key);
+            if (val && !utmParams[key]) utmParams[key] = val;
+          });
+
+          var response = await fetch('/.netlify/functions/free-register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(Object.assign({ email: email }, utmParams))
+          });
+
+          if (response.ok) {
+            // Analytics events
+            if (typeof fbq !== 'undefined') fbq('track', 'Lead');
+            if (window.amplitude) amplitude.track('free_capture_submitted', { source: 'main_landing' });
+            if (window.mixpanel) mixpanel.track('free_capture_submitted', { source: 'main_landing' });
+            if (typeof gtag !== 'undefined') gtag('event', 'generate_lead', { method: 'free_trial_main_landing' });
+
+            window.location.href = '/prueba-gratis/confirmado/';
+          } else {
+            var data = {};
+            try { data = await response.json(); } catch(err) {}
+            showError(data.error || 'Algo salió mal. Inténtalo de nuevo.');
+            setLoading(false);
+          }
+        } catch(err) {
+          showError('Algo salió mal. Inténtalo de nuevo.');
+          setLoading(false);
+        }
+      });
+    })();
   </script>
 
 </body>

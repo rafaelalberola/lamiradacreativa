@@ -61,7 +61,10 @@
   
   <!-- Favicon -->
   <link rel="icon" type="image/jpeg" href="../assets/images/logo.jpg">
-  
+
+  <!-- Progress & Streak styles -->
+  <link rel="stylesheet" href="../css/progress.css">
+
   <!-- Auth0 SPA JS SDK -->
   <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
   
@@ -339,7 +342,7 @@
 
     @media (max-width: 768px) {
       .btn-3d {
-        display: flex;
+        display: none;
       }
     }
 
@@ -766,7 +769,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 12px 20px 16px;
+      padding: 20px 20px 8px;
       position: relative;
     }
 
@@ -791,7 +794,7 @@
     }
 
     .mobile-options-list {
-      padding: 0 12px 12px;
+      padding: 0;
     }
 
     .mobile-option-item {
@@ -2096,7 +2099,12 @@
         <div class="mobile-options-list">
           
           <div class="mobile-options-separator"></div>
-          
+
+          <button class="mobile-option-item" id="mobileCalendarBtn">
+            <span class="material-symbols-sharp">calendar_month</span>
+            Mi calendario
+          </button>
+
           <button class="mobile-option-item" id="mobileIndexBtn">
             <span class="material-symbols-sharp">list</span>
             Índice de cartas
@@ -2204,7 +2212,10 @@
 
   <!-- Load card data from external file -->
   <script src="data.js"></script>
-  
+
+  <!-- Progress & Streak System -->
+  <script src="../js/progress.js"></script>
+
   <script>
     // ============================================
     // AUTH0 CONFIGURATION
@@ -2479,6 +2490,7 @@
         try {
           // Set flag to show toast after redirect
           safeSetItem('lmc_logged_out', 'true');
+          if (window.ProgressSystem) ProgressSystem.clearCache();
           await auth0Client.logout({
             logoutParams: {
               returnTo: window.location.origin + '/app/'
@@ -2544,7 +2556,8 @@
     let currentView = 'swipe'; // Always default to horizontal view
     let currentIndex = parseInt(safeGetItem(STORAGE_KEY_INDEX)) || 0;
     let filteredCards = [...allCards];
-    
+    window._filteredCards = filteredCards; // Expose for ProgressSystem
+
     // Validate stored index
     if (currentIndex >= allCards.length) currentIndex = 0;
 
@@ -2793,6 +2806,9 @@
       
       // Use instant scroll when switching views to maintain position
       setTimeout(() => scrollToSwipeCard(currentIndex, true), 100);
+
+      // Inject completion buttons
+      if (window.ProgressSystem) ProgressSystem.updateAllCardButtons();
     }
 
     function loadMoreSwipeCards() {
@@ -2843,10 +2859,11 @@
         renderedSwipeCards = endIdx;
         setupSwipeObserver();
         setupCardClickHandlers(swipeView, 'swipe');
-        
+        if (window.ProgressSystem) ProgressSystem.updateAllCardButtons();
+
         cardWrapper = swipeView.querySelector(`.swipe-card-wrapper[data-index="${index}"]`);
       }
-      
+
       if (cardWrapper) {
         // Use scrollIntoView for smooth behavior, or direct scroll for instant
         if (instant) {
@@ -2925,6 +2942,9 @@
       
       // Use instant scroll when switching views to maintain position
       setTimeout(() => scrollToScrollCard(currentIndex, true), 100);
+
+      // Inject completion buttons
+      if (window.ProgressSystem) ProgressSystem.updateAllCardButtons();
     }
 
     function loadMoreScrollCards() {
@@ -2975,10 +2995,11 @@
         renderedScrollCards = endIdx;
         setupScrollObserver();
         setupCardClickHandlers(scrollView, 'scroll');
-        
+        if (window.ProgressSystem) ProgressSystem.updateAllCardButtons();
+
         cardWrapper = scrollView.querySelector(`.scroll-card-wrapper[data-index="${index}"]`);
       }
-      
+
       if (cardWrapper) {
         if (instant) {
           const containerRect = scrollView.getBoundingClientRect();
@@ -3062,6 +3083,7 @@
           );
         });
       }
+      window._filteredCards = filteredCards; // Update for ProgressSystem
       
       currentIndex = 0;
       renderCurrentView();
@@ -3631,6 +3653,16 @@
       });
     }
 
+    const mobileCalendarBtn = document.getElementById('mobileCalendarBtn');
+    if (mobileCalendarBtn) {
+      mobileCalendarBtn.addEventListener('click', () => {
+        closeMobileOptions();
+        setTimeout(() => {
+          if (window.ProgressSystem) ProgressSystem.openCalendar();
+        }, 100);
+      });
+    }
+
     if (mobileIndexBtn) {
       mobileIndexBtn.addEventListener('click', () => {
         closeMobileOptions();
@@ -3660,6 +3692,7 @@
         closeMobileOptions();
         try {
           safeSetItem('lmc_logged_out', 'true');
+          if (window.ProgressSystem) ProgressSystem.clearCache();
           await auth0Client.logout({
             logoutParams: {
               returnTo: window.location.origin + '/app/'
@@ -3948,6 +3981,13 @@
         // Render the current view
         renderCurrentView();
         initTiltEffect();
+
+        // Initialize Progress & Streak System
+        if (window.ProgressSystem) {
+          ProgressSystem.createStreakDashboard();
+          ProgressSystem.createCalendarModal();
+          ProgressSystem.loadProgress();
+        }
       } catch (err) {
         console.error('Error initializing cards app:', err);
       }

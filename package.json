@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "generate-pdf": "node scripts/generate-pdf.js"
+    "generate-pdf": "node scripts/generate-pdf.js",
+    "import-exercises": "node scripts/import-exercises.js"
   },
   "dependencies": {
+    "@netlify/functions": "^2.8.0",
+    "@supabase/supabase-js": "^2.49.0",
     "pdfkit": "^0.17.2",
     "stripe": "^14.0.0"
   }
