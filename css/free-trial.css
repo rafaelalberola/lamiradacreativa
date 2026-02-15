@@ -631,3 +631,94 @@ section > .container > .text-center .section-desc {
 .section-dark .preview-cards-caption {
   color: rgba(255, 255, 255, 0.8);
 }
+
+/* ============================================
+   Exercise Preview: Day 1 hero + locked grid
+   ============================================ */
+.exercise-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Reset card positioning for this section (base .card is position:absolute) */
+.exercise-preview .card {
+  position: relative;
+  width: auto;
+  height: auto;
+  animation: none;
+  transform: none;
+}
+
+/* Day 1 hero wrapper */
+.exercise-preview__hero {
+  max-width: 260px;
+  width: 100%;
+}
+
+/* Locked cards grid: 3 cols desktop, 2 cols mobile */
+.exercise-preview__locked {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 540px;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .exercise-preview__locked {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Locked card: blur content, no interaction */
+.card--locked {
+  pointer-events: none;
+  user-select: none;
+  min-height: 120px;
+  font-size: 0.8rem;
+}
+
+.card--locked .card-content,
+.card--locked .card-header {
+  filter: blur(4px);
+  opacity: 0.5;
+}
+
+.card--locked .card-cta,
+.card--locked .card-icon {
+  display: none;
+}
+
+.card--locked .card-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.7rem;
+}
+
+.card--locked .card-title { font-size: 0.85rem; }
+.card--locked .card-subtitle { font-size: 0.65rem; }
+
+/* Lock overlay */
+.card-lock-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.card-lock-overlay svg {
+  width: 28px;
+  height: 28px;
+  stroke: var(--color-text-secondary);
+  fill: none;
+  stroke-width: 1.5;
+  opacity: 0.7;
+}

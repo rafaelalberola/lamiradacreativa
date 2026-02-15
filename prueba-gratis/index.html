@@ -13,10 +13,10 @@
   <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
 
   <!-- Preload + load critical CSS (same as main landing + free trial overrides) -->
-  <link rel="preload" href="../css/styles.css?v=20260215i" as="style">
-  <link rel="stylesheet" href="../css/styles.css?v=20260215i">
-  <link rel="preload" href="../css/free-trial.css?v=20260215i" as="style">
-  <link rel="stylesheet" href="../css/free-trial.css?v=20260215i">
+  <link rel="preload" href="../css/styles.css?v=20260215j" as="style">
+  <link rel="stylesheet" href="../css/styles.css?v=20260215j">
+  <link rel="preload" href="../css/free-trial.css?v=20260215j" as="style">
+  <link rel="stylesheet" href="../css/free-trial.css?v=20260215j">
 
   <!-- Fonts (same as main landing) -->
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Inter:wght@400;500;700&family=Inter+Tight:wght@500;600&family=Space+Mono:wght@400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -268,78 +268,102 @@
         <h2>Tus primeros ejercicios</h2>
         <p class="section-desc">Así es un día dentro de La Mirada Creativa.</p>
       </div>
-      <div class="deck-group">
-      <div class="card-deck">
-        <div class="card" data-index="0">
-          <div class="card-header">
-            <span class="card-day">Día 1 / 365</span>
-            <span class="card-block">Mirada Técnica</span>
-          </div>
-          <div class="card-content">
-            <h3 class="card-title">Punto en blanco</h3>
-            <p class="card-subtitle">Interrupción mínima</p>
-            <div class="card-icon">
-              <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="14"/></svg>
+      <div class="exercise-preview">
+        <!-- Day 1: fully visible -->
+        <div class="exercise-preview__hero">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-day">Día 1 / 365</span>
+              <span class="card-block">Mirada Técnica</span>
             </div>
-            <p class="card-desc">Busca una superficie lisa: una pared blanca, un folio vacío, una mesa despejada. Encuentra un único punto que rompa esa monotonía.</p>
-            <p class="card-cta">Ahora sal y dispara</p>
+            <div class="card-content">
+              <h3 class="card-title">Punto en blanco</h3>
+              <p class="card-subtitle">Interrupción mínima</p>
+              <div class="card-icon">
+                <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="14"/></svg>
+              </div>
+              <p class="card-desc">Busca una superficie lisa: una pared blanca, un folio vacío, una mesa despejada. Encuentra un único punto que rompa esa monotonía.</p>
+              <p class="card-cta">Ahora sal y dispara</p>
+            </div>
           </div>
         </div>
-        <div class="card" data-index="1">
-          <div class="card-header">
-            <span class="card-day">Día 2 / 365</span>
-            <span class="card-block">Mirada Técnica</span>
-          </div>
-          <div class="card-content">
-            <h3 class="card-title">Línea sola</h3>
-            <p class="card-subtitle">Dirección pura</p>
-            <div class="card-icon">
-              <svg viewBox="0 0 48 48"><line x1="8" y1="24" x2="40" y2="24"/></svg>
+        <!-- Days 2-7: locked -->
+        <div class="exercise-preview__locked">
+          <div class="card card--locked">
+            <div class="card-header">
+              <span class="card-day">Día 2 / 365</span>
+              <span class="card-block">Mirada Técnica</span>
             </div>
-            <p class="card-desc">Busca una línea aislada sobre un fondo limpio. Observa cómo esa línea divide el espacio en dos.</p>
-            <p class="card-cta">Ya estás listo para tu foto</p>
+            <div class="card-content">
+              <h3 class="card-title">Línea sola</h3>
+              <p class="card-subtitle">Dirección pura</p>
+              <p class="card-desc">Busca una línea aislada sobre un fondo limpio. Observa cómo esa línea divide el espacio en dos.</p>
+            </div>
+            <div class="card-lock-overlay"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+          </div>
+          <div class="card card--locked">
+            <div class="card-header">
+              <span class="card-day">Día 3 / 365</span>
+              <span class="card-block">Mirada Técnica</span>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">Sombra pequeña</h3>
+              <p class="card-subtitle">Forma sin objeto</p>
+              <p class="card-desc">Encuentra una sombra proyectada. Ignora el objeto y concéntrate solo en la forma oscura.</p>
+            </div>
+            <div class="card-lock-overlay"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+          </div>
+          <div class="card card--locked">
+            <div class="card-header">
+              <span class="card-day">Día 4 / 365</span>
+              <span class="card-block">Mirada Técnica</span>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">Objeto centrado</h3>
+              <p class="card-subtitle">Claridad absoluta</p>
+              <p class="card-desc">Busca un objeto pequeño centrado en una superficie simple. Observa cómo el espacio vacío amplifica su presencia.</p>
+            </div>
+            <div class="card-lock-overlay"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+          </div>
+          <div class="card card--locked">
+            <div class="card-header">
+              <span class="card-day">Día 5 / 365</span>
+              <span class="card-block">Mirada Técnica</span>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">Luz y forma</h3>
+              <p class="card-subtitle">Volumen revelado</p>
+              <p class="card-desc">Busca un objeto con volumen. Identifica la parte iluminada, la sombra propia y la sombra proyectada.</p>
+            </div>
+            <div class="card-lock-overlay"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+          </div>
+          <div class="card card--locked">
+            <div class="card-header">
+              <span class="card-day">Día 6 / 365</span>
+              <span class="card-block">Mirada Técnica</span>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">Espacio negativo</h3>
+              <p class="card-subtitle">Lo que no está</p>
+              <p class="card-desc">Observa el hueco entre dos objetos cercanos. Tiene forma propia. Encuadra ese espacio.</p>
+            </div>
+            <div class="card-lock-overlay"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+          </div>
+          <div class="card card--locked">
+            <div class="card-header">
+              <span class="card-day">Día 7 / 365</span>
+              <span class="card-block">Mirada Técnica</span>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">Textura cercana</h3>
+              <p class="card-subtitle">Superficie táctil</p>
+              <p class="card-desc">Acércate mucho a una superficie hasta que solo veas su textura. Imagina cómo se sentiría al tacto.</p>
+            </div>
+            <div class="card-lock-overlay"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
           </div>
         </div>
-        <div class="card" data-index="2">
-          <div class="card-header">
-            <span class="card-day">Día 3 / 365</span>
-            <span class="card-block">Mirada Técnica</span>
-          </div>
-          <div class="card-content">
-            <h3 class="card-title">Sombra pequeña</h3>
-            <p class="card-subtitle">Forma sin objeto</p>
-            <div class="card-icon">
-              <svg viewBox="0 0 48 48"><path d="M32 24c0 7.7-6.3 14-14 14S4 31.7 4 24s6.3-14 14-14"/></svg>
-            </div>
-            <p class="card-desc">Encuentra una sombra proyectada. Ignora el objeto y concéntrate solo en la forma oscura.</p>
-            <p class="card-cta">Coge la cámara y practica</p>
-          </div>
-        </div>
-        <div class="card" data-index="3">
-          <div class="card-header">
-            <span class="card-day">Día 4 / 365</span>
-            <span class="card-block">Mirada Técnica</span>
-          </div>
-          <div class="card-content">
-            <h3 class="card-title">Objeto centrado</h3>
-            <p class="card-subtitle">Claridad absoluta</p>
-            <div class="card-icon">
-              <svg viewBox="0 0 48 48">
-                <path d="M8 8 L8 18 M8 8 L18 8"/>
-                <path d="M40 8 L40 18 M40 8 L30 8"/>
-                <path d="M8 40 L8 30 M8 40 L18 40"/>
-                <path d="M40 40 L40 30 M40 40 L30 40"/>
-                <circle cx="24" cy="24" r="2"/>
-              </svg>
-            </div>
-            <p class="card-desc">Busca un objeto pequeño centrado en una superficie simple. Observa cómo el espacio vacío amplifica su presencia.</p>
-            <p class="card-cta">¡Captúralo!</p>
-          </div>
-        </div>
+        <a href="#bottomForm" class="btn btn--primary">Desbloquea los 7 ejercicios gratis</a>
       </div>
-      <div class="deck-dots"></div>
-      </div>
-      <p class="preview-cards-caption">Ejemplos reales de ejercicios</p>
     </div>
   </section>
 
@@ -466,8 +490,8 @@
   </div>
 
   <!-- Scripts -->
-  <script src="../js/main.js?v=20260215i"></script>
-  <script src="../js/free-trial.js?v=20260215i"></script>
+  <script src="../js/main.js?v=20260215j"></script>
+  <script src="../js/free-trial.js?v=20260215j"></script>
 
 </body>
 </html>
