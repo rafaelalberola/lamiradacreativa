@@ -1054,11 +1054,14 @@ nav a:hover {
   bottom: 0;
   left: 0;
   right: 0;
+  height: 67px;
+  display: flex;
+  align-items: center;
   background: rgba(255, 255, 255, 0.15);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border-top: 1px solid rgba(255, 255, 255, 0.25);
-  padding: 12px 22px;
+  padding: 0 22px;
   z-index: 90;
   transform: translateY(100%);
   opacity: 0;
@@ -1081,6 +1084,9 @@ nav a:hover {
 
 .fixed-cta .btn--cta {
   width: 100%;
+  height: 50px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 @media (min-width: 768px) {
@@ -1089,7 +1095,7 @@ nav a:hover {
   }
 
   .fixed-cta .btn--cta {
-    width: 300px;
+    width: 425px;
   }
 }
 
@@ -1105,11 +1111,17 @@ nav a:hover {
 /* ============================================
    Card Deck
    ============================================ */
+.deck-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+}
+
 .card-deck {
   position: relative;
   width: 225px;
   height: 364px;
-  margin: 0 auto var(--space-sm);
   perspective: 1000px;
   cursor: grab;
   user-select: none;
@@ -1119,8 +1131,33 @@ nav a:hover {
   .card-deck {
     width: 270px;
     height: 412px;
-    margin: 0;
   }
+}
+
+.deck-dots {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.deck-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.15);
+  transition: background 0.3s ease;
+}
+
+.deck-dot.active {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.section-dark .deck-dot {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.section-dark .deck-dot.active {
+  background: #fff;
 }
 
 .card {
@@ -1399,7 +1436,6 @@ nav a:hover {
   position: relative;
   width: 245px;
   height: 435px;
-  margin: 0 auto;
   perspective: 1000px;
   cursor: grab;
   user-select: none;
@@ -1416,12 +1452,12 @@ nav a:hover {
   font-size: 0.7rem;
   color: #999;
   text-align: center;
-  margin-top: 60px;
+  margin-top: 24px;
 }
 
 @media (min-width: 768px) {
   .blocks-deck-caption {
-    margin-top: 50px;
+    margin-top: 24px;
   }
 }
 
@@ -2858,6 +2894,7 @@ footer {
 .modal-content--demo .blocks-deck {
   width: 244px;
   height: 400px;
+  margin-right: 32px;
 }
 
 @media (min-width: 768px) {
@@ -3935,12 +3972,12 @@ section#testimonios {
   font-size: 0.7rem;
   color: #999;
   text-align: center;
-  margin-top: 32px;
+  margin-top: 24px;
 }
 
 @media (min-width: 768px) {
   .preview-cards-caption {
-    margin-top: 50px;
+    margin-top: 24px;
   }
 }
 

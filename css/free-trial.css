@@ -119,8 +119,12 @@
 /* ============================================
    Hero layout — flex + gap
    ============================================ */
+.hero {
+  padding-top: 320px;
+}
+
 .container.container--wide {
-  padding-top: 220px;
+  padding-top: 0;
 }
 
 .hero-cards-wrapper {
@@ -563,8 +567,9 @@ section > .container > .text-center .section-desc {
 .ft-progress {
   display: flex;
   justify-content: center;
-  gap: 8px;
-  margin-bottom: 24px;
+  gap: 12px;
+  margin-top: 16px;
+  margin-bottom: 0;
 }
 
 .ft-progress-dot {

@@ -4097,7 +4097,8 @@
     async function getAuthToken() {
       if (!auth0Client) return null;
       try {
-        return await auth0Client.getTokenSilently();
+        const claims = await auth0Client.getIdTokenClaims();
+        return claims ? claims.__raw : null;
       } catch {
         return null;
       }

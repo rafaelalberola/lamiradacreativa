@@ -7,39 +7,45 @@ const headers = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS'
 };
 
-async function verifyUser(authHeader) {
+function verifyUser(authHeader) {
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     console.warn('verifyUser: missing or malformed Authorization header');
     return null;
   }
   const token = authHeader.replace('Bearer ', '');
 
-  for (let attempt = 0; attempt < 2; attempt++) {
-    try {
-      const response = await fetch(`https://${process.env.AUTH0_DOMAIN}/userinfo`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (response.ok) {
-        const userInfo = await response.json();
-        return userInfo; // Return full userInfo (sub, email, etc.)
-      }
-      const body = await response.text().catch(() => '');
-      console.warn(`verifyUser: Auth0 /userinfo returned ${response.status} (attempt ${attempt + 1}):`, body.slice(0, 200));
-      if (attempt === 0 && (response.status === 429 || response.status >= 500)) {
-        await new Promise(r => setTimeout(r, 500));
-        continue;
-      }
-      return null;
-    } catch (err) {
-      console.error(`verifyUser: fetch error (attempt ${attempt + 1}):`, err.message);
-      if (attempt === 0) {
-        await new Promise(r => setTimeout(r, 500));
-        continue;
-      }
+  try {
+    // Decode JWT ID token (base64url payload)
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      console.warn('verifyUser: token is not a valid JWT');
       return null;
     }
+    const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
+
+    // Verify issuer matches Auth0 domain
+    const expectedIssuer = `https://${process.env.AUTH0_DOMAIN}/`;
+    if (payload.iss !== expectedIssuer) {
+      console.warn('verifyUser: issuer mismatch:', payload.iss, '!==', expectedIssuer);
+      return null;
+    }
+
+    // Verify token is not expired
+    if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
+      console.warn('verifyUser: token expired');
+      return null;
+    }
+
+    if (!payload.sub) {
+      console.warn('verifyUser: no sub claim in token');
+      return null;
+    }
+
+    return { sub: payload.sub, email: payload.email || '' };
+  } catch (err) {
+    console.error('verifyUser: JWT decode error:', err.message);
+    return null;
   }
-  return null;
 }
 
 exports.handler = async (event) => {

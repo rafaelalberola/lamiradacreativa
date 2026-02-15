@@ -13,10 +13,10 @@
   <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
 
   <!-- Preload + load critical CSS (same as main landing + free trial overrides) -->
-  <link rel="preload" href="../css/styles.css?v=20260215d" as="style">
-  <link rel="stylesheet" href="../css/styles.css?v=20260215d">
-  <link rel="preload" href="../css/free-trial.css?v=20260215d" as="style">
-  <link rel="stylesheet" href="../css/free-trial.css?v=20260215d">
+  <link rel="preload" href="../css/styles.css?v=20260215i" as="style">
+  <link rel="stylesheet" href="../css/styles.css?v=20260215i">
+  <link rel="preload" href="../css/free-trial.css?v=20260215i" as="style">
+  <link rel="stylesheet" href="../css/free-trial.css?v=20260215i">
 
   <!-- Fonts (same as main landing) -->
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Inter:wght@400;500;700&family=Inter+Tight:wght@500;600&family=Space+Mono:wght@400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -227,7 +227,7 @@
         <div class="hero-content">
           <div class="hero-text">
             <h1>El problema no es tu cámara. Es tu ojo.</h1>
-            <p class="hero-subtitle">7 ejercicios visuales <strong>gratis</strong>. Sin tarjeta. <br class="mobile-only">Sin compromiso.</p>
+            <p class="hero-subtitle"><strong style="color:#000">7 ejercicios</strong> visuales <strong style="color:#FF5006">gratis</strong>. Sin tarjeta. <br class="mobile-only">Sin compromiso.</p>
           </div>
           <div class="hero-cta-mobile">
             <form class="ft-form" id="heroForm">
@@ -268,6 +268,7 @@
         <h2>Tus primeros ejercicios</h2>
         <p class="section-desc">Así es un día dentro de La Mirada Creativa.</p>
       </div>
+      <div class="deck-group">
       <div class="card-deck">
         <div class="card" data-index="0">
           <div class="card-header">
@@ -335,6 +336,8 @@
             <p class="card-cta">¡Captúralo!</p>
           </div>
         </div>
+      </div>
+      <div class="deck-dots"></div>
       </div>
       <p class="preview-cards-caption">Ejemplos reales de ejercicios</p>
     </div>
@@ -455,9 +458,16 @@
     </div>
   </footer>
 
+  <!-- Fixed Bottom CTA -->
+  <div class="fixed-cta visible" id="fixedCta">
+    <div class="fixed-cta-inner">
+      <a href="#heroForm" class="btn btn--primary btn--cta" onclick="document.getElementById('heroForm').querySelector('input').focus();return false;">Empezar gratis</a>
+    </div>
+  </div>
+
   <!-- Scripts -->
-  <script src="../js/main.js?v=20260215d"></script>
-  <script src="../js/free-trial.js?v=20260215d"></script>
+  <script src="../js/main.js?v=20260215i"></script>
+  <script src="../js/free-trial.js?v=20260215i"></script>
 
 </body>
 </html>

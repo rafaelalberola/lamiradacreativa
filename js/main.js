@@ -166,10 +166,22 @@ document.addEventListener('DOMContentLoaded', function() {
       this.cards.forEach(card => {
         card.style.animation = 'none';
       });
-      
+
+      // Initialize dots — look for .deck-dots as sibling inside .deck-group
+      const group = this.container.closest('.deck-group');
+      this.dotsContainer = group ? group.querySelector('.deck-dots') : this.container.querySelector('.deck-dots');
+      if (this.dotsContainer) {
+        for (let i = 0; i < this.totalCards; i++) {
+          const dot = document.createElement('span');
+          dot.className = 'deck-dot';
+          if (i === 0) dot.classList.add('active');
+          this.dotsContainer.appendChild(dot);
+        }
+      }
+
       // Set initial positions
       this.updatePositions();
-      
+
       // Start auto-play
       this.startAutoPlay();
       
@@ -228,6 +240,14 @@ document.addEventListener('DOMContentLoaded', function() {
         card.style.zIndex = zIndex;
         card.style.filter = 'none';
       });
+
+      // Sync dots
+      if (this.dotsContainer) {
+        const dots = this.dotsContainer.querySelectorAll('.deck-dot');
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === this.currentIndex);
+        });
+      }
     }
     
     next() {
