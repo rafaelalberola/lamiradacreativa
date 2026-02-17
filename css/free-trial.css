@@ -722,3 +722,18 @@ section > .container > .text-center .section-desc {
   stroke-width: 1.5;
   opacity: 0.7;
 }
+
+/* Buy link — subtle */
+.ft-buy-link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 4px;
+  font-size: 0.85rem;
+  font-weight: 400;
+  transition: color 0.2s;
+}
+
+.ft-buy-link:hover {
+  color: #fff;
+}
