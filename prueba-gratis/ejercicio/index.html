@@ -10,8 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
 
-  <link rel="stylesheet" href="../../css/styles.css?v=20260217a">
-  <link rel="stylesheet" href="../../css/free-trial.css?v=20260217a">
+  <link rel="stylesheet" href="../../css/styles.css?v=20260218a">
+  <link rel="stylesheet" href="../../css/free-trial.css?v=20260218a">
 
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Inter:wght@400;500;700&family=Inter+Tight:wght@500;600&family=Space+Mono:wght@400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Inter:wght@400;500;700&family=Inter+Tight:wght@500;600&family=Space+Mono:wght@400&display=swap" rel="stylesheet"></noscript>
@@ -83,58 +83,83 @@
   </script>
 
   <style>
+    /* === Layout: wrapper > header + content + footer === */
     .ft-exercise-page {
-      min-height: 100vh;
-      min-height: 100dvh;
+      height: 100vh;
+      height: 100dvh;
       display: flex;
       flex-direction: column;
+      gap: 0;
+      overflow: hidden;
     }
-    .ft-exercise-center {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      padding: 24px 16px 72px;
+    .ft-exercise-page > header {
+      flex: 0 0 auto;
+      position: relative;
+      z-index: 100;
     }
-    .ft-exercise-wrap {
+    .ft-exercise-page > .ft-exercise-nav { flex: 0 0 auto; }
+
+    /* Content areas — fill remaining space, scroll if needed */
+    #exerciseLoading,
+    #exerciseCard,
+    #exerciseLocked {
+      flex: 1 1 0;
+      min-height: 0;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 32px;
-      width: 100%;
-      max-width: 400px;
-      margin: auto 0;
+      padding: 12px 16px;
     }
-    /* Override app card deck styles for standalone card */
-    .ft-exercise-wrap .card {
+
+    /* Center card + progress as a group */
+    #exerciseCard,
+    #exerciseLocked {
+      padding: 12px 16px 32px;
+    }
+    #exerciseCard {
+      gap: 16px;
+    }
+    #exerciseCard > #cardContainer {
+      margin-top: auto;
+    }
+    #exerciseCard > .ft-progress {
+      margin: 0;
+      margin-bottom: auto;
+    }
+
+    /* Center loading & locked vertically */
+    #exerciseLoading > p,
+    #exerciseLocked > :first-child {
+      margin: auto;
+    }
+    #exerciseLoading > p,
+    #exerciseLocked > :last-child {
+      margin-bottom: auto;
+    }
+
+    /* === Card (scoped to this page) === */
+    .ft-exercise-page .card {
       position: relative;
       width: 300px;
       min-height: 480px;
       height: auto;
-      margin: 0 auto;
       transition: none;
       animation: none;
     }
-    .ft-exercise-wrap .card-icon {
-      transform: none;
-    }
-    .ft-exercise-wrap .card-icon .material-symbols-sharp {
-      color: var(--color-accent);
-    }
+    .card-icon { transform: none; }
+    .card-icon .material-symbols-sharp { color: var(--color-accent); }
+
+    /* === Footer nav === */
     .ft-exercise-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 16px;
       padding-bottom: max(12px, env(safe-area-inset-bottom));
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      margin: 0;
+      background: #fff;
       border-top: 1px solid rgba(0, 0, 0, 0.08);
-      z-index: 100;
       gap: 12px;
     }
     .ft-exercise-nav a {
@@ -159,38 +184,31 @@
     .ft-nav-next {
       background: var(--color-accent);
       color: #fff;
-      margin-left: auto; /* push right when it's the only button */
+      margin-left: auto;
     }
     .ft-nav-next:hover {
       background: #E5480A;
     }
-    .ft-buy-link {
-      color: rgba(0, 0, 0, 0.8);
-    }
-    .ft-buy-link:hover {
-      color: rgba(0, 0, 0, 1);
-    }
+
+    /* === Locked state === */
     .ft-exercise-locked {
       text-align: center;
       max-width: 400px;
     }
-    .ft-exercise-locked h2 {
-      margin-bottom: 12px;
-    }
-    .ft-exercise-locked p {
-      margin-bottom: 20px;
-    }
+    .ft-exercise-locked h2 { margin-bottom: 12px; }
+    .ft-exercise-locked p { margin-bottom: 20px; }
     .ft-exercise-locked .btn {
       display: inline-block;
       text-decoration: none;
     }
-    /* Hide icon text until Material Symbols font loads */
-    .material-symbols-sharp {
-      visibility: hidden;
-    }
-    .fonts-loaded .material-symbols-sharp {
-      visibility: visible;
-    }
+
+    /* Ensure hidden mobile-nav doesn't block touch events */
+    .mobile-nav { pointer-events: none; }
+    .mobile-nav.active { pointer-events: auto; }
+
+    /* === FOUT fix === */
+    .material-symbols-sharp { visibility: hidden; }
+    .fonts-loaded .material-symbols-sharp { visibility: visible; }
   </style>
 </head>
 <body>
@@ -225,36 +243,30 @@
       </div>
     </div>
 
-    <!-- Exercise Content -->
-    <div class="ft-exercise-center">
-      <div class="ft-exercise-wrap">
-        <a href="/#precio" class="ft-buy-link">Comprar acceso · 29€ <s>67€</s> &rarr;</a>
-        <!-- Loading state -->
-        <div id="exerciseLoading" style="text-align:center;">
-          <p>Cargando ejercicio...</p>
-        </div>
+    <!-- Loading state -->
+    <div id="exerciseLoading" style="text-align:center;">
+      <p>Cargando ejercicio...</p>
+    </div>
 
-        <!-- Exercise card (hidden until loaded) -->
-        <div id="exerciseCard" style="display:none;width:100%;display:none;">
-          <div id="cardContainer"></div>
-          <div class="ft-progress" id="progressDots"></div>
-        </div>
+    <!-- Exercise card -->
+    <div id="exerciseCard" style="display:none;">
+      <div id="cardContainer"></div>
+      <div class="ft-progress" id="progressDots"></div>
+    </div>
 
-        <!-- Locked state for day > 7 -->
-        <div id="exerciseLocked" class="ft-exercise-locked" style="display:none;">
-          <h2>Has completado la prueba gratuita</h2>
-          <p>Los 365 ejercicios te esperan. Cuatro bloques progresivos. De mirada técnica a mirada propia.</p>
-          <p><strong>29 €. Pago único. Para siempre.</strong></p>
-          <a href="/#precio" class="btn btn--primary btn--cta">Desbloquear acceso completo</a>
-        </div>
-      </div>
+    <!-- Locked state for day > 7 -->
+    <div id="exerciseLocked" class="ft-exercise-locked" style="display:none;">
+      <h2>Has completado la prueba gratuita</h2>
+      <p>Los 365 ejercicios te esperan. Cuatro bloques progresivos. De mirada técnica a mirada propia.</p>
+      <p><strong>29 €. Pago único. Para siempre.</strong></p>
+      <a href="/#precio" class="btn btn--primary btn--cta">Desbloquear acceso completo</a>
     </div>
     <!-- Fixed bottom nav -->
     <div class="ft-exercise-nav" id="exNav"></div>
   </div>
 
   <!-- Main JS (mobile nav, protections, etc.) -->
-  <script src="../../js/main.js?v=20260217a"></script>
+  <script src="../../js/main.js?v=20260218a"></script>
 
   <!-- Exercise data -->
   <script>
@@ -282,7 +294,7 @@
 
     if (dayParam > 7) {
       loadingEl.style.display = 'none';
-      lockedEl.style.display = 'block';
+      lockedEl.style.display = 'flex';
       if (window.amplitude && window.amplitude.track) {
         try { amplitude.track('free_exercise_locked', { day: dayParam }); } catch(e) {}
       }
@@ -335,7 +347,7 @@
 
     // Show card
     loadingEl.style.display = 'none';
-    cardEl.style.display = 'block';
+    cardEl.style.display = 'flex';
 
     // Track view
     if (window.amplitude && window.amplitude.track) {
