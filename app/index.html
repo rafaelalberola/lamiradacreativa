@@ -63,7 +63,7 @@
   <link rel="icon" type="image/jpeg" href="../assets/images/logo.jpg">
 
   <!-- Progress & Streak styles -->
-  <link rel="stylesheet" href="../css/progress.css">
+  <link rel="stylesheet" href="../css/progress.css?v=20260223c">
 
   <!-- Auth0 SPA JS SDK -->
   <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
@@ -71,7 +71,6 @@
   <!-- Libraries for card export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
   
   <style>
     /* Monograf Font */
@@ -150,200 +149,538 @@
       flex-direction: column;
     }
 
-    /* Header */
-    .header {
+    /* ============================================
+       iOS NAVIGATION BAR
+       ============================================ */
+    .ios-navbar {
       flex-shrink: 0;
-      background: var(--color-bg);
-      border-bottom: 1px solid var(--color-border-light);
-      padding: 12px 0;
-      z-index: 100;
-    }
-
-    .header-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 0 24px;
+      height: 44px;
+      padding: 0 8px;
+      background: var(--color-bg);
+      border-bottom: 0.5px solid var(--color-border-light);
+      z-index: 100;
     }
 
-    .logo {
+    .ios-navbar-title {
       font-family: var(--font-headline);
+      font-size: 1.0625rem;
       font-weight: 600;
-      font-size: 0.9375rem;
-      letter-spacing: -0.01em;
       color: var(--color-text);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      text-align: center;
+      flex: 1;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .logo-img {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      object-fit: cover;
-    }
-
-    @media (max-width: 768px) {
-      .header-inner {
-        padding: 0 16px;
-      }
-      .view-controls {
-        margin-right: 8px;
-      }
-    }
-
-    /* View Toggle */
-    .view-toggle {
-      display: flex;
-      gap: 2px;
-      background: var(--color-bg-alt);
-      padding: 3px;
-      border-radius: 6px;
-    }
-
-    .view-btn {
+    .ios-navbar-left,
+    .ios-navbar-right {
       display: flex;
       align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 28px;
-      border: none;
-      background: transparent;
-      border-radius: 4px;
-      cursor: pointer;
-      color: var(--color-text-tertiary);
-      transition: all 0.2s;
-    }
-
-    .view-btn:hover {
-      color: var(--color-text);
-    }
-
-    .view-btn.active {
-      background: var(--color-bg);
-      color: var(--color-text);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-
-    .view-btn .material-symbols-sharp {
-      font-size: 18px;
-    }
-
-    /* Index Button */
-    .index-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      border: 1px solid var(--color-border-light);
-      background: var(--color-bg);
-      border-radius: 6px;
-      cursor: pointer;
-      color: var(--color-text-secondary);
-      transition: all 0.2s;
-    }
-
-    .index-btn:hover {
-      color: var(--color-text);
-      border-color: var(--color-border);
-      background: var(--color-bg-alt);
-    }
-
-    .index-btn .material-symbols-sharp {
-      font-size: 18px;
-    }
-
-    /* Header Actions (Index + Options + Logout) */
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      gap: 0;
       flex-shrink: 0;
     }
 
-    @media (max-width: 480px) {
-      .header-actions {
-        gap: 4px;
-      }
-    }
-    
-    .header-actions-group {
+    .ios-nav-btn {
+      width: 44px;
+      height: 44px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--color-accent);
+      -webkit-tap-highlight-color: transparent;
+      transition: opacity 0.15s;
     }
 
-    @media (max-width: 480px) {
-      .header-actions-group {
-        gap: 4px;
-      }
-    }
-    
-    .header-separator {
-      width: 1px;
-      height: 20px;
-      background: var(--color-border-light);
-      margin: 0 8px;
+    .ios-nav-btn:active {
+      opacity: 0.5;
     }
 
-    @media (max-width: 480px) {
-      .header-separator {
-        margin: 0 4px;
-      }
+    .ios-nav-btn .material-symbols-sharp {
+      font-size: 22px;
     }
 
-    /* View Controls Container */
-    .view-controls {
+    /* ============================================
+       iOS TAB BAR
+       ============================================ */
+    .ios-tabbar {
+      flex-shrink: 0;
       display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-left: auto;
-      margin-right: 8px;
+      background: var(--color-bg);
+      border-top: 0.5px solid var(--color-border-light);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      z-index: 100;
     }
 
-    /* 3D Button - Mobile Only */
-    .btn-3d {
+    .ios-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 12px 0 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--color-text-tertiary);
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+      transition: color 0.15s;
+    }
+
+    .ios-tab.active {
+      color: var(--color-accent);
+    }
+
+    .ios-tab .material-symbols-sharp {
+      font-size: 24px;
+    }
+
+    .ios-tab-label {
+      font-family: var(--font-body);
+      font-size: 0.625rem;
+      font-weight: 500;
+    }
+
+    .ios-tab-badge {
+      position: absolute;
+      top: 8px;
+      right: calc(50% - 24px);
+      background: var(--color-accent);
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 0.5625rem;
+      font-weight: 700;
+      min-width: 16px;
+      height: 16px;
+      border-radius: 8px;
+      padding: 0 4px;
       display: none;
       align-items: center;
       justify-content: center;
-      gap: 4px;
-      height: 34px;
-      padding: 0 12px;
-      border: none;
-      border-radius: 6px;
+    }
+
+    .ios-tab-badge.visible {
+      display: flex;
+    }
+
+    /* ============================================
+       iOS SCRUBBER (thin progress bar)
+       ============================================ */
+    .ios-scrubber {
+      flex-shrink: 0;
+      padding: 4px 20px 4px;
+      background: var(--color-bg);
+    }
+
+    .ios-scrubber-track {
+      position: relative;
+      height: 20px;
       cursor: pointer;
+      touch-action: none;
+    }
+
+    .ios-scrubber-track::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 3px;
+      transform: translateY(-50%);
+      background: var(--color-border-light);
+      border-radius: 1.5px;
+    }
+
+    .ios-scrubber-fill {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      height: 3px;
+      transform: translateY(-50%);
+      background: var(--color-accent);
+      border-radius: 1.5px;
+      z-index: 1;
+      transition: width 0.1s ease;
+    }
+
+    .ios-scrubber-handle {
+      position: absolute;
+      top: 50%;
+      width: 14px;
+      height: 14px;
+      background: var(--color-accent);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      cursor: grab;
+      z-index: 2;
+      box-shadow: 0 1px 4px var(--color-accent-glow);
+      transition: transform 0.1s ease;
+    }
+
+    .ios-scrubber-handle:active {
+      cursor: grabbing;
+      transform: translate(-50%, -50%) scale(1.3);
+    }
+
+    /* ============================================
+       iOS ACTION SHEET
+       ============================================ */
+    .ios-action-sheet {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .ios-action-sheet.active {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .ios-action-sheet-content {
+      width: calc(100% - 16px);
+      max-width: 400px;
+      margin: 0 8px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-bottom: env(safe-area-inset-bottom, 8px);
+      animation: slideUp 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+
+    .ios-action-group {
+      background: var(--color-bg);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .ios-action-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px;
+      background: none;
+      border: none;
+      width: 100%;
       font-family: var(--font-body);
-      font-size: 0.75rem;
+      font-size: 1.125rem;
+      color: var(--color-accent);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .ios-action-item:active {
+      background: var(--color-bg-alt);
+    }
+
+    .ios-action-item + .ios-action-item {
+      border-top: 0.5px solid var(--color-border-light);
+    }
+
+    .ios-action-item .material-symbols-sharp {
+      font-size: 20px;
+    }
+
+    .ios-action-cancel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: var(--color-bg);
+      border: none;
+      border-radius: 14px;
+      font-family: var(--font-body);
+      font-size: 1.125rem;
       font-weight: 600;
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-      color: #fff;
-      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
-      transition: all 0.2s;
+      color: var(--color-accent);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .btn-3d:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    .ios-action-cancel:active {
+      background: var(--color-bg-alt);
     }
 
-    .btn-3d:active {
-      transform: translateY(0);
+    /* ============================================
+       TAB CALENDARIO CONTENT
+       ============================================ */
+    .tab-calendario-content {
+      flex: 1 1 0;
+      min-height: 0;
+      overflow: hidden;
+      padding: 16px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      background: var(--color-bg-alt);
     }
 
-    .btn-3d .material-symbols-sharp {
-      font-size: 16px;
+    /* Streak section */
+    .tab-calendario-content .progreso-streak {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 8px 0 0;
     }
 
-    @media (max-width: 768px) {
-      .btn-3d {
-        display: none;
-      }
+    .tab-calendario-content .progreso-streak-counter {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-calendario-content .progreso-streak-fire {
+      font-size: 1.75rem;
+      line-height: 1;
+    }
+
+    .tab-calendario-content .progreso-streak-fire.streak-risk {
+      filter: grayscale(1);
+      opacity: 0.5;
+    }
+
+    .tab-calendario-content .progreso-streak-number {
+      font-family: var(--font-headline);
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--color-text);
+      line-height: 1;
+    }
+
+    .tab-calendario-content .progreso-streak-label {
+      font-size: 0.8125rem;
+      color: var(--color-text-secondary);
+      margin-top: 0;
+    }
+
+    .tab-calendario-content .progreso-streak-best {
+      font-size: 0.75rem;
+      color: var(--color-text-tertiary);
+      margin-top: 2px;
+    }
+
+    /* Progress section */
+    .tab-calendario-content .progreso-progress {
+      padding: 0;
+      width: 100%;
+      max-width: 340px;
+    }
+
+    .tab-calendario-content .progress-bar-global {
+      height: 5px;
+      border-radius: 3px;
+    }
+
+    .tab-calendario-content .progress-fill-global {
+      border-radius: 3px;
+    }
+
+    .tab-calendario-content .progress-label-row {
+      margin-top: 4px;
+    }
+
+    .tab-calendario-content .progress-label-global {
+      font-size: 0.75rem;
+    }
+
+    /* Inline calendar section */
+    .tab-calendar-section {
+      width: 100%;
+      max-width: 340px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .tab-calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-shrink: 0;
+    }
+
+    .tab-calendar-title {
+      font-family: var(--font-headline);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--color-text);
+      min-width: 140px;
+      text-align: center;
+      margin: 0;
+    }
+
+    .tab-calendar-nav {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: 1px solid var(--color-border-light);
+      border-radius: 50%;
+      cursor: pointer;
+      color: var(--color-text-secondary);
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.15s;
+    }
+
+    .tab-calendar-nav:active {
+      background: var(--color-bg-alt);
+    }
+
+    .tab-calendar-nav .material-symbols-sharp {
+      font-size: 18px;
+    }
+
+    /* Calendar grid overrides for inline tab (more compact than modal) */
+    .tab-calendario-content .progress-calendar-weekdays {
+      flex-shrink: 0;
+      margin-bottom: 2px;
+    }
+
+    .tab-calendario-content .progress-calendar-weekdays span {
+      padding: 2px 0;
+      font-size: 0.625rem;
+    }
+
+    .tab-calendario-content .progress-calendar-grid {
+      flex: 1;
+      align-content: start;
+    }
+
+    .tab-calendario-content .progress-cal-day {
+      aspect-ratio: auto;
+      padding: 14px 0;
+    }
+
+    .tab-calendario-content .progress-cal-daynum {
+      font-size: 0.6875rem;
+    }
+
+    .tab-calendario-content .progress-calendar-legend {
+      flex-shrink: 0;
+      margin-top: 6px;
+      padding-top: 6px;
+      gap: 0.75rem;
+    }
+
+    /* ============================================
+       TAB AJUSTES CONTENT
+       ============================================ */
+    .tab-ajustes-content {
+      flex: 1 1 0;
+      min-height: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+      background: var(--color-bg-alt);
+    }
+
+    .ajustes-settings {
+      width: 100%;
+      max-width: 340px;
+    }
+
+    /* ============================================
+       CARD 3-DOT MENU
+       ============================================ */
+    .card-more-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--card-text, #F5F5F7);
+      opacity: 0.5;
+      -webkit-tap-highlight-color: transparent;
+      padding: 0;
+      margin: -4px -8px -4px 0;
+      border-radius: 50%;
+      transition: opacity 0.15s, background 0.15s;
+    }
+
+    .card-more-btn:active {
+      opacity: 0.8;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .card-more-btn .material-symbols-sharp {
+      font-size: 18px;
+    }
+
+    .progreso-settings {
+      width: 100%;
+      max-width: 340px;
+      display: flex;
+      flex-direction: column;
+      background: var(--color-bg);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .progreso-setting-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border: none;
+      background: none;
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      color: var(--color-text);
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.15s;
+    }
+
+    .progreso-setting-item:active {
+      background: var(--color-bg-alt);
+    }
+
+    .progreso-setting-item + .progreso-setting-item {
+      border-top: 0.5px solid var(--color-border-light);
+    }
+
+    .progreso-setting-item .material-symbols-sharp {
+      font-size: 20px;
+      color: var(--color-text-secondary);
+    }
+
+    .progreso-setting-item.danger {
+      color: #FF3B30;
+    }
+
+    .progreso-setting-item.danger .material-symbols-sharp {
+      color: #FF3B30;
     }
 
     /* 3D Viewing Mode Overlay */
@@ -432,96 +769,6 @@
     @keyframes tilt-hint {
       0%, 100% { transform: rotate(-15deg); }
       50% { transform: rotate(15deg); }
-    }
-
-    /* Options Button & Dropdown */
-    .options-wrapper {
-      position: relative;
-    }
-
-    .options-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      border: 1px solid var(--color-border-light);
-      background: var(--color-bg);
-      border-radius: 6px;
-      cursor: pointer;
-      color: var(--color-text-secondary);
-      transition: all 0.2s;
-    }
-
-    .options-btn:hover {
-      color: var(--color-text);
-      border-color: var(--color-border);
-      background: var(--color-bg-alt);
-    }
-
-    .options-btn .material-symbols-sharp {
-      font-size: 18px;
-    }
-
-    .options-dropdown {
-      position: absolute;
-      top: calc(100% + 8px);
-      right: 0;
-      background: var(--color-bg);
-      border: 1px solid var(--color-border-light);
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-      min-width: 220px;
-      padding: 8px;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-8px) scale(0.95);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 100;
-    }
-
-    .options-dropdown.active {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0) scale(1);
-    }
-
-    .options-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-      padding: 12px 14px;
-      border: none;
-      background: transparent;
-      border-radius: 8px;
-      cursor: pointer;
-      font-family: var(--font-body);
-      font-size: 0.875rem;
-      color: var(--color-text);
-      text-align: left;
-      transition: background 0.15s;
-      white-space: nowrap;
-    }
-
-    .options-item:hover {
-      background: var(--color-bg-alt);
-    }
-
-    .options-item .material-symbols-sharp {
-      font-size: 20px;
-      color: var(--color-text-secondary);
-    }
-
-    .options-separator {
-      height: 1px;
-      background: var(--color-border-light);
-      margin: 4px 0;
-    }
-
-    .options-item:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
     }
 
     /* Toast Alert for Progress */
@@ -706,143 +953,6 @@
         font-size: 13px;
       }
     }
-
-    /* Mobile: Hide elements and show only menu button */
-    @media (max-width: 768px) {
-      .header-actions-group,
-      .header-separator,
-      .logout-btn {
-        display: none !important;
-      }
-
-      /* Show mobile menu button */
-      .mobile-menu-btn {
-        display: flex !important;
-      }
-    }
-
-    /* Mobile Menu Button - matches landing exactly */
-    .mobile-menu-btn {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 8px;
-      margin-right: -8px;
-    }
-
-    .mobile-menu-btn .material-symbols-sharp {
-      font-size: 24px;
-      color: var(--color-text);
-    }
-
-    /* Mobile Options Bottom Sheet */
-    .mobile-options-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.4);
-      z-index: 1000;
-      display: none;
-      align-items: flex-end;
-    }
-
-    .mobile-options-modal.active {
-      display: flex;
-      animation: fadeIn 0.2s ease;
-    }
-
-    .mobile-options-content {
-      background: var(--color-bg);
-      width: 100%;
-      max-height: 70vh;
-      border-radius: 20px 20px 0 0;
-      animation: slideUp 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-      padding-bottom: env(safe-area-inset-bottom, 20px);
-    }
-
-    .mobile-options-header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px 20px 8px;
-      position: relative;
-    }
-
-    .mobile-options-header::before {
-      content: '';
-      position: absolute;
-      top: 8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 36px;
-      height: 4px;
-      background: var(--color-border);
-      border-radius: 2px;
-    }
-
-    .mobile-options-title {
-      font-family: var(--font-headline);
-      font-weight: 600;
-      font-size: 1rem;
-      color: var(--color-text);
-      padding-top: 8px;
-    }
-
-    .mobile-options-list {
-      padding: 0;
-    }
-
-    .mobile-option-item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      width: 100%;
-      padding: 16px;
-      border: none;
-      background: transparent;
-      border-radius: 12px;
-      cursor: pointer;
-      font-family: var(--font-body);
-      font-size: 1rem;
-      color: var(--color-text);
-      text-align: left;
-      transition: background 0.15s;
-    }
-
-    .mobile-option-item:active {
-      background: var(--color-bg-alt);
-    }
-
-    .mobile-option-item .material-symbols-sharp {
-      font-size: 24px;
-      color: var(--color-text-secondary);
-      width: 32px;
-      text-align: center;
-    }
-
-    .mobile-option-item.active .material-symbols-sharp {
-      color: var(--color-accent);
-    }
-
-    .mobile-option-item.danger {
-      color: #dc2626;
-    }
-
-    .mobile-option-item.danger .material-symbols-sharp {
-      color: #dc2626;
-    }
-
-    .mobile-options-separator {
-      height: 1px;
-      background: var(--color-border-light);
-      margin: 8px 16px;
-    }
-
 
     /* Index Modal */
     .index-modal {
@@ -1120,82 +1230,7 @@
       color: var(--color-text);
     }
 
-    /* Progress Bar */
-    .progress-bar {
-      flex-shrink: 0;
-      background: var(--color-bg);
-      border-top: 1px solid var(--color-border-light);
-      padding: 12px 20px 16px;
-      z-index: 100;
-    }
 
-    .progress-inner {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .progress-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      font-size: 0.75rem;
-      color: var(--color-text-tertiary);
-    }
-
-    .progress-current {
-      font-family: 'Space Mono', monospace;
-      font-weight: 400;
-    }
-
-    .progress-track {
-      position: relative;
-      height: 20px;
-      background: #FFFFFF;
-      border-radius: 10px;
-      cursor: pointer;
-      touch-action: none;
-    }
-
-    .progress-track-inner {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 4px;
-      transform: translateY(-50%);
-      background: var(--color-border);
-      border-radius: 2px;
-    }
-
-    .progress-fill {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      height: 4px;
-      transform: translateY(-50%);
-      background: var(--color-accent);
-      border-radius: 2px;
-      transition: width 0.1s ease;
-    }
-
-    .progress-handle {
-      position: absolute;
-      top: 50%;
-      width: 16px;
-      height: 16px;
-      background: var(--color-accent);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      cursor: grab;
-      box-shadow: 0 2px 6px var(--color-accent-glow);
-      transition: transform 0.1s ease;
-    }
-
-    .progress-handle:active {
-      cursor: grabbing;
-      transform: translate(-50%, -50%) scale(1.2);
-    }
 
     /* Views Container - 3D Transitions */
     .view {
@@ -1227,7 +1262,7 @@
     .card {
       /* Use inline custom properties for dynamic colors */
       background: var(--card-bg, linear-gradient(145deg, #1a1025 0%, #2d1b3d 100%));
-      border-radius: 12px;
+      border-radius: 16px;
       display: flex;
       flex-direction: column;
       padding: 1.5rem;
@@ -1276,10 +1311,7 @@
       cursor: pointer;
       transform-style: preserve-3d;
     }
-    
-    .js-tilt-glare {
-      border-radius: inherit;
-    }
+
 
     /* Subtle glow effect based on accent color */
     .card::before {
@@ -1299,8 +1331,8 @@
 
     .card-header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 8px;
       margin-bottom: 1rem;
       padding-bottom: 0.75rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -1317,6 +1349,7 @@
     }
 
     .card-day {
+      flex: 1;
       font-family: var(--font-body);
       font-size: 0.6875rem;
       font-weight: 500;
@@ -1359,7 +1392,7 @@
       font-size: 0.875rem;
       color: var(--card-text, #F5F5F7);
       opacity: 0.7;
-      margin-bottom: 1rem;
+      margin-bottom: .5rem;
     }
 
     .card-icon {
@@ -1368,7 +1401,7 @@
       align-items: center;
       flex: 1;
       min-height: 100px;
-      margin-bottom: 1rem;
+      margin-bottom: .5rem;
     }
 
     .card-icon .material-symbols-sharp {
@@ -1409,6 +1442,12 @@
       color: var(--card-text, #F5F5F7);
       opacity: 0.85;
       line-height: 1.4;
+    }
+
+    .card-desc br {
+      display: block;
+      content: "";
+      margin-top: 0.15em;
     }
 
     /* Light theme cards */
@@ -1507,45 +1546,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      perspective: 1000px;
-      transform-style: preserve-3d;
     }
 
     .swipe-card-wrapper .card {
-      width: 100%;
-      max-width: 340px;
-      height: 100%;
-      max-height: 550px;
-    }
-
-    /* ============================================
-       SCROLL VIEW - Vertical scroll
-       ============================================ */
-    .scroll-view {
-      flex-direction: column;
-      overflow-y: auto;
-      overflow-x: visible;
-      scroll-snap-type: y mandatory;
-      -webkit-overflow-scrolling: touch;
-      padding: calc(50vh - 310px) 0; /* Center with peek of adjacent cards */
-      gap: 20px;
-    }
-
-    .scroll-card-wrapper {
-      flex-shrink: 0;
-      scroll-snap-align: center;
-      scroll-snap-stop: always; /* Forces stop at each card */
-      min-height: 550px;
-      height: auto;
-      padding: 40px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      perspective: 1000px;
-      transform-style: preserve-3d;
-    }
-
-    .scroll-card-wrapper .card {
       width: 100%;
       max-width: 340px;
       height: 100%;
@@ -1692,7 +1695,7 @@
       .swipe-card-wrapper {
         width: 300px;
         min-width: 300px;
-        padding: 35px 0;
+        padding: 8px 0;
       }
 
       .scroll-view {
@@ -1960,30 +1963,6 @@
       background: var(--color-accent);
     }
 
-    /* Logout button - red background */
-    .logout-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      border: none;
-      background: #dc2626;
-      border-radius: 6px;
-      cursor: pointer;
-      color: #fff;
-      transition: all 0.2s;
-    }
-
-    .logout-btn:hover {
-      background: #b91c1c;
-      transform: scale(1.05);
-    }
-
-    .logout-btn .material-symbols-sharp {
-      font-size: 18px;
-    }
-
     @media (max-width: 480px) {
       .login-container {
         padding: 1.5rem;
@@ -1993,7 +1972,7 @@
 </head>
 <body>
   <!-- Login Screen -->
-  <div class="login-screen" id="loginScreen">
+  <div class="login-screen hidden" id="loginScreen">
     <div class="login-container">
       <a href="/" class="login-back">
         <span class="material-symbols-sharp">arrow_back</span>
@@ -2022,7 +2001,7 @@
   </div>
 
   <!-- Initial loading overlay -->
-  <div class="app-loading hidden" id="appLoading">
+  <div class="app-loading" id="appLoading">
     <div class="loading-spinner"></div>
     <p class="app-loading-text">
       <span>La Mirada Creativa</span>
@@ -2031,112 +2010,91 @@
   </div>
 
   <div class="app" id="cardsApp" style="display: none;">
-    <!-- Header -->
-    <header class="header">
-      <div class="header-inner">
-        <a href="/" class="logo"><img src="../assets/images/logo.jpg" alt="Logo" class="logo-img">La Mirada Creativa</a>
-        
-        <div class="view-controls">
-          <div class="view-toggle">
-            <button class="view-btn active" data-view="swipe" title="Scroll horizontal">
-              <span class="material-symbols-sharp">swap_horiz</span>
-            </button>
-            <button class="view-btn" data-view="scroll" title="Scroll vertical">
-              <span class="material-symbols-sharp">swap_vert</span>
-            </button>
-          </div>
-          <button class="btn-3d" id="view3dHeaderBtn" title="Ver en 3D">
-            <span class="material-symbols-sharp">view_in_ar</span>
-            <span>3D</span>
-          </button>
+    <!-- iOS Navigation Bar -->
+    <nav class="ios-navbar" id="iosNavbar">
+      <div class="ios-navbar-left" id="navbarLeft">
+        <button class="ios-nav-btn" id="navDownloadBtn" title="Descargar todas">
+          <span class="material-symbols-sharp">download</span>
+        </button>
+      </div>
+      <div class="ios-navbar-title" id="navbarTitle">Día 1 / 365</div>
+      <div class="ios-navbar-right" id="navbarRight">
+        <button class="ios-nav-btn" id="navIndexBtn" title="Índice">
+          <span class="material-symbols-sharp">list</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Tab: Calendario (hidden by default) -->
+    <div class="tab-calendario-content" id="tabCalendarioContent" style="display: none;">
+      <!-- Streak -->
+      <div class="progreso-streak">
+        <div class="progreso-streak-counter">
+          <span class="progreso-streak-fire" id="progresoFire">🔥</span>
+          <span class="progreso-streak-number" id="progresoNumber">0</span>
         </div>
-
-        <div class="header-actions">
-          <div class="header-actions-group">
-            <button class="index-btn" id="indexBtn" title="Ver índice">
-              <span class="material-symbols-sharp">list</span>
-            </button>
-
-            <div class="options-wrapper">
-              <button class="options-btn" id="optionsBtn" title="Opciones">
-                <span class="material-symbols-sharp">more_vert</span>
-              </button>
-              <div class="options-dropdown" id="optionsDropdown">
-                <button class="options-item" id="downloadCard">
-                  <span class="material-symbols-sharp">image</span>
-                  <span>Descargar carta actual (JPG)</span>
-                </button>
-                <div class="options-separator"></div>
-                <button class="options-item" id="downloadPDF">
-                  <span class="material-symbols-sharp">picture_as_pdf</span>
-                  <span>Descargar todas las cartas (PDF)</span>
-                </button>
-                <div class="options-separator"></div>
-                <button class="options-item" id="notifSettingsBtn">
-                  <span class="material-symbols-sharp">notifications</span>
-                  <span>Recordatorio diario</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-
-          <div class="header-separator"></div>
-
-          <button class="logout-btn" id="logoutBtn" title="Cerrar sesión">
-            <span class="material-symbols-sharp">logout</span>
-          </button>
-
-          <!-- Mobile Menu Button -->
-          <button class="mobile-menu-btn" id="mobileMenuBtn" title="Menú">
-            <span class="material-symbols-sharp">menu</span>
-          </button>
+        <span class="progreso-streak-label" id="progresoLabel">días de racha</span>
+        <span class="progreso-streak-best" id="progresoBest">Mejor racha: 0 días</span>
+      </div>
+      <!-- Progress bar -->
+      <div class="progreso-progress">
+        <div class="progress-bar-global">
+          <div class="progress-fill-global" id="progresoFill"></div>
+          <div class="progress-block-marker" style="left: 24.6%"></div>
+          <div class="progress-block-marker" style="left: 49.3%"></div>
+          <div class="progress-block-marker" style="left: 74%"></div>
+        </div>
+        <div class="progress-label-row">
+          <span class="progress-label-global" id="progresoTotal">0/365</span>
         </div>
       </div>
-    </header>
 
-    <!-- Mobile Options Bottom Sheet -->
-    <div class="mobile-options-modal" id="mobileOptionsModal">
-      <div class="mobile-options-content">
-        <div class="mobile-options-header">
-          <span class="mobile-options-title">Opciones</span>
-        </div>
-        <div class="mobile-options-list">
-          
-          <div class="mobile-options-separator"></div>
-
-          <button class="mobile-option-item" id="mobileCalendarBtn">
-            <span class="material-symbols-sharp">calendar_month</span>
-            Mi calendario
+      <!-- Calendar -->
+      <div class="tab-calendar-section">
+        <div class="tab-calendar-header">
+          <button class="tab-calendar-nav" id="calNavPrev">
+            <span class="material-symbols-sharp">chevron_left</span>
           </button>
-
-          <button class="mobile-option-item" id="mobileIndexBtn">
-            <span class="material-symbols-sharp">list</span>
-            Índice de cartas
-          </button>
-          
-          <button class="mobile-option-item" id="mobileDownloadCard">
-            <span class="material-symbols-sharp">image</span>
-            Descargar carta actual
-          </button>
-          
-          <button class="mobile-option-item" id="mobileDownloadPDF">
-            <span class="material-symbols-sharp">picture_as_pdf</span>
-            Descargar todas (PDF)
-          </button>
-
-          <button class="mobile-option-item" id="mobileNotifSettingsBtn">
-            <span class="material-symbols-sharp">notifications</span>
-            Recordatorio diario
-          </button>
-
-          <div class="mobile-options-separator"></div>
-          
-          <button class="mobile-option-item danger" id="mobileLogoutBtn">
-            <span class="material-symbols-sharp">logout</span>
-            Cerrar sesión
+          <h3 class="tab-calendar-title" id="calTitle"></h3>
+          <button class="tab-calendar-nav" id="calNavNext">
+            <span class="material-symbols-sharp">chevron_right</span>
           </button>
         </div>
+        <div class="progress-calendar-weekdays">
+          <span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span>
+        </div>
+        <div class="progress-calendar-grid" id="calGrid"></div>
+        <div class="progress-calendar-legend">
+          <span class="progress-cal-legend-item"><span class="progress-cal-swatch progress-cal-swatch-1"></span>Actividad</span>
+          <span class="progress-cal-legend-item"><span class="progress-cal-swatch progress-cal-swatch-break"></span>Racha rota</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Ajustes (hidden by default) -->
+    <div class="tab-ajustes-content" id="tabAjustesContent" style="display: none;">
+      <div class="ajustes-settings progreso-settings">
+        <button class="progreso-setting-item" id="ajustesNotifBtn">
+          <span class="material-symbols-sharp">notifications</span>
+          Recordatorio diario
+        </button>
+        <button class="progreso-setting-item danger" id="ajustesLogoutBtn">
+          <span class="material-symbols-sharp">logout</span>
+          Cerrar sesión
+        </button>
+      </div>
+    </div>
+
+    <!-- iOS Action Sheet (dynamic) -->
+    <div class="ios-action-sheet" id="actionSheet">
+      <div class="ios-action-sheet-content">
+        <div class="ios-action-group">
+          <button class="ios-action-item" id="actionSheetBtn">
+            <span class="material-symbols-sharp" id="actionSheetIcon">image</span>
+            <span id="actionSheetLabel">Descargar carta (JPG)</span>
+          </button>
+        </div>
+        <button class="ios-action-cancel" id="actionCancel">Cancelar</button>
       </div>
     </div>
 
@@ -2162,9 +2120,6 @@
 
       <!-- Swipe View (horizontal scroll) -->
       <div class="view swipe-view active" id="swipeView"></div>
-
-      <!-- Scroll View (vertical scroll) -->
-      <div class="view scroll-view" id="scrollView"></div>
     </main>
 
     <!-- Toast Progress Alert -->
@@ -2249,19 +2204,28 @@
       </div>
     </div>
 
-    <!-- Progress Bar (Draggable) -->
-    <div class="progress-bar">
-      <div class="progress-inner">
-        <div class="progress-info">
-          <span class="progress-current" id="progressCurrent">Cargando...</span>
-          <span class="progress-total" id="progressTotal">— / 394</span>
-        </div>
-        <div class="progress-track" id="progressTrack">
-          <div class="progress-track-inner"></div>
-          <div class="progress-fill" id="progressFill"></div>
-          <div class="progress-handle" id="progressHandle"></div>
-        </div>
+    <!-- iOS Scrubber (thin progress) -->
+    <div class="ios-scrubber" id="iosScrubber">
+      <div class="ios-scrubber-track" id="scrubberTrack">
+        <div class="ios-scrubber-fill" id="scrubberFill"></div>
+        <div class="ios-scrubber-handle" id="scrubberHandle"></div>
       </div>
+    </div>
+
+    <!-- iOS Tab Bar -->
+    <div class="ios-tabbar">
+      <button class="ios-tab active" data-tab="hoy" id="tabBtnHoy">
+        <span class="material-symbols-sharp">style</span>
+        <span class="ios-tab-label">Hoy</span>
+      </button>
+      <button class="ios-tab" data-tab="calendario" id="tabBtnCalendario">
+        <span class="material-symbols-sharp">rocket_launch</span>
+        <span class="ios-tab-label">Progreso</span>
+      </button>
+      <button class="ios-tab" data-tab="ajustes" id="tabBtnAjustes">
+        <span class="material-symbols-sharp">settings</span>
+        <span class="ios-tab-label">Ajustes</span>
+      </button>
     </div>
   </div>
 
@@ -2269,7 +2233,7 @@
   <script src="data.js"></script>
 
   <!-- Progress & Streak System -->
-  <script src="../js/progress.js"></script>
+  <script src="../js/progress.js?v=20260223c"></script>
 
   <script>
     // ============================================
@@ -2318,8 +2282,6 @@
     const loginMessage = document.getElementById('loginMessage');
     const cardsApp = document.getElementById('cardsApp');
     const appLoading = document.getElementById('appLoading');
-    const logoutBtn = document.getElementById('logoutBtn');
-
     let auth0Client = null;
     let currentUser = null;
 
@@ -2445,6 +2407,7 @@
     }
 
     function showLogin() {
+      appLoading.classList.add('hidden');
       loginScreen.classList.remove('hidden');
       cardsApp.style.display = 'none';
     }
@@ -2539,24 +2502,6 @@
       });
     }
 
-    // Logout button
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', async () => {
-        try {
-          // Set flag to show toast after redirect
-          safeSetItem('lmc_logged_out', 'true');
-          if (window.ProgressSystem) ProgressSystem.clearCache();
-          await auth0Client.logout({
-            logoutParams: {
-              returnTo: window.location.origin + '/app/'
-            }
-          });
-        } catch (err) {
-          console.error('Logout error:', err);
-        }
-      });
-    }
-
     // Check for logout flag and show toast
     if (safeGetItem('lmc_logged_out') === 'true') {
       safeRemoveItem('lmc_logged_out');
@@ -2583,32 +2528,44 @@
     // DOM Elements
     // ============================================
     const swipeView = document.getElementById('swipeView');
-    const scrollView = document.getElementById('scrollView');
-    const viewBtns = document.querySelectorAll('.view-btn');
-    const views = document.querySelectorAll('.view');
     const ownerBanner = document.getElementById('ownerBanner');
     const ownerName = document.getElementById('ownerName');
     const accessInfo = document.getElementById('accessInfo');
-    const progressCurrent = document.getElementById('progressCurrent');
-    const progressTotal = document.getElementById('progressTotal');
-    const progressFill = document.getElementById('progressFill');
-    const progressTrack = document.getElementById('progressTrack');
-    const progressHandle = document.getElementById('progressHandle');
-    const indexBtn = document.getElementById('indexBtn');
+    // iOS Scrubber elements
+    const scrubberFill = document.getElementById('scrubberFill');
+    const scrubberTrack = document.getElementById('scrubberTrack');
+    const scrubberHandle = document.getElementById('scrubberHandle');
+    const iosScrubber = document.getElementById('iosScrubber');
+    // iOS Navbar
+    const navbarTitle = document.getElementById('navbarTitle');
+    const navDownloadBtn = document.getElementById('navDownloadBtn');
+    const navIndexBtn = document.getElementById('navIndexBtn');
+    // iOS Tabs
+    const tabBtnHoy = document.getElementById('tabBtnHoy');
+    const tabBtnCalendario = document.getElementById('tabBtnCalendario');
+    const tabBtnAjustes = document.getElementById('tabBtnAjustes');
+    const tabCalendarioContent = document.getElementById('tabCalendarioContent');
+    const tabAjustesContent = document.getElementById('tabAjustesContent');
+    const mainContent = document.querySelector('.main');
+    const streakBadge = document.getElementById('streakBadge');
+    // Index modal
     const indexModal = document.getElementById('indexModal');
     const indexClose = document.getElementById('indexClose');
     const indexList = document.getElementById('indexList');
+    // Action sheet
+    const actionSheet = document.getElementById('actionSheet');
+    const actionSheetBtn = document.getElementById('actionSheetBtn');
+    const actionSheetIcon = document.getElementById('actionSheetIcon');
+    const actionSheetLabel = document.getElementById('actionSheetLabel');
 
     // ============================================
     // LocalStorage Keys
     // ============================================
     const STORAGE_KEY_INDEX = 'lmc_current_index';
-    const STORAGE_KEY_VIEW = 'lmc_current_view';
 
     // ============================================
     // State
     // ============================================
-    let currentView = 'swipe'; // Always default to horizontal view
     let currentIndex = parseInt(safeGetItem(STORAGE_KEY_INDEX)) || 0;
     let filteredCards = [...allCards];
     window._filteredCards = filteredCards; // Expose for ProgressSystem
@@ -2619,12 +2576,8 @@
     // Progress drag state
     let isDraggingProgress = false;
     
-    // Flag to prevent observer updates during view switch
-    let isSwitchingView = false;
-    
-    // Scroll observer references
+    // Scroll observer reference
     let swipeObserver = null;
-    let scrollObserver = null;
 
     // ============================================
     // Card HTML Generator
@@ -2697,6 +2650,9 @@
           <div class="${headerClass}">
             <span class="card-day">${dayLabel}</span>
             <span class="card-block">${blockLabel}</span>
+            <button class="card-more-btn" aria-label="Más opciones">
+              <span class="material-symbols-sharp">more_vert</span>
+            </button>
           </div>
           <div class="card-content">
             <h3 class="card-title">${card.title}</h3>
@@ -2711,50 +2667,134 @@
     }
 
     // ============================================
-    // Progress Bar
+    // iOS Tab Switching
+    // ============================================
+    let activeTab = 'hoy';
+
+    function switchTab(tabName) {
+      activeTab = tabName;
+
+      // Toggle tab button active states
+      tabBtnHoy.classList.toggle('active', tabName === 'hoy');
+      tabBtnCalendario.classList.toggle('active', tabName === 'calendario');
+      tabBtnAjustes.classList.toggle('active', tabName === 'ajustes');
+
+      // Hide all content areas
+      mainContent.style.display = 'none';
+      tabCalendarioContent.style.display = 'none';
+      tabAjustesContent.style.display = 'none';
+      iosScrubber.style.display = 'none';
+
+      if (tabName === 'hoy') {
+        mainContent.style.display = '';
+        iosScrubber.style.display = '';
+        navbarTitle.textContent = getNavbarTitle(currentIndex);
+        navDownloadBtn.style.display = '';
+        navIndexBtn.style.display = '';
+      } else if (tabName === 'calendario') {
+        tabCalendarioContent.style.display = '';
+        navbarTitle.textContent = 'Progreso';
+        navDownloadBtn.style.display = 'none';
+        navIndexBtn.style.display = 'none';
+        // Render calendar each time (async API call — re-renders fresh data)
+        if (window.ProgressSystem && ProgressSystem.renderCalendar) {
+          ProgressSystem.renderCalendar();
+        }
+      } else if (tabName === 'ajustes') {
+        tabAjustesContent.style.display = '';
+        navbarTitle.textContent = 'Ajustes';
+        navDownloadBtn.style.display = 'none';
+        navIndexBtn.style.display = 'none';
+      }
+    }
+
+    tabBtnHoy.addEventListener('click', () => switchTab('hoy'));
+    tabBtnCalendario.addEventListener('click', () => switchTab('calendario'));
+    tabBtnAjustes.addEventListener('click', () => switchTab('ajustes'));
+
+    function getNavbarTitle(index) {
+      const card = filteredCards[index];
+      if (!card) return '';
+      if (card.day) return `Día ${card.day} / 365`;
+      return card.title || '';
+    }
+
+    // ============================================
+    // iOS Action Sheet (dynamic)
+    // ============================================
+    let actionSheetCallback = null;
+
+    function openActionSheet(mode) {
+      if (mode === 'card') {
+        actionSheetIcon.textContent = 'image';
+        actionSheetLabel.textContent = 'Descargar carta (JPG)';
+        actionSheetCallback = downloadCurrentCardJPG;
+      } else {
+        actionSheetIcon.textContent = 'picture_as_pdf';
+        actionSheetLabel.textContent = 'Descargar todas (PDF)';
+        actionSheetCallback = downloadAllCardsPDF;
+      }
+      actionSheet.classList.add('active');
+    }
+
+    function closeActionSheet() {
+      actionSheet.classList.remove('active');
+      actionSheetCallback = null;
+    }
+
+    actionSheetBtn.addEventListener('click', () => {
+      closeActionSheet();
+      if (actionSheetCallback) actionSheetCallback();
+    });
+
+    navDownloadBtn.addEventListener('click', () => openActionSheet('all'));
+    document.getElementById('actionCancel').addEventListener('click', closeActionSheet);
+    actionSheet.addEventListener('click', (e) => {
+      if (e.target === actionSheet) closeActionSheet();
+    });
+
+    // ============================================
+    // iOS Scrubber (Progress)
     // ============================================
     function updateProgressBar(index, animate = true) {
       if (filteredCards.length === 0) return;
-      if (!progressCurrent || !progressTotal || !progressFill || !progressHandle) return;
-      
+      if (!scrubberFill || !scrubberHandle) return;
+
       const card = filteredCards[index];
       if (!card) return;
-      
+
       const progress = ((index + 1) / filteredCards.length) * 100;
-      
-      // Format: "DÍA X / 365: TITULO" for exercises, just title for others
-      let displayText = card.title || '';
-      if (card.day) {
-        displayText = `DÍA ${card.day} / 365: ${card.title}`;
-      }
-      progressCurrent.textContent = displayText;
-      progressTotal.textContent = `${index + 1} / ${filteredCards.length}`;
-      
+
       if (!animate) {
-        progressFill.style.transition = 'none';
-        progressHandle.style.transition = 'none';
+        scrubberFill.style.transition = 'none';
+        scrubberHandle.style.transition = 'none';
       } else {
-        progressFill.style.transition = 'width 0.2s ease';
-        progressHandle.style.transition = 'left 0.2s ease';
+        scrubberFill.style.transition = 'width 0.2s ease';
+        scrubberHandle.style.transition = 'left 0.2s ease';
       }
-      
-      progressFill.style.width = `${progress}%`;
-      progressHandle.style.left = `${progress}%`;
-      
+
+      scrubberFill.style.width = `${progress}%`;
+      scrubberHandle.style.left = `${progress}%`;
+
+      // Update navbar title
+      if (activeTab === 'hoy') {
+        navbarTitle.textContent = getNavbarTitle(index);
+      }
+
       // Save to localStorage
       safeSetItem(STORAGE_KEY_INDEX, index.toString());
     }
 
-    // Progress bar drag functionality
+    // Scrubber drag functionality
     function initProgressDrag() {
-      if (!progressTrack) return;
-      
-      progressTrack.addEventListener('mousedown', startProgressDrag);
-      progressTrack.addEventListener('touchstart', startProgressDrag, { passive: false });
-      
+      if (!scrubberTrack) return;
+
+      scrubberTrack.addEventListener('mousedown', startProgressDrag);
+      scrubberTrack.addEventListener('touchstart', startProgressDrag, { passive: false });
+
       document.addEventListener('mousemove', moveProgressDrag);
       document.addEventListener('touchmove', moveProgressDrag, { passive: false });
-      
+
       document.addEventListener('mouseup', endProgressDrag);
       document.addEventListener('touchend', endProgressDrag);
     }
@@ -2774,45 +2814,37 @@
     function endProgressDrag(e) {
       if (!isDraggingProgress) return;
       isDraggingProgress = false;
-      
+
       // Ensure final scroll to target position
-      if (currentView === 'swipe') {
-        scrollToSwipeCard(currentIndex, false);
-      } else {
-        scrollToScrollCard(currentIndex, false);
-      }
+      scrollToSwipeCard(currentIndex, false);
     }
 
     let lastSliderUpdate = 0;
     const SLIDER_THROTTLE = 50; // ms between updates while dragging
 
     function updateFromProgressPosition(e) {
-      if (!progressTrack) return;
-      
+      if (!scrubberTrack) return;
+
       const now = Date.now();
-      const rect = progressTrack.getBoundingClientRect();
+      const rect = scrubberTrack.getBoundingClientRect();
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       let progress = (clientX - rect.left) / rect.width;
       progress = Math.max(0, Math.min(1, progress));
-      
+
       const newIndex = Math.round(progress * (filteredCards.length - 1));
-      
-      // Always update progress bar visually
+
+      // Always update scrubber visually
       updateProgressBar(newIndex, false);
-      
+
       if (newIndex !== currentIndex) {
         resetOtherCardsGyro();
         currentIndex = newIndex;
-        
+
         // Throttle actual card scrolling while dragging to prevent lag
         if (now - lastSliderUpdate > SLIDER_THROTTLE) {
           lastSliderUpdate = now;
-          
-          if (currentView === 'swipe') {
-            scrollToSwipeCard(currentIndex, true); // instant scroll while dragging
-          } else {
-            scrollToScrollCard(currentIndex, true);
-          }
+
+          scrollToSwipeCard(currentIndex, true); // instant scroll while dragging
         }
       }
     }
@@ -2936,8 +2968,6 @@
       const cards = swipeView.querySelectorAll('.swipe-card-wrapper');
       
       swipeObserver = new IntersectionObserver((entries) => {
-        if (isSwitchingView) return;
-        
         entries.forEach(entry => {
           if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
             const index = parseInt(entry.target.dataset.index);
@@ -2957,161 +2987,32 @@
     }
 
     // ============================================
-    // Scroll View (Vertical)
-    // ============================================
-    let renderedScrollCards = 0;
-
-    function renderScrollView() {
-      if (!scrollView) return;
-      
-      if (scrollObserver) {
-        scrollObserver.disconnect();
-      }
-      
-      if (filteredCards.length === 0) {
-        scrollView.innerHTML = '<div class="no-results"><span class="material-symbols-sharp">search_off</span><p>No se encontraron cartas</p></div>';
-        return;
-      }
-
-      // On mobile, start with cards around current index
-      const startIdx = isMobile ? Math.max(0, currentIndex - 5) : 0;
-      const endIdx = isMobile ? Math.min(filteredCards.length, currentIndex + CARDS_PER_BATCH) : filteredCards.length;
-      renderedScrollCards = endIdx;
-
-      scrollView.innerHTML = filteredCards.slice(startIdx, endIdx).map((card, i) => {
-        const index = startIdx + i;
-        return `
-          <div class="scroll-card-wrapper" data-index="${index}">
-            ${createCardHTML(card)}
-          </div>
-        `;
-      }).join('');
-
-      setupScrollObserver();
-      setupCardClickHandlers(scrollView, 'scroll');
-      
-      // Load more cards as user scrolls (mobile only)
-      if (isMobile) {
-        scrollView.addEventListener('scroll', loadMoreScrollCards, { passive: true });
-      }
-      
-      // Use instant scroll when switching views to maintain position
-      setTimeout(() => scrollToScrollCard(currentIndex, true), 100);
-
-      // Inject completion buttons
-      if (window.ProgressSystem) ProgressSystem.updateAllCardButtons();
-    }
-
-    function loadMoreScrollCards() {
-      if (!isMobile || renderedScrollCards >= filteredCards.length) return;
-      
-      const scrollTop = scrollView.scrollTop;
-      const scrollHeight = scrollView.scrollHeight;
-      const clientHeight = scrollView.clientHeight;
-      
-      // Load more when near the end
-      if (scrollTop + clientHeight > scrollHeight - 1000) {
-        const startIdx = renderedScrollCards;
-        const endIdx = Math.min(filteredCards.length, renderedScrollCards + CARDS_PER_BATCH);
-        
-        const fragment = document.createDocumentFragment();
-        for (let i = startIdx; i < endIdx; i++) {
-          const wrapper = document.createElement('div');
-          wrapper.className = 'scroll-card-wrapper';
-          wrapper.dataset.index = i;
-          wrapper.innerHTML = createCardHTML(filteredCards[i]);
-          fragment.appendChild(wrapper);
-          scrollObserver.observe(wrapper);
-        }
-        scrollView.appendChild(fragment);
-        renderedScrollCards = endIdx;
-        setupCardClickHandlers(scrollView, 'scroll');
-      }
-    }
-
-    function scrollToScrollCard(index, instant = false) {
-      let cardWrapper = scrollView.querySelector(`.scroll-card-wrapper[data-index="${index}"]`);
-      
-      // If card not loaded (mobile lazy loading), re-render around target
-      if (!cardWrapper && isMobile) {
-        // Re-render centered on target index with padding on both sides
-        const startIdx = Math.max(0, index - Math.floor(CARDS_PER_BATCH / 2));
-        const endIdx = Math.min(filteredCards.length, startIdx + CARDS_PER_BATCH);
-        
-        scrollView.innerHTML = filteredCards.slice(startIdx, endIdx).map((card, i) => {
-          const cardIndex = startIdx + i;
-          return `
-            <div class="scroll-card-wrapper" data-index="${cardIndex}">
-              ${createCardHTML(card)}
-            </div>
-          `;
-        }).join('');
-        
-        renderedScrollCards = endIdx;
-        setupScrollObserver();
-        setupCardClickHandlers(scrollView, 'scroll');
-        if (window.ProgressSystem) ProgressSystem.updateAllCardButtons();
-
-        cardWrapper = scrollView.querySelector(`.scroll-card-wrapper[data-index="${index}"]`);
-      }
-
-      if (cardWrapper) {
-        if (instant) {
-          const containerRect = scrollView.getBoundingClientRect();
-          const cardRect = cardWrapper.getBoundingClientRect();
-          const scrollTop = scrollView.scrollTop + (cardRect.top - containerRect.top) - (containerRect.height / 2) + (cardRect.height / 2);
-          scrollView.scrollTop = scrollTop;
-        } else {
-          cardWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }
-    }
-
-    function setupScrollObserver() {
-      const cards = scrollView.querySelectorAll('.scroll-card-wrapper');
-      
-      scrollObserver = new IntersectionObserver((entries) => {
-        if (isSwitchingView) return;
-        
-        entries.forEach(entry => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-            const index = parseInt(entry.target.dataset.index);
-            if (index !== currentIndex && !isDraggingProgress) {
-              resetOtherCardsGyro(); // Reset previous card's gyro
-              currentIndex = index;
-              updateProgressBar(index);
-            }
-          }
-        });
-      }, {
-        root: scrollView,
-        threshold: 0.5
-      });
-
-      cards.forEach(card => scrollObserver.observe(card));
-    }
-
-    // ============================================
     // Card Click Handlers
     // ============================================
     function setupCardClickHandlers(container, viewType) {
       const wrappers = container.querySelectorAll(`.${viewType}-card-wrapper`);
-      
+
       wrappers.forEach(wrapper => {
         const card = wrapper.querySelector('.card');
         if (card) {
+          // 3-dot menu button
+          const moreBtn = card.querySelector('.card-more-btn');
+          if (moreBtn) {
+            moreBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              openActionSheet('card');
+            });
+          }
+
           card.addEventListener('click', (e) => {
             const index = parseInt(wrapper.dataset.index);
             if (index !== currentIndex) {
               resetOtherCardsGyro(); // Reset previous card's gyro
               currentIndex = index;
               updateProgressBar(index);
-              
-              if (viewType === 'swipe') {
-                scrollToSwipeCard(index);
-              } else {
-                scrollToScrollCard(index);
-              }
+
+              scrollToSwipeCard(index);
             }
           });
         }
@@ -3144,87 +3045,14 @@
       renderCurrentView();
     }
 
-    // ============================================
-    // View Toggle
-    // ============================================
-    function switchView(viewName) {
-      if (currentView === viewName) return;
-      
-      const savedIndex = currentIndex; // Guardar posición actual
-      
-      // Set flag to prevent observer updates
-      isSwitchingView = true;
-      
-      // Exit animation on current view
-      const currentActiveView = document.getElementById(currentView + 'View');
-      if (currentActiveView) {
-        currentActiveView.classList.add('exiting');
-        currentActiveView.classList.remove('visible');
-      }
-      
-      // After exit animation, switch views
-      setTimeout(() => {
-        // Remove exiting class and deactivate
-        views.forEach(view => {
-          view.classList.remove('exiting', 'visible', 'active');
-        });
-        
-        currentView = viewName;
-        
-        viewBtns.forEach(btn => {
-          btn.classList.toggle('active', btn.dataset.view === viewName);
-        });
-        
-        // Activate new view
-        const newView = document.getElementById(viewName + 'View');
-        if (newView) newView.classList.add('active');
-        
-        currentIndex = savedIndex; // Restaurar posición
-        safeSetItem(STORAGE_KEY_VIEW, viewName);
-        
-        // Render new view
-        if (currentView === 'swipe') {
-          renderSwipeView();
-        } else {
-          renderScrollView();
-        }
-        updateProgressBar(currentIndex);
-        initTiltEffect();
-        
-        // Entrance animation after rendering - slight delay for wow effect
-        requestAnimationFrame(() => {
-          setTimeout(() => {
-            const newView = document.getElementById(viewName + 'View');
-            if (newView) newView.classList.add('visible');
-            
-            // Reset flag after transition completes
-            setTimeout(() => {
-              isSwitchingView = false;
-            }, 500);
-          }, 50);
-        });
-      }, 400); // Wait for exit animation
-    }
-
     function renderCurrentView() {
-      if (currentView === 'swipe') {
-        renderSwipeView();
-      } else {
-        renderScrollView();
-      }
+      renderSwipeView();
       updateProgressBar(currentIndex);
-      initTiltEffect();
-      
-      // Make view visible
-      const activeView = document.getElementById(currentView + 'View');
-      if (activeView) activeView.classList.add('visible');
-    }
+      init3DMode();
 
-    viewBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        switchView(btn.dataset.view);
-      });
-    });
+      // Make view visible
+      if (swipeView) swipeView.classList.add('visible');
+    }
 
     // ============================================
     // Index Modal
@@ -3381,11 +3209,7 @@
             updateProgressBar(idx);
             closeIndex();
             
-            if (currentView === 'swipe') {
-              scrollToSwipeCard(idx);
-            } else {
-              scrollToScrollCard(idx);
-            }
+            scrollToSwipeCard(idx);
           });
         }
       });
@@ -3411,11 +3235,6 @@
       document.body.style.overflow = '';
     }
     
-    indexBtn.addEventListener('click', () => {
-      buildIndex();
-      openIndex();
-    });
-    
     indexClose.addEventListener('click', closeIndex);
     
     indexModal.addEventListener('click', (e) => {
@@ -3432,68 +3251,44 @@
     });
 
     // ============================================
-    // Options Menu & Download
+    // Download Functions
     // ============================================
-    const optionsBtn = document.getElementById('optionsBtn');
-    const optionsDropdown = document.getElementById('optionsDropdown');
-    const downloadCardBtn = document.getElementById('downloadCard');
-    const downloadPDFBtn = document.getElementById('downloadPDF');
-
-    // Toggle dropdown
-    optionsBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      optionsDropdown.classList.toggle('active');
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', () => {
-      optionsDropdown.classList.remove('active');
-    });
-
-    optionsDropdown.addEventListener('click', (e) => {
-      e.stopPropagation();
-    });
 
     // Download current card as JPG
-    downloadCardBtn.addEventListener('click', async () => {
-      optionsDropdown.classList.remove('active');
-      
+    async function downloadCurrentCardJPG() {
+      closeShareSheet();
+
       const card = filteredCards[currentIndex];
-      
+
       // Find the current visible card
       const activeView = document.querySelector('.view.active.visible');
       const cardWrapper = activeView?.querySelector(`[data-index="${currentIndex}"]`);
       const cardElement = cardWrapper?.querySelector('.card');
-      
+
       if (!cardElement || typeof html2canvas === 'undefined') {
         alert('Error al capturar la carta. Intenta de nuevo.');
         return;
       }
-
-      // Show loading state
-      downloadCardBtn.disabled = true;
-      downloadCardBtn.querySelector('span:last-child').textContent = 'Generando...';
 
       try {
         // Temporarily add class to disable problematic CSS for html2canvas
         cardElement.classList.add('capturing');
         const originalTransform = cardElement.style.transform;
         cardElement.style.transform = 'none';
-        
+
         // Wait for styles to apply
         await new Promise(resolve => setTimeout(resolve, 50));
-        
+
         const canvas = await html2canvas(cardElement, {
           scale: 2,
           backgroundColor: '#1a1025',
           useCORS: true,
           logging: false,
           ignoreElements: (element) => {
-            // Ignore pseudo-elements by checking for reflection-related classes
             return element.classList?.contains('card-reflection');
           }
         });
-        
+
         // Restore original state
         cardElement.classList.remove('capturing');
         cardElement.style.transform = originalTransform;
@@ -3509,11 +3304,7 @@
         console.error('Error capturing card:', error);
         alert('Error al generar la imagen. Intenta de nuevo.');
       }
-
-      // Reset button
-      downloadCardBtn.disabled = false;
-      downloadCardBtn.querySelector('span:last-child').textContent = 'Descargar carta actual (JPG)';
-    });
+    }
 
     // Toast elements
     const toastProgress = document.getElementById('toastProgress');
@@ -3546,42 +3337,38 @@
     });
 
     // Download all cards as PDF
-    downloadPDFBtn.addEventListener('click', async () => {
-      optionsDropdown.classList.remove('active');
-      
+    async function downloadAllCardsPDF() {
+      closeShareSheet();
+
       // Check if libraries are loaded
       if (typeof html2canvas === 'undefined') {
         alert('Librería html2canvas no cargada. Recarga la página.');
         return;
       }
-      
+
       if (typeof window.jspdf === 'undefined') {
         alert('Librería jsPDF no cargada. Recarga la página.');
         return;
       }
 
       const { jsPDF } = window.jspdf;
-      
+
       // Reset cancel flag
       pdfCancelled = false;
-      
+
       // Show PDF progress toast
       showPdfToast('Preparando...', 0);
-      downloadPDFBtn.disabled = true;
 
       try {
-        // Card dimensions (maintain aspect ratio)
         const cardWidth = 340;
         const cardHeight = 520;
-        
-        // Create PDF with exact card dimensions (no margins)
+
         const pdf = new jsPDF({
           orientation: 'portrait',
           unit: 'px',
           format: [cardWidth, cardHeight]
         });
 
-        // Create a temporary container for rendering cards
         const tempContainer = document.createElement('div');
         tempContainer.id = 'pdf-temp-container';
         tempContainer.style.cssText = `
@@ -3594,32 +3381,25 @@
         `;
         document.body.appendChild(tempContainer);
 
-        // Small delay to ensure container is ready
         await new Promise(resolve => setTimeout(resolve, 100));
 
         for (let i = 0; i < allCards.length; i++) {
-          // Check if cancelled
           if (pdfCancelled) {
             document.body.removeChild(tempContainer);
-            downloadPDFBtn.disabled = false;
             return;
           }
-          
+
           const card = allCards[i];
-          
-          // Update toast progress
           updatePdfToast(i + 1, allCards.length);
 
-          // Render card HTML
           tempContainer.innerHTML = createCardHTML(card);
           const cardEl = tempContainer.querySelector('.card');
-          
+
           if (!cardEl) {
             console.error('Card element not found for index:', i);
             continue;
           }
-          
-          // Add capturing class to disable problematic CSS
+
           cardEl.classList.add('capturing');
           cardEl.style.width = `${cardWidth}px`;
           cardEl.style.height = `${cardHeight}px`;
@@ -3627,10 +3407,8 @@
           cardEl.style.transform = 'none';
           cardEl.style.position = 'relative';
 
-          // Small delay to ensure styles are applied
           await new Promise(resolve => setTimeout(resolve, 15));
 
-          // Capture to canvas (scale 3 for high quality)
           const canvas = await html2canvas(cardEl, {
             scale: 3,
             backgroundColor: '#1a1025',
@@ -3639,31 +3417,21 @@
             allowTaint: true
           });
 
-          // Add page (except for first)
           if (i > 0) pdf.addPage();
 
-          // Add image to PDF (0.95 quality for optimal output)
           const imgData = canvas.toDataURL('image/jpeg', 0.95);
           pdf.addImage(imgData, 'JPEG', 0, 0, cardWidth, cardHeight);
         }
 
-        // Remove temp container
         document.body.removeChild(tempContainer);
 
-        // Check if cancelled at the end
-        if (pdfCancelled) {
-          downloadPDFBtn.disabled = false;
-          return;
-        }
+        if (pdfCancelled) return;
 
-        // Update toast to complete
         toastStatus.textContent = '¡Completado!';
         toastFill.style.width = '100%';
 
-        // Download PDF
         pdf.save('la-mirada-creativa-365-cartas.pdf');
 
-        // Hide toast after a moment
         setTimeout(() => hidePdfToast(), 1500);
 
       } catch (error) {
@@ -3671,93 +3439,34 @@
         hidePdfToast();
         alert('Error al generar el PDF. Intenta de nuevo.');
       }
+    }
 
-      // Reset button
-      downloadPDFBtn.disabled = false;
+    // ============================================
+    // Ajustes Tab Buttons
+    // ============================================
+    document.getElementById('ajustesNotifBtn').addEventListener('click', () => {
+      openNotifModal();
     });
 
-    // ============================================
-    // Mobile Options Menu
-    // ============================================
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mobileOptionsModal = document.getElementById('mobileOptionsModal');
-    const mobileIndexBtn = document.getElementById('mobileIndexBtn');
-    const mobileDownloadCard = document.getElementById('mobileDownloadCard');
-    const mobileDownloadPDF = document.getElementById('mobileDownloadPDF');
-    const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
+    document.getElementById('ajustesLogoutBtn').addEventListener('click', async () => {
+      try {
+        safeSetItem('lmc_logged_out', 'true');
+        if (window.ProgressSystem) ProgressSystem.clearCache();
+        await auth0Client.logout({
+          logoutParams: {
+            returnTo: window.location.origin + '/app/'
+          }
+        });
+      } catch (err) {
+        console.error('Logout error:', err);
+      }
+    });
 
-    function openMobileOptions() {
-      mobileOptionsModal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeMobileOptions() {
-      mobileOptionsModal.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    if (mobileMenuBtn) {
-      mobileMenuBtn.addEventListener('click', openMobileOptions);
-    }
-
-    if (mobileOptionsModal) {
-      mobileOptionsModal.addEventListener('click', (e) => {
-        if (e.target === mobileOptionsModal) {
-          closeMobileOptions();
-        }
-      });
-    }
-
-    const mobileCalendarBtn = document.getElementById('mobileCalendarBtn');
-    if (mobileCalendarBtn) {
-      mobileCalendarBtn.addEventListener('click', () => {
-        closeMobileOptions();
-        setTimeout(() => {
-          if (window.ProgressSystem) ProgressSystem.openCalendar();
-        }, 100);
-      });
-    }
-
-    if (mobileIndexBtn) {
-      mobileIndexBtn.addEventListener('click', () => {
-        closeMobileOptions();
-        setTimeout(() => {
-          buildIndex();
-          openIndex();
-        }, 100);
-      });
-    }
-
-    if (mobileDownloadCard) {
-      mobileDownloadCard.addEventListener('click', () => {
-        closeMobileOptions();
-        downloadCardBtn.click();
-      });
-    }
-
-    if (mobileDownloadPDF) {
-      mobileDownloadPDF.addEventListener('click', () => {
-        closeMobileOptions();
-        downloadPDFBtn.click();
-      });
-    }
-
-    if (mobileLogoutBtn) {
-      mobileLogoutBtn.addEventListener('click', async () => {
-        closeMobileOptions();
-        try {
-          safeSetItem('lmc_logged_out', 'true');
-          if (window.ProgressSystem) ProgressSystem.clearCache();
-          await auth0Client.logout({
-            logoutParams: {
-              returnTo: window.location.origin + '/app/'
-            }
-          });
-        } catch (err) {
-          console.error('Logout error:', err);
-        }
-      });
-    }
+    // Index button in navbar
+    navIndexBtn.addEventListener('click', () => {
+      buildIndex();
+      openIndex();
+    });
 
     // ============================================
     // 3D Mode (Mobile Only)
@@ -3767,25 +3476,6 @@
     let smoothBeta = 0;
     let smoothGamma = 0;
     const SMOOTHING = 0.1;
-    
-    function initTiltEffect() {
-      // Desktop only: VanillaTilt on cards
-      if (window.innerWidth >= 768 && typeof VanillaTilt !== 'undefined') {
-        const cards = document.querySelectorAll('.card:not([data-tilt])');
-        if (cards.length > 0) {
-          VanillaTilt.init(cards, {
-            max: 12,
-            speed: 400,
-            scale: 1,
-            perspective: 1000,
-            glare: true,
-            "max-glare": 0.15,
-            gyroscope: false
-          });
-        }
-      }
-      init3DMode();
-    }
     
     // ============================================
     // 3D Viewing Mode (Mobile Only)
@@ -3991,11 +3681,7 @@
           resetOtherCardsGyro();
           currentIndex++;
           updateProgressBar(currentIndex);
-          if (currentView === 'swipe') {
-            scrollToSwipeCard(currentIndex);
-          } else {
-            scrollToScrollCard(currentIndex);
-          }
+          scrollToSwipeCard(currentIndex);
         }
       } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
         e.preventDefault();
@@ -4003,11 +3689,7 @@
           resetOtherCardsGyro();
           currentIndex--;
           updateProgressBar(currentIndex);
-          if (currentView === 'swipe') {
-            scrollToSwipeCard(currentIndex);
-          } else {
-            scrollToScrollCard(currentIndex);
-          }
+          scrollToSwipeCard(currentIndex);
         }
       }
     });
@@ -4021,21 +3703,9 @@
         parseURLParams();
         initProgressDrag();
         
-        // Restore saved view state
-        if (viewBtns) {
-          viewBtns.forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.view === currentView);
-          });
-        }
-        if (views) {
-          views.forEach(view => {
-            view.classList.toggle('active', view.id === currentView + 'View');
-          });
-        }
-        
-        // Render the current view
+        // Render cards
         renderCurrentView();
-        initTiltEffect();
+        init3DMode();
 
         // Initialize Progress & Streak System
         if (window.ProgressSystem) {
@@ -4061,27 +3731,18 @@
     const notifHour = document.getElementById('notifHour');
     const notifHourRow = document.getElementById('notifHourRow');
     const notifStatus = document.getElementById('notifStatus');
-    const notifSettingsBtn = document.getElementById('notifSettingsBtn');
-    const mobileNotifSettingsBtn = document.getElementById('mobileNotifSettingsBtn');
 
     let notifSaveTimeout = null;
     let notifPrefsLoaded = false;
 
     function openNotifModal() {
-      if (notifModal) {
-        notifModal.classList.add('active');
-        // Close mobile options if open
-        const mobileOptionsModal = document.getElementById('mobileOptionsModal');
-        if (mobileOptionsModal) mobileOptionsModal.classList.remove('active');
-      }
+      if (notifModal) notifModal.classList.add('active');
     }
 
     function closeNotifModal() {
       if (notifModal) notifModal.classList.remove('active');
     }
 
-    if (notifSettingsBtn) notifSettingsBtn.addEventListener('click', openNotifModal);
-    if (mobileNotifSettingsBtn) mobileNotifSettingsBtn.addEventListener('click', openNotifModal);
     if (notifModalBackdrop) notifModalBackdrop.addEventListener('click', closeNotifModal);
     if (notifModalClose) notifModalClose.addEventListener('click', closeNotifModal);
 

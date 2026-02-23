@@ -465,6 +465,25 @@
   // UI: STREAK DASHBOARD
   // ============================================
   function createStreakDashboard() {
+    // iOS tab-based UI: Calendario tab has inline HTML elements in app/index.html
+    const tabCalendario = document.getElementById('tabCalendarioContent');
+    if (tabCalendario) {
+      // Wire up calendar nav buttons (if not already wired)
+      const prevBtn = document.getElementById('calNavPrev');
+      const nextBtn = document.getElementById('calNavNext');
+      if (prevBtn && !prevBtn._wired) {
+        prevBtn._wired = true;
+        prevBtn.addEventListener('click', () => navigateCalendar(-1));
+      }
+      if (nextBtn && !nextBtn._wired) {
+        nextBtn._wired = true;
+        nextBtn.addEventListener('click', () => navigateCalendar(1));
+      }
+      setupAutoInjection();
+      return;
+    }
+
+    // Fallback: legacy inline dashboard (for contexts without the iOS tab UI)
     if (document.getElementById('streakDashboard')) return;
 
     const dashboard = document.createElement('div');
@@ -498,13 +517,11 @@
       </div>
     `;
 
-    // Insert before <main>
     const main = document.querySelector('.app .main');
     if (main && main.parentNode) {
       main.parentNode.insertBefore(dashboard, main);
     }
 
-    // Calendar button handler
     const calBtn = document.getElementById('streakCalendarBtn');
     if (calBtn) {
       calBtn.addEventListener('click', () => {
@@ -517,37 +534,76 @@
   }
 
   function updateStreakDashboard() {
+    const newStreak = streakData.current || 0;
+    const longest = streakData.longest || 0;
+    const pct = Math.min(100, (totalCompleted / TOTAL_EXERCISES) * 100);
+
+    // --- iOS Progreso tab elements ---
+    const progresoNum = document.getElementById('progresoNumber');
+    const progresoBest = document.getElementById('progresoBest');
+    const progresoFill = document.getElementById('progresoFill');
+    const progresoTotal = document.getElementById('progresoTotal');
+    const progresoFire = document.getElementById('progresoFire');
+    const progresoLabel = document.getElementById('progresoLabel');
+
+    if (progresoNum) {
+      const prevStreak = parseInt(progresoNum.textContent) || 0;
+      progresoNum.textContent = newStreak;
+      if (progresoLabel) {
+        progresoLabel.textContent = newStreak === 1 ? 'día de racha' : 'días de racha';
+      }
+      if (progresoBest) {
+        progresoBest.textContent = `Mejor racha: ${longest} día${longest !== 1 ? 's' : ''}`;
+      }
+      if (progresoFill) progresoFill.style.width = pct + '%';
+      if (progresoTotal) progresoTotal.textContent = `${totalCompleted}/${TOTAL_EXERCISES}`;
+      if (progresoFire) {
+        if (newStreak === 0 && longest > 0) {
+          progresoFire.classList.add('streak-risk');
+        } else {
+          progresoFire.classList.remove('streak-risk');
+        }
+      }
+      // Bounce animation
+      if (newStreak !== prevStreak && newStreak > 0) {
+        progresoNum.classList.remove('streak-bounce');
+        void progresoNum.offsetWidth;
+        progresoNum.classList.add('streak-bounce');
+      }
+    }
+
+    // --- Tab bar streak badge ---
+    const badge = document.getElementById('streakBadge');
+    if (badge) {
+      badge.textContent = newStreak > 0 ? newStreak : '';
+      badge.style.display = newStreak > 0 ? 'flex' : 'none';
+    }
+
+    // --- Legacy inline dashboard (fallback) ---
     const numEl = document.getElementById('streakNumber');
     const bestEl = document.getElementById('streakBest');
     const fillEl = document.getElementById('progressFillGlobal');
     const labelEl = document.getElementById('progressLabelGlobal');
     const fireEl = document.getElementById('streakFire');
 
-    if (!numEl) return;
-
-    const prevStreak = parseInt(numEl.textContent) || 0;
-    const newStreak = streakData.current || 0;
-
-    numEl.textContent = newStreak;
-    const longest = streakData.longest || 0;
-    bestEl.textContent = `Mejor racha: ${longest} día${longest !== 1 ? 's' : ''}`;
-
-    const pct = Math.min(100, (totalCompleted / TOTAL_EXERCISES) * 100);
-    fillEl.style.width = pct + '%';
-    labelEl.textContent = `${totalCompleted}/${TOTAL_EXERCISES}`;
-
-    // Streak risk state
-    if (newStreak === 0 && streakData.longest > 0) {
-      fireEl.classList.add('streak-risk');
-    } else {
-      fireEl.classList.remove('streak-risk');
-    }
-
-    // Bounce animation on streak change
-    if (newStreak !== prevStreak && newStreak > 0) {
-      numEl.classList.remove('streak-bounce');
-      void numEl.offsetWidth;
-      numEl.classList.add('streak-bounce');
+    if (numEl) {
+      const prevStreak = parseInt(numEl.textContent) || 0;
+      numEl.textContent = newStreak;
+      if (bestEl) bestEl.textContent = `Mejor racha: ${longest} día${longest !== 1 ? 's' : ''}`;
+      if (fillEl) fillEl.style.width = pct + '%';
+      if (labelEl) labelEl.textContent = `${totalCompleted}/${TOTAL_EXERCISES}`;
+      if (fireEl) {
+        if (newStreak === 0 && longest > 0) {
+          fireEl.classList.add('streak-risk');
+        } else {
+          fireEl.classList.remove('streak-risk');
+        }
+      }
+      if (newStreak !== prevStreak && newStreak > 0) {
+        numEl.classList.remove('streak-bounce');
+        void numEl.offsetWidth;
+        numEl.classList.add('streak-bounce');
+      }
     }
   }
 
@@ -555,6 +611,8 @@
   // UI: CALENDAR MODAL
   // ============================================
   function createCalendarModal() {
+    // Skip modal if calendar is rendered inline in the Calendario tab
+    if (document.getElementById('tabCalendarioContent')) return;
     if (document.getElementById('progressCalendarModal')) return;
 
     const modal = document.createElement('div');
@@ -625,7 +683,9 @@
     await renderCalendar();
   }
 
-  async function renderCalendar() {
+  const calendarCache = {};
+
+  async function renderCalendar(forceRefresh) {
     const titleEl = document.getElementById('calTitle');
     const gridEl = document.getElementById('calGrid');
     if (!titleEl || !gridEl) return;
@@ -634,18 +694,29 @@
       'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     titleEl.textContent = `${monthNames[calendarCurrentMonth - 1]} ${calendarCurrentYear}`;
 
-    // Fetch calendar data
+    const cacheKey = `${calendarCurrentYear}-${calendarCurrentMonth}`;
+
+    // Fetch calendar data (use cache if available)
     let days = [];
-    try {
-      const tz = getUserTimezone();
-      const data = await apiCall('progress-calendar', 'GET', {
-        year: calendarCurrentYear,
-        month: calendarCurrentMonth,
-        timezone: tz
-      });
-      days = data.days || [];
-    } catch (err) {
-      console.error('Failed to load calendar:', err);
+    if (!forceRefresh && calendarCache[cacheKey]) {
+      days = calendarCache[cacheKey];
+    } else {
+      try {
+        const tz = getUserTimezone();
+        const data = await apiCall('progress-calendar', 'GET', {
+          year: calendarCurrentYear,
+          month: calendarCurrentMonth,
+          timezone: tz
+        });
+        days = data.days || [];
+        calendarCache[cacheKey] = days;
+      } catch (err) {
+        console.error('Failed to load calendar:', err);
+        // Use cached data as fallback if available
+        if (calendarCache[cacheKey]) {
+          days = calendarCache[cacheKey];
+        }
+      }
     }
 
     // Build grid
@@ -655,6 +726,18 @@
     if (startDay < 0) startDay = 6;
 
     const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: getUserTimezone() });
+
+    // Pre-compute streak-break days:
+    // A past day with count=0 that comes AFTER any day with activity → streak was broken
+    const streakBreakDates = new Set();
+    let hadActivity = false;
+    for (const day of days) {
+      if (day.count > 0) {
+        hadActivity = true;
+      } else if (hadActivity && day.date < todayStr) {
+        streakBreakDates.add(day.date);
+      }
+    }
 
     let html = '';
 
@@ -672,9 +755,12 @@
       if (count >= 3) intensityClass = 'progress-cal-level-3';
       else if (count >= 2) intensityClass = 'progress-cal-level-2';
       else if (count >= 1) intensityClass = 'progress-cal-level-1';
+      else if (streakBreakDates.has(day.date)) intensityClass = 'progress-cal-streak-break';
 
       const todayClass = isToday ? ' progress-cal-today' : '';
-      const tooltip = count > 0 ? `${count} ejercicio${count > 1 ? 's' : ''} completado${count > 1 ? 's' : ''}` : '';
+      const tooltip = count > 0
+        ? `${count} ejercicio${count > 1 ? 's' : ''} completado${count > 1 ? 's' : ''}`
+        : streakBreakDates.has(day.date) ? 'Racha rota' : '';
 
       html += `<div class="progress-cal-day ${intensityClass}${todayClass}" ${tooltip ? `title="${tooltip}"` : ''}>
         <span class="progress-cal-daynum">${dayNum}</span>
@@ -767,7 +853,9 @@
     createCalendarModal,
     openCalendar,
     closeCalendar,
-    clearCache: () => safeRemoveItem(CACHE_KEY)
+    clearCache: () => safeRemoveItem(CACHE_KEY),
+    getStreakData: () => ({ ...streakData, totalCompleted, nextExercise }),
+    renderCalendar
   };
 
 })();
