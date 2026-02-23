@@ -695,10 +695,16 @@
     titleEl.textContent = `${monthNames[calendarCurrentMonth - 1]} ${calendarCurrentYear}`;
 
     const cacheKey = `${calendarCurrentYear}-${calendarCurrentMonth}`;
+    const needsFetch = forceRefresh || !calendarCache[cacheKey];
+
+    // Show loading spinner if fetching from API
+    if (needsFetch) {
+      gridEl.innerHTML = '<div class="cal-loading"><div class="cal-loading-spinner"></div></div>';
+    }
 
     // Fetch calendar data (use cache if available)
     let days = [];
-    if (!forceRefresh && calendarCache[cacheKey]) {
+    if (!needsFetch) {
       days = calendarCache[cacheKey];
     } else {
       try {
