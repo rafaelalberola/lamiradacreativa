@@ -683,9 +683,7 @@
     await renderCalendar();
   }
 
-  const calendarCache = {};
-
-  async function renderCalendar(forceRefresh) {
+  async function renderCalendar() {
     const titleEl = document.getElementById('calTitle');
     const gridEl = document.getElementById('calGrid');
     if (!titleEl || !gridEl) return;
@@ -694,35 +692,21 @@
       'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     titleEl.textContent = `${monthNames[calendarCurrentMonth - 1]} ${calendarCurrentYear}`;
 
-    const cacheKey = `${calendarCurrentYear}-${calendarCurrentMonth}`;
-    const needsFetch = forceRefresh || !calendarCache[cacheKey];
+    // Show loading spinner
+    gridEl.innerHTML = '<div class="cal-loading"><div class="cal-loading-spinner"></div></div>';
 
-    // Show loading spinner if fetching from API
-    if (needsFetch) {
-      gridEl.innerHTML = '<div class="cal-loading"><div class="cal-loading-spinner"></div></div>';
-    }
-
-    // Fetch calendar data (use cache if available)
+    // Fetch calendar data
     let days = [];
-    if (!needsFetch) {
-      days = calendarCache[cacheKey];
-    } else {
-      try {
-        const tz = getUserTimezone();
-        const data = await apiCall('progress-calendar', 'GET', {
-          year: calendarCurrentYear,
-          month: calendarCurrentMonth,
-          timezone: tz
-        });
-        days = data.days || [];
-        calendarCache[cacheKey] = days;
-      } catch (err) {
-        console.error('Failed to load calendar:', err);
-        // Use cached data as fallback if available
-        if (calendarCache[cacheKey]) {
-          days = calendarCache[cacheKey];
-        }
-      }
+    try {
+      const tz = getUserTimezone();
+      const data = await apiCall('progress-calendar', 'GET', {
+        year: calendarCurrentYear,
+        month: calendarCurrentMonth,
+        timezone: tz
+      });
+      days = data.days || [];
+    } catch (err) {
+      console.error('Failed to load calendar:', err);
     }
 
     // Build grid

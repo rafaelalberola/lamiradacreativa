@@ -503,7 +503,7 @@ nav a:hover {
   gap: var(--space-xs);
   font-family: var(--font-body);
   font-size: 0.9375rem;
-  font-weight: 500;
+  font-weight: 600;
   text-decoration: none;
   padding: 0.875rem 1.75rem;
   border: none;
@@ -570,14 +570,14 @@ nav a:hover {
 .btn--cta {
   padding: 1rem 1.75rem;
   font-size: 0.9375rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* Nav button (header) */
 .btn--nav {
   padding: 0.5rem 1rem;
   font-size: 0.8125rem;
-  font-weight: 500;
+  font-weight: 600;
   width: auto;
   border-radius: 6px;
 }
@@ -1228,11 +1228,6 @@ nav a:hover {
   filter: drop-shadow(0 0 20px var(--color-accent)) drop-shadow(0 0 40px rgba(255, 149, 0, 0.5));
 }
 
-/* Vanilla Tilt Glare Override */
-.js-tilt-glare {
-  border-radius: inherit;
-}
-
 @media (min-width: 768px) {
   .card {
     padding: 1.25rem;
@@ -1300,7 +1295,6 @@ nav a:hover {
   align-items: center;
   flex: 1;
   min-height: 60px;
-  margin-bottom: 0.75rem;
 }
 
 .card-icon svg {
@@ -3775,8 +3769,9 @@ section#testimonios {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-size: 0.75rem;
-  color: var(--color-text-tertiary);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #111111;
   white-space: nowrap;
 }
 
@@ -5044,7 +5039,7 @@ section#testimonios {
 }
 
 .section-dark .value-prop {
-  color: rgba(255, 255, 255, 0.6);
+  color: #ffffff;
 }
 
 /* FAQ accordion inside dark section */

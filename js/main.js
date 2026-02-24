@@ -158,9 +158,10 @@ document.addEventListener('DOMContentLoaded', function() {
       this.autoPlayInterval = null;
       this.isAutoPlaying = true;
       
+      this.ready = false;
       this.init();
     }
-    
+
     init() {
       // Stop CSS animations
       this.cards.forEach(card => {
@@ -179,8 +180,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
 
-      // Set initial positions
+      // Set initial positions instantly (no transition)
       this.updatePositions();
+      this.ready = true;
 
       // Start auto-play
       this.startAutoPlay();
@@ -234,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
           card.style.transition = 'none';
         } else {
           card.style.transform = `translateY(${offset}px) translateX(${offset}px) rotate(${rotation}deg)`;
-          card.style.transition = 'transform 0.4s ease';
+          card.style.transition = this.ready ? 'transform 0.4s ease' : 'none';
         }
         
         card.style.zIndex = zIndex;

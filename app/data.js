@@ -110,7 +110,7 @@ window.CARDS = [
   // ═══════════════════════════════════════════════════════════════
   // PORTADA
   // ═══════════════════════════════════════════════════════════════
-  {id:0,type:'cover',style:'cover',title:'LA MIRADA CREATIVA',subtitle:'365 días de entrenamiento visual',icon:'visibility',desc:'Un sistema para entrenar tu ojo fotográfico y desarrollar un estilo que sea solo tuyo.'},
+  {id:0,type:'cover',style:'cover',title:'La mirada creativa',subtitle:'365 ejercicios visuales\npara fotógrafos',icon:'visibility',desc:''},
 
   // ═══════════════════════════════════════════════════════════════
   // PRESENTACIÓN (2 páginas)

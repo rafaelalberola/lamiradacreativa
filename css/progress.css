@@ -339,7 +339,7 @@
 
 /* Calendar intensity levels */
 .progress-cal-level-0 {
-  background: var(--color-bg-alt);
+  background: #f8f8f8;
 }
 
 .progress-cal-level-1 {
@@ -391,7 +391,7 @@
   gap: 1rem;
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid var(--color-border-light);
+  border-top: 1px solid #e8e8e8;
 }
 
 .progress-cal-legend-item {
@@ -462,15 +462,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 3rem 0;
+  padding: 6rem 0;
   grid-column: 1 / -1;
 }
 
 .cal-loading-spinner {
   width: 24px;
   height: 24px;
-  border: 2.5px solid rgba(255, 255, 255, 0.1);
-  border-top-color: rgba(255, 255, 255, 0.5);
+  border: 2.5px solid rgba(226, 77, 25, 0.2);
+  border-top-color: #e24d19;
   border-radius: 50%;
   animation: calSpin 0.6s linear infinite;
 }
