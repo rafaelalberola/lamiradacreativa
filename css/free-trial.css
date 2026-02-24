@@ -117,6 +117,35 @@
 }
 
 /* ============================================
+   Coupon badge
+   ============================================ */
+.ft-coupon-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #F0FDF4;
+  border: 1.5px solid #86EFAC;
+  border-radius: 10px;
+  padding: 10px 16px;
+  max-width: 420px;
+}
+
+.ft-coupon-badge__icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.ft-coupon-badge__text {
+  font-size: 0.8125rem;
+  color: #166534;
+  line-height: 1.4;
+}
+
+.ft-coupon-badge__text strong {
+  color: #15803D;
+}
+
+/* ============================================
    Hero layout — flex + gap
    ============================================ */
 .hero {
@@ -655,6 +684,10 @@ section > .container > .text-center .section-desc {
 .exercise-preview__hero {
   max-width: 260px;
   width: 100%;
+}
+
+.exercise-preview__hero .card {
+  height: 412px;
 }
 
 /* Locked cards grid: 3 cols desktop, 2 cols mobile */
