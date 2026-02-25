@@ -88,22 +88,29 @@ function buildEmailHtml(step) {
       <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">Es el que más fotógrafos mencionan cuando les pregunto cuál les cambió la forma de ver.</p>
       <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">No puedo dártelo todavía — está en el Bloque 1, después del día 7.</p>
       <p style="font-size:15px;color:#555555;margin:0 0 28px;line-height:1.7;">Pero mañana terminas tu prueba. Y puedes desbloquear los 365 por lo que cuesta un café a la semana durante un mes.</p>
-      <p style="font-size:15px;color:#111111;margin:0 0 28px;line-height:1.7;font-weight:600;">29 €. Una vez. Para siempre.</p>
-      ${ctaButton('Desbloquear los 365 ejercicios — 29 €', `${BASE_URL}/#precio?${utmBase}4`)}`,
+      <p style="font-size:15px;color:#111111;margin:0 0 28px;line-height:1.7;font-weight:600;">39 €. Una vez. Para siempre.</p>
+      ${ctaButton('Desbloquear los 365 ejercicios — 39 €', `${BASE_URL}/#precio?${utmBase}4`)}`,
 
     5: `
       <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">Hoy es tu día 7.</p>
       <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">Has entrenado tu mirada durante una semana. La pregunta es simple: ¿quieres seguir?</p>
       <p style="font-size:15px;color:#555555;margin:0 0 28px;line-height:1.7;">365 ejercicios. Cuatro bloques. De mirada técnica a mirada propia.</p>
-      <p style="font-size:15px;color:#111111;margin:0 0 28px;line-height:1.7;font-weight:600;">29 €. Pago único. Acceso para siempre. Garantía de 30 días.</p>
-      ${ctaButton('Desbloquear acceso completo — 29 €', `${BASE_URL}/#precio?${utmBase}5`)}
+      <p style="font-size:15px;color:#111111;margin:0 0 28px;line-height:1.7;font-weight:600;">39 €. Pago único. Acceso para siempre. Garantía de 30 días.</p>
+      ${ctaButton('Desbloquear acceso completo — 39 €', `${BASE_URL}/#precio?${utmBase}5`)}
       <p style="font-size:15px;color:#555555;margin:28px 0 0;line-height:1.7;">Si no es para ti, no pasa nada. Pero si has llegado hasta aquí, probablemente es para ti.</p>`,
 
     6: `
       <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">Llevas 3 días sin ejercicio.</p>
       <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">No te voy a presionar. Solo te digo que el ojo se entrena como un músculo. Si paras, vuelve a donde estaba.</p>
-      <p style="font-size:15px;color:#555555;margin:0 0 28px;line-height:1.7;">Los 365 ejercicios siguen ahí. 29 €. Sin prisa, pero sin pausa.</p>
-      ${ctaButton('Retomar el entrenamiento', `${BASE_URL}/#precio?${utmBase}6`)}`
+      <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">Los 365 ejercicios siguen ahí. 39 €. Sin prisa, pero sin pausa.</p>
+      <p style="font-size:15px;color:#15803D;margin:0 0 12px;line-height:1.7;font-weight:600;">Recuerda: tienes un 10% de descuento.</p>
+      <table cellpadding="0" cellspacing="0" style="margin:0 0 14px;">
+      <tr><td style="background-color:#111111;border-radius:8px;padding:10px 20px;">
+        <p style="font-size:18px;color:#ffffff;margin:0;font-weight:700;letter-spacing:0.1em;font-family:'Courier New',Courier,monospace;">WELCOME10</p>
+      </td></tr>
+      </table>
+      <p style="font-size:13px;color:#166534;margin:0 0 28px;line-height:1.5;">Usa este código en el checkout. Sin fecha de caducidad.</p>
+      ${ctaButton('Retomar el entrenamiento — 10% dto.', `${BASE_URL}/#precio?${utmBase}6`)}`
   };
 
   const bodyContent = bodies[step] || '';

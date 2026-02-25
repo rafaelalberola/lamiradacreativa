@@ -453,8 +453,8 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Get price dynamically from the page
       const priceElement = document.querySelector('.price-current');
-      const priceText = priceElement ? priceElement.textContent : '29 €';
-      const price = parseFloat(priceText.replace(/[^\d.,]/g, '').replace(',', '.')) || 29;
+      const priceText = priceElement ? priceElement.textContent : '39 €';
+      const price = parseFloat(priceText.replace(/[^\d.,]/g, '').replace(',', '.')) || 39;
       
       // Save price for purchase tracking on success page
       try { localStorage.setItem('checkout_price', price); } catch(e) {}
