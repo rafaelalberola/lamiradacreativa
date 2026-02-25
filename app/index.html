@@ -3270,8 +3270,6 @@
 
     // Download current card as JPG
     async function downloadCurrentCardJPG() {
-      closeShareSheet();
-
       const card = filteredCards[currentIndex];
 
       // Find the current visible card
@@ -3352,8 +3350,6 @@
 
     // Download all cards as PDF
     async function downloadAllCardsPDF() {
-      closeShareSheet();
-
       // Check if libraries are loaded
       if (typeof html2canvas === 'undefined') {
         alert('Librería html2canvas no cargada. Recarga la página.');
