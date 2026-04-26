@@ -123,8 +123,9 @@
 [functions."free-send-sequence"]
   schedule = "*/15 * * * *"
 
-[functions."daily-report"]
-  schedule = "0 7 * * *"
+# Pausado: proyecto detenido. Reactivar descomentando.
+# [functions."daily-report"]
+#   schedule = "0 7 * * *"
 
 [functions."weekly-summary"]
   schedule = "0 9 * * 0"
