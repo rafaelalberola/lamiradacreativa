@@ -149,6 +149,12 @@ function ctaButton(text, url) {
 // Send email via Resend
 // ============================================
 async function sendEmail(to, subject, html) {
+  const { isSuppressed } = require('../lib/suppressed-emails');
+  if (isSuppressed(to)) {
+    console.log(`[Free Sequence] Suppressed, skipping email to ${to}`);
+    return { status: 200, suppressed: true };
+  }
+
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {

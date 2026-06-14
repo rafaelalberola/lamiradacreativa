@@ -229,6 +229,12 @@ META ADS \u2014 compara con Ads Manager
 // ============================================
 
 async function sendReport(subject, html) {
+  const { isSuppressed } = require('../lib/suppressed-emails');
+  if (isSuppressed(process.env.REPORT_EMAIL)) {
+    console.log(`[Daily Report] Suppressed, skipping report to ${process.env.REPORT_EMAIL}`);
+    return { status: 200, suppressed: true };
+  }
+
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {

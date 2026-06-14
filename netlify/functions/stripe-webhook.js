@@ -373,6 +373,12 @@ function buildFeedbackEmailHtml(name) {
 }
 
 async function sendFeedbackEmail(email, name) {
+  const { isSuppressed } = require('../lib/suppressed-emails');
+  if (isSuppressed(email)) {
+    console.log(`[Feedback Email] Suppressed, skipping email to ${email}`);
+    return;
+  }
+
   if (!process.env.RESEND_API_KEY) {
     console.warn('[Feedback Email] RESEND_API_KEY not configured, skipping');
     return;
@@ -415,6 +421,12 @@ async function sendFeedbackEmail(email, name) {
 }
 
 async function sendPurchaseEmail(email, name) {
+  const { isSuppressed } = require('../lib/suppressed-emails');
+  if (isSuppressed(email)) {
+    console.log(`[Email] Suppressed, skipping purchase email to ${email}`);
+    return;
+  }
+
   if (!process.env.RESEND_API_KEY) {
     console.warn('[Email] RESEND_API_KEY not configured, skipping email');
     return;

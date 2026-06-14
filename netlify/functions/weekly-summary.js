@@ -221,6 +221,12 @@ Progreso: <strong style="color:#1A1A1A;">${totalCompleted}/365</strong> (${progr
 // ============================================
 
 async function sendEmail(to, html) {
+  const { isSuppressed } = require('../lib/suppressed-emails');
+  if (isSuppressed(to)) {
+    console.log(`[Weekly Summary] Suppressed, skipping email to ${to}`);
+    return null;
+  }
+
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {

@@ -83,6 +83,12 @@ function buildCongratsEmailHtml(appUrl) {
 }
 
 async function sendEmail(to, subject, html) {
+  const { isSuppressed } = require('../lib/suppressed-emails');
+  if (isSuppressed(to)) {
+    console.log(`[daily-notification] Suppressed, skipping email to ${to}`);
+    return null;
+  }
+
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {

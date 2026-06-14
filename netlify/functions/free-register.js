@@ -97,6 +97,12 @@ function buildWelcomeEmailHtml() {
 // Send email via Resend
 // ============================================
 async function sendEmail(to, subject, html) {
+  const { isSuppressed } = require('../lib/suppressed-emails');
+  if (isSuppressed(to)) {
+    console.log(`[Free Register] Suppressed, skipping email to ${to}`);
+    return null;
+  }
+
   if (!process.env.RESEND_API_KEY) {
     console.warn('[Free Register] RESEND_API_KEY not configured');
     return null;
