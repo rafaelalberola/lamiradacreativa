@@ -1324,3 +1324,12 @@ header { height: 64px; padding-top: 0; padding-bottom: 0; }
 .hero-copy .prop svg { width: 16px; height: 16px; }
 /* props del hero: envuelven por filas y centradas, igual que el bloque del CTA final */
 .hero-copy .props { flex-wrap: wrap; justify-content: center; gap: 0.7rem 1.2rem; }
+
+/* ---- v93: los 3 props del CTA final SIEMPRE en una sola fila ---- */
+.props--center { flex-wrap: nowrap; }
+.props--center .prop { white-space: nowrap; }
+@media (max-width: 640px) {
+  .props--center { gap: 0.55rem; }
+  .props--center .prop { font-size: clamp(0.7rem, 3.5vw, 0.95rem); gap: 0.3em; }
+  .props--center .prop svg { width: 12px; height: 12px; }
+}
