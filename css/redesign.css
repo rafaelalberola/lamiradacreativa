@@ -1,0 +1,1314 @@
+/* ============================================================
+   LA MIRADA CREATIVA — Design language: "Upwize" parity
+   Plus Jakarta Sans · blanco + azul · pills · icon-tiles · grid
+   Motion: fade-up + stagger (Framer style)
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; overflow-x: hidden; }
+img, svg { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; cursor: pointer; background: none; border: none; touch-action: manipulation; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; border-radius: 6px; }
+
+:root {
+  --bg:        #FFFFFF;
+  --bg-2:      #F5F6F8;
+  --ink:       #0B0B0D;
+  --ink-2:     #1A1B1F;
+  --muted:     #6A6F79;
+  --muted-2:   #9AA0AA;
+  --line:      #E7E9ED;
+  --line-soft: rgba(11,11,13,0.06);
+  --grid:      rgba(22,40,90,0.055);
+
+  --blue:      #2F6BFF;
+  --blue-600:  #1E56F0;
+  --blue-050:  #EAF1FF;
+  --indigo:    #2B2BE0;
+  --orange:    #FF7442;
+  --red:       #E64240;
+
+  --font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --wrap: 1200px;
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+  --sec-y: clamp(4.5rem, 10vh, 8.5rem);
+  --radius: 28px;
+  --radius-sm: 18px;
+  --pill: 100px;
+  --shadow: 0 24px 60px -30px rgba(20,32,64,0.35);
+  --shadow-sm: 0 10px 30px -16px rgba(20,32,64,0.28);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring: cubic-bezier(0.34, 1.3, 0.5, 1);
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 1.125rem;      /* 18 */
+  line-height: 1.7;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--blue); color: #fff; }
+
+/* Grid overlay utility (Upwize signature) */
+.grid-bg { position: relative; }
+.grid-bg::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 72px 72px; mask-image: radial-gradient(120% 90% at 50% 20%, #000 40%, transparent 90%);
+}
+
+/* Layout */
+.wrap { max-width: var(--wrap); margin: 0 auto; padding-inline: var(--gutter); position: relative; z-index: 1; }
+.wrap--narrow { max-width: 820px; }
+.s { padding-block: var(--sec-y); position: relative; overflow: hidden; }
+.s--paper { background: var(--bg); color: var(--ink); }
+.s--ink   { background: var(--bg-2); color: var(--ink); }   /* soft-gray section (light theme) */
+.s .muted, .s--ink .muted { color: var(--muted); }
+
+/* ---- Typography ---- */
+.display { font-weight: 700; line-height: 1.04; letter-spacing: -0.03em; text-wrap: balance; }
+h1.display { font-size: clamp(1.85rem, 4.4vw, 3.4rem); line-height: 1.03; letter-spacing: -0.03em; text-transform: uppercase; }
+h2.display { font-size: clamp(2.1rem, 4.6vw, 3.5rem); line-height: 1.08; letter-spacing: -0.03em; }
+h3 { font-weight: 600; font-size: clamp(1.4rem, 2.6vw, 1.9rem); letter-spacing: -0.02em; line-height: 1.15; }
+.ital { font-style: normal; font-weight: 800; }            /* neutralize serif; emphasis via weight/color */
+.accent-word { color: var(--blue); }
+.accent-word.o { color: var(--orange); }
+
+.eyebrow { color: var(--blue); font-weight: 700; font-size: 1rem; letter-spacing: 0.005em; display: inline-flex; align-items: center; gap: 0.5em; }
+.eyebrow::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--blue); }
+.eyebrow--center { justify-content: center; }
+
+.lead { font-size: 1.15rem; line-height: 1.6; color: var(--muted); max-width: 48ch; }
+.section-head { max-width: 64ch; }
+.section-head--center { margin-inline: auto; text-align: center; }
+.section-head .eyebrow { margin-bottom: 1.1rem; }
+.section-head h2 { margin-bottom: 1rem; }
+
+/* ---- Buttons (pills) ---- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.55em;
+  padding: 0.95em 1.7em; min-height: 54px;
+  background: var(--ink); color: #fff; border-radius: var(--pill);
+  font-family: var(--font); font-weight: 700; font-size: 1.0625rem; letter-spacing: -0.01em; line-height: 1;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s var(--spring), background 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+.btn:hover { transform: translateY(-2px); background: var(--blue); box-shadow: 0 18px 40px -18px rgba(47,107,255,0.6); }
+.btn:active { transform: translateY(0); }
+.btn--lg { padding: 1.1em 2em; min-height: 60px; font-size: 1.125rem; }
+.btn .price-old, .price-old { text-decoration: line-through; opacity: 0.55; font-weight: 500; font-size: 0.82em; margin-left: 0.15em; }
+.btn .price-old { color: rgba(255,255,255,0.8); }
+.btn--blue { background: var(--blue); } .btn--blue:hover { background: var(--blue-600); }
+.btn--white { background: #fff; color: var(--ink); } .btn--white:hover { background: #fff; color: var(--blue); }
+
+/* value props */
+.props { display: flex; flex-wrap: wrap; gap: 1.1rem 1.6rem; align-items: center; }
+.props--center { justify-content: center; }
+.prop { display: inline-flex; align-items: center; gap: 0.5em; font-size: 0.95rem; font-weight: 600; color: var(--muted); }
+.prop svg { width: 18px; height: 18px; stroke: var(--blue); stroke-width: 2.4; fill: none; }
+
+.cta-block { display: flex; flex-direction: column; gap: 1.3rem; align-items: flex-start; }
+.cta-block--center { align-items: center; text-align: center; }
+
+/* icon tile (Upwize) */
+.tile { width: 54px; height: 54px; border-radius: 18px; display: grid; place-items: center; flex: none; box-shadow: 0 12px 24px -12px rgba(20,32,64,0.4); }
+.tile svg { width: 26px; height: 26px; stroke: #fff; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.tile--blue { background: var(--blue); } .tile--indigo { background: var(--indigo); } .tile--orange { background: var(--orange); } .tile--red { background: var(--red); }
+
+/* ============================================================ TICKER (blue band) */
+.ticker { background: var(--blue); overflow: hidden; padding: 1.05rem 0; position: relative; }
+.ticker::before, .ticker::after { content: ""; position: absolute; top: 0; bottom: 0; width: 12%; z-index: 2; pointer-events: none; }
+.ticker::before { left: 0; background: linear-gradient(90deg, var(--blue), transparent); }
+.ticker::after { right: 0; background: linear-gradient(270deg, var(--blue), transparent); }
+.ticker__track { display: flex; width: max-content; animation: marquee 38s linear infinite; will-change: transform; }
+.ticker__set { display: flex; align-items: center; flex: 0 0 auto; }
+.ticker__set > span { font-weight: 800; font-size: clamp(1.2rem, 2.8vw, 1.9rem); letter-spacing: -0.02em; color: #fff; white-space: nowrap; padding: 0 1.4rem; text-transform: uppercase; }
+.ticker__sep { color: rgba(255,255,255,0.6); font-size: 0.6em; }
+.ticker__set .g { color: #fff; opacity: 1; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ============================================================ HEADER / NAV */
+header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 1rem 0; transition: background 0.4s var(--ease), box-shadow 0.4s var(--ease); }
+header.scrolled { background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(16px) saturate(1.2); -webkit-backdrop-filter: blur(16px) saturate(1.2); box-shadow: 0 6px 26px -18px rgba(20,32,64,0.35); }
+.header-inner { max-width: var(--wrap); margin: 0 auto; padding-inline: var(--gutter); display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.logo { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 800; letter-spacing: -0.03em; font-size: 1.2rem; color: var(--ink); transition: color 0.4s var(--ease); }
+.logo-mark { width: 30px; height: 30px; border-radius: 9px; background: var(--blue); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 1rem; }
+header.header--light-text .logo { color: #fff; } header.header--light-text .logo-mark { background: #fff; color: var(--blue); }
+nav { display: flex; align-items: center; gap: 0.6rem; }
+.nav-links { display: flex; align-items: center; gap: 0.4rem; background: rgba(11,11,13,0.05); padding: 0.35rem; border-radius: var(--pill); }
+header.header--light-text .nav-links { background: rgba(255,255,255,0.16); }
+.nav-links a { padding: 0.5em 1em; border-radius: var(--pill); font-size: 0.95rem; font-weight: 600; color: var(--ink); transition: background 0.25s, color 0.25s; }
+.nav-links a:hover { background: #fff; box-shadow: var(--shadow-sm); }
+header.header--light-text .nav-links a { color: #fff; } header.header--light-text .nav-links a:hover { color: var(--ink); background: #fff; }
+.nav-cta { margin-left: 0.4rem; padding: 0.7em 1.3em; min-height: 44px; border-radius: var(--pill); font-size: 0.95rem; font-weight: 700; color: #fff; background: var(--ink); transition: transform 0.3s var(--spring), background 0.3s var(--ease); }
+.nav-cta:hover { transform: translateY(-2px); background: var(--blue); }
+header.header--light-text .nav-cta { background: #fff; color: var(--ink); }
+.menu-toggle { display: none; width: 44px; height: 44px; align-items: center; justify-content: center; color: currentColor; }
+header.header--light-text .menu-toggle { color: #fff; }
+.menu-toggle .material-symbols-sharp { font-size: 26px; }
+
+.mobile-nav { position: fixed; inset: 0; z-index: 2000; background: var(--blue); color: #fff; transform: translateY(-100%); transition: transform 0.5s var(--ease); display: flex; flex-direction: column; }
+.mobile-nav.active { transform: translateY(0); }
+.mobile-nav-header { display: flex; align-items: center; justify-content: space-between; padding: 1.3rem var(--gutter); border-bottom: 1px solid rgba(255,255,255,0.2); }
+.mobile-nav-header .logo { color: #fff; } .mobile-nav-header .logo-mark { background: #fff; color: var(--blue); }
+.mobile-nav-close { width: 44px; height: 44px; display: grid; place-items: center; color: #fff; }
+.mobile-nav-close .material-symbols-sharp { font-size: 28px; }
+.mobile-nav-content { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 2.2rem; padding: 2rem var(--gutter) 4rem; }
+.mobile-nav-links { display: flex; flex-direction: column; gap: 0.9rem; }
+.mobile-nav-links a { font-weight: 800; font-size: clamp(2rem, 9vw, 3rem); letter-spacing: -0.03em; color: #fff; text-transform: uppercase; }
+.mobile-nav-links a .ital { color: #fff; }
+
+/* ============================================================ HERO (blue + grid) */
+.hero { min-height: 100svh; display: flex; align-items: center; padding-top: 5.5rem; padding-bottom: 4rem; overflow: hidden; position: relative;
+  background: linear-gradient(180deg, #3B79FF 0%, #2E63F2 100%); color: #fff; }
+.hero::before { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(255,255,255,0.09) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.09) 1px, transparent 1px);
+  background-size: 40px 40px; mask-image: radial-gradient(130% 100% at 50% 90%, #000 45%, transparent 92%); }
+.aurora { display: none; }
+.hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; width: 100%; position: relative; z-index: 1; }
+.hero-eyebrow { margin-bottom: 1.6rem; color: #fff; } .hero-eyebrow::before { background: #fff; }
+.hero h1 { margin-bottom: 1.6rem; color: #fff; }
+.hero h1 .ital { display: inline; color: #fff; }
+.hero h1 .accent-word { color: #fff; }
+.hero-sub { max-width: 40ch; margin-bottom: 1.7rem; color: rgba(255,255,255,0.94); font-size: clamp(1rem, 0.98rem + 0.3vw, 1.12rem); line-height: 1.5; font-weight: 500; }
+
+/* header actions */
+.header-actions { display: flex; align-items: center; gap: 1.3rem; }
+.header-login { font-weight: 600; font-size: 0.95rem; color: #fff; }
+.header-login:hover { text-decoration: underline; }
+
+/* single-screen offer block */
+.offer { display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+.offer-price { display: flex; align-items: baseline; gap: 0.5rem; }
+.hero .price-current { font-weight: 800; font-size: clamp(2rem, 4vw, 2.6rem); letter-spacing: -0.03em; color: #fff; line-height: 1; }
+.hero .price-anchor { font-size: 1.15rem; text-decoration: line-through; color: rgba(255,255,255,0.7); }
+.proof { margin-top: 1.2rem; font-size: 0.92rem; color: rgba(255,255,255,0.82); }
+.proof strong { color: #fff; font-weight: 700; }
+
+/* minimal footer pinned to bottom of the single screen */
+.mini-foot { position: absolute; bottom: 1rem; left: 0; right: 0; z-index: 1; display: flex; gap: 1.2rem; justify-content: center; align-items: center; font-size: 0.76rem; color: rgba(255,255,255,0.7); flex-wrap: wrap; }
+.mini-foot a { color: rgba(255,255,255,0.8); } .mini-foot a:hover { color: #fff; }
+.hero .btn { background: #fff; color: var(--ink); }
+.hero .btn:hover { background: #fff; color: var(--blue); transform: translateY(-2px); }
+.hero .prop { color: rgba(255,255,255,0.9); } .hero .prop svg { stroke: #fff; }
+
+.early-metrics { border-top: 1px solid rgba(255,255,255,0.22); padding-top: 1.7rem; }
+.early-metrics__grid { display: flex; flex-wrap: wrap; gap: clamp(1.5rem, 4vw, 3rem); }
+.early-metrics__card { display: flex; flex-direction: column; gap: 0.15rem; }
+.early-metrics__number { font-weight: 800; font-size: clamp(1.7rem, 3.4vw, 2.3rem); letter-spacing: -0.03em; line-height: 1; color: #fff; }
+.early-metrics__label { font-size: 0.82rem; font-weight: 500; color: rgba(255,255,255,0.75); max-width: 18ch; line-height: 1.4; }
+.hero-deck { display: flex; justify-content: center; }
+
+/* ============================================================ CARD DECK */
+.deck-group { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+.card-deck, .blocks-deck { position: relative; width: min(340px, 82vw); height: 452px; cursor: grab; user-select: none; touch-action: pan-y; }
+.card-deck:active, .blocks-deck:active { cursor: grabbing; }
+.card, .block-card { position: absolute; inset: 0; background: #fff; border: 1px solid var(--line); border-radius: 26px; padding: 1.7rem 1.6rem; box-shadow: 0 34px 70px -30px rgba(15,25,55,0.5); display: flex; flex-direction: column; color: var(--ink); transform-origin: bottom center; overflow: hidden; }
+.card-header, .block-card-header { display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; font-weight: 600; color: var(--muted); padding-bottom: 1rem; margin-bottom: 1.2rem; border-bottom: 1px solid var(--line); }
+.card-block, .block-card-block { font-weight: 700; padding: 0.32em 0.75em; border-radius: var(--pill); color: #fff; background: var(--blue); font-size: 0.68rem; letter-spacing: 0.01em; }
+.card-title, .block-card-title { font-weight: 700; font-size: 1.75rem; letter-spacing: -0.025em; line-height: 1.05; margin-bottom: 0.35rem; }
+.card-subtitle, .block-card-subtitle { font-size: 1rem; color: var(--muted); margin-bottom: 1.2rem; font-weight: 500; }
+.card-icon, .block-card-icon { margin: auto 0; display: grid; place-items: center; padding: 0.8rem 0; }
+.card-icon svg, .block-card-icon svg { width: 60px; height: 60px; stroke: var(--blue); stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.card-desc, .block-card-desc { font-size: 0.95rem; line-height: 1.5; color: var(--muted); margin-bottom: 1rem; }
+.card-cta, .block-card-cta { margin-top: auto; font-size: 0.82rem; font-weight: 700; color: var(--blue); display: inline-flex; align-items: center; gap: 0.4em; }
+.card-cta::after, .block-card-cta::after { content: "→"; }
+.card-content, .block-card-content { display: flex; flex-direction: column; flex: 1; }
+.deck-dots { display: flex; gap: 0.5rem; }
+.deck-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: 0.25; transition: all 0.3s; }
+.deck-dot.active { opacity: 1; transform: scale(1.3); background: var(--blue); }
+.hero .deck-dot { background: #fff; } .hero .deck-dot.active { background: #fff; }
+.deck-hint { font-size: 0.8rem; font-weight: 600; opacity: 0.72; }
+
+/* ============================================================ CÓMO FUNCIONA */
+.how-grid { display: grid; grid-template-columns: 1fr 0.9fr; gap: clamp(2.5rem, 6vw, 5rem); align-items: center; margin-top: 3.5rem; }
+.how-points { list-style: none; display: flex; flex-direction: column; gap: 1.2rem; }
+.how-point { display: flex; gap: 1.1rem; padding: 1.5rem; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); transition: transform 0.35s var(--spring), box-shadow 0.35s var(--ease); }
+.how-point:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.how-point__num { width: 40px; height: 40px; border-radius: 12px; background: var(--blue-050); color: var(--blue); display: grid; place-items: center; font-weight: 800; font-size: 0.95rem; flex: none; }
+.how-point__body strong { display: block; font-weight: 700; font-size: 1.18rem; letter-spacing: -0.01em; margin-bottom: 0.2rem; }
+.how-point__body span { color: var(--muted); font-size: 0.98rem; }
+
+/* Visual example */
+.example { position: relative; max-width: 400px; margin-inline: auto; }
+.example-media { position: relative; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.example-media .gallery-image { aspect-ratio: 4 / 5; width: 100%; background-size: cover; background-position: center; background-color: var(--bg-2); }
+.example-tag { position: absolute; left: 1rem; top: 1rem; z-index: 2; display: inline-flex; align-items: center; gap: 0.5em; padding: 0.55em 0.95em; border-radius: var(--pill); background: #fff; box-shadow: var(--shadow-sm); color: var(--ink); font-size: 0.78rem; font-weight: 700; }
+.example-tag::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--blue); }
+.example-cap { margin-top: 1rem; text-align: center; font-size: 0.95rem; font-weight: 600; color: var(--muted); }
+.example-cap b { color: var(--blue); }
+
+/* ============================================================ MÉTODO (icon-tile feature cards) */
+.method-list { margin-top: 3.5rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+.method-row { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; padding: 1.9rem; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); transition: transform 0.35s var(--spring), box-shadow 0.35s var(--ease); }
+.method-row:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.method-row .tile { grid-row: span 2; }
+.method-num { display: none; }
+.method-name { font-weight: 700; font-size: 1.45rem; letter-spacing: -0.02em; line-height: 1.1; }
+.method-desc { color: var(--muted); font-size: 1rem; }
+.method-foot { margin-top: 2.6rem; display: flex; flex-wrap: wrap; gap: 1.2rem; align-items: center; }
+.link-underline { font-weight: 700; font-size: 1rem; color: var(--blue); display: inline-flex; align-items: center; gap: 0.4em; }
+.link-underline:hover { text-decoration: underline; }
+
+/* ============================================================ PHOTO BAND */
+.photo-band { position: relative; min-height: clamp(340px, 52vh, 520px); display: flex; align-items: center; overflow: hidden; }
+.photo-band .band-bg { position: absolute; inset: 0; background-size: cover; background-position: center 35%; }
+.photo-band::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(8,16,40,0.86), rgba(8,16,40,0.4) 55%, rgba(47,107,255,0.5)); }
+.band-inner { position: relative; z-index: 2; }
+.band-inner .eyebrow { color: #fff; } .band-inner .eyebrow::before { background: #fff; }
+.band-inner h2 { color: #fff; max-width: 16ch; margin-top: 1rem; }
+.band-inner h2 .accent-word { color: #fff; }
+.band-inner p { color: rgba(255,255,255,0.9); margin-top: 1rem; max-width: 40ch; }
+
+/* ============================================================ OBJECIONES */
+.obj-list { margin-top: 3.5rem; display: grid; gap: 1.2rem; max-width: 960px; }
+.obj-row { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 4vw, 3rem); align-items: start; padding: 1.9rem; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); }
+.obj-q { font-weight: 700; font-size: clamp(1.2rem, 2.6vw, 1.55rem); line-height: 1.3; letter-spacing: -0.01em; }
+.obj-q::before { content: "“"; color: var(--blue); } .obj-q::after { content: "”"; color: var(--blue); }
+.obj-a { color: var(--muted); font-size: 1rem; }
+
+/* ============================================================ QUÉ INCLUYE (feature list) */
+.feature-list { margin-top: 3rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 clamp(2rem, 5vw, 4rem); }
+.feature-row { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.7rem; padding: 1.5rem 0; border-bottom: 1px solid var(--line); }
+.feature-row svg { width: 22px; height: 22px; stroke: var(--blue); stroke-width: 2.6; fill: none; flex: none; margin-top: 3px; }
+.feature-row b { font-weight: 700; font-size: 1.08rem; letter-spacing: -0.01em; }
+.feature-row em { font-style: normal; color: var(--muted); font-size: 0.92rem; display: block; margin-top: 0.1rem; }
+.feature-foot { margin-top: 2.2rem; font-weight: 800; font-size: 1.35rem; letter-spacing: -0.02em; }
+.feature-foot .accent-word { color: var(--blue); }
+.incl-foot { font-weight: 800; }
+
+/* ============================================================ GALERÍA POLAROID */
+.polaroid-scatter { margin-top: 3.5rem; display: block; max-width: 360px; margin-inline: auto; }
+.polaroid { position: relative; background: #fff; padding: 0.7rem 0.7rem 0; box-shadow: var(--shadow); border-radius: 8px; border: 1px solid var(--line); transition: transform 0.5s var(--spring), box-shadow 0.5s var(--ease); }
+.polaroid:nth-child(4n+1) { transform: rotate(-2deg) translateY(1rem); }
+.polaroid:nth-child(4n+2) { transform: rotate(1.6deg); }
+.polaroid:nth-child(4n+3) { transform: rotate(-1.2deg) translateY(1.6rem); }
+.polaroid:nth-child(4n+4) { transform: rotate(2.2deg) translateY(0.5rem); }
+.polaroid:hover { transform: rotate(0) translateY(-8px) scale(1.03); box-shadow: 0 44px 80px -30px rgba(47,107,255,0.4); z-index: 5; }
+.polaroid .gallery-image { aspect-ratio: 4 / 5; width: 100%; background-size: cover; background-position: center; background-color: var(--bg-2); border-radius: 4px; }
+.polaroid-caption { padding: 0.7rem 0.4rem 0.8rem; text-align: center; }
+.polaroid-name { font-weight: 700; font-size: 1.05rem; color: var(--ink); }
+.polaroid-style { display: block; font-size: 0.72rem; font-weight: 600; color: var(--blue); margin-top: 0.2rem; }
+.gallery-note { margin-top: 2.6rem; text-align: center; font-size: 0.82rem; font-weight: 500; color: var(--muted-2); }
+
+/* ============================================================ PRECIO */
+.price-wrap { margin-top: 3.5rem; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+.price-card { position: relative; background: #fff; color: var(--ink); border-radius: var(--radius); padding: clamp(2rem, 4vw, 3rem); border: 1px solid var(--line); box-shadow: var(--shadow); }
+.price-tag { display: flex; align-items: baseline; gap: 0.6rem; }
+.price-current { font-weight: 800; font-size: clamp(3rem, 6.5vw, 4.5rem); letter-spacing: -0.04em; line-height: 1; color: var(--ink); }
+.price-anchor { font-size: 1.4rem; text-decoration: line-through; color: var(--muted-2); }
+.price-per { font-size: 0.95rem; color: var(--muted); margin-top: 0.6rem; font-weight: 500; }
+.price-divider { height: 1px; background: var(--line); margin: 1.5rem 0; }
+.price-features { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 1.7rem; }
+.price-features li { display: flex; align-items: center; gap: 0.6rem; font-size: 1rem; color: var(--ink); font-weight: 500; }
+.price-features svg { width: 20px; height: 20px; stroke: var(--blue); stroke-width: 2.6; fill: none; flex: none; }
+.price-card .btn { width: 100%; }
+.price-reassure { text-align: center; font-size: 0.85rem; font-weight: 600; color: var(--muted); margin-top: 0.9rem; }
+.guarantee { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 1.5rem; display: flex; gap: 1rem; align-items: flex-start; margin-top: 1.6rem; background: var(--blue-050); }
+.guarantee__icon { color: var(--blue); font-size: 1.3rem; line-height: 1; }
+.guarantee strong { display: block; margin-bottom: 0.25rem; font-weight: 700; }
+.guarantee p { color: var(--muted); font-size: 0.95rem; }
+.price-scarcity { margin-top: 1.5rem; font-size: 0.95rem; color: var(--muted); max-width: 42ch; }
+.price-scarcity .dot { color: var(--blue); }
+
+/* ============================================================ FAQ */
+.accordion { margin-top: 3rem; max-width: 860px; display: flex; flex-direction: column; gap: 0.9rem; }
+.accordion-item { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); overflow: hidden; }
+.accordion-header { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 1.4rem 1.6rem; text-align: left; }
+.accordion-title { font-weight: 700; font-size: clamp(1.05rem, 2.2vw, 1.25rem); letter-spacing: -0.01em; }
+.accordion-icon { font-size: 26px; transition: transform 0.4s var(--spring); color: var(--blue); flex: none; }
+.accordion-item.active .accordion-icon { transform: rotate(135deg); }
+.accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s var(--ease); }
+.accordion-item.active .accordion-content { max-height: 420px; }
+.accordion-body { padding: 0 1.6rem 1.5rem; color: var(--muted); font-size: 1rem; line-height: 1.6; max-width: 66ch; }
+
+/* ============================================================ AUTOR */
+.author-wrap { margin-top: 3.5rem; display: grid; grid-template-columns: auto 1fr; gap: clamp(2rem, 5vw, 3.5rem); align-items: center; }
+.author-photo-frame { position: relative; width: 100%; max-width: 180px; }
+.author-photo-frame::before { content: ""; position: absolute; inset: -6px; border-radius: 24px; background: var(--blue); z-index: 0; opacity: 0.14; }
+.author-photo { position: relative; z-index: 1; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 20px; }
+.author-name { font-weight: 700; font-size: 0.95rem; color: var(--blue); margin-bottom: 1.2rem; }
+.author-bio { font-size: 1.25rem; line-height: 1.5; font-weight: 500; }
+.author-bio .ital { color: var(--blue); font-weight: 700; }
+.author-sign { margin-top: 1.4rem; height: 58px; width: auto; opacity: 0.75; }
+
+/* ============================================================ CTA FINAL (blue) */
+.s--grad, .finalcta { position: relative; background: linear-gradient(180deg, #3B79FF, #2E63F2); color: #fff; text-align: center; overflow: hidden; }
+.s--grad::before { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; background-image: linear-gradient(rgba(255,255,255,0.09) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.09) 1px, transparent 1px); background-size: 40px 40px; mask-image: radial-gradient(120% 110% at 50% 0%, #000 45%, transparent 92%); }
+.finalcta .wrap { z-index: 1; }
+.finalcta h2 { margin: 1.1rem auto; max-width: 18ch; color: #fff; }
+.finalcta h2 .accent-word { color: #fff; }
+.finalcta .eyebrow { color: #fff; } .finalcta .eyebrow::before { background: #fff; }
+.finalcta .lead { margin: 0 auto 2.4rem; text-align: center; color: rgba(255,255,255,0.92); }
+.finalcta .cta-block { align-items: center; }
+.finalcta .btn { background: #fff; color: var(--ink); }
+.finalcta .btn:hover { background: #fff; color: var(--blue); }
+.finalcta .btn .price-old { color: var(--muted); }
+.finalcta .prop { color: rgba(255,255,255,0.9); } .finalcta .prop svg { stroke: #fff; }
+.finalcta .price-reassure { color: rgba(255,255,255,0.85); }
+.footer { border-top: 1px solid rgba(255,255,255,0.22); padding-top: 2.4rem; margin-top: 4.5rem; }
+.footer-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
+.footer-links { display: flex; flex-wrap: wrap; gap: 1.5rem; font-size: 0.9rem; }
+.footer-links a, .footer-login a { color: rgba(255,255,255,0.88); transition: color 0.25s; }
+.footer-links a:hover { color: #fff; }
+.footer-login a { border-bottom: 1px solid rgba(255,255,255,0.6); padding-bottom: 2px; color: #fff; }
+.footer-copy { font-size: 0.82rem; color: rgba(255,255,255,0.78); }
+
+/* ============================================================ FIXED CTA */
+.fixed-cta { position: fixed; left: 0; right: 0; bottom: 0; z-index: 900; padding: 0.8rem var(--gutter); background: color-mix(in srgb, #fff 88%, transparent); backdrop-filter: blur(14px); border-top: 1px solid var(--line); transform: translateY(120%); transition: transform 0.5s var(--spring); }
+.fixed-cta.visible { transform: translateY(0); }
+.fixed-cta-inner { max-width: var(--wrap); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.fixed-cta-text { font-size: 0.9rem; font-weight: 700; color: var(--ink); }
+
+/* ============================================================ MODALES */
+.modal { position: fixed; inset: 0; z-index: 3000; display: none; align-items: center; justify-content: center; padding: 1.5rem; }
+.modal.active { display: flex; }
+.modal-backdrop { position: absolute; inset: 0; background: rgba(11,15,30,0.6); backdrop-filter: blur(6px); }
+.modal-content { position: relative; z-index: 1; background: #fff; border-radius: var(--radius); padding: clamp(1.6rem, 4vw, 2.6rem); max-width: 460px; width: 100%; box-shadow: var(--shadow); }
+.modal-content--demo { text-align: center; }
+.modal-close { position: absolute; top: 1rem; right: 1rem; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; background: var(--bg-2); }
+.modal-close .material-symbols-sharp { font-size: 20px; }
+.modal-header h3 { font-size: 1.6rem; margin-bottom: 1.4rem; }
+.blocks-deck-wrapper { display: flex; justify-content: center; }
+
+/* loader */
+.page-loader { background: var(--bg) !important; }
+.page-loader-spinner { border-color: var(--line) !important; border-top-color: var(--blue) !important; }
+
+/* ============================================================ REVEAL (fade-up + stagger) */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal { opacity: 0; transform: translateY(30px); }
+  .reveal.in { opacity: 1; transform: none; transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+  .hero-stagger > * { opacity: 0; transform: translateY(24px); animation: rise 0.8s var(--ease) forwards; }
+  .hero-stagger > *:nth-child(1){animation-delay:.05s} .hero-stagger > *:nth-child(2){animation-delay:.13s}
+  .hero-stagger > *:nth-child(3){animation-delay:.21s} .hero-stagger > *:nth-child(4){animation-delay:.29s}
+  .hero-stagger > *:nth-child(5){animation-delay:.37s}
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  .how-point, .method-row, .obj-row, .polaroid, .feature-row { opacity: 0; transform: translateY(26px); }
+  .reveal.in .how-point, .reveal.in .method-row, .reveal.in .obj-row, .reveal.in .polaroid, .reveal.in .feature-row,
+  .how-point.in, .method-row.in, .obj-row.in, .polaroid.in, .feature-row.in { opacity: 1; transform: none; transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+}
+@media (prefers-reduced-motion: reduce) { .ticker__track { animation: none !important; } * { scroll-behavior: auto; } }
+
+/* ============================================================ RESPONSIVE */
+@media (max-width: 980px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .hero-deck { order: -1; }
+  .how-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .method-list { grid-template-columns: 1fr; }
+  .price-wrap { grid-template-columns: 1fr; }
+  .author-wrap { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  .author-name, .author-bio { text-align: center; }
+  .author-photo-frame { max-width: 140px; }
+  .polaroid-scatter { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 760px) {
+  .nav-links { display: none; } .nav-cta { display: none; }
+  .menu-toggle { display: inline-flex; }
+  .obj-row { grid-template-columns: 1fr; gap: 0.6rem; }
+  .feature-list { grid-template-columns: 1fr; }
+  .card-deck, .blocks-deck { width: min(300px, 84vw); height: 430px; }
+  .fixed-cta-text { display: none; }
+  .fixed-cta-inner { justify-content: center; }
+  .fixed-cta .btn { width: 100%; }
+  .hero { min-height: auto; }
+}
+@media (max-width: 460px) {
+  .polaroid-scatter { grid-template-columns: 1fr; max-width: 300px; margin-inline: auto; }
+  .polaroid:nth-child(n) { transform: rotate(-1.2deg); }
+}
+
+/* ============================================================
+   FEEDBACK FIXES + PRODUCT VISUAL (v7)
+   ============================================================ */
+/* header login adapts to bg */
+.header-login { color: var(--ink); }
+header.header--light-text .header-login { color: #fff; }
+
+/* hero deck: center, smaller, dots/hint separated from the fanned stack */
+.card-deck, .blocks-deck { width: min(300px, 78vw); height: 430px; margin: 0 auto; }
+.hero .card-deck { transform: translateX(-8px); }
+.deck-group { gap: 2.8rem; }
+.deck-hint { margin-top: -1rem; }
+
+/* hero proof avatar stack */
+.proof { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+.proof-dots { display: inline-flex; }
+.proof-dots i { width: 27px; height: 27px; border-radius: 50%; background: rgba(255,255,255,0.22); border: 2px solid #2E63F2; display: grid; place-items: center; font-style: normal; font-weight: 800; font-size: 0.72rem; color: #fff; margin-left: -9px; }
+.proof-dots i:first-child { margin-left: 0; }
+
+/* método — icon on top (flex column) */
+.method-row { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+
+/* te suena — chat bubbles (gris = cliente / azul = producto, sin etiquetas) */
+.chat { margin-top: 3rem; display: flex; flex-direction: column; gap: 0.85rem; max-width: 760px; margin-inline: auto; }
+.chat-row { display: flex; }
+.chat-row--them { justify-content: flex-start; }
+.chat-row--us { justify-content: flex-end; }
+.bubble { max-width: 80%; padding: 1rem 1.3rem; border-radius: 22px; font-size: 1.05rem; line-height: 1.45; box-shadow: var(--shadow-sm); }
+.bubble--them { background: #E9EBEF; color: var(--ink); border-bottom-left-radius: 6px; font-weight: 600; }
+.bubble--us { background: var(--blue); color: #fff; border-bottom-right-radius: 6px; font-weight: 500; }
+
+/* comunidad — avatar + nombre + ubicación */
+.polaroid-caption { display: flex; align-items: center; gap: 0.6rem; padding: 0.7rem 0.55rem 0.75rem; text-align: left; }
+.avatar { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 0.78rem; flex: none; }
+.polaroid-meta { display: flex; flex-direction: column; gap: 3px; line-height: 1.15; }
+.polaroid-meta .polaroid-name { font-weight: 700; font-size: 0.92rem; color: var(--ink); }
+.polaroid-loc { font-size: 0.76rem; color: var(--muted); font-weight: 500; }
+
+/* ---- Camera viewfinder mockup (el producto) ---- */
+.producto-bg { background: linear-gradient(180deg, #FFFFFF 0%, #EAF1FF 100%); }
+.shots { margin-top: 3.5rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.2rem, 3vw, 2.4rem); }
+.shot { position: relative; }
+.shot:nth-child(2) { transform: translateY(1.6rem); }
+.shot-screen { position: relative; aspect-ratio: 9 / 19.5; border-radius: 46px; overflow: hidden; background: #000; border: 6px solid #0B0B0D; box-shadow: 0 44px 90px -36px rgba(20,32,64,0.5); }
+.shot-screen::before { content: ""; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: min(34%, 120px); height: 26px; background: #0B0B0D; border-radius: 20px; z-index: 6; }
+.shot-photo { position: absolute; inset: 0; background-size: cover; background-position: center; }
+.shot-grid { position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(255,255,255,0.28) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.28) 1px, transparent 1px); background-size: 33.33% 33.33%; background-position: -1px -1px; opacity: 0.5; }
+.shot-top { position: absolute; top: 0; left: 0; right: 0; padding: 2.5rem 1rem 0.7rem; display: flex; align-items: center; justify-content: space-between; color: #fff; background: linear-gradient(rgba(0,0,0,0.4), transparent); }
+.shot-top .flash { display: inline-flex; align-items: center; gap: 0.3em; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.03em; }
+.shot-top .flash svg { width: 13px; height: 13px; fill: #FFD23F; }
+.shot-top .zoom { font-size: 0.64rem; font-weight: 700; background: rgba(0,0,0,0.4); padding: 0.25em 0.6em; border-radius: 100px; backdrop-filter: blur(4px); }
+.shot-card { position: absolute; bottom: 0.9rem; left: 0.9rem; background: rgba(255,255,255,0.96); backdrop-filter: blur(6px); border-radius: 14px; padding: 0.6rem 0.8rem; max-width: 58%; box-shadow: 0 10px 24px rgba(0,0,0,0.28); }
+.shot-card__day { display: block; font-weight: 800; font-size: 0.8rem; color: var(--ink); line-height: 1.15; letter-spacing: -0.01em; }
+.shot-card__block { display: inline-block; font-size: 0.6rem; font-weight: 800; color: #fff; background: var(--blue); padding: 0.15em 0.55em; border-radius: 100px; margin-top: 0.35rem; text-transform: uppercase; letter-spacing: 0.03em; }
+.shot-shutter { position: absolute; bottom: 0.9rem; right: 0.9rem; width: 50px; height: 50px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.85); background: transparent; box-shadow: 0 4px 14px rgba(0,0,0,0.3); }
+.shot-shutter::after { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: #fff; }
+.shot-label { margin-top: 1.1rem; text-align: center; font-weight: 700; font-size: 1rem; color: var(--ink); }
+.shot-label span { display: block; font-weight: 500; font-size: 0.85rem; color: var(--muted); margin-top: 0.1rem; }
+
+/* trust anchors */
+.trust-band { margin: 3rem auto 0; display: flex; flex-wrap: wrap; gap: 1.5rem clamp(2rem, 5vw, 4rem); align-items: center; justify-content: center; }
+.trust-stat { text-align: center; }
+.trust-stat b { display: block; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); line-height: 1; }
+.trust-stat span { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+.trust-avatars { display: flex; align-items: center; }
+.trust-avatars i { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 0.9rem; font-style: normal; margin-left: -12px; border: 3px solid var(--bg); }
+.trust-avatars i:first-child { margin-left: 0; }
+
+/* cómo-funciona example → single viewfinder */
+.example { max-width: 360px; }
+
+@media (max-width: 980px) {
+  .shots { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .shot:nth-child(2) { transform: none; }
+}
+@media (max-width: 760px) {
+  .bubble { max-width: 88%; font-size: 1rem; }
+  .card-deck, .blocks-deck { width: min(280px, 82vw); height: 405px; }
+  .hero .card-deck { transform: none; }
+  .header-login { display: none; }
+  .shots { grid-template-columns: 1fr; gap: 1.6rem; max-width: 340px; margin-inline: auto; }
+}
+
+/* ============================================================
+   FEEDBACK v8 — CTA amarillo · hero · merge · Q&A · comunidad · scarcity · autor
+   ============================================================ */
+:root { --cta: linear-gradient(135deg, #FFD84D 0%, #FFB020 100%); --cta-hover: linear-gradient(135deg, #FFDF6B, #FFBE33); --cta-ink: #241900; }
+
+/* Botón de compra: gradiente amarillo, alto contraste, moderno */
+.btn { background: var(--cta); color: var(--cta-ink); box-shadow: 0 12px 30px -12px rgba(255,176,32,0.55); white-space: nowrap; }
+.btn:hover { background: var(--cta-hover); color: var(--cta-ink); box-shadow: 0 18px 42px -14px rgba(255,176,32,0.7); }
+.btn .price-old { color: rgba(36,25,0,0.5); }
+.hero .btn, .finalcta .btn { background: var(--cta); color: var(--cta-ink); }
+.hero .btn:hover, .finalcta .btn:hover { background: var(--cta-hover); color: var(--cta-ink); }
+.finalcta .btn .price-old { color: rgba(36,25,0,0.5); }
+.nav-cta, header.header--light-text .nav-cta { background: var(--cta); color: var(--cta-ink); }
+.nav-cta:hover { background: var(--cta-hover); }
+
+/* HERO — más aire en los affordances */
+.hero-sub { margin-bottom: 2rem; }
+.hero-copy .offer { margin-top: 0.3rem; margin-bottom: 1.6rem; gap: 1.4rem; }
+.hero-copy .props { gap: 0.9rem 1.5rem; }
+.hero-copy .proof { margin-top: 1.7rem; }
+
+/* HERO deck — hint arriba; móvil: bloque a la izquierda, set visible entero */
+.deck-group { gap: 1.3rem; }
+.deck-hint { order: -1; margin: 0 0 0.2rem; }
+@media (max-width: 760px) {
+  .hero-deck { justify-content: flex-start; }
+  .deck-group { align-items: flex-start; }
+  .hero .card-deck { width: min(258px, 72vw); height: 372px; transform: translateX(-4px); margin: 0; }
+  .deck-dots { align-self: flex-start; }
+}
+
+/* CÓMO FUNCIONA (fusionada) — pasos centrados */
+.steps { list-style: none; margin: 3rem auto 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 900px; }
+.step { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.7rem; padding: 1.4rem 1rem; }
+.step-num { width: 44px; height: 44px; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 1.05rem; }
+.step-body strong { display: block; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.2rem; }
+.step-body span { color: var(--muted); font-size: 0.95rem; }
+.trust-band { justify-content: center; }
+@media (max-width: 720px) { .steps { grid-template-columns: 1fr; max-width: 360px; gap: 0.4rem; } }
+
+/* TE SUENA — Q&A centrado (ni chat ni FAQ) */
+.qa { margin-top: 3.5rem; max-width: 720px; margin-inline: auto; display: flex; flex-direction: column; }
+.qa-item { text-align: center; padding: 2.1rem 0; border-top: 1px solid var(--line); }
+.qa-item:first-child { border-top: none; }
+.qa-q { font-weight: 800; font-size: clamp(1.25rem, 3vw, 1.85rem); letter-spacing: -0.02em; line-height: 1.2; color: var(--ink); }
+.qa-a { margin-top: 0.9rem; color: var(--muted); font-size: 1.1rem; line-height: 1.5; max-width: 52ch; margin-inline: auto; }
+
+/* COMUNIDAD — grid limpio (sin rotación), 2 col en móvil */
+.polaroid { transform: none !important; border-radius: 14px; }
+.polaroid::before { display: none; }
+.polaroid:hover { transform: translateY(-6px) !important; box-shadow: var(--shadow); }
+@media (max-width: 460px) { .polaroid-scatter { grid-template-columns: repeat(2, 1fr) !important; max-width: none !important; gap: 0.9rem !important; } }
+
+/* PRECIO — botón sin overlap + scarcity 30 puntos */
+.price-card .btn { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.scarcity { border: 1px solid var(--line-ink); border-radius: var(--radius-sm); padding: 1.5rem; margin-bottom: 1.4rem; background: #fff; }
+.scarcity-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.9rem; }
+.scarcity-head strong { font-weight: 700; }
+.scarcity-count { font-weight: 800; color: var(--blue); font-size: 0.95rem; }
+.scarcity-dots { display: grid; grid-template-columns: repeat(15, 1fr); gap: 6px; }
+.scarcity-dots i { aspect-ratio: 1; border-radius: 50%; background: var(--line); }
+.scarcity-dots i.full { background: var(--blue); }
+.scarcity-note { margin-top: 0.9rem; font-size: 0.9rem; color: var(--muted); }
+
+/* AUTOR — avatar pequeño redondo + firma */
+.author-wrap { grid-template-columns: 1fr; max-width: 720px; }
+.author-bio { font-size: clamp(1.15rem, 1rem + 0.6vw, 1.5rem); line-height: 1.45; font-weight: 500; }
+.author-sign-row { display: flex; align-items: center; gap: 0.9rem; margin-top: 1.6rem; }
+.author-photo { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
+.author-name { font-weight: 700; font-size: 1rem; color: var(--ink); margin: 0; }
+.author-role { font-size: 0.88rem; color: var(--muted); margin: 0; }
+
+/* ============================================================
+   FEEDBACK v9 — Paleta playful / colorful (primarios pastel, no-Google)
+   ============================================================ */
+:root {
+  --coral:  #FF6B6B; --coral-050: #FFECEC;
+  --sun:    #FFC93C; --sun-050:   #FFF3D2;
+  --green:  #2FC177; --green-050: #E1F6EC;
+  --violet: #7C6CF5; --violet-050:#EEEBFE;
+  --sky:    #3B6EF6;
+}
+/* icon tiles — 4 primarios suaves */
+.tile--coral  { background: var(--coral); }
+.tile--green  { background: var(--green); }
+.tile--violet { background: var(--violet); }
+.tile--sun    { background: var(--sun); }
+.tile--sun svg { stroke: #4A3400; }
+
+/* eyebrows con color por sección (variedad alegre, texto + punto) */
+#como-funciona .eyebrow { color: var(--green); }  #como-funciona .eyebrow::before { background: var(--green); }
+#metodo .eyebrow { color: var(--sky); }           #metodo .eyebrow::before { background: var(--sky); }
+#te-suena .eyebrow { color: var(--coral); }        #te-suena .eyebrow::before { background: var(--coral); }
+#que-incluye .eyebrow { color: var(--ink); }    #que-incluye .eyebrow::before { background: var(--ink); }
+#comunidad .eyebrow { color: var(--coral); }       #comunidad .eyebrow::before { background: var(--coral); }
+#precio .eyebrow { color: var(--green); }           #precio .eyebrow::before { background: var(--green); }
+#autor .eyebrow { color: var(--violet); }           #autor .eyebrow::before { background: var(--violet); }
+
+/* accent-words coloridos por sección */
+#comunidad .accent-word { color: var(--coral); }
+#que-incluye .accent-word { color: var(--ink); }
+
+/* pasos con números de colores */
+.step:nth-child(1) .step-num { background: var(--sky); }
+.step:nth-child(2) .step-num { background: var(--coral); }
+.step:nth-child(3) .step-num { background: var(--green); }
+
+/* checks de "qué incluye" en verde para variar */
+#que-incluye .feature-row svg { stroke: var(--ink); }
+
+/* scarcity dots: progreso en verde */
+.scarcity-dots i.full { background: var(--green); }
+.scarcity-count { color: var(--green); }
+
+/* blobs pastel juguetones en la sección Cómo funciona */
+#como-funciona.producto-bg::after {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(260px 260px at 6% 14%, var(--coral-050), transparent 70%),
+    radial-gradient(300px 300px at 94% 22%, var(--green-050), transparent 70%),
+    radial-gradient(240px 240px at 82% 94%, var(--sun-050), transparent 72%),
+    radial-gradient(220px 220px at 14% 90%, var(--violet-050), transparent 72%);
+}
+#como-funciona .wrap { position: relative; z-index: 1; }
+
+/* ============================================================
+   FEEDBACK v10 — un visor + carta fiel, iconos valor, burbuja autor,
+   text-balance, hero centrado/above-fold, modal deck contenido
+   ============================================================ */
+
+/* --- item 5: text balance / pretty (líneas paralelas y simétricas) --- */
+h1.display, h2.display, h3, .lead, .hero-sub, .qa-q, .shot-label, .step-body strong,
+.section-head p, .band-inner h2, .trust-stat span { text-wrap: balance; }
+p, .qa-a, .author-bio, .feature-row em, .method-desc, .card-desc, .shot-card__ds { text-wrap: pretty; }
+
+/* --- item 6: hero — cartas y affordances CENTRADAS; info clave en viewport --- */
+.deck-group { align-items: center; }
+.deck-hint, .deck-dots { align-self: center; }
+.hero .card-deck { transform: translateX(-10px); margin: 0 auto; }  /* centra ópticamente el abanico */
+@media (max-width: 760px) {
+  .hero-copy { order: -1; }                 /* copy + CTA primero → above the fold */
+  .hero-deck { order: 0; justify-content: center; }
+  .hero .card-deck { width: min(238px, 66vw); height: 340px; transform: translateX(-7px); }
+  .deck-group { align-items: center; }
+  .hero { padding-top: 5rem; padding-bottom: 2.6rem; min-height: auto; }
+}
+
+/* --- item 1: un solo visor, carta fiel (con icono) que coincide con la foto --- */
+.shots--one { grid-template-columns: 1fr; max-width: 300px; margin-inline: auto; }
+.shot-card--full { left: 0.7rem; right: 0.7rem; bottom: 0.8rem; max-width: none; padding: 0.9rem 1rem; display: block; }
+.shot-card__hd { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.55rem; }
+.shot-card__hd .shot-card__day { font-size: 0.6rem; font-weight: 700; color: var(--muted); }
+.shot-card__hd .shot-card__block { font-size: 0.56rem; font-weight: 800; color: #fff; background: var(--blue); padding: 0.2em 0.55em; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.03em; }
+.shot-card__ti { font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; line-height: 1; }
+.shot-card__su { font-size: 0.7rem; color: var(--muted); margin-top: 0.15rem; }
+.shot-card__ic { display: grid; place-items: center; padding: 0.45rem 0; }
+.shot-card__ic svg { width: 32px; height: 32px; stroke: var(--blue); stroke-width: 1.9; fill: none; stroke-linecap: round; }
+.shot-card__ds { font-size: 0.68rem; color: var(--muted); line-height: 1.35; }
+.shots--one .example-cap { margin-top: 1.2rem; }
+
+/* --- item 3: iconos de valor (no checks) --- */
+.feature-row { align-items: center; }
+.feat-ic { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; flex: none; background: #fff; border: 1px solid var(--line); box-shadow: 0 8px 18px -10px rgba(20,32,64,0.4); }
+.feat-ic svg { width: 21px; height: 21px; stroke: var(--ink); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+/* --- item 4: burbuja de autor (como si lo dijera él) --- */
+.author-quote { max-width: 620px; }
+.bubble--author { position: relative; background: #fff; border: 1px solid var(--line); border-radius: 22px 22px 22px 6px; padding: 1.6rem 1.8rem; box-shadow: var(--shadow-sm); }
+.bubble--author::after { content: ""; position: absolute; left: 26px; bottom: -10px; width: 20px; height: 20px; background: #fff; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); transform: rotate(45deg); }
+.bubble--author .author-bio { margin: 0; font-size: clamp(1.08rem, 1rem + 0.5vw, 1.32rem); line-height: 1.5; font-weight: 500; }
+.author-quote .author-sign-row { margin-top: 1.5rem; margin-left: 0.5rem; }
+
+/* --- item 2: CTAs centrados + modal deck contenido y centrado --- */
+.method-foot { justify-content: center; }
+.modal-content--demo { max-width: 372px; }
+.blocks-deck-wrapper { width: 100%; overflow: hidden; display: flex; justify-content: center; }
+.modal .deck-group { align-items: center; width: 100%; }
+.blocks-deck { width: min(256px, 72vw); height: 372px; transform: translateX(-8px); margin: 0 auto; }
+
+/* ============================================================
+   DECK — COMPONENTE ÚNICO (v12) · proporción de carta real
+   Reemplaza cualquier tamaño por contexto anterior. Rectangular (16/25).
+   ============================================================ */
+.card-deck, .blocks-deck, .hero .card-deck {
+  width: min(300px, 80vw);
+  aspect-ratio: 16 / 25;        /* rectangular tipo carta (0.64) */
+  height: auto;
+  margin: 0 auto;
+  transform: none;              /* centrado por el contenedor, sin desplazamientos */
+}
+/* la carta ocupa el componente entero y su contenido cabe sin recortes */
+.card, .block-card { padding: 1.6rem 1.5rem; }
+.card-title, .block-card-title { font-size: 1.6rem; }
+.card-icon, .block-card-icon { padding: 0.4rem 0; }
+.card-icon svg, .block-card-icon svg { width: 52px; height: 52px; }
+.card-desc, .block-card-desc { font-size: 0.9rem; }
+
+/* modal: mismo componente, centrado y contenido */
+.modal-content--demo { max-width: 420px; }
+.blocks-deck-wrapper { overflow: hidden; width: 100%; display: flex; justify-content: center; }
+
+@media (max-width: 760px) {
+  .card-deck, .blocks-deck, .hero .card-deck {
+    width: min(268px, 74vw); aspect-ratio: 16 / 25; height: auto; transform: none;
+  }
+}
+
+/* ============================================================
+   FEEDBACK v13 — avales en una fila · separación deck↔dots = 24px
+   ============================================================ */
+/* los 3 avales siempre en la misma fila */
+.hero-copy .props { flex-wrap: nowrap; }
+@media (max-width: 760px) {
+  .hero-copy .props { gap: 0.45rem 0.8rem; }
+  .hero-copy .prop { font-size: 0.78rem; }
+  .hero-copy .prop svg { width: 15px; height: 15px; }
+}
+/* deck: gap real de 24px con los dots (reservando el abanico de cartas) */
+.deck-group { gap: 24px; }
+.card-deck, .blocks-deck, .hero .card-deck { margin-bottom: 42px; }
+
+/* ============================================================
+   v14 — ajuste óptico del deck del hero (el abanico abre a la derecha)
+   ============================================================ */
+.hero .card-deck { transform: translateX(-36px); }
+@media (max-width: 760px) { .hero .card-deck { transform: translateX(-34px); } }
+
+/* ============================================================
+   v15 — comunidad: bloque apilado en una columna a todos los tamaños
+   ============================================================ */
+.polaroid-scatter { display: block !important; max-width: 360px; margin-inline: auto; }
+.polaroid-scatter .polaroid { max-width: 340px; margin: 0 auto 1.4rem; }
+.polaroid-scatter .polaroid:last-child { margin-bottom: 0; }
+@media (max-width: 460px) { .polaroid-scatter { max-width: 340px !important; } }
+
+/* ============================================================
+   v19 — carta del visor rectangular (contenida, no full-width)
+         + gap 12px entre icono y {título+descripción} en método
+   ============================================================ */
+/* Cómo funciona: tarjeta contenida y centrada abajo (deja ver la foto) */
+.shot-card--full { left: 50%; right: auto; transform: translateX(-50%); bottom: 1rem; width: 84%; max-width: 84%; padding: 0.85rem 0.95rem; }
+
+/* Método: icono separado 12px del bloque de texto (título+descripción juntos) */
+.method-row { gap: 0; }
+.method-row .method-name { margin-top: 12px; }
+.method-row .method-desc { margin-top: 0.4rem; }
+
+/* ============================================================
+   v20 — header blanco · carta visor portrait (punto de fuga) · icono 48px
+         · eyebrows color único · textos negros · acceso completo izquierda
+         · autor a la izquierda con nombre+cargo arriba
+   ============================================================ */
+
+/* Header blanco, diferenciado del contenido (crea separación con el hero azul) */
+header { background: color-mix(in srgb, #fff 90%, transparent); backdrop-filter: blur(14px) saturate(1.1); -webkit-backdrop-filter: blur(14px) saturate(1.1); border-bottom: 1px solid var(--line); box-shadow: 0 4px 20px -16px rgba(20,32,64,0.3); }
+header.scrolled { background: color-mix(in srgb, #fff 90%, transparent); }
+header .logo, header.header--light-text .logo { color: var(--ink); }
+header .logo-mark, header.header--light-text .logo-mark { background: var(--blue); color: #fff; }
+header .nav-links, header.header--light-text .nav-links { background: rgba(11,11,13,0.05); }
+header .nav-links a, header.header--light-text .nav-links a { color: var(--ink); }
+.header-login, header.header--light-text .header-login { color: var(--ink); }
+.menu-toggle, header.header--light-text .menu-toggle { color: var(--ink); }
+
+/* Eyebrows: mismo color en todas las secciones (la paleta vive solo en iconos) */
+#como-funciona .eyebrow, #metodo .eyebrow, #te-suena .eyebrow, #que-incluye .eyebrow,
+#comunidad .eyebrow, #precio .eyebrow, #autor .eyebrow { color: var(--blue); }
+#como-funciona .eyebrow::before, #metodo .eyebrow::before, #te-suena .eyebrow::before, #que-incluye .eyebrow::before,
+#comunidad .eyebrow::before, #precio .eyebrow::before, #autor .eyebrow::before { background: var(--blue); }
+
+/* Textos y títulos siempre negros (hero/finalcta permanecen blancos por especificidad) */
+.accent-word { color: var(--ink); }
+#comunidad .accent-word, .feature-foot .accent-word { color: var(--ink); }
+
+/* Acceso completo: todo a la izquierda */
+.feature-list { justify-items: start; }
+.feature-row { align-items: flex-start; text-align: left; }
+
+/* Método: icono más pequeño (gap de 12px ya aplicado) */
+.tile { width: 48px; height: 48px; }
+.tile svg { width: 24px; height: 24px; }
+
+/* Cómo funciona: carta rectangular (portrait) anclada abajo-izquierda */
+.shot-card--full { left: 0.85rem; right: auto; transform: none; bottom: 0.85rem; width: 54%; max-width: 54%; padding: 0.7rem 0.75rem; }
+.shot-card--full .shot-card__hd { flex-direction: column; align-items: flex-start; gap: 0.3rem; margin-bottom: 0.4rem; }
+.shot-card--full .shot-card__ti { font-size: 0.95rem; }
+.shot-card--full .shot-card__su { font-size: 0.62rem; margin-top: 0.1rem; }
+.shot-card--full .shot-card__ic { padding: 0.35rem 0; }
+.shot-card--full .shot-card__ic svg { width: 26px; height: 26px; }
+.shot-card--full .shot-card__ds { font-size: 0.6rem; line-height: 1.3; }
+
+/* Autor: nombre + cargo arriba, todo a la izquierda; bio más pequeña; rabito hacia arriba */
+.author-wrap { text-align: left; justify-items: start; }
+.author-quote .author-sign-row { margin: 0 0 0.9rem 0; }
+.bubble--author { border-radius: 6px 22px 22px 22px; }
+.bubble--author::after { top: -10px; bottom: auto; left: 26px; border: 0; border-top: 1px solid var(--line); border-left: 1px solid var(--line); transform: rotate(45deg); }
+.bubble--author .author-bio { font-size: clamp(1rem, 0.95rem + 0.35vw, 1.15rem); line-height: 1.55; }
+@media (max-width: 980px) {
+  .author-wrap { justify-items: start; text-align: left; }
+  .author-name, .author-bio { text-align: left; }
+}
+
+/* ============================================================
+   v21 — hero padding · carta=deck real (con stack, sin azul) · steps en card
+         · método flex+gap (sin margins) · qué te llevas icono a la izquierda
+         · text-wrap balance en toda la landing
+   ============================================================ */
+
+/* 2) Hero: separación del header blanco */
+.hero { padding-top: 8rem; }
+@media (max-width: 760px) { .hero { padding-top: 6.5rem; } }
+
+/* 4a) Carta del visor = réplica de la carta del deck (blanca, con stack detrás, sin azul) */
+.shot-card--full {
+  left: 0.85rem; right: auto; transform: none; bottom: 0.85rem;
+  width: 58%; max-width: 58%; padding: 0.85rem 0.9rem;
+  background: #fff; border-radius: 16px; overflow: visible;
+  box-shadow: 7px 7px 0 0 #fff, 7px 7px 0 1px var(--line),
+              14px 14px 0 0 #fff, 14px 14px 0 1px var(--line),
+              0 22px 42px -18px rgba(15,25,55,0.45);
+}
+.shot-card--full .shot-card__hd { flex-direction: row; align-items: center; justify-content: space-between; gap: 0.4rem; margin-bottom: 0.55rem; }
+.shot-card--full .shot-card__ti { font-size: 1rem; margin-bottom: 0.1rem; }
+.shot-card--full .shot-card__su { font-size: 0.66rem; }
+.shot-card--full .shot-card__ic { padding: 0.5rem 0; }
+.shot-card--full .shot-card__ic svg { width: 30px; height: 30px; }
+.shot-card--full .shot-card__ds { font-size: 0.64rem; line-height: 1.35; }
+.shot-card__cta { margin-top: 0.5rem; font-size: 0.66rem; font-weight: 800; color: var(--blue); }
+
+/* 4b) Pasos dentro de un componente card */
+.steps { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.6rem 1.4rem; }
+
+/* 5) Método: gap con flex, SIN margins */
+.method-row { gap: 12px; }
+.method-row .method-name, .method-row .method-desc { margin: 0; }
+.method-text { display: flex; flex-direction: column; gap: 4px; }
+
+/* 6) Qué te llevas: icono a la IZQUIERDA del título + descripción (flex row) */
+.feature-row { flex-direction: row; align-items: center; text-align: left; gap: 0.9rem; }
+.feature-row > div { flex: 1; }
+
+/* 9) text-wrap balance en toda la landing (líneas simétricas) */
+h1, h2, h3, h4, .lead, .hero-sub, .qa-q, .qa-a, .shot-label, .step-body strong, .step-body span,
+.author-bio, .method-desc, .card-desc, .obj-a, .feature-row em, .band-inner p, .price-scarcity,
+.scarcity-note, .accordion-body, .proof, .shot-card__ds, .price-per, .example-cap { text-wrap: balance; }
+
+/* v21.1 — cabecera de la carta del visor en una sola línea (como la referencia) */
+.shot-card--full .shot-card__day { white-space: nowrap; font-size: 0.56rem; }
+.shot-card--full .shot-card__block { white-space: nowrap; font-size: 0.5rem; padding: 0.18em 0.5em; }
+
+/* ============================================================
+   v23 — carta del visor: UNA sola carta simple (icono→título→descripción),
+         con padding (no toca bordes) y texto legible · método gap más claro
+   ============================================================ */
+.shot-card--full {
+  left: 1.1rem; right: auto; bottom: 1.4rem; transform: none;
+  width: 45%; max-width: 45%; padding: 1rem 1.05rem;
+  background: #fff; border-radius: 18px;
+  box-shadow: 0 20px 42px -18px rgba(15,25,55,0.45);   /* una sola carta, sin stack */
+  display: flex; flex-direction: column; align-items: flex-start; gap: 0.55rem; text-align: left;
+}
+.shot-card--full .shot-card__ic { padding: 0; margin: 0; display: block; }
+.shot-card--full .shot-card__ic svg { width: 30px; height: 30px; stroke: var(--blue); stroke-width: 2; }
+.shot-card--full .shot-card__ti { font-size: 1.05rem; line-height: 1.1; margin: 0; }
+.shot-card--full .shot-card__ds { font-size: 0.78rem; line-height: 1.4; color: var(--muted); margin: 0; }
+
+/* Cuatro miradas: separación clara icono ↔ texto (flex + gap, sin margins) */
+.method-row { gap: 16px; }
+
+/* ============================================================
+   v24 — desktop: centrar autor/faq/precio · comunidad en grid
+         · móvil de "cómo funciona" más bajo · header más bajo · nav separado
+   ============================================================ */
+
+/* Centrar secciones y su contenido */
+#autor .section-head, #faq .section-head, #precio .section-head { max-width: 62ch; margin-inline: auto; text-align: center; }
+#autor .section-head .eyebrow, #faq .section-head .eyebrow, #precio .section-head .eyebrow { justify-content: center; }
+#faq .accordion { margin-inline: auto; }
+#autor .author-wrap { justify-items: center; text-align: center; margin-inline: auto; }
+#autor .author-quote { margin-inline: auto; }
+#autor .author-sign-row { justify-content: center; }
+#precio .price-wrap { justify-content: center; }
+
+/* Comunidad en grid (vuelve a rejilla) */
+.polaroid-scatter { display: grid !important; grid-template-columns: repeat(4, 1fr); gap: clamp(1rem, 2vw, 1.6rem); max-width: 1040px; margin-inline: auto; }
+.polaroid-scatter .polaroid { max-width: none; margin: 0; }
+@media (max-width: 760px) { .polaroid-scatter { grid-template-columns: repeat(2, 1fr) !important; max-width: 420px !important; } }
+
+/* "Una carta al día": móvil del visor más bajo */
+.shot-screen { aspect-ratio: 9 / 16; }
+.shots--one { max-width: 280px; }
+
+/* Header más bajo */
+header { padding: 0.6rem 0; }
+
+/* Nav: separar los 3 enlaces del grupo Acceder / Empezar */
+.header-login { margin-left: 1.6rem; }
+
+/* ---- v25: unificar prueba social (hero == cómo funciona) ---- */
+/* El hero usa el MISMO componente .trust-band; solo adapta color/alineación al fondo azul */
+.trust-band--hero { margin: 1.7rem 0 0; justify-content: flex-start; gap: 0.9rem; }
+.trust-band--hero .trust-stat { text-align: left; }
+.trust-band--hero .trust-stat b { color: #fff; }
+.trust-band--hero .trust-stat span { color: rgba(255,255,255,0.82); }
+
+/* ---- v26: qué te llevas centrado + autor con contenido a la izquierda ---- */
+/* Qué te llevas: se mantiene el layout (icono a la izquierda) pero el bloque queda centrado */
+#que-incluye .feature-list { max-width: 860px; margin-inline: auto; }
+#que-incluye .feature-foot { text-align: center; }
+
+/* Autor: la tarjeta sigue centrada en la página, pero su contenido va alineado a la izquierda */
+#autor .author-wrap { text-align: left; }
+#autor .author-quote { text-align: left; }
+#autor .author-sign-row { justify-content: flex-start; }
+#autor .author-name, #autor .author-role, #autor .author-bio { text-align: left; }
+
+/* ---- v27: hero + ticker visibles dentro del viewport (desktop y móvil) ---- */
+@media (min-width: 761px) {
+  /* Desktop: el hero reserva espacio para que el ticker entre en pantalla */
+  .hero { min-height: calc(100svh - 104px); padding-top: 6.5rem; padding-bottom: 2.6rem; }
+}
+@media (max-width: 760px) {
+  /* Móvil: hero + ticker en una pantalla, con aire (ajuste fino en v29) */
+  .hero { padding-top: 4.5rem; padding-bottom: 0.8rem; }
+  .hero-grid { gap: 1.05rem; }
+  .trust-band--hero { gap: 0.75rem; }
+  .trust-band--hero .trust-avatars i { width: 31px; height: 31px; font-size: 0.78rem; }
+}
+
+/* ---- v28: dividers en pasos · +1300 más pequeño y consistente · autor centrado ---- */
+/* Separadores verticales sutiles entre los 3 pasos (solo desktop; en móvil van apilados) */
+@media (min-width: 721px) {
+  .steps .step + .step { border-left: 1px solid rgba(17, 24, 39, 0.10); }
+}
+/* +1300 más contenido y consistente en las dos ubicaciones (hero y cómo funciona) */
+.trust-stat b { font-size: 1.3rem; line-height: 1; }
+/* Autor: la tarjeta queda centrada en la página, pero nombre, cargo y bio van alineados a la izquierda (nombre/cargo justo encima de la bio) */
+#autor .author-wrap { text-align: left; }
+#autor .author-quote { text-align: left; }
+#autor .author-sign-row { justify-content: flex-start; }
+#autor .author-name, #autor .author-role, #autor .author-bio { text-align: left; }
+
+/* ---- v29: fold hero+ticker con aire — cabe en portátiles (768+) y móviles estándar (844+) dejando que respire ---- */
+@media (min-width: 761px) {
+  .hero { padding-top: 5.5rem; padding-bottom: 2.2rem; }
+  .hero .card-deck, .hero .blocks-deck { height: 408px; }
+  .deck-group { gap: 2rem; }
+}
+@media (max-width: 760px) {
+  .hero-sub { font-size: 0.92rem; line-height: 1.42; margin-bottom: 0.75rem; }
+  .hero-eyebrow { margin-bottom: 0.65rem; }
+  .hero h1 { margin-bottom: 0.6rem; }
+  .hero .offer { margin-top: 0; margin-bottom: 0.8rem; }
+  .trust-band--hero { margin-top: 0.85rem; }
+  .hero .card-deck { width: min(196px, 55vw); height: 240px; transform: translateX(-30px); }
+  .card-deck, .blocks-deck, .hero .card-deck { margin-bottom: 14px; }
+  .deck-group { gap: 11px; }
+}
+
+/* ---- v31: comunidad en móvil en bloque (1 columna) · método-foot en columna ---- */
+@media (max-width: 760px) {
+  .polaroid-scatter { grid-template-columns: 1fr !important; max-width: 340px !important; }
+}
+.method-foot { flex-direction: column; align-items: flex-start; gap: 1rem; }
+
+/* ---- v32: móviles estrechos (≤384px: iPhone mini/X, etc.) — pequeño ajuste para que el ticker también entre ---- */
+@media (max-width: 384px) {
+  .hero-sub { font-size: 0.88rem; }
+  .hero .card-deck { width: min(178px, 52vw); height: 214px; transform: translateX(-26px); }
+}
+
+/* ---- v33: autor centrado (bloque) + equilibrio de líneas (text-wrap balance) ---- */
+/* El bloque del autor queda centrado en la página (mobile y desktop); el contenido, a la izquierda */
+#autor .author-wrap { justify-items: center; }
+#autor .author-quote { margin-inline: auto; }
+
+/* Equilibrio de líneas: títulos y textos cortos con líneas simétricas y paralelas */
+h1.display, h2.display, h3, .lead, .hero-sub, .qa-q, .qa-a, .method-name, .method-desc,
+.card-desc, .shot-card__ti, .shot-card__ds, .feature-row b, .feature-row em, .feature-foot,
+.price-per, .price-reassure, .scarcity-note, .step-body strong, .step-body span,
+.example-cap, .band-inner p, .author-role, .trust-stat span { text-wrap: balance; }
+
+/* ---- v34: hero con menos carga cognitiva (Principal PD) + carta con proporción correcta + separadores de pasos en móvil ---- */
+/* Fuera lo redundante del hero: las features ya se listan en "Qué te llevas" y en el precio */
+.hero .props { display: none; }
+
+@media (max-width: 760px) {
+  /* En móvil, la prueba social (+1300) ya protagoniza "Fotos de nuestra comunidad";
+     se quita del hero para bajar la carga cognitiva y que la carta tenga su proporción */
+  .trust-band--hero { display: none; }
+  /* Carta con proporción de carta (retrato ~0.72) y todo su contenido visible */
+  .hero .card-deck { width: min(232px, 64vw); height: 324px; transform: translateX(-32px); }
+  .hero-eyebrow { margin-bottom: 0.9rem; }
+  .hero h1 { margin-bottom: 0.7rem; }
+  .hero-sub { margin-bottom: 1rem; }
+  .hero .offer { margin-bottom: 1rem; }
+  .deck-group { gap: 14px; }
+}
+@media (max-width: 384px) {
+  .hero .card-deck { width: min(210px, 60vw); height: 294px; transform: translateX(-28px); }
+  .hero-sub { font-size: 0.9rem; }
+}
+/* Separadores horizontales entre los pasos apilados (móvil, 1 columna) */
+@media (max-width: 720px) {
+  .steps .step + .step { border-top: 1px solid rgba(17, 24, 39, 0.10); }
+}
+
+/* ---- v35: la carta del hero muestra TODO su contenido en móvil (sin recortar el CTA) ---- */
+@media (max-width: 760px) {
+  .hero .card-header { padding-bottom: 0.5rem; margin-bottom: 1rem; }
+  .hero .card-title { font-size: 1.35rem; margin-bottom: 0.2rem; }
+  .hero .card-subtitle { font-size: 0.88rem; margin-bottom: 0.5rem; }
+  .hero .card-icon { padding: 0.25rem 0; }
+  .hero .card-icon svg { width: 48px; height: 48px; }
+  .hero .card-desc { font-size: 0.84rem; line-height: 1.4; margin-bottom: 0.5rem; }
+}
+@media (max-width: 384px) {
+  .hero .card-title { font-size: 1.2rem; }
+  .hero .card-icon svg { width: 48px; height: 48px; }
+  .hero .card-desc { font-size: 0.8rem; }
+}
+
+/* ---- v36: bloque del autor centrado (desktop y móvil) — firma centrada con offset óptico ---- */
+#autor .author-quote { display: flex; flex-direction: column; align-items: center; }
+#autor .author-sign-row { justify-content: flex-start; margin-left: -75px; }
+
+/* ---- v37: footer — padding inferior + centrado en móvil ---- */
+.footer { padding-bottom: 2.6rem; }
+@media (max-width: 760px) {
+  .footer-inner { flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .footer-copy { text-align: center; }
+}
+
+/* ---- v38: precio centrado en desktop · +1300 (sección) a la izquierda · método-foot centrado ---- */
+/* Precio: en desktop todo en una sola columna centrada */
+@media (min-width: 761px) {
+  #precio .price-wrap { display: flex; flex-direction: column; align-items: center; max-width: 480px; margin-inline: auto; }
+  #precio .price-card, #precio .price-wrap > .reveal { width: 100%; }
+  #precio .price-tag { justify-content: center; }
+  #precio .price-per { text-align: center; }
+  #precio .price-features { align-items: center; }
+  #precio .scarcity { text-align: center; }
+  #precio .scarcity-head { justify-content: center; }
+}
+/* +1300 de la sección "cómo funciona" alineado a la izquierda */
+.trust-band { justify-content: flex-start; }
+.trust-stat { text-align: left; }
+/* método-foot: CTA + enlace centrados (en columna) */
+.method-foot { align-items: center; }
+
+/* ---- v39: cartas SIEMPRE 230×350 · contenido que cabe en ese tamaño · enlace "Ver ejemplo" por carta ---- */
+.card-deck, .blocks-deck, .hero .card-deck { width: 230px !important; height: 350px !important; }
+/* Contenido del deck (hero y modal) ajustado para caber en 230×350 en cualquier tamaño */
+.card-header, .block-card-header { padding-bottom: 0.5rem; margin-bottom: 0.6rem; }
+.card-title, .block-card-title { font-size: 1.3rem; margin-bottom: 0.2rem; }
+.card-subtitle, .block-card-subtitle { font-size: 0.86rem; margin-bottom: 0.5rem; }
+.card-icon, .block-card-icon { padding: 0.3rem 0; }
+.card-icon svg, .block-card-icon svg { width: 40px; height: 40px; }
+.card-desc, .block-card-desc { font-size: 0.82rem; line-height: 1.4; margin-bottom: 0.5rem; }
+/* Enlace "Ver ejemplo" en cada carta del método */
+.method-example { align-self: flex-start; margin-top: 0.55rem; font-weight: 700; font-size: 0.9rem; color: var(--blue); cursor: pointer; }
+.method-example:hover { text-decoration: underline; }
+
+/* ---- v40: hero centrado en móvil · dots verdes con glow · +1300 centrado · deck gap/orden ---- */
+/* Hero: todo centrado en móvil (eyebrow, h1, texto, CTA) */
+@media (max-width: 760px) {
+  .hero-copy { text-align: center; }
+  .hero-eyebrow { justify-content: center; }
+  .hero-sub { margin-inline: auto; }
+  .hero .offer { justify-content: center; }
+  /* deck: separación pedida (38px) y "Desliza las cartas" debajo de los puntos */
+  .deck-group { gap: 38px; }
+  .hero .card-deck { order: 0; }
+  .deck-dots { order: 1; }
+  .deck-hint { order: 2; margin: 0; }
+}
+/* +1300 de la sección centrado (número + avatares + texto) */
+.trust-band:not(.trust-band--hero) { justify-content: center; }
+.trust-band:not(.trust-band--hero) .trust-stat { text-align: center; }
+/* Punto del eyebrow en verde con glow: hero + "Empieza hoy" */
+.hero-eyebrow::before, .finalcta .eyebrow::before {
+  background: var(--green);
+  box-shadow: 0 0 8px 1px rgba(47,193,119,0.85), 0 0 16px 3px rgba(47,193,119,0.45);
+}
+
+/* ---- v41 (revertido): "Qué te llevas" vuelve al layout de icono a la izquierda ---- */
+.feature-row { display: flex; flex-direction: row; align-items: center; text-align: left; gap: 0.9rem; padding: 1.5rem 0; }
+.feature-row > div { flex: 1; }
+
+/* ---- v42: scarcity-count a la derecha · method-row gap 24px ---- */
+#precio .scarcity-head { justify-content: space-between; }
+.method-row { gap: 24px; }
+
+/* ---- v43: hero-deck margin-right · padding de la carta ---- */
+.hero-deck { margin-right: -20px; }
+.card, .block-card { padding: 0.7rem 0.7rem 2rem 1.5rem; border-radius: 12px; }
+
+/* ---- v46: carta del visor al 50% + radius 10px · mockup del iPhone más estrecho ---- */
+.shot-card--full { width: 50%; max-width: 50%; border-radius: 10px; }
+.shots--one { max-width: 240px; }
+
+/* ---- v48: espaciado del hero en móvil ---- */
+@media (max-width: 760px) {
+  .hero { padding-top: 6.5rem; padding-bottom: 3.5rem; }
+  .hero-grid { gap: 2.05rem; }
+}
+
+/* ---- v49: padding-top de 4rem en todas las secciones ---- */
+.s { padding-top: 4rem; }
+
+/* ---- v50: en móvil, padding vertical 3rem en las secciones (excepto el hero, que necesita despejar el header fijo) ---- */
+@media (max-width: 760px) {
+  section:not(.hero) { padding: 3rem 0 3rem 0 !important; }
+}
+
+/* ---- v51: polaroid-caption · hero 24px · iPhone estrecho+radius · shot-card · rayas hero · tags 4 colores ---- */
+/* Polaroid caption */
+.polaroid-caption { display: flex; align-items: center; gap: 0.6rem; padding: 2.7rem 0.55rem 1.25rem; text-align: left; }
+
+/* Hero: 24px entre descripción y botón */
+.hero-sub { margin-bottom: 24px; }
+.hero .offer { margin-top: 0; }
+
+/* iPhone del visor: más estrecho + radius 32px */
+.shots--one { max-width: 210px; }
+.shot-screen { border-radius: 32px; }
+
+/* Carta del visor: dimensiones nuevas */
+.shot-card--full { width: 54%; max-width: 60%; height: 45%; border-radius: 10px; }
+
+/* Rayas blancas del hero más intensas */
+.hero::before {
+  background-image: linear-gradient(rgba(255,255,255,0.11) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.11) 1px, transparent 1px);
+}
+
+/* Tags de las cartas: 4 colores distintos + radius 8px */
+.card-block, .block-card-block { border-radius: 8px; }
+.card[data-index="0"] .card-block, .block-card[data-index="0"] .block-card-block { background: var(--blue); }
+.card[data-index="1"] .card-block, .block-card[data-index="1"] .block-card-block { background: var(--violet); }
+.card[data-index="2"] .card-block, .block-card[data-index="2"] .block-card-block { background: var(--green); }
+.card[data-index="3"] .card-block, .block-card[data-index="3"] .block-card-block { background: var(--coral); }
+
+@media (max-width: 760px) {
+  /* card-header del hero */
+  .hero .card-header { padding-bottom: 0.7rem; margin-bottom: 1rem; }
+  /* foto del visor desplazada más hacia abajo */
+  .shot-photo { object-position: 50% 78%; }
+}
+
+/* ---- v52: icono y CTA de cada carta con el color de su tag ---- */
+.card[data-index="0"], .block-card[data-index="0"] { --card-accent: var(--blue); }
+.card[data-index="1"], .block-card[data-index="1"] { --card-accent: var(--violet); }
+.card[data-index="2"], .block-card[data-index="2"] { --card-accent: var(--green); }
+.card[data-index="3"], .block-card[data-index="3"] { --card-accent: var(--coral); }
+.card-icon svg, .block-card-icon svg { stroke: var(--card-accent, var(--blue)); }
+.card-cta, .block-card-cta { color: var(--card-accent, var(--blue)); }
+
+/* ---- v53: texto de la carta del visor más pequeño (proporcional) · scarcity-count a la derecha ---- */
+.shot-card--full { gap: 0.35rem; padding: 0.7rem 0.8rem; }
+.shot-card--full .shot-card__ti { font-size: 0.8rem; line-height: 1.12; }
+.shot-card--full .shot-card__ds { font-size: 0.6rem; line-height: 1.3; }
+.shot-card--full .shot-card__ic svg { width: 22px; height: 22px; }
+.scarcity-count { margin-left: auto; text-align: right; }
+
+/* ---- v54: modal una-sola-carta + botón circular de cierre · footer · fix punto del icono ---- */
+/* Modo "una sola carta": oculta cabecera, X superior y dots */
+#modalBloques.single-card .modal-header { display: none; }
+#modalBloques.single-card #modalBloquesClose { display: none; }
+#modalBloques.single-card .deck-dots { display: none; }
+/* Botón circular con cross para cerrar, debajo de la carta */
+.modal-close-circle { display: none; margin: 1.6rem auto 0; width: 48px; height: 48px; border-radius: 50%; background: #fff; border: 1px solid var(--line); box-shadow: 0 10px 22px -10px rgba(15,25,55,0.4); align-items: center; justify-content: center; cursor: pointer; }
+#modalBloques.single-card .modal-close-circle { display: flex; }
+.modal-close-circle svg { width: 22px; height: 22px; stroke: var(--ink); stroke-width: 2.2; fill: none; stroke-linecap: round; }
+.modal-close-circle:hover { background: #f4f6fb; }
+/* Footer */
+.footer { padding-bottom: 4.6rem; }
+/* Punto interior de los iconos (fill=currentColor) en color de acento, no negro */
+.card-icon svg, .block-card-icon svg { color: var(--card-accent, var(--blue)); }
+
+/* ---- v55: iconos de las cartas dentro de un panel del color de acento (baja opacidad), full width, radius 16px ---- */
+.card-icon, .block-card-icon {
+  background: color-mix(in srgb, var(--card-accent, var(--blue)) 14%, transparent);
+  border-radius: 16px;
+  padding: 0.7rem 0;
+  width: 100%;
+}
+
+/* ---- v56: icon panel radius 8px · padding de la carta ---- */
+.card-icon, .block-card-icon { border-radius: 8px; }
+.card, .block-card { padding: 1rem 1rem 2rem 1rem; }
+
+/* ---- v57: carta del visor más pequeña (44% / height 31%) + textos más pequeños ---- */
+.shot-card--full { width: 44%; max-width: 60%; height: 31%; }
+.shot-card--full .shot-card__ti { font-size: 0.65rem; }
+.shot-card--full .shot-card__ds { font-size: 0.55rem; }
+
+/* ---- v58: carta del visor — gap y padding ---- */
+.shot-card--full { gap: 0.35rem; padding: 0.5rem 0.7rem; }
+
+/* ---- v59: trust-avatars más pequeños · feature-row padding · iconos "Qué te llevas" verdes con glow ---- */
+.trust-avatars i { width: 32px; height: 32px; font-size: 0.78rem; margin-left: -10px; }
+.trust-avatars i:first-child { margin-left: 0; }
+.feature-row { padding: 1rem 0; }
+/* "Qué te llevas": iconos verdes con glow (sensación de "incluido") */
+#que-incluye .feat-ic { background: color-mix(in srgb, var(--green) 12%, #fff); border-color: color-mix(in srgb, var(--green) 28%, var(--line)); box-shadow: 0 0 16px -1px rgba(47,193,119,0.55), 0 8px 18px -10px rgba(47,193,119,0.55); }
+#que-incluye .feat-ic svg { stroke: var(--green); }
+
+/* ---- v60: price-features gap · scarcity line-height ---- */
+.price-features { gap: 0.2rem; }
+.scarcity-head strong, .scarcity-count { line-height: 1.3; }
+
+/* ---- v61: modal deck-group tamaño · blocks-deck-wrapper sin overflow ---- */
+.blocks-deck-wrapper { overflow: visible; }
+.modal .deck-group { align-items: center; width: 100%; height: 380px; margin: 30px 0 -20px; }
+
+/* ---- v62: feature-row gap 1.5rem · línea dotted (corte) en las polaroids ---- */
+.feature-row { flex-direction: row; align-items: center; text-align: left; gap: 1.5rem; }
+.polaroid-caption { position: relative; }
+.polaroid-caption::before { content: ""; position: absolute; top: 1.1rem; left: 0.55rem; right: 0.55rem; border-top: 2px dotted var(--line); opacity: 0.9; }
+
+/* ---- v63: las rayas del hero también en el menú móvil ---- */
+.mobile-nav { overflow: hidden; }
+.mobile-nav::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(255,255,255,0.11) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.11) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(130% 100% at 50% 90%, #000 45%, transparent 92%);
+}
+.mobile-nav-header, .mobile-nav-content { position: relative; z-index: 1; }
+
+/* ---- v64: +1300 del hero visible también en móvil (centrado) · borde de avatares más estrecho ---- */
+@media (max-width: 760px) {
+  .trust-band--hero { display: flex; justify-content: center; }
+}
+.trust-avatars i { border-width: 2px; }
+
+/* ---- v65: carta del visor — height fija, radius 6px, título+desc en un wrapper ---- */
+.shot-card--full { width: 43%; max-width: 60%; height: 120px !important; border-radius: 6px; gap: 0.6rem; padding: 0.7rem 0.7rem; }
+.shot-card--full .shot-card__text { display: flex; flex-direction: column; gap: 6px; }
+
+/* ---- v68: feature-row padding-left en móvil ---- */
+@media (max-width: 760px) {
+  .feature-row { padding-left: 0.6rem; }
+}
+
+/* ---- v70: "Si has pensado…" más cerca del Q&A ---- */
+#te-suena .qa { margin-top: 1.6rem; }
+
+/* ---- v71: línea dotted de la polaroid más visible ---- */
+.polaroid-caption::before { border-top: 2px dotted rgba(11,11,13,0.35); opacity: 1; }
+
+/* ---- v72: puntos de la polaroid con más espacio entre ellos (dots como background) ---- */
+.polaroid-caption::before {
+  border: none;
+  height: 2px;
+  background: radial-gradient(circle, #bdbdbd 1.1px, transparent 1.5px) left center / 6px 2px repeat-x;
+}
+
+/* ---- v73: en móvil, +300 encima del botón ---- */
+@media (max-width: 760px) {
+  .hero-copy { display: flex; flex-direction: column; }
+  .trust-band--hero { order: 1; margin: 0 0 1.5rem; }
+  .hero .offer { order: 2; }
+}
+
+/* ---- v74: precio "69" siempre en verde ---- */
+.p69 { color: var(--green); }
+
+/* ---- v75: en los CTA, "69" NO va en verde (hereda el color del botón) ---- */
+.btn .p69, .nav-cta .p69 { color: inherit; }
+
+/* ---- v76: "+300 ya confían" en una sola fila (row) ---- */
+.trust-band--hero .trust-stat { display: flex; flex-direction: row; align-items: baseline; gap: 0.4rem; }
+.trust-band--hero .trust-stat b { display: inline; }
+
+/* ---- v77: al abrir el overlay del menú, la barra superior sigue siendo blanca (como el header) ---- */
+.mobile-nav-header { background: #fff; border-bottom: 1px solid var(--line); }
+.mobile-nav-header .logo { color: var(--ink); }
+.mobile-nav-close, .mobile-nav-close .material-symbols-sharp { color: var(--ink); }
+
+/* ---- v79: texto de las cartas del modal alineado a la izquierda ---- */
+.block-card-title, .block-card-subtitle, .block-card-desc, .block-card-cta { text-align: left; }
+
+/* ---- v80: polaroids sin rotación, radius 4px ---- */
+.polaroid { transform: none !important; border-radius: 4px; }
+
+/* ---- v82: mockup del iPhone (shot-screen) más grande (proporcional) ---- */
+.shots--one { max-width: 290px; }
+
+/* ---- v83: header 64px, igual en default y con el menú abierto ---- */
+header { height: 64px; padding-top: 0; padding-bottom: 0; }
+.header-inner { height: 64px; }
+.mobile-nav-header { height: 64px; padding-top: 0; padding-bottom: 0; box-sizing: border-box; }
+
+/* ---- v84: jerarquía tipográfica del hero en móvil (h1 y descripción más grandes) ---- */
+@media (max-width: 760px) {
+  .hero h1.display { font-size: 2.35rem; line-height: 1.08; letter-spacing: -0.03em; }
+  .hero-sub { font-size: 1.05rem; line-height: 1.5; }
+}
+
+/* ---- v88: carta del visor más alta + textos/icono más grandes ---- */
+.shot-card--full { width: 43%; max-width: 60%; height: 170px !important; border-radius: 6px; gap: 1rem; padding: 0.7rem 0.7rem; }
+.shot-card--full .shot-card__ti { font-size: 0.95rem; }
+.shot-card--full .shot-card__ds { font-size: 0.85rem; }
+.shot-card--full .shot-card__ic svg { width: 32px; height: 32px; }

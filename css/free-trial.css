@@ -409,7 +409,7 @@ section > .container > .text-center .section-desc {
 }
 
 .ft-confirm-actions .ft-btn-primary:hover {
-  background: #E5480A;
+  background: #2456d6;
 }
 
 .ft-confirm-actions .ft-btn-secondary {
@@ -489,7 +489,7 @@ section > .container > .text-center .section-desc {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--color-accent);
-  background: rgba(255, 80, 6, 0.1);
+  background: rgba(47, 107, 255, 0.1);
   padding: 3px 10px;
   border-radius: 4px;
 }
@@ -567,7 +567,7 @@ section > .container > .text-center .section-desc {
 }
 
 .ft-nav-next:hover {
-  background: #E5480A;
+  background: #2456d6;
 }
 
 /* Exercise locked / CTA state */

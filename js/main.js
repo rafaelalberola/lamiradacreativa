@@ -515,32 +515,60 @@ document.addEventListener('DOMContentLoaded', function() {
   const modalBloquesBackdrop = modalBloques ? modalBloques.querySelector('.modal-backdrop') : null;
   let blocksDeckInstance = null;
   
-  function openModalBloques() {
-    if (modalBloques) {
-      modalBloques.classList.add('active');
-      document.body.style.overflow = 'hidden';
-      
-      // Initialize the blocks deck if not already done
-      const blocksDeck = document.getElementById('blocksDeckDemo');
-      if (blocksDeck && !blocksDeckInstance) {
-        blocksDeckInstance = new CardDeck(blocksDeck);
-      }
+  function openModalBloques(startIndex) {
+    if (!modalBloques) return;
+    modalBloques.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    const blocksDeck = document.getElementById('blocksDeckDemo');
+    const single = typeof startIndex === 'number' && !isNaN(startIndex);
+    modalBloques.classList.toggle('single-card', single);
+
+    if (single && blocksDeck) {
+      // Single-card mode: show ONLY the requested mirada, flat (no deck / no stack)
+      if (blocksDeckInstance) blocksDeckInstance.stopAutoPlay();
+      blocksDeck.querySelectorAll('.block-card').forEach(function (c, i) {
+        c.style.animation = 'none';
+        if (i === startIndex) {
+          c.style.display = 'flex';
+          c.style.transform = 'none';
+          c.style.zIndex = '10';
+          c.style.opacity = '1';
+          c.style.filter = 'none';
+        } else {
+          c.style.display = 'none';
+        }
+      });
+    } else if (blocksDeck && !blocksDeckInstance) {
+      blocksDeckInstance = new CardDeck(blocksDeck);
     }
   }
-  
+
   function closeModalBloques() {
-    if (modalBloques) {
-      modalBloques.classList.remove('active');
-      document.body.style.overflow = '';
-    }
+    if (!modalBloques) return;
+    modalBloques.classList.remove('active');
+    modalBloques.classList.remove('single-card');
+    document.body.style.overflow = '';
   }
   
   if (btnVerDemo) {
     btnVerDemo.addEventListener('click', openModalBloques);
   }
+
+  // Per-card "Ver ejemplo" links: open the modal on the matching mirada
+  document.querySelectorAll('.method-example').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      openModalBloques(parseInt(btn.dataset.mirada, 10));
+    });
+  });
   
   if (modalBloquesClose) {
     modalBloquesClose.addEventListener('click', closeModalBloques);
+  }
+
+  var modalCloseCircle = document.getElementById('modalCloseCircle');
+  if (modalCloseCircle) {
+    modalCloseCircle.addEventListener('click', closeModalBloques);
   }
   
   if (modalBloquesBackdrop) {

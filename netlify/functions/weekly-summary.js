@@ -160,7 +160,7 @@ Progreso: <strong style="color:#1A1A1A;">${totalCompleted}/365</strong> (${progr
 
 <!-- Logo -->
 <tr><td style="padding:0 0 32px;text-align:center;">
-  <span style="font-family:'Courier New',monospace;font-size:13px;font-weight:600;color:#888888;letter-spacing:2px;text-transform:uppercase;">LA MIRADA CREATIVA</span>
+  <span style="font-family:'Plus Jakarta Sans',Arial,Helvetica,sans-serif;font-size:17px;font-weight:800;color:#0B0B0D;letter-spacing:-0.02em;">La Mirada Creativa</span>
 </td></tr>
 
 <!-- Card -->
@@ -177,7 +177,7 @@ Progreso: <strong style="color:#1A1A1A;">${totalCompleted}/365</strong> (${progr
     <table width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;">
     <tr><td>
       <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f0f0;border-radius:4px;height:8px;">
-      <tr><td style="width:${progressBarFill}%;background-color:#FF5006;border-radius:4px;height:8px;font-size:1px;">&nbsp;</td>
+      <tr><td style="width:${progressBarFill}%;background-color:#2F6BFF;border-radius:4px;height:8px;font-size:1px;">&nbsp;</td>
       <td style="font-size:1px;">&nbsp;</td></tr>
       </table>
     </td></tr>
@@ -189,7 +189,7 @@ Progreso: <strong style="color:#1A1A1A;">${totalCompleted}/365</strong> (${progr
     <!-- CTA -->
     <table width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0 0;">
     <tr><td align="center">
-      <a href="${appUrl}" style="display:inline-block;background-color:#FF5006;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:8px;"><span style="color:#ffffff;">${ctaText}</span></a>
+      <a href="${appUrl}" style="display:inline-block;background-color:#2F6BFF;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:8px;"><span style="color:#ffffff;">${ctaText}</span></a>
     </td></tr>
     </table>
 

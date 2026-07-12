@@ -209,7 +209,7 @@ function buildEmailHtml(name, email) {
 
 <!-- Logo -->
 <tr><td style="padding:0 0 32px;text-align:center;">
-  <span style="font-family:'Courier New',monospace;font-size:13px;font-weight:600;color:#888888;letter-spacing:2px;text-transform:uppercase;">LA MIRADA CREATIVA</span>
+  <span style="font-family:'Plus Jakarta Sans',Arial,Helvetica,sans-serif;font-size:17px;font-weight:800;color:#0B0B0D;letter-spacing:-0.02em;">La Mirada Creativa</span>
 </td></tr>
 
 <!-- Card -->
@@ -253,7 +253,7 @@ function buildEmailHtml(name, email) {
 
     <!-- CTA -->
     <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
-      <a href="https://lamiradacreativa.com/app" style="display:inline-block;background-color:#FF5006;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:6px;"><span style="color:#ffffff;">Acceder a la app</span></a>
+      <a href="https://lamiradacreativa.com/app" style="display:inline-block;background-color:#2F6BFF;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:6px;"><span style="color:#ffffff;">Acceder a la app</span></a>
     </td></tr></table>
   </td></tr>
 
@@ -296,7 +296,7 @@ function buildFeedbackEmailHtml(name) {
 
 <!-- Logo -->
 <tr><td style="padding:0 0 32px;text-align:center;">
-  <span style="font-family:'Courier New',monospace;font-size:13px;font-weight:600;color:#888888;letter-spacing:2px;text-transform:uppercase;">LA MIRADA CREATIVA</span>
+  <span style="font-family:'Plus Jakarta Sans',Arial,Helvetica,sans-serif;font-size:17px;font-weight:800;color:#0B0B0D;letter-spacing:-0.02em;">La Mirada Creativa</span>
 </td></tr>
 
 <!-- Card -->

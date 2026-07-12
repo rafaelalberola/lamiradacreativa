@@ -68,7 +68,7 @@ exports.handler = async (event) => {
       Has desactivado las notificaciones diarias. No recibirás más emails de recordatorio.
     </p>
     <p style="margin:0;color:#888;font-size:14px;">
-      Puedes reactivarlas en cualquier momento desde <a href="https://lamiradacreativa.com/app/" style="color:#FF5006;">la app</a>.
+      Puedes reactivarlas en cualquier momento desde <a href="https://lamiradacreativa.com/app/" style="color:#2F6BFF;">la app</a>.
     </p>
   </div>
 </body>

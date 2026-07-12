@@ -141,7 +141,7 @@ function buildEmailHtml(step) {
 
 function ctaButton(text, url) {
   return `<table cellpadding="0" cellspacing="0"><tr><td>
-    <a href="${url}" style="display:inline-block;background-color:#FF5006;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;padding:14px 28px;border-radius:8px;">${text}</a>
+    <a href="${url}" style="display:inline-block;background-color:#2F6BFF;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;padding:14px 28px;border-radius:8px;">${text}</a>
   </td></tr></table>`;
 }
 

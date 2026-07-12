@@ -57,7 +57,7 @@ function buildWelcomeEmailHtml() {
   <p style="font-size:15px;color:#555555;margin:0 0 28px;line-height:1.7;">No vas a aprender teoría. Vas a entrenar tu ojo.</p>
 
   <table cellpadding="0" cellspacing="0" width="100%"><tr><td>
-    <a href="https://lamiradacreativa.com/prueba-gratis/ejercicio/?day=1&utm_source=email&utm_medium=sequence&utm_campaign=free_trial&utm_content=day_0" style="display:inline-block;background-color:#FF5006;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;padding:14px 28px;border-radius:8px;">Abrir mi primer ejercicio</a>
+    <a href="https://lamiradacreativa.com/prueba-gratis/ejercicio/?day=1&utm_source=email&utm_medium=sequence&utm_campaign=free_trial&utm_content=day_0" style="display:inline-block;background-color:#2F6BFF;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;padding:14px 28px;border-radius:8px;">Abrir mi primer ejercicio</a>
   </td></tr></table>
 </td></tr>
 

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <meta charset="UTF-8">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-2HEEKVP1BF"></script>
   <script>
@@ -46,7 +47,6 @@
   </script>
   <!-- End Mixpanel Analytics -->
 
-  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>App — La Mirada Creativa</title>
   
@@ -54,6 +54,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Inter+Tight:wght@500;600&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500;1,700&display=swap" rel="stylesheet">
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500&display=swap" rel="stylesheet">
   
   <!-- Material Symbols -->
@@ -97,8 +98,8 @@
       --color-text: #111111;
       --color-text-secondary: #555555;
       --color-text-tertiary: #888888;
-      --color-accent: #FF5006;
-      --color-accent-glow: rgba(255, 80, 6, 0.4);
+      --color-accent: #2F6BFF;
+      --color-accent-glow: rgba(47, 107, 255, 0.35);
       --color-border: #D0D0D0;
       --color-border-light: #E0E0E0;
       
@@ -110,9 +111,9 @@
       --card-text-tertiary: rgba(255, 255, 255, 0.5);
       --card-border: rgba(255, 255, 255, 0.1);
       
-      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-headline: 'Inter Tight', 'Inter', sans-serif;
-      --font-display: 'Monograf', monospace;
+      --font-body: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-headline: 'Plus Jakarta Sans', 'Inter Tight', sans-serif;
+      --font-display: 'Plus Jakarta Sans', 'Inter Tight', sans-serif;
     }
 
     /* Reset */
@@ -809,7 +810,7 @@
       justify-content: center;
       width: 40px;
       height: 40px;
-      background: rgba(255, 80, 6, 0.1);
+      background: rgba(47, 107, 255, 0.1);
       border-radius: 10px;
       color: var(--color-accent);
       flex-shrink: 0;
@@ -1189,7 +1190,7 @@
 
     /* Special styles */
     .index-item.is-special .index-item-title {
-      color: #FF5006;
+      color: #2F6BFF;
     }
 
     .index-item.is-congrats .index-item-title {
@@ -1198,7 +1199,7 @@
 
     /* Current/active item */
     .index-item.is-current {
-      background: rgba(255, 80, 6, 0.1);
+      background: rgba(47, 107, 255, 0.1);
       border-left: 3px solid var(--color-accent);
       padding-left: 21px;
     }
@@ -1756,13 +1757,26 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(135deg, #1a1025 0%, #2d1b3d 50%, #1a1025 100%);
+      background: linear-gradient(180deg, #3B79FF 0%, #2E63F2 100%);
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 10000;
       opacity: 1;
       transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    /* Rejilla del hero del landing */
+    .login-screen::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(255,255,255,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.18) 1px, transparent 1px);
+      background-size: 76px 76px;
+      mask-image: radial-gradient(130% 100% at 50% 15%, #000 45%, transparent 92%);
+      -webkit-mask-image: radial-gradient(130% 100% at 50% 15%, #000 45%, transparent 92%);
     }
 
     .login-screen.hidden {
@@ -1772,6 +1786,8 @@
     }
 
     .login-container {
+      position: relative;
+      z-index: 1;
       width: 100%;
       max-width: 450px;
       padding: 2rem;
@@ -1799,16 +1815,17 @@
 
     .login-logo {
       font-family: var(--font-display);
-      font-size: 1.5rem;
-      color: #F5F5F7;
-      letter-spacing: 0.05em;
+      font-weight: 800;
+      font-size: 1.7rem;
+      color: #ffffff;
+      letter-spacing: -0.02em;
       margin-bottom: 0.5rem;
     }
 
     .login-subtitle {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.875rem;
-      color: rgba(245, 245, 247, 0.6);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.75);
       margin-bottom: 3rem;
     }
 
@@ -1845,18 +1862,19 @@
       padding: 1rem 1.5rem;
       font-family: var(--font-body);
       font-size: 1rem;
-      font-weight: 500;
-      color: #FFFFFF;
-      background: var(--color-accent);
+      font-weight: 700;
+      color: #1a1200;
+      background: linear-gradient(135deg, #FFD84D, #FFB020);
       border: none;
-      border-radius: 12px;
+      border-radius: 100px;
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
     .login-btn:hover {
-      background: #e54500;
+      filter: brightness(1.03);
       transform: translateY(-1px);
+      box-shadow: 0 12px 26px -10px rgba(255, 176, 32, 0.65);
     }
 
     .login-btn:disabled {

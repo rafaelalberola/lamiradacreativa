@@ -43,7 +43,7 @@ function buildEmailHtml(exercise, streak, appUrl) {
     <p style="margin:0 0 32px;font-size:18px;color:#1A1A1A;font-style:italic;line-height:1.5;">
       "${exercise.subtitle}"
     </p>
-    <a href="${appUrl}" style="display:inline-block;padding:14px 32px;background:#FF5006;color:#ffffff;text-decoration:none;border-radius:8px;font-size:16px;font-weight:600;">
+    <a href="${appUrl}" style="display:inline-block;padding:14px 32px;background:#2F6BFF;color:#ffffff;text-decoration:none;border-radius:8px;font-size:16px;font-weight:600;">
       Abrir ejercicio
     </a>
     ${streakHtml}
@@ -69,7 +69,7 @@ function buildCongratsEmailHtml(appUrl) {
     <p style="margin:0 0 32px;font-size:16px;color:#555;line-height:1.6;">
       Tu mirada ya no es la misma. Revisa tus favoritos, repite los que más te retaron, o simplemente sal a disparar con todo lo que has aprendido.
     </p>
-    <a href="${appUrl}" style="display:inline-block;padding:14px 32px;background:#FF5006;color:#ffffff;text-decoration:none;border-radius:8px;font-size:16px;font-weight:600;">
+    <a href="${appUrl}" style="display:inline-block;padding:14px 32px;background:#2F6BFF;color:#ffffff;text-decoration:none;border-radius:8px;font-size:16px;font-weight:600;">
       Abrir la app
     </a>
   </div>
