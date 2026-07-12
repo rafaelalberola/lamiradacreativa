@@ -1316,3 +1316,11 @@ header { height: 64px; padding-top: 0; padding-bottom: 0; }
 .shot-card--full .shot-card__ti { font-size: 0.95rem; }
 .shot-card--full .shot-card__ds { font-size: 0.85rem; }
 .shot-card--full .shot-card__ic svg { width: 32px; height: 32px; }
+
+/* ---- v92: avatares de social proof con fotos reales + props del hero igual que el CTA final ---- */
+.trust-avatars img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; margin-left: -11px; display: block; box-shadow: 0 2px 6px rgba(11,20,55,0.2); }
+.trust-avatars img:first-child { margin-left: 0; }
+.hero-copy .prop { font-size: 0.95rem; }
+.hero-copy .prop svg { width: 16px; height: 16px; }
+/* props del hero: envuelven por filas y centradas, igual que el bloque del CTA final */
+.hero-copy .props { flex-wrap: wrap; justify-content: center; gap: 0.7rem 1.2rem; }

@@ -1,0 +1,322 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Mirada Creativa · Meta Ad Creatives</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0B0D;
+    --muted:#6A6F79;
+    --coral:#FF6B6B;
+    --bg-blue:#2E63F2;
+    --preview-scale:0.315;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  body{
+    font-family:"Plus Jakarta Sans",system-ui,sans-serif;
+    background:#dfe1e6;color:#1b1d22;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    padding:56px 40px 80px;
+  }
+
+  .page-head{text-align:center;margin:0 auto 44px;max-width:1100px;}
+  .page-head h1{font-size:22px;font-weight:800;letter-spacing:-0.01em;}
+  .page-head p{font-size:14px;color:#6b7280;margin-top:6px;font-weight:500;}
+
+  .gallery{display:flex;flex-wrap:wrap;gap:56px;justify-content:center;align-items:flex-start;}
+
+  .figure{display:flex;flex-direction:column;align-items:center;gap:14px;}
+  .label{
+    font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+    color:#5b6270;background:#fff;padding:6px 14px;border-radius:100px;
+    box-shadow:0 1px 2px rgba(0,0,0,0.06);
+  }
+
+  /* Stage reserves the SCALED footprint; wrapper inside is built at EXACT px and scaled. */
+  .stage{position:relative;overflow:hidden;border-radius:calc(30px * var(--preview-scale));box-shadow:0 24px 60px rgba(20,30,60,0.22);}
+  .stage.s-stories{width:calc(1080px * var(--preview-scale));height:calc(1920px * var(--preview-scale));}
+  .stage.s-post   {width:calc(1080px * var(--preview-scale));height:calc(1350px * var(--preview-scale));}
+  .stage.s-square {width:calc(1080px * var(--preview-scale));height:calc(1080px * var(--preview-scale));}
+  .wrapper{transform-origin:top left;transform:scale(var(--preview-scale));}
+
+  /* ===================== THE CREATIVE ===================== */
+  .creative{
+    position:relative;overflow:hidden;width:1080px;
+    background:linear-gradient(180deg,#3B79FF 0%,#2E63F2 100%);
+    color:#fff;
+    /* defaults ~ Post */
+    --pad-x:74px;--pad-t:78px;--pad-b:78px;
+    --headline:90px;--sub:37px;--head-gap:26px;
+    --pill-fs:31px;--av-size:60px;--pill-pad:14px 26px 14px 18px;
+    --card-w:560px;--deck-h:640px;--deck-shift:24px;--card-pad:42px;--card-gap:22px;--icon-h:196px;--icon-size:104px;--mask-start:67%;--mask-end:90%;
+    --banner-top:446px;--banner-overhang:30px;--banner-fs:41px;--banner-pad-y:28px;--banner-radius:20px;
+    --title:45px;--c-day:25px;--c-tag:23px;--c-sub2:29px;--c-desc:25px;--c-cta:28px;
+    --trust-fs:29px;--trust-ic:26px;
+  }
+
+  /* Stories safe area: clear top ~260px (username overlay) & bottom ~340px (caption/reply/icons) */
+  .c-stories{
+    width:1080px;height:1920px;
+    --pad-x:84px;--pad-t:262px;--pad-b:352px;
+    --headline:98px;--sub:40px;--head-gap:28px;
+    --pill-fs:34px;--av-size:66px;--pill-pad:15px 30px 15px 20px;
+    --card-w:560px;--deck-h:730px;--deck-shift:18px;--card-pad:44px;--card-gap:20px;--icon-h:196px;--icon-size:114px;--mask-start:90%;--mask-end:100%;
+    --banner-top:590px;--banner-overhang:16px;--banner-fs:44px;--banner-pad-y:30px;--banner-radius:22px;
+    --title:49px;--c-day:27px;--c-tag:25px;--c-sub2:31px;--c-desc:28px;--c-cta:31px;
+    --trust-fs:31px;--trust-ic:28px;
+  }
+  .c-post{
+    width:1080px;height:1350px;
+    --pad-x:74px;--pad-t:78px;--pad-b:78px;
+    --headline:92px;--sub:37px;--head-gap:26px;
+    --pill-fs:31px;--av-size:60px;--pill-pad:14px 26px 14px 18px;
+    --card-w:560px;--deck-h:640px;--deck-shift:20px;--card-pad:42px;--card-gap:22px;--icon-h:196px;--icon-size:104px;--mask-start:67%;--mask-end:90%;
+    --banner-top:446px;--banner-overhang:32px;--banner-fs:41px;--banner-pad-y:28px;--banner-radius:20px;
+    --title:45px;--c-day:25px;--c-tag:23px;--c-sub2:29px;--c-desc:25px;--c-cta:28px;
+    --trust-fs:29px;--trust-ic:26px;
+  }
+  .c-square{
+    width:1080px;height:1080px;
+    --pad-x:72px;--pad-t:72px;--pad-b:72px;
+    --headline:76px;--sub:33px;--head-gap:22px;
+    --pill-fs:29px;--av-size:56px;--pill-pad:13px 24px 13px 16px;
+    --card-w:520px;--deck-h:452px;--deck-shift:24px;--card-pad:38px;--card-gap:16px;--icon-h:186px;--icon-size:98px;--mask-start:62%;--mask-end:88%;
+    --banner-top:292px;--banner-overhang:36px;--banner-fs:38px;--banner-pad-y:26px;--banner-radius:19px;
+    --title:41px;--c-day:23px;--c-tag:21px;--c-sub2:27px;--c-desc:23px;--c-cta:26px;
+    --trust-fs:27px;--trust-ic:24px;
+  }
+
+  /* technical grid — subtle, faded softly so it never fights the text */
+  .creative::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.10) 0 1px, transparent 1px 40px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.10) 0 1px, transparent 1px 40px);
+    -webkit-mask-image:radial-gradient(122% 96% at 50% 84%, #000 38%, transparent 92%);
+            mask-image:radial-gradient(122% 96% at 50% 84%, #000 38%, transparent 92%);
+    pointer-events:none;z-index:0;
+  }
+
+  .inner{
+    position:relative;z-index:1;height:100%;
+    display:flex;flex-direction:column;justify-content:space-between;align-items:center;
+    padding:var(--pad-t) var(--pad-x) var(--pad-b);
+  }
+
+  /* ---------- 1 + 2 + 3 · head : title / description / social proof ---------- */
+  .head{display:flex;flex-direction:column;align-items:center;gap:var(--head-gap);width:100%;flex:none;}
+  .headline{
+    width:100%;text-align:center;
+    font-size:var(--headline);font-weight:800;line-height:0.96;letter-spacing:-0.03em;
+    text-transform:uppercase;text-shadow:0 6px 30px rgba(11,20,55,0.22);
+  }
+  .subhead{
+    text-align:center;
+    font-size:var(--sub);font-weight:500;line-height:1.34;color:rgba(255,255,255,0.9);
+  }
+
+  .social{
+    display:inline-flex;align-items:center;gap:16px;
+    background:rgba(255,255,255,0.13);border:1px solid rgba(255,255,255,0.22);
+    border-radius:100px;padding:var(--pill-pad);
+    box-shadow:0 6px 20px rgba(11,20,55,0.14);
+  }
+  .avatars{display:inline-flex;align-items:center;}
+  .av{
+    width:var(--av-size);height:var(--av-size);border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;
+    color:#fff;font-weight:800;font-size:calc(var(--av-size)*0.4);letter-spacing:-0.01em;
+    border:3px solid #fff;box-shadow:0 2px 6px rgba(11,20,55,0.22);
+    object-fit:cover;
+  }
+  .av + .av{margin-left:calc(var(--av-size)*-0.34);}
+  .av-1{background:#FF6B6B;z-index:4;}
+  .av-2{background:#7C6CF5;z-index:3;}
+  .av-3{background:#2F6BFF;z-index:2;}
+  .av-4{background:#2FC177;z-index:1;}
+  .social-text{font-size:var(--pill-fs);font-weight:500;color:rgba(255,255,255,0.86);white-space:nowrap;}
+  .social-text b{font-weight:800;color:#fff;}
+
+  /* ---------- 4 + 5 · hero card deck with amber price banner ---------- */
+  .card-deck{position:relative;width:var(--card-w);height:var(--deck-h);flex:none;transform:translateX(calc(-1 * var(--deck-shift)));}
+
+  .deck{
+    position:absolute;top:0;left:0;width:100%;height:var(--deck-h);
+    background:#fff;border-radius:22px;box-shadow:0 16px 40px rgba(9,16,40,0.14);
+  }
+  .deck .chip{position:absolute;top:var(--card-pad);right:var(--card-pad);width:92px;height:30px;border-radius:100px;}
+  .deck-1{transform:translate(26px,-13px) rotate(3deg);z-index:1;}
+  .deck-2{transform:translate(50px,-25px) rotate(6deg);z-index:0;opacity:0.92;}
+  .deck-3{transform:translate(74px,-37px) rotate(9deg);z-index:0;opacity:0.82;}
+  .deck-1 .chip{background:#7C6CF5;}
+  .deck-2 .chip{background:#2F6BFF;}
+  .deck-3 .chip{background:#2FC177;}
+
+  /* wrapper carries the drop-shadow so it follows the card's masked (faded) alpha */
+  .card-wrap{
+    position:absolute;top:0;left:0;width:100%;height:var(--deck-h);z-index:2;
+    filter:drop-shadow(0 30px 52px rgba(9,16,40,0.26));
+  }
+  .card{
+    width:100%;height:100%;
+    background:#fff;border-radius:22px;padding:var(--card-pad);color:var(--ink);text-align:left;
+    overflow:hidden;display:flex;flex-direction:column;gap:var(--card-gap);
+    -webkit-mask-image:linear-gradient(to bottom, #000 var(--mask-start), transparent var(--mask-end));
+            mask-image:linear-gradient(to bottom, #000 var(--mask-start), transparent var(--mask-end));
+  }
+  .card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex:none;}
+  .card-day{font-size:var(--c-day);font-weight:600;color:var(--muted);white-space:nowrap;}
+  .tag{font-size:var(--c-tag);font-weight:700;color:#fff;background:var(--coral);padding:0.42em 0.9em;border-radius:100px;white-space:nowrap;}
+  .card-titles{display:flex;flex-direction:column;gap:6px;flex:none;}
+  .card-title{font-size:var(--title);font-weight:800;letter-spacing:-0.02em;line-height:1.02;}
+  .card-sub{font-size:var(--c-sub2);font-weight:500;color:var(--muted);}
+
+  .icon-panel{
+    height:var(--icon-h);flex:none;width:100%;
+    background:linear-gradient(150deg, color-mix(in srgb,#FF6B6B 16%, #fff) 0%, color-mix(in srgb,#FF6B6B 7%, #fff) 100%);
+    border-radius:16px;display:flex;align-items:center;justify-content:center;
+  }
+  .icon-panel svg{width:var(--icon-size);height:var(--icon-size);display:block;}
+  .card-desc{font-size:var(--c-desc);font-weight:500;line-height:1.4;color:var(--muted);flex:none;}
+  .card-cta{font-size:var(--c-cta);font-weight:800;color:var(--coral);letter-spacing:-0.005em;flex:none;}
+
+  /* 5 · flat amber price-highlight banner overlapping the lower card */
+  .banner{
+    position:absolute;left:calc(-1 * var(--banner-overhang));right:calc(-1 * var(--banner-overhang));
+    top:var(--banner-top);z-index:5;
+    background:linear-gradient(180deg,#FFD84D 0%,#FFB020 100%);
+    border-radius:var(--banner-radius);
+    box-shadow:0 18px 34px rgba(180,120,0,0.30), inset 0 1px 0 rgba(255,255,255,0.5);
+    padding:var(--banner-pad-y) 28px;
+    display:flex;align-items:baseline;justify-content:center;gap:0.42em;
+    font-size:var(--banner-fs);color:#1a1200;white-space:nowrap;
+  }
+  .banner .b-lead{font-weight:700;}
+  .banner .b-now{font-weight:800;}
+  .banner .b-old{font-weight:700;font-size:0.74em;color:rgba(26,18,0,0.42);text-decoration:line-through;}
+
+  /* ---------- 6 · trust affordances row ---------- */
+  .trust{
+    display:flex;align-items:center;justify-content:center;flex-wrap:nowrap;
+    gap:0.7em;flex:none;
+    font-size:var(--trust-fs);font-weight:600;color:rgba(255,255,255,0.9);white-space:nowrap;
+  }
+  .trust-item{display:inline-flex;align-items:center;gap:0.42em;}
+  .trust-item svg{width:var(--trust-ic);height:var(--trust-ic);display:block;flex:none;}
+  .trust .sep{color:rgba(255,255,255,0.42);font-weight:700;}
+</style>
+
+<div class="page-head">
+  <h1>La Mirada Creativa — Meta Ad Creatives</h1>
+  <p>Local preview · built at exact export resolution, scaled for on-screen review · not for commit/deploy</p>
+</div>
+
+<div class="gallery" id="gallery"></div>
+
+<script>
+  const viewfinderSVG = `
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="#FF6B6B" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 35 V23 H35"/>
+        <path d="M65 23 H77 V35"/>
+        <path d="M77 65 V77 H65"/>
+        <path d="M35 77 H23 V65"/>
+      </g>
+      <circle cx="50" cy="50" r="5.4" fill="#FF6B6B"/>
+    </svg>`;
+
+  const icoWallet = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="6" width="18" height="13" rx="2.5"/>
+      <path d="M3 10.5h18"/>
+      <path d="M16.5 15h1.5"/>
+    </svg>`;
+  const icoPhone = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="7" y="3" width="10" height="18" rx="2.6"/>
+      <path d="M10.8 18h2.4"/>
+    </svg>`;
+  const icoShield = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3l7 2.6v5.1c0 4.3-3 7-7 8.3-4-1.3-7-4-7-8.3V5.6z"/>
+      <path d="M9.2 12l2 2 3.6-3.9"/>
+    </svg>`;
+
+  function creativeMarkup(){
+    return `
+      <div class="inner">
+        <div class="head">
+          <h1 class="headline">El problema<br>no es tu cámara</h1>
+          <p class="subhead">Es tu forma de mirar.<br>365 retos para hacer fotos con tu sello.</p>
+          <div class="social">
+            <div class="avatars">
+              <img class="av av-1" src="../assets/images/avatars/1.jpg" alt="">
+              <img class="av av-2" src="../assets/images/avatars/2.jpg" alt="">
+              <img class="av av-3" src="../assets/images/avatars/3.jpg" alt="">
+              <img class="av av-4" src="../assets/images/avatars/4.jpg" alt="">
+            </div>
+            <span class="social-text"><b>+300</b> ya confían</span>
+          </div>
+        </div>
+
+        <div class="card-deck">
+          <div class="deck deck-3"><span class="chip"></span></div>
+          <div class="deck deck-2"><span class="chip"></span></div>
+          <div class="deck deck-1"><span class="chip"></span></div>
+
+          <div class="card-wrap">
+            <div class="card">
+              <div class="card-head">
+                <span class="card-day">Día 4 / 365</span>
+                <span class="tag">Mirada propia</span>
+              </div>
+              <div class="card-titles">
+                <div class="card-title">Objeto centrado</div>
+                <div class="card-sub">El vacío compone</div>
+              </div>
+              <div class="icon-panel">${viewfinderSVG}</div>
+              <div class="card-desc">Un objeto pequeño y centrado. Deja que el espacio vacío trabaje.</div>
+              <div class="card-cta">Dispara →</div>
+            </div>
+          </div>
+
+          <div class="banner">
+            <span class="b-lead">Consíguelo hoy ·</span>
+            <span class="b-now">69 €</span>
+            <span class="b-old">129 €</span>
+          </div>
+        </div>
+
+        <div class="trust">
+          <span class="trust-item">${icoWallet}Pago único</span>
+          <span class="sep">·</span>
+          <span class="trust-item">${icoPhone}App + PDF</span>
+          <span class="sep">·</span>
+          <span class="trust-item">${icoShield}Garantía 30 días</span>
+        </div>
+      </div>`;
+  }
+
+  const formats = [
+    {cls:'c-stories', stage:'s-stories', label:'Stories 1080×1920'},
+    {cls:'c-post',    stage:'s-post',    label:'Post 1080×1350'},
+    {cls:'c-square',  stage:'s-square',  label:'Square 1080×1080'},
+  ];
+
+  const gallery = document.getElementById('gallery');
+  for(const f of formats){
+    const fig = document.createElement('div');
+    fig.className = 'figure';
+    fig.innerHTML = `
+      <div class="label">${f.label}</div>
+      <div class="stage ${f.stage}">
+        <div class="wrapper">
+          <div class="creative ${f.cls}" data-fmt="${f.cls}">${creativeMarkup()}</div>
+        </div>
+      </div>`;
+    gallery.appendChild(fig);
+  }
+</script>
