@@ -1,5 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="La Mirada Creativa">
-  <rect width="100" height="100" rx="22" fill="#2F6BFF"/>
-  <circle cx="50" cy="50" r="27" fill="none" stroke="#ffffff" stroke-width="7.5"/>
-  <circle cx="50" cy="50" r="8.5" fill="#ffffff"/>
+  <defs>
+    <linearGradient id="lmc-cta" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFD84D"/>
+      <stop offset="1" stop-color="#FFB020"/>
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="22" fill="url(#lmc-cta)"/>
+  <circle cx="50" cy="50" r="27" fill="none" stroke="#241900" stroke-width="7.5"/>
+  <circle cx="50" cy="50" r="8.5" fill="#241900"/>
 </svg>

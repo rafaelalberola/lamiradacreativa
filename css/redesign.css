@@ -123,15 +123,15 @@ h3 { font-weight: 600; font-size: clamp(1.4rem, 2.6vw, 1.9rem); letter-spacing: 
 .tile--blue { background: var(--blue); } .tile--indigo { background: var(--indigo); } .tile--orange { background: var(--orange); } .tile--red { background: var(--red); }
 
 /* ============================================================ TICKER (blue band) */
-.ticker { background: var(--blue); overflow: hidden; padding: 1.05rem 0; position: relative; }
+.ticker { background: var(--cta); overflow: hidden; padding: 1.05rem 0; position: relative; }
 .ticker::before, .ticker::after { content: ""; position: absolute; top: 0; bottom: 0; width: 12%; z-index: 2; pointer-events: none; }
-.ticker::before { left: 0; background: linear-gradient(90deg, var(--blue), transparent); }
-.ticker::after { right: 0; background: linear-gradient(270deg, var(--blue), transparent); }
+.ticker::before { left: 0; background: linear-gradient(90deg, #FFD84D, transparent); }
+.ticker::after { right: 0; background: linear-gradient(270deg, #FFB020, transparent); }
 .ticker__track { display: flex; width: max-content; animation: marquee 38s linear infinite; will-change: transform; }
 .ticker__set { display: flex; align-items: center; flex: 0 0 auto; }
-.ticker__set > span { font-weight: 800; font-size: clamp(1.2rem, 2.8vw, 1.9rem); letter-spacing: -0.02em; color: #fff; white-space: nowrap; padding: 0 1.4rem; text-transform: uppercase; }
-.ticker__sep { color: rgba(255,255,255,0.6); font-size: 0.6em; }
-.ticker__set .g { color: #fff; opacity: 1; }
+.ticker__set > span { font-weight: 800; font-size: clamp(1.2rem, 2.8vw, 1.9rem); letter-spacing: -0.02em; color: var(--cta-ink); white-space: nowrap; padding: 0 1.4rem; text-transform: uppercase; }
+.ticker__sep { color: rgba(36,25,0,0.5); font-size: 0.6em; }
+.ticker__set .g { color: var(--cta-ink); opacity: 1; }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 /* ============================================================ HEADER / NAV */
@@ -139,8 +139,8 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 1re
 header.scrolled { background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(16px) saturate(1.2); -webkit-backdrop-filter: blur(16px) saturate(1.2); box-shadow: 0 6px 26px -18px rgba(20,32,64,0.35); }
 .header-inner { max-width: var(--wrap); margin: 0 auto; padding-inline: var(--gutter); display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .logo { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 800; letter-spacing: -0.03em; font-size: 1.2rem; color: var(--ink); transition: color 0.4s var(--ease); }
-.logo-mark { width: 30px; height: 30px; border-radius: 9px; background: var(--blue); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 1rem; }
-header.header--light-text .logo { color: #fff; } header.header--light-text .logo-mark { background: #fff; color: var(--blue); }
+.logo-mark { width: 30px; height: 30px; display: block; flex: none; } /* usa favicon.svg -> logo === favicon */
+header.header--light-text .logo { color: #fff; }
 nav { display: flex; align-items: center; gap: 0.6rem; }
 .nav-links { display: flex; align-items: center; gap: 0.4rem; background: rgba(11,11,13,0.05); padding: 0.35rem; border-radius: var(--pill); }
 header.header--light-text .nav-links { background: rgba(255,255,255,0.16); }
@@ -157,7 +157,7 @@ header.header--light-text .menu-toggle { color: #fff; }
 .mobile-nav { position: fixed; inset: 0; z-index: 2000; background: var(--blue); color: #fff; transform: translateY(-100%); transition: transform 0.5s var(--ease); display: flex; flex-direction: column; }
 .mobile-nav.active { transform: translateY(0); }
 .mobile-nav-header { display: flex; align-items: center; justify-content: space-between; padding: 1.3rem var(--gutter); border-bottom: 1px solid rgba(255,255,255,0.2); }
-.mobile-nav-header .logo { color: #fff; } .mobile-nav-header .logo-mark { background: #fff; color: var(--blue); }
+.mobile-nav-header .logo { color: #fff; }
 .mobile-nav-close { width: 44px; height: 44px; display: grid; place-items: center; color: #fff; }
 .mobile-nav-close .material-symbols-sharp { font-size: 28px; }
 .mobile-nav-content { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 2.2rem; padding: 2rem var(--gutter) 4rem; }
@@ -175,6 +175,7 @@ header.header--light-text .menu-toggle { color: #fff; }
 .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; width: 100%; position: relative; z-index: 1; }
 .hero-eyebrow { margin-bottom: 1.6rem; color: #fff; } .hero-eyebrow::before { background: #fff; }
 .hero h1 { margin-bottom: 1.6rem; color: #fff; }
+.hero h1.display { font-weight: 800; } /* máxima negrita disponible de Plus Jakarta Sans */
 .hero h1 .ital { display: inline; color: #fff; }
 .hero h1 .accent-word { color: #fff; }
 .hero-sub { max-width: 40ch; margin-bottom: 1.7rem; color: rgba(255,255,255,0.94); font-size: clamp(1rem, 0.98rem + 0.3vw, 1.12rem); line-height: 1.5; font-weight: 500; }
@@ -765,7 +766,6 @@ p, .qa-a, .author-bio, .feature-row em, .method-desc, .card-desc, .shot-card__ds
 header { background: color-mix(in srgb, #fff 90%, transparent); backdrop-filter: blur(14px) saturate(1.1); -webkit-backdrop-filter: blur(14px) saturate(1.1); border-bottom: 1px solid var(--line); box-shadow: 0 4px 20px -16px rgba(20,32,64,0.3); }
 header.scrolled { background: color-mix(in srgb, #fff 90%, transparent); }
 header .logo, header.header--light-text .logo { color: var(--ink); }
-header .logo-mark, header.header--light-text .logo-mark { background: var(--blue); color: #fff; }
 header .nav-links, header.header--light-text .nav-links { background: rgba(11,11,13,0.05); }
 header .nav-links a, header.header--light-text .nav-links a { color: var(--ink); }
 .header-login, header.header--light-text .header-login { color: var(--ink); }
@@ -1322,8 +1322,9 @@ header { height: 64px; padding-top: 0; padding-bottom: 0; }
 .trust-avatars img:first-child { margin-left: 0; }
 .hero-copy .prop { font-size: 0.95rem; }
 .hero-copy .prop svg { width: 16px; height: 16px; }
-/* v94: props del hero con el MISMO tratamiento que el CTA final -> SIEMPRE en una sola fila */
-.hero-copy .props { flex-wrap: nowrap; justify-content: center; gap: 1.1rem 1.6rem; }
+/* v94: props del hero en una sola fila; alineados a la izquierda en desktop, centrados en móvil */
+.hero-copy .props { flex-wrap: nowrap; justify-content: flex-start; gap: 1.1rem 1.6rem; }
+@media (max-width: 760px) { .hero-copy .props { justify-content: center; } }
 @media (max-width: 640px) {
   .hero-copy .props { gap: 0.55rem; }
   .hero-copy .prop { font-size: clamp(0.7rem, 3.5vw, 0.95rem); gap: 0.3em; }
@@ -1337,4 +1338,31 @@ header { height: 64px; padding-top: 0; padding-bottom: 0; }
   .props--center { gap: 0.55rem; }
   .props--center .prop { font-size: clamp(0.7rem, 3.5vw, 0.95rem); gap: 0.3em; }
   .props--center .prop svg { width: 12px; height: 12px; }
+}
+
+/* ---- v97: refuerzo "365 cartas digitales" · lead de precio centrado · fold hero+ticker · trust-band y firma del autor (desktop) ---- */
+/* "365 cartas digitales" resalta más (800 + blanco puro) en hero y CTA final */
+.hero-sub strong, .finalcta .lead strong { font-weight: 800; color: #fff; }
+/* la descripción de la sección de precio queda centrada (bloque + texto) */
+.section-head--center .lead { margin-inline: auto; }
+
+/* Prueba social: UN SOLO componente en todas las secciones -> avatares + "+300 ya confían",
+   wrapper en fila, gap 24px, alineado verticalmente. (Solo cambia el color según el fondo.) */
+.trust-band { gap: 24px; align-items: center; }
+.trust-band .trust-stat { display: flex; flex-direction: row; align-items: baseline; gap: 0.4rem; }
+.trust-band .trust-stat b { display: inline; }
+
+@media (min-width: 761px) {
+  /* Franja blanca: hero + ticker llenan EXACTAMENTE el viewport (el hero crece por flex) */
+  .hero-fold { min-height: 100svh; display: flex; flex-direction: column; }
+  .hero-fold > .hero { flex: 1 1 auto; }
+
+  /* Firma del autor alineada a la izquierda (sobre la cola del bocadillo), sin el hack de margin negativo */
+  #autor .author-quote { align-items: flex-start; }
+  #autor .author-sign-row { margin-left: 0; }
+}
+
+/* ---- v99: fuera el eyebrow "Para fotógrafos" del hero · más aire arriba en móvil ---- */
+@media (max-width: 760px) {
+  .hero { padding-top: 7.5rem; }
 }
