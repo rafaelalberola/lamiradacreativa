@@ -112,7 +112,7 @@ h3 { font-weight: 600; font-size: clamp(1.4rem, 2.6vw, 1.9rem); letter-spacing: 
 .props { display: flex; flex-wrap: wrap; gap: 1.1rem 1.6rem; align-items: center; }
 .props--center { justify-content: center; }
 .prop { display: inline-flex; align-items: center; gap: 0.5em; font-size: 0.95rem; font-weight: 600; color: var(--muted); }
-.prop svg { width: 18px; height: 18px; stroke: var(--blue); stroke-width: 2.4; fill: none; }
+.prop svg { width: 15px; height: 15px; stroke: var(--blue); stroke-width: 1.6; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 
 .cta-block { display: flex; flex-direction: column; gap: 1.3rem; align-items: flex-start; }
 .cta-block--center { align-items: center; text-align: center; }
@@ -990,8 +990,12 @@ h1.display, h2.display, h3, .lead, .hero-sub, .qa-q, .qa-a, .method-name, .metho
 .example-cap, .band-inner p, .author-role, .trust-stat span { text-wrap: balance; }
 
 /* ---- v34: hero con menos carga cognitiva (Principal PD) + carta con proporción correcta + separadores de pasos en móvil ---- */
-/* Fuera lo redundante del hero: las features ya se listan en "Qué te llevas" y en el precio */
-.hero .props { display: none; }
+/* v89: los avales vuelven bajo el CTA del hero, con el MISMO tratamiento que el footer (CTA final) */
+.hero .props { display: flex; }
+/* En móvil el hero se centra y reordena (botón order:2); los avales quedan debajo del CTA y centrados */
+@media (max-width: 760px) {
+  .hero .props { order: 3; justify-content: center; margin-top: 0.9rem; }
+}
 
 @media (max-width: 760px) {
   /* En móvil, la prueba social (+1300) ya protagoniza "Fotos de nuestra comunidad";
