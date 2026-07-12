@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="La Mirada Creativa">
+  <rect width="100" height="100" rx="22" fill="#2F6BFF"/>
+  <circle cx="50" cy="50" r="27" fill="none" stroke="#ffffff" stroke-width="7.5"/>
+  <circle cx="50" cy="50" r="8.5" fill="#ffffff"/>
+</svg>
