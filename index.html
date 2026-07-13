@@ -26,27 +26,37 @@
     .checkout-loading { min-height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; color: #666; font-size: .9rem; }
     .checkout-loading-spinner { width: 34px; height: 34px; border: 3px solid #eee; border-top-color: #2F6BFF; border-radius: 50%; animation: loader-spin .8s linear infinite; }
     .material-symbols-sharp { font-family: "Material Symbols Sharp"; font-weight: normal; font-style: normal; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; }
-    /* Lead capture (exit-intent 5%) — usa los tokens de marca de redesign.css */
+    /* Lead capture (exit-intent 5%) — vale canjeable, verde positivo */
     .lead-modal { display: none; position: fixed; inset: 0; background: rgba(11,11,13,.72); z-index: 10001; align-items: center; justify-content: center; backdrop-filter: blur(6px); padding: 20px; font-family: var(--font, 'Plus Jakarta Sans', system-ui, sans-serif); }
     .lead-modal.active { display: flex; animation: leadFade .25s ease; }
     @keyframes leadFade { from { opacity: 0; } to { opacity: 1; } }
-    .lead-modal-content { position: relative; width: 100%; max-width: 420px; background: var(--bg, #fff); border-radius: var(--radius-sm, 18px); padding: 34px 28px 26px; box-shadow: var(--shadow, 0 24px 60px -30px rgba(20,32,64,.35)); text-align: center; }
-    .lead-modal-close { position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; border: none; border-radius: 50%; background: var(--line-soft, rgba(11,11,13,.06)); color: var(--ink, #0B0B0D); font-size: 20px; line-height: 1; cursor: pointer; }
-    .lead-modal-close:hover { background: rgba(11,11,13,.12); }
-    .lead-badge { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #7A5C00; background: #FFF4D6; padding: 6px 12px; border-radius: var(--pill, 100px); margin-bottom: 14px; }
-    .lead-modal h3 { font-size: 1.45rem; line-height: 1.2; margin: 0 0 10px; color: var(--ink, #0B0B0D); font-family: var(--font, 'Plus Jakarta Sans', sans-serif); font-weight: 800; letter-spacing: -0.01em; }
-    .lead-pct { background: var(--cta, linear-gradient(135deg, #FFD84D 0%, #FFB020 100%)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-    .lead-modal p { font-size: .92rem; color: var(--muted, #6A6F79); line-height: 1.55; margin: 0 0 18px; }
+    .lead-modal-content { position: relative; width: 100%; max-width: 400px; background: #fff; border-radius: 18px; box-shadow: 0 30px 70px -25px rgba(11,11,13,.6); text-align: center; }
+    .lead-modal-close { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border: none; border-radius: 50%; background: rgba(255,255,255,.28); color: #0B3D22; font-size: 18px; line-height: 1; cursor: pointer; z-index: 2; }
+    .lead-modal-close:hover { background: rgba(255,255,255,.5); }
+    /* Banda de valor (parte de arriba del vale) — verde positivo */
+    .lead-ticket-top { background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%); color: #fff; border-radius: 18px 18px 0 0; padding: 26px 28px 22px; }
+    .lead-eyebrow { margin: 0 0 4px; text-transform: uppercase; letter-spacing: .16em; font-size: 11px; font-weight: 700; opacity: .85; }
+    .lead-value { margin: 0; font-size: 3.6rem; line-height: .95; font-weight: 800; letter-spacing: -.03em; }
+    .lead-value-sub { margin: 3px 0 0; font-size: .82rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; opacity: .92; }
+    /* Perforación / troquelado del vale */
+    .lead-perf { position: relative; height: 0; border-top: 2px dashed rgba(11,11,13,.16); }
+    .lead-perf::before, .lead-perf::after { content: ""; position: absolute; top: -12px; width: 24px; height: 24px; border-radius: 50%; background: rgba(11,11,13,.82); }
+    .lead-perf::before { left: -12px; }
+    .lead-perf::after { right: -12px; }
+    /* Cuerpo del vale */
+    .lead-ticket-body { padding: 22px 28px 26px; }
+    .lead-lead { font-size: .95rem; color: var(--ink, #0B0B0D); line-height: 1.5; margin: 0 0 16px; font-weight: 600; }
     .lead-modal form { display: flex; flex-direction: column; gap: 10px; margin: 0; }
-    .lead-modal input[type=email] { width: 100%; padding: 13px 15px; border: 1.5px solid var(--line, #E7E9ED); border-radius: 12px; font-size: 1rem; font-family: inherit; color: var(--ink, #0B0B0D); box-sizing: border-box; }
-    .lead-modal input[type=email]:focus { outline: none; border-color: #FFB020; }
+    .lead-modal input[type=email] { width: 100%; padding: 13px 15px; border: 1.5px solid var(--line, #E7E9ED); border-radius: 12px; font-size: 1rem; font-family: inherit; color: var(--ink, #0B0B0D); box-sizing: border-box; text-align: center; }
+    .lead-modal input[type=email]:focus { outline: none; border-color: #16A34A; }
     .lead-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
-    .lead-submit, .lead-go { width: 100%; padding: 14px; border: none; border-radius: var(--pill, 100px); background: var(--cta, linear-gradient(135deg, #FFD84D 0%, #FFB020 100%)); color: var(--cta-ink, #241900); font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit; box-shadow: 0 12px 30px -12px rgba(255,176,32,.55); transition: transform .15s ease, filter .15s ease; }
-    .lead-submit:hover, .lead-go:hover { transform: translateY(-1px); filter: brightness(1.03); }
+    .lead-submit, .lead-go { width: 100%; padding: 14px; border: none; border-radius: var(--pill, 100px); background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%); color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit; box-shadow: 0 12px 30px -12px rgba(22,163,74,.55); transition: transform .15s ease, filter .15s ease; }
+    .lead-submit:hover, .lead-go:hover { transform: translateY(-1px); filter: brightness(1.04); }
     .lead-submit:disabled { opacity: .6; cursor: default; transform: none; }
-    .lead-fine { font-size: .72rem; color: var(--muted-2, #9AA0AA); margin: 12px 0 0; }
+    .lead-fine { font-size: .72rem; color: var(--muted, #6A6F79); margin: 12px 0 0; }
     .lead-err { color: var(--red, #E64240); font-size: .8rem; margin: 6px 0 0; min-height: 1em; }
-    .lead-code { font-family: 'Courier New', monospace; font-size: 1.5rem; font-weight: 700; letter-spacing: .12em; color: #fff; background: var(--ink, #0B0B0D); border-radius: 12px; padding: 14px; margin: 6px 0 16px; }
+    /* Código = vale canjeable (verde) */
+    .lead-code { display: block; font-family: 'Courier New', monospace; font-size: 1.5rem; font-weight: 700; letter-spacing: .16em; color: #15803D; background: #F0FDF4; border: 2px dashed #86EFAC; border-radius: 12px; padding: 14px; margin: 0 0 10px; }
   </style>
 
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
@@ -471,28 +481,33 @@
     </div>
   </div>
 
-  <!-- Lead capture (exit-intent 5%) -->
-  <div class="lead-modal" id="leadModal" role="dialog" aria-modal="true" aria-labelledby="leadTitle" aria-hidden="true">
+  <!-- Lead capture (exit-intent 5%) — vale canjeable -->
+  <div class="lead-modal" id="leadModal" role="dialog" aria-modal="true" aria-labelledby="leadValue" aria-hidden="true">
     <div class="lead-modal-content">
       <button class="lead-modal-close" id="leadClose" aria-label="Cerrar">&times;</button>
-      <div id="leadFormWrap">
-        <span class="lead-badge">Antes de irte</span>
-        <h3 id="leadTitle">Llévate un <span class="lead-pct">5% de descuento</span></h3>
-        <p>Te enviamos tu código al email y, de vez en cuando, alguna idea para mirar mejor. Sin spam.</p>
-        <form id="leadForm" novalidate>
-          <input type="email" id="leadEmail" name="email" placeholder="tu@email.com" autocomplete="email" required>
-          <input type="text" name="website" class="lead-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <button type="submit" class="lead-submit" id="leadSubmit">Quiero mi 5%</button>
-        </form>
-        <p class="lead-err" id="leadErr"></p>
-        <p class="lead-fine">Nada de spam. Te puedes dar de baja cuando quieras.</p>
+      <div class="lead-ticket-top">
+        <p class="lead-eyebrow" id="leadEyebrow">Antes de irte</p>
+        <p class="lead-value" id="leadValue">5%</p>
+        <p class="lead-value-sub">de descuento</p>
       </div>
-      <div id="leadSuccess" style="display:none;">
-        <span class="lead-badge">Tu código</span>
-        <h3>Aquí tienes tu <span class="lead-pct">5%</span></h3>
-        <div class="lead-code">BIENVENIDA5</div>
-        <p>Te lo hemos enviado también a tu email. Aplícalo en el paso de pago.</p>
-        <button class="lead-go" id="leadGo">Usar mi 5% ahora</button>
+      <div class="lead-perf"></div>
+      <div class="lead-ticket-body">
+        <div id="leadFormWrap">
+          <p class="lead-lead">Te guardamos el vale a cambio de tu email.</p>
+          <form id="leadForm" novalidate>
+            <input type="email" id="leadEmail" name="email" placeholder="tu@email.com" autocomplete="email" required>
+            <input type="text" name="website" class="lead-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <button type="submit" class="lead-submit" id="leadSubmit">Canjear mi 5%</button>
+          </form>
+          <p class="lead-err" id="leadErr"></p>
+          <p class="lead-fine">Nada de spam · te das de baja cuando quieras.</p>
+        </div>
+        <div id="leadSuccess" style="display:none;">
+          <p class="lead-lead">Tu vale está activo. Este es tu código:</p>
+          <div class="lead-code">BIENVENIDA5</div>
+          <p class="lead-fine" style="margin:0 0 16px;">Aplícalo en el paso de pago. Te lo hemos enviado también al email.</p>
+          <button class="lead-go" id="leadGo">Usar mi 5% ahora</button>
+        </div>
       </div>
     </div>
   </div>
@@ -591,6 +606,7 @@
             lsSet(DONE_KEY, '1');
             formWrap.style.display = 'none';
             successEl.style.display = 'block';
+            var _eb = document.getElementById('leadEyebrow'); if(_eb) _eb.textContent = 'Vale activado';
             track('Lead Captured', { discount: 5 });
             if(typeof fbq !== 'undefined'){ try{ fbq('track','Lead'); }catch(e){} }
           } else {
@@ -609,6 +625,11 @@
       var btn = document.querySelector('.btn-checkout');
       if(btn) btn.click();
     });
+
+    // Previsualización: ?lead=1 fuerza la apertura (salta cooldown/estado)
+    if(/[?&]lead=1/.test(location.search)){
+      setTimeout(function(){ shown = true; modal.classList.add('active'); modal.setAttribute('aria-hidden','false'); try{ emailIn.focus(); }catch(e){} }, 300);
+    }
 
     // Profundidad de scroll (para gating de los fallbacks)
     window.addEventListener('scroll', function(){
