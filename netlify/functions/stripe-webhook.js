@@ -201,8 +201,9 @@ function buildEmailHtml(name, email) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body style="margin:0;padding:0;background-color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+<body style="margin:0;padding:0;background-color:#f5f5f5;font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;padding:40px 0;">
 <tr><td align="center" style="padding:0 16px;">
 <table width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;">
@@ -218,8 +219,8 @@ function buildEmailHtml(name, email) {
 
   <!-- Body -->
   <tr><td style="padding:40px 24px;">
-    <p style="font-size:15px;color:#111111;margin:0 0 8px;line-height:1.5;">${greeting}</p>
-    <p style="font-size:15px;color:#555555;margin:0 0 32px;line-height:1.6;">Ya tienes acceso a <span style="color:#111111;font-weight:600;">La Mirada Creativa</span>: 365 ejercicios visuales para desarrollar tu ojo fotogr\u00e1fico.</p>
+    <p style="font-size:15px;color:#0B0B0D;margin:0 0 8px;line-height:1.5;">${greeting}</p>
+    <p style="font-size:15px;color:#6A6F79;margin:0 0 32px;line-height:1.6;">Ya tienes acceso a <span style="color:#0B0B0D;font-weight:600;">La Mirada Creativa</span>: 365 ejercicios visuales para desarrollar tu ojo fotogr\u00e1fico.</p>
 
     <!-- PDF -->
     <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 16px;">
@@ -229,7 +230,7 @@ function buildEmailHtml(name, email) {
           <span style="font-size:20px;">📄</span>
         </td>
         <td style="vertical-align:top;">
-          <p style="font-size:14px;color:#111111;margin:0 0 4px;font-weight:600;">PDF adjunto</p>
+          <p style="font-size:14px;color:#0B0B0D;margin:0 0 4px;font-weight:600;">PDF adjunto</p>
           <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">Gu\u00e1rdalo en tu dispositivo para tenerlo siempre a mano.</p>
         </td>
       </tr></table>
@@ -244,8 +245,8 @@ function buildEmailHtml(name, email) {
           <span style="font-size:20px;">📱</span>
         </td>
         <td style="vertical-align:top;">
-          <p style="font-size:14px;color:#111111;margin:0 0 4px;font-weight:600;">App interactiva</p>
-          <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">Entra con tu email <span style="color:#111111;font-weight:600;">${email}</span> y recibir\u00e1s un c\u00f3digo de acceso.</p>
+          <p style="font-size:14px;color:#0B0B0D;margin:0 0 4px;font-weight:600;">App interactiva</p>
+          <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">Entra con tu email <span style="color:#0B0B0D;font-weight:600;">${email}</span> y recibir\u00e1s un c\u00f3digo de acceso.</p>
         </td>
       </tr></table>
     </td></tr>
@@ -253,7 +254,7 @@ function buildEmailHtml(name, email) {
 
     <!-- CTA -->
     <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
-      <a href="https://lamiradacreativa.com/app" style="display:inline-block;background-color:#2F6BFF;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:6px;"><span style="color:#ffffff;">Acceder a la app</span></a>
+      <a href="https://lamiradacreativa.com/app" style="display:inline-block;background-color:#FFB020;background-image:linear-gradient(135deg,#FFD84D 0%,#FFB020 100%);color:#241900;font-size:14px;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:100px;"><span style="color:#241900;">Acceder a la app</span></a>
     </td></tr></table>
   </td></tr>
 
@@ -288,8 +289,9 @@ function buildFeedbackEmailHtml(name) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body style="margin:0;padding:0;background-color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+<body style="margin:0;padding:0;background-color:#f5f5f5;font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;padding:40px 0;">
 <tr><td align="center" style="padding:0 16px;">
 <table width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;">
@@ -305,8 +307,8 @@ function buildFeedbackEmailHtml(name) {
 
   <!-- Body -->
   <tr><td style="padding:40px 24px;">
-    <p style="font-size:15px;color:#111111;margin:0 0 8px;line-height:1.5;">${greeting}</p>
-    <p style="font-size:15px;color:#555555;margin:0 0 32px;line-height:1.6;">${intro}</p>
+    <p style="font-size:15px;color:#0B0B0D;margin:0 0 8px;line-height:1.5;">${greeting}</p>
+    <p style="font-size:15px;color:#6A6F79;margin:0 0 32px;line-height:1.6;">${intro}</p>
 
     <!-- Experience -->
     <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 16px;">
@@ -316,7 +318,7 @@ function buildFeedbackEmailHtml(name) {
           <span style="font-size:20px;">\ud83d\udcac</span>
         </td>
         <td style="vertical-align:top;">
-          <p style="font-size:14px;color:#111111;margin:0 0 4px;font-weight:600;">Tu experiencia hasta ahora</p>
+          <p style="font-size:14px;color:#0B0B0D;margin:0 0 4px;font-weight:600;">Tu experiencia hasta ahora</p>
           <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">\u00bfC\u00f3mo te est\u00e1 resultando? \u00bfHas notado que miras las cosas de forma diferente?</p>
         </td>
       </tr></table>
@@ -331,7 +333,7 @@ function buildFeedbackEmailHtml(name) {
           <span style="font-size:20px;">\ud83d\udccb</span>
         </td>
         <td style="vertical-align:top;">
-          <p style="font-size:14px;color:#111111;margin:0 0 4px;font-weight:600;">Sobre los ejercicios y la app</p>
+          <p style="font-size:14px;color:#0B0B0D;margin:0 0 4px;font-weight:600;">Sobre los ejercicios y la app</p>
           <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">\u00bfLos ejercicios te parecen claros? \u00bfLa app funciona bien en tu dispositivo? \u00bfHay algo que mejorar\u00edas?</p>
         </td>
       </tr></table>
@@ -346,15 +348,15 @@ function buildFeedbackEmailHtml(name) {
           <span style="font-size:20px;">\u2b50</span>
         </td>
         <td style="vertical-align:top;">
-          <p style="font-size:14px;color:#111111;margin:0 0 4px;font-weight:600;">Una \u00faltima cosa</p>
+          <p style="font-size:14px;color:#0B0B0D;margin:0 0 4px;font-weight:600;">Una \u00faltima cosa</p>
           <p style="font-size:13px;color:#888888;margin:0;line-height:1.5;">Si La Mirada Creativa te est\u00e1 aportando algo, me ayudar\u00eda mucho que me lo contaras en unas l\u00edneas. Los testimonios de personas reales son lo que m\u00e1s ayuda a otros fot\u00f3grafos a decidirse.</p>
         </td>
       </tr></table>
     </td></tr>
     </table>
 
-    <p style="font-size:14px;color:#555555;margin:0 0 8px;line-height:1.6;">No hace falta nada elaborado \u2014 responde a este email con lo que te salga. Cada opini\u00f3n cuenta.</p>
-    <p style="font-size:14px;color:#555555;margin:0;line-height:1.6;">Gracias por tu tiempo,<br><span style="color:#111111;font-weight:600;">Rafa</span></p>
+    <p style="font-size:14px;color:#6A6F79;margin:0 0 8px;line-height:1.6;">No hace falta nada elaborado \u2014 responde a este email con lo que te salga. Cada opini\u00f3n cuenta.</p>
+    <p style="font-size:14px;color:#6A6F79;margin:0;line-height:1.6;">Gracias por tu tiempo,<br><span style="color:#0B0B0D;font-weight:600;">Rafa</span></p>
   </td></tr>
 
   </table>

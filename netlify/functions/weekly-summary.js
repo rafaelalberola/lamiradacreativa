@@ -152,8 +152,9 @@ Progreso: <strong style="color:#1A1A1A;">${totalCompleted}/365</strong> (${progr
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body style="margin:0;padding:0;background-color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;">
+<body style="margin:0;padding:0;background-color:#f5f5f5;font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;padding:40px 0;">
 <tr><td align="center" style="padding:0 16px;">
 <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;">
@@ -177,7 +178,7 @@ Progreso: <strong style="color:#1A1A1A;">${totalCompleted}/365</strong> (${progr
     <table width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;">
     <tr><td>
       <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f0f0;border-radius:4px;height:8px;">
-      <tr><td style="width:${progressBarFill}%;background-color:#2F6BFF;border-radius:4px;height:8px;font-size:1px;">&nbsp;</td>
+      <tr><td style="width:${progressBarFill}%;background-color:#FF7442;border-radius:4px;height:8px;font-size:1px;">&nbsp;</td>
       <td style="font-size:1px;">&nbsp;</td></tr>
       </table>
     </td></tr>
@@ -189,7 +190,7 @@ Progreso: <strong style="color:#1A1A1A;">${totalCompleted}/365</strong> (${progr
     <!-- CTA -->
     <table width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0 0;">
     <tr><td align="center">
-      <a href="${appUrl}" style="display:inline-block;background-color:#2F6BFF;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:8px;"><span style="color:#ffffff;">${ctaText}</span></a>
+      <a href="${appUrl}" style="display:inline-block;background-color:#FFB020;background-image:linear-gradient(135deg,#FFD84D 0%,#FFB020 100%);color:#241900;font-size:14px;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:100px;"><span style="color:#241900;">${ctaText}</span></a>
     </td></tr>
     </table>
 

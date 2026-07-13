@@ -45,41 +45,42 @@ const SEQUENCE_DELAYS_HOURS = [0, 24, 72, 120, 144, 168, 240];
 function buildWelcomeEmailHtml() {
   return `<!DOCTYPE html>
 <html lang="es">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background-color:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></head>
+<body style="margin:0;padding:0;background-color:#ffffff;font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;padding:40px 0;">
 <tr><td align="center" style="padding:0 16px;">
 <table width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;">
 
 <tr><td style="padding:0 0 32px;">
-  <p style="font-size:15px;color:#111111;margin:0 0 20px;line-height:1.7;">Bienvenido a La Mirada Creativa.</p>
-  <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">Tienes 7 ejercicios esperándote. Uno por día. Menos de 5 minutos cada uno.</p>
-  <p style="font-size:15px;color:#555555;margin:0 0 28px;line-height:1.7;">No vas a aprender teoría. Vas a entrenar tu ojo.</p>
+  <p style="font-size:15px;color:#0B0B0D;margin:0 0 20px;line-height:1.7;">Bienvenido a La Mirada Creativa.</p>
+  <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">Tienes 7 ejercicios esperándote. Uno por día. Menos de 5 minutos cada uno.</p>
+  <p style="font-size:15px;color:#6A6F79;margin:0 0 28px;line-height:1.7;">No vas a aprender teoría. Vas a entrenar tu ojo.</p>
 
   <table cellpadding="0" cellspacing="0" width="100%"><tr><td>
-    <a href="https://lamiradacreativa.com/prueba-gratis/ejercicio/?day=1&utm_source=email&utm_medium=sequence&utm_campaign=free_trial&utm_content=day_0" style="display:inline-block;background-color:#2F6BFF;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;padding:14px 28px;border-radius:8px;">Abrir mi primer ejercicio</a>
+    <a href="https://lamiradacreativa.com/prueba-gratis/ejercicio/?day=1&utm_source=email&utm_medium=sequence&utm_campaign=free_trial&utm_content=day_0" style="display:inline-block;background-color:#FFB020;background-image:linear-gradient(135deg,#FFD84D 0%,#FFB020 100%);color:#241900;font-size:15px;font-weight:600;text-decoration:none;padding:14px 28px;border-radius:100px;">Abrir mi primer ejercicio</a>
   </td></tr></table>
 </td></tr>
 
 <!-- Coupon section -->
 <tr><td style="padding:28px 0 0;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#F0FDF4;border:2px solid #86EFAC;border-radius:12px;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#FFF8E6;border:1.5px solid #FFE08A;border-radius:14px;">
   <tr><td style="padding:24px;">
-    <p style="font-size:13px;color:#166534;margin:0 0 6px;line-height:1.5;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Tu regalo de bienvenida</p>
-    <p style="font-size:22px;color:#15803D;margin:0 0 12px;line-height:1.3;font-weight:700;">10% de descuento en el programa completo</p>
+    <p style="font-size:13px;color:#8A6A00;margin:0 0 6px;line-height:1.5;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Tu regalo de bienvenida</p>
+    <p style="font-size:22px;color:#0B0B0D;margin:0 0 12px;line-height:1.3;font-weight:700;">10% de descuento en el programa completo</p>
     <table cellpadding="0" cellspacing="0" style="margin:0 0 14px;">
-    <tr><td style="background-color:#111111;border-radius:8px;padding:12px 24px;">
+    <tr><td style="background-color:#0B0B0D;border-radius:8px;padding:12px 24px;">
       <p style="font-size:20px;color:#ffffff;margin:0;font-weight:700;letter-spacing:0.1em;font-family:'Courier New',Courier,monospace;">WELCOME10</p>
     </td></tr>
     </table>
-    <p style="font-size:13px;color:#166534;margin:0;line-height:1.5;">Usa este código cuando quieras acceder a los 365 ejercicios. Sin prisa, sin fecha de caducidad.</p>
+    <p style="font-size:13px;color:#8A6A00;margin:0;line-height:1.5;">Usa este código cuando quieras acceder a los 365 ejercicios. Sin prisa, sin fecha de caducidad.</p>
   </td></tr>
   </table>
 </td></tr>
 
 <tr><td style="padding:28px 0 0;">
-  <p style="font-size:15px;color:#555555;margin:0 0 0;line-height:1.7;">El problema nunca fue tu cámara.</p>
-  <p style="font-size:15px;color:#111111;margin:20px 0 0;line-height:1.7;">\u2014 Rafa</p>
+  <p style="font-size:15px;color:#6A6F79;margin:0 0 0;line-height:1.7;">El problema nunca fue tu cámara.</p>
+  <p style="font-size:15px;color:#0B0B0D;margin:20px 0 0;line-height:1.7;">\u2014 Rafa</p>
 </td></tr>
 
 <tr><td style="padding:24px 0 0;border-top:1px solid #f0f0f0;">

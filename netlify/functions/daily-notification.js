@@ -31,8 +31,9 @@ function buildEmailHtml(exercise, streak, appUrl) {
 
   return `<!DOCTYPE html>
 <html lang="es">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></head>
+<body style="margin:0;padding:0;background:#f7f7f7;font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
   <div style="max-width:600px;margin:0 auto;padding:40px 24px;background:#ffffff;">
     <p style="margin:0 0 24px;font-size:16px;color:#1A1A1A;line-height:1.6;">
       Tu ejercicio de hoy está listo.
@@ -43,7 +44,7 @@ function buildEmailHtml(exercise, streak, appUrl) {
     <p style="margin:0 0 32px;font-size:18px;color:#1A1A1A;font-style:italic;line-height:1.5;">
       "${exercise.subtitle}"
     </p>
-    <a href="${appUrl}" style="display:inline-block;padding:14px 32px;background:#2F6BFF;color:#ffffff;text-decoration:none;border-radius:8px;font-size:16px;font-weight:600;">
+    <a href="${appUrl}" style="display:inline-block;padding:14px 32px;background-color:#FFB020;background-image:linear-gradient(135deg,#FFD84D 0%,#FFB020 100%);color:#241900;text-decoration:none;border-radius:100px;font-size:16px;font-weight:600;">
       Abrir ejercicio
     </a>
     ${streakHtml}
@@ -60,8 +61,9 @@ function buildEmailHtml(exercise, streak, appUrl) {
 function buildCongratsEmailHtml(appUrl) {
   return `<!DOCTYPE html>
 <html lang="es">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></head>
+<body style="margin:0;padding:0;background:#f7f7f7;font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
   <div style="max-width:600px;margin:0 auto;padding:40px 24px;background:#ffffff;">
     <p style="margin:0 0 24px;font-size:18px;color:#1A1A1A;line-height:1.6;">
       &#127881; Has completado los 365 ejercicios.
@@ -69,7 +71,7 @@ function buildCongratsEmailHtml(appUrl) {
     <p style="margin:0 0 32px;font-size:16px;color:#555;line-height:1.6;">
       Tu mirada ya no es la misma. Revisa tus favoritos, repite los que más te retaron, o simplemente sal a disparar con todo lo que has aprendido.
     </p>
-    <a href="${appUrl}" style="display:inline-block;padding:14px 32px;background:#2F6BFF;color:#ffffff;text-decoration:none;border-radius:8px;font-size:16px;font-weight:600;">
+    <a href="${appUrl}" style="display:inline-block;padding:14px 32px;background-color:#FFB020;background-image:linear-gradient(135deg,#FFD84D 0%,#FFB020 100%);color:#241900;text-decoration:none;border-radius:100px;font-size:16px;font-weight:600;">
       Abrir la app
     </a>
   </div>

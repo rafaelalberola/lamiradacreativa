@@ -60,15 +60,16 @@ exports.handler = async (event) => {
       headers: { 'Content-Type': 'text/html; charset=utf-8' },
       body: `<!DOCTYPE html>
 <html lang="es">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Baja confirmada</title></head>
-<body style="margin:0;padding:60px 20px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;text-align:center;background:#f7f7f7;">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Baja confirmada</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></head>
+<body style="margin:0;padding:60px 20px;font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;text-align:center;background:#f7f7f7;">
   <div style="max-width:480px;margin:0 auto;background:#fff;padding:40px;border-radius:12px;">
     <h2 style="margin:0 0 16px;color:#1A1A1A;">Listo</h2>
     <p style="margin:0 0 24px;color:#555;line-height:1.6;">
       Has desactivado las notificaciones diarias. No recibirás más emails de recordatorio.
     </p>
     <p style="margin:0;color:#888;font-size:14px;">
-      Puedes reactivarlas en cualquier momento desde <a href="https://lamiradacreativa.com/app/" style="color:#2F6BFF;">la app</a>.
+      Puedes reactivarlas en cualquier momento desde <a href="https://lamiradacreativa.com/app/" style="color:#FF7442;">la app</a>.
     </p>
   </div>
 </body>

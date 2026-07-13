@@ -58,58 +58,58 @@ function buildEmailHtml(step) {
 
   const bodies = {
     0: `
-      <p style="font-size:15px;color:#111111;margin:0 0 20px;line-height:1.7;">Bienvenido a La Mirada Creativa.</p>
-      <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">Tienes 7 ejercicios esperándote. Uno por día. Menos de 5 minutos cada uno.</p>
-      <p style="font-size:15px;color:#555555;margin:0 0 28px;line-height:1.7;">No vas a aprender teoría. Vas a entrenar tu ojo.</p>
+      <p style="font-size:15px;color:#0B0B0D;margin:0 0 20px;line-height:1.7;">Bienvenido a La Mirada Creativa.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">Tienes 7 ejercicios esperándote. Uno por día. Menos de 5 minutos cada uno.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 28px;line-height:1.7;">No vas a aprender teoría. Vas a entrenar tu ojo.</p>
       ${ctaButton('Abrir mi primer ejercicio', `${BASE_URL}/prueba-gratis/ejercicio/?day=1&${utmBase}0`)}
-      <p style="font-size:15px;color:#555555;margin:28px 0 0;line-height:1.7;">El problema nunca fue tu cámara.</p>`,
+      <p style="font-size:15px;color:#6A6F79;margin:28px 0 0;line-height:1.7;">El problema nunca fue tu cámara.</p>`,
 
     1: `
-      <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">Si hiciste el ejercicio de ayer, ya sabes de qué va esto.<br>Si no lo hiciste, hoy es otro día.</p>
-      <p style="font-size:15px;color:#555555;margin:0 0 28px;line-height:1.7;">Tu segundo ejercicio está listo.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">Si hiciste el ejercicio de ayer, ya sabes de qué va esto.<br>Si no lo hiciste, hoy es otro día.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 28px;line-height:1.7;">Tu segundo ejercicio está listo.</p>
       ${ctaButton('Abrir ejercicio del día 2', `${BASE_URL}/prueba-gratis/ejercicio/?day=2&${utmBase}1`)}
-      <p style="font-size:15px;color:#555555;margin:28px 0 0;line-height:1.7;">5 minutos. Una mirada nueva.</p>`,
+      <p style="font-size:15px;color:#6A6F79;margin:28px 0 0;line-height:1.7;">5 minutos. Una mirada nueva.</p>`,
 
     2: `
-      <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">Tres días mirando diferente.</p>
-      <p style="font-size:15px;color:#555555;margin:0 0 28px;line-height:1.7;">La mayoría de fotógrafos nunca entrenan su mirada. Solo compran equipo nuevo y esperan que las fotos cambien.</p>
-      <p style="font-size:15px;color:#555555;margin:0 0 28px;line-height:1.7;">Tú ya estás haciendo algo distinto.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">Tres días mirando diferente.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 28px;line-height:1.7;">La mayoría de fotógrafos nunca entrenan su mirada. Solo compran equipo nuevo y esperan que las fotos cambien.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 28px;line-height:1.7;">Tú ya estás haciendo algo distinto.</p>
       ${ctaButton('Abrir ejercicio del día 3', `${BASE_URL}/prueba-gratis/ejercicio/?day=3&${utmBase}2`)}`,
 
     3: `
-      <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">En dos días se acaban tus ejercicios de prueba.</p>
-      <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">Pero el entrenamiento de verdad empieza en el día 8. Ahí es donde la mirada técnica se vuelve instinto.</p>
-      <p style="font-size:15px;color:#555555;margin:0 0 28px;line-height:1.7;">365 ejercicios. Cuatro bloques progresivos. De composición básica a firma visual propia.</p>
-      <p style="font-size:15px;color:#555555;margin:0 0 28px;line-height:1.7;">Si esto te está sirviendo, no pierdas el ritmo.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">En dos días se acaban tus ejercicios de prueba.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">Pero el entrenamiento de verdad empieza en el día 8. Ahí es donde la mirada técnica se vuelve instinto.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 28px;line-height:1.7;">365 ejercicios. Cuatro bloques progresivos. De composición básica a firma visual propia.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 28px;line-height:1.7;">Si esto te está sirviendo, no pierdas el ritmo.</p>
       ${ctaButton('Ver el programa completo', `${BASE_URL}/?${utmBase}3`)}`,
 
     4: `
-      <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">El ejercicio del día 47 se llama "Luz que abraza".</p>
-      <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">Es el que más fotógrafos mencionan cuando les pregunto cuál les cambió la forma de ver.</p>
-      <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">No puedo dártelo todavía — está en el Bloque 1, después del día 7.</p>
-      <p style="font-size:15px;color:#555555;margin:0 0 28px;line-height:1.7;">Pero mañana terminas tu prueba. Y puedes desbloquear los 365 por lo que cuesta un café a la semana durante un mes.</p>
-      <p style="font-size:15px;color:#111111;margin:0 0 28px;line-height:1.7;font-weight:600;">39 €. Una vez. Para siempre.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">El ejercicio del día 47 se llama "Luz que abraza".</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">Es el que más fotógrafos mencionan cuando les pregunto cuál les cambió la forma de ver.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">No puedo dártelo todavía — está en el Bloque 1, después del día 7.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 28px;line-height:1.7;">Pero mañana terminas tu prueba. Y puedes desbloquear los 365 por lo que cuesta un café a la semana durante un mes.</p>
+      <p style="font-size:15px;color:#0B0B0D;margin:0 0 28px;line-height:1.7;font-weight:600;">39 €. Una vez. Para siempre.</p>
       ${ctaButton('Desbloquear los 365 ejercicios — 39 €', `${BASE_URL}/#precio?${utmBase}4`)}`,
 
     5: `
-      <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">Hoy es tu día 7.</p>
-      <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">Has entrenado tu mirada durante una semana. La pregunta es simple: ¿quieres seguir?</p>
-      <p style="font-size:15px;color:#555555;margin:0 0 28px;line-height:1.7;">365 ejercicios. Cuatro bloques. De mirada técnica a mirada propia.</p>
-      <p style="font-size:15px;color:#111111;margin:0 0 28px;line-height:1.7;font-weight:600;">39 €. Pago único. Acceso para siempre. Garantía de 30 días.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">Hoy es tu día 7.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">Has entrenado tu mirada durante una semana. La pregunta es simple: ¿quieres seguir?</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 28px;line-height:1.7;">365 ejercicios. Cuatro bloques. De mirada técnica a mirada propia.</p>
+      <p style="font-size:15px;color:#0B0B0D;margin:0 0 28px;line-height:1.7;font-weight:600;">39 €. Pago único. Acceso para siempre. Garantía de 30 días.</p>
       ${ctaButton('Desbloquear acceso completo — 39 €', `${BASE_URL}/#precio?${utmBase}5`)}
-      <p style="font-size:15px;color:#555555;margin:28px 0 0;line-height:1.7;">Si no es para ti, no pasa nada. Pero si has llegado hasta aquí, probablemente es para ti.</p>`,
+      <p style="font-size:15px;color:#6A6F79;margin:28px 0 0;line-height:1.7;">Si no es para ti, no pasa nada. Pero si has llegado hasta aquí, probablemente es para ti.</p>`,
 
     6: `
-      <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">Llevas 3 días sin ejercicio.</p>
-      <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">No te voy a presionar. Solo te digo que el ojo se entrena como un músculo. Si paras, vuelve a donde estaba.</p>
-      <p style="font-size:15px;color:#555555;margin:0 0 20px;line-height:1.7;">Los 365 ejercicios siguen ahí. 39 €. Sin prisa, pero sin pausa.</p>
-      <p style="font-size:15px;color:#15803D;margin:0 0 12px;line-height:1.7;font-weight:600;">Recuerda: tienes un 10% de descuento.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">Llevas 3 días sin ejercicio.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">No te voy a presionar. Solo te digo que el ojo se entrena como un músculo. Si paras, vuelve a donde estaba.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">Los 365 ejercicios siguen ahí. 39 €. Sin prisa, pero sin pausa.</p>
+      <p style="font-size:15px;color:#8A6A00;margin:0 0 12px;line-height:1.7;font-weight:600;">Recuerda: tienes un 10% de descuento.</p>
       <table cellpadding="0" cellspacing="0" style="margin:0 0 14px;">
-      <tr><td style="background-color:#111111;border-radius:8px;padding:10px 20px;">
+      <tr><td style="background-color:#0B0B0D;border-radius:8px;padding:10px 20px;">
         <p style="font-size:18px;color:#ffffff;margin:0;font-weight:700;letter-spacing:0.1em;font-family:'Courier New',Courier,monospace;">WELCOME10</p>
       </td></tr>
       </table>
-      <p style="font-size:13px;color:#166534;margin:0 0 28px;line-height:1.5;">Usa este código en el checkout. Sin fecha de caducidad.</p>
+      <p style="font-size:13px;color:#8A6A00;margin:0 0 28px;line-height:1.5;">Usa este código en el checkout. Sin fecha de caducidad.</p>
       ${ctaButton('Retomar el entrenamiento — 10% dto.', `${BASE_URL}/#precio?${utmBase}6`)}`
   };
 
@@ -117,15 +117,16 @@ function buildEmailHtml(step) {
 
   return `<!DOCTYPE html>
 <html lang="es">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background-color:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></head>
+<body style="margin:0;padding:0;background-color:#ffffff;font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;padding:40px 0;">
 <tr><td align="center" style="padding:0 16px;">
 <table width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;">
 
 <tr><td style="padding:0 0 32px;">
   ${bodyContent}
-  <p style="font-size:15px;color:#111111;margin:20px 0 0;line-height:1.7;">\u2014 Rafa</p>
+  <p style="font-size:15px;color:#0B0B0D;margin:20px 0 0;line-height:1.7;">\u2014 Rafa</p>
 </td></tr>
 
 <tr><td style="padding:24px 0 0;border-top:1px solid #f0f0f0;">
@@ -141,7 +142,7 @@ function buildEmailHtml(step) {
 
 function ctaButton(text, url) {
   return `<table cellpadding="0" cellspacing="0"><tr><td>
-    <a href="${url}" style="display:inline-block;background-color:#2F6BFF;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;padding:14px 28px;border-radius:8px;">${text}</a>
+    <a href="${url}" style="display:inline-block;background-color:#FFB020;background-image:linear-gradient(135deg,#FFD84D 0%,#FFB020 100%);color:#241900;font-size:15px;font-weight:600;text-decoration:none;padding:14px 28px;border-radius:100px;">${text}</a>
   </td></tr></table>`;
 }
 

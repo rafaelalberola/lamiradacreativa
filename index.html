@@ -26,6 +26,27 @@
     .checkout-loading { min-height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; color: #666; font-size: .9rem; }
     .checkout-loading-spinner { width: 34px; height: 34px; border: 3px solid #eee; border-top-color: #2F6BFF; border-radius: 50%; animation: loader-spin .8s linear infinite; }
     .material-symbols-sharp { font-family: "Material Symbols Sharp"; font-weight: normal; font-style: normal; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; }
+    /* Lead capture (exit-intent 5%) — usa los tokens de marca de redesign.css */
+    .lead-modal { display: none; position: fixed; inset: 0; background: rgba(11,11,13,.72); z-index: 10001; align-items: center; justify-content: center; backdrop-filter: blur(6px); padding: 20px; font-family: var(--font, 'Plus Jakarta Sans', system-ui, sans-serif); }
+    .lead-modal.active { display: flex; animation: leadFade .25s ease; }
+    @keyframes leadFade { from { opacity: 0; } to { opacity: 1; } }
+    .lead-modal-content { position: relative; width: 100%; max-width: 420px; background: var(--bg, #fff); border-radius: var(--radius-sm, 18px); padding: 34px 28px 26px; box-shadow: var(--shadow, 0 24px 60px -30px rgba(20,32,64,.35)); text-align: center; }
+    .lead-modal-close { position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; border: none; border-radius: 50%; background: var(--line-soft, rgba(11,11,13,.06)); color: var(--ink, #0B0B0D); font-size: 20px; line-height: 1; cursor: pointer; }
+    .lead-modal-close:hover { background: rgba(11,11,13,.12); }
+    .lead-badge { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #7A5C00; background: #FFF4D6; padding: 6px 12px; border-radius: var(--pill, 100px); margin-bottom: 14px; }
+    .lead-modal h3 { font-size: 1.45rem; line-height: 1.2; margin: 0 0 10px; color: var(--ink, #0B0B0D); font-family: var(--font, 'Plus Jakarta Sans', sans-serif); font-weight: 800; letter-spacing: -0.01em; }
+    .lead-pct { background: var(--cta, linear-gradient(135deg, #FFD84D 0%, #FFB020 100%)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .lead-modal p { font-size: .92rem; color: var(--muted, #6A6F79); line-height: 1.55; margin: 0 0 18px; }
+    .lead-modal form { display: flex; flex-direction: column; gap: 10px; margin: 0; }
+    .lead-modal input[type=email] { width: 100%; padding: 13px 15px; border: 1.5px solid var(--line, #E7E9ED); border-radius: 12px; font-size: 1rem; font-family: inherit; color: var(--ink, #0B0B0D); box-sizing: border-box; }
+    .lead-modal input[type=email]:focus { outline: none; border-color: #FFB020; }
+    .lead-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+    .lead-submit, .lead-go { width: 100%; padding: 14px; border: none; border-radius: var(--pill, 100px); background: var(--cta, linear-gradient(135deg, #FFD84D 0%, #FFB020 100%)); color: var(--cta-ink, #241900); font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit; box-shadow: 0 12px 30px -12px rgba(255,176,32,.55); transition: transform .15s ease, filter .15s ease; }
+    .lead-submit:hover, .lead-go:hover { transform: translateY(-1px); filter: brightness(1.03); }
+    .lead-submit:disabled { opacity: .6; cursor: default; transform: none; }
+    .lead-fine { font-size: .72rem; color: var(--muted-2, #9AA0AA); margin: 12px 0 0; }
+    .lead-err { color: var(--red, #E64240); font-size: .8rem; margin: 6px 0 0; min-height: 1em; }
+    .lead-code { font-family: 'Courier New', monospace; font-size: 1.5rem; font-weight: 700; letter-spacing: .12em; color: #fff; background: var(--ink, #0B0B0D); border-radius: 12px; padding: 14px; margin: 6px 0 16px; }
   </style>
 
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
@@ -450,6 +471,32 @@
     </div>
   </div>
 
+  <!-- Lead capture (exit-intent 5%) -->
+  <div class="lead-modal" id="leadModal" role="dialog" aria-modal="true" aria-labelledby="leadTitle" aria-hidden="true">
+    <div class="lead-modal-content">
+      <button class="lead-modal-close" id="leadClose" aria-label="Cerrar">&times;</button>
+      <div id="leadFormWrap">
+        <span class="lead-badge">Antes de irte</span>
+        <h3 id="leadTitle">Llévate un <span class="lead-pct">5% de descuento</span></h3>
+        <p>Te enviamos tu código al email y, de vez en cuando, alguna idea para mirar mejor. Sin spam.</p>
+        <form id="leadForm" novalidate>
+          <input type="email" id="leadEmail" name="email" placeholder="tu@email.com" autocomplete="email" required>
+          <input type="text" name="website" class="lead-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button type="submit" class="lead-submit" id="leadSubmit">Quiero mi 5%</button>
+        </form>
+        <p class="lead-err" id="leadErr"></p>
+        <p class="lead-fine">Nada de spam. Te puedes dar de baja cuando quieras.</p>
+      </div>
+      <div id="leadSuccess" style="display:none;">
+        <span class="lead-badge">Tu código</span>
+        <h3>Aquí tienes tu <span class="lead-pct">5%</span></h3>
+        <div class="lead-code">BIENVENIDA5</div>
+        <p>Te lo hemos enviado también a tu email. Aplícalo en el paso de pago.</p>
+        <button class="lead-go" id="leadGo">Usar mi 5% ahora</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Checkout Modal -->
   <div class="checkout-modal" id="checkoutModal">
     <div class="checkout-modal-content">
@@ -476,6 +523,120 @@
   </script>
   <script>
     document.querySelectorAll('.btn-checkout').forEach(function(btn){btn.addEventListener('click',function(){var location=this.getAttribute('data-location')||'unknown';if(window.amplitude)amplitude.track('Checkout Button Clicked',{button_location:location,product:'La Mirada Creativa',price:69,tracking_version:'2'});if(window.mixpanel)mixpanel.track('Checkout Button Clicked',{button_location:location,product:'La Mirada Creativa',price:69,tracking_version:'2'});});});
+  </script>
+  <!-- Lead capture (exit-intent 5%) -->
+  <script>
+  (function(){
+    var modal = document.getElementById('leadModal');
+    if(!modal) return;
+    var closeBtn = document.getElementById('leadClose');
+    var form = document.getElementById('leadForm');
+    var emailIn = document.getElementById('leadEmail');
+    var submitBtn = document.getElementById('leadSubmit');
+    var errEl = document.getElementById('leadErr');
+    var formWrap = document.getElementById('leadFormWrap');
+    var successEl = document.getElementById('leadSuccess');
+    var goBtn = document.getElementById('leadGo');
+
+    var SHOWN_KEY = 'lmc_lead_shown', DONE_KEY = 'lmc_lead_captured';
+    var COOLDOWN = 7*24*3600*1000; // no volver a mostrar en 7 días si no captó
+    function ls(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+    function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+    function track(name, props){
+      try{ if(window.amplitude) amplitude.track(name, props||{}); }catch(e){}
+      try{ if(window.mixpanel) mixpanel.track(name, props||{}); }catch(e){}
+    }
+
+    var shown = false, maxDepth = 0;
+    function canShow(){
+      if(shown) return false;
+      if(ls(DONE_KEY)) return false;
+      var t = parseInt(ls(SHOWN_KEY)||'0', 10);
+      if(t && (Date.now()-t) < COOLDOWN) return false;
+      var cm = document.getElementById('checkoutModal');
+      if(cm && cm.classList.contains('active')) return false;
+      return true;
+    }
+    function open(){
+      if(!canShow()) return;
+      shown = true; lsSet(SHOWN_KEY, String(Date.now()));
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden','false');
+      try{ emailIn.focus(); }catch(e){}
+      track('Lead Popup Shown');
+    }
+    function close(){
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden','true');
+    }
+
+    closeBtn.addEventListener('click', close);
+    modal.addEventListener('click', function(e){ if(e.target === modal) close(); });
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && modal.classList.contains('active')) close(); });
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var email = (emailIn.value||'').trim();
+      errEl.textContent = '';
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ errEl.textContent = 'Introduce un email válido.'; return; }
+      submitBtn.disabled = true; submitBtn.textContent = 'Enviando…';
+      var utm = {}; try{ var s = localStorage.getItem('lmc_utm_data'); if(s) utm = JSON.parse(s); }catch(_){}
+      var hp = (form.querySelector('[name=website]')||{}).value || '';
+      fetch('/.netlify/functions/capture-lead', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, website: hp, utm: utm })
+      }).then(function(r){ return r.json().catch(function(){ return {}; }); })
+        .then(function(d){
+          if(d && d.ok){
+            lsSet(DONE_KEY, '1');
+            formWrap.style.display = 'none';
+            successEl.style.display = 'block';
+            track('Lead Captured', { discount: 5 });
+            if(typeof fbq !== 'undefined'){ try{ fbq('track','Lead'); }catch(e){} }
+          } else {
+            errEl.textContent = (d && d.error) || 'Algo falló. Inténtalo otra vez.';
+            submitBtn.disabled = false; submitBtn.textContent = 'Quiero mi 5%';
+          }
+        }).catch(function(){
+          errEl.textContent = 'Sin conexión. Inténtalo otra vez.';
+          submitBtn.disabled = false; submitBtn.textContent = 'Quiero mi 5%';
+        });
+    });
+
+    goBtn.addEventListener('click', function(){
+      close();
+      track('Lead Popup To Checkout');
+      var btn = document.querySelector('.btn-checkout');
+      if(btn) btn.click();
+    });
+
+    // Profundidad de scroll (para gating de los fallbacks)
+    window.addEventListener('scroll', function(){
+      var y = window.scrollY;
+      var docH = document.documentElement.scrollHeight - window.innerHeight;
+      if(docH > 0) maxDepth = Math.max(maxDepth, y/docH);
+    }, { passive: true });
+
+    var isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+    if(isTouch){
+      // Móvil: subida rápida cerca del inicio tras haber bajado (intención de salir)
+      var lastY = window.scrollY;
+      window.addEventListener('scroll', function(){
+        var y = window.scrollY;
+        if(y < lastY - 40 && maxDepth > 0.35 && y < 400){ open(); }
+        lastY = y;
+      }, { passive: true });
+      // Fallback: 30s con scroll > 40%
+      setTimeout(function(){ if(maxDepth > 0.4) open(); }, 30000);
+    } else {
+      // Desktop: exit-intent (el ratón sale por arriba)
+      document.addEventListener('mouseout', function(e){
+        if(e.clientY <= 0 && !e.relatedTarget){ open(); }
+      });
+      // Fallback: 60s con scroll > 30%
+      setTimeout(function(){ if(maxDepth > 0.3) open(); }, 60000);
+    }
+  })();
   </script>
 </body>
 </html>
