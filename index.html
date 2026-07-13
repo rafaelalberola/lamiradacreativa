@@ -30,19 +30,16 @@
     .lead-modal { display: none; position: fixed; inset: 0; background: rgba(11,11,13,.72); z-index: 10001; align-items: center; justify-content: center; backdrop-filter: blur(6px); padding: 20px; font-family: var(--font, 'Plus Jakarta Sans', system-ui, sans-serif); }
     .lead-modal.active { display: flex; animation: leadFade .25s ease; }
     @keyframes leadFade { from { opacity: 0; } to { opacity: 1; } }
-    .lead-modal-content { position: relative; width: 100%; max-width: 400px; background: #fff; border-radius: 18px; box-shadow: 0 30px 70px -25px rgba(11,11,13,.6); text-align: center; }
+    .lead-modal-content { position: relative; width: 100%; max-width: 400px; background: #fff; border-radius: 18px; text-align: center; --perf-y: 128px; filter: drop-shadow(0 26px 40px rgba(11,11,13,.5)); -webkit-mask: radial-gradient(circle 11px at left var(--perf-y), #0000 0 11px, #000 11.5px), radial-gradient(circle 11px at right var(--perf-y), #0000 0 11px, #000 11.5px); -webkit-mask-composite: source-in; mask: radial-gradient(circle 11px at left var(--perf-y), #0000 0 11px, #000 11.5px), radial-gradient(circle 11px at right var(--perf-y), #0000 0 11px, #000 11.5px); mask-composite: intersect; }
     .lead-modal-close { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border: none; border-radius: 50%; background: rgba(255,255,255,.28); color: #0B3D22; font-size: 18px; line-height: 1; cursor: pointer; z-index: 2; }
     .lead-modal-close:hover { background: rgba(255,255,255,.5); }
     /* Banda de valor (parte de arriba del vale) — verde positivo */
-    .lead-ticket-top { background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%); color: #fff; border-radius: 18px 18px 0 0; padding: 26px 28px 22px; }
+    .lead-ticket-top { height: 128px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0 28px; background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%); color: #fff; border-radius: 18px 18px 0 0; }
     .lead-eyebrow { margin: 0 0 4px; text-transform: uppercase; letter-spacing: .16em; font-size: 11px; font-weight: 700; opacity: .85; }
     .lead-value { margin: 0; font-size: 3.6rem; line-height: .95; font-weight: 800; letter-spacing: -.03em; }
     .lead-value-sub { margin: 3px 0 0; font-size: .82rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; opacity: .92; }
     /* Perforación / troquelado del vale */
-    .lead-perf { position: relative; height: 0; border-top: 2px dashed rgba(11,11,13,.16); }
-    .lead-perf::before, .lead-perf::after { content: ""; position: absolute; top: -12px; width: 24px; height: 24px; border-radius: 50%; background: rgba(11,11,13,.82); }
-    .lead-perf::before { left: -12px; }
-    .lead-perf::after { right: -12px; }
+    .lead-perf { height: 0; border-top: 2px dashed rgba(11,11,13,.18); }
     /* Cuerpo del vale */
     .lead-ticket-body { padding: 22px 28px 26px; }
     .lead-lead { font-size: .95rem; color: var(--ink, #0B0B0D); line-height: 1.5; margin: 0 0 16px; font-weight: 600; }
