@@ -42,10 +42,12 @@ exports.handler = async (event, context) => {
     // Parse UTM data and device_id from request body
     let utm = {};
     let amplitudeDeviceId = null;
+    let promoCode = null;
     try {
       const body = JSON.parse(event.body || '{}');
       utm = body.utm || {};
       amplitudeDeviceId = body.amplitude_device_id || null;
+      promoCode = body.promo_code || null;
     } catch(e) {}
 
     // Build metadata with UTM parameters
@@ -70,8 +72,8 @@ exports.handler = async (event, context) => {
       metadata.traffic_source = 'organic';
     }
 
-    // Create checkout session with embedded mode
-    const session = await stripe.checkout.sessions.create({
+    // Build checkout session params
+    const sessionParams = {
       ui_mode: 'embedded',
       line_items: [
         {
@@ -84,11 +86,30 @@ exports.handler = async (event, context) => {
       automatic_tax: { enabled: false },
       // Collect billing address which includes name
       billing_address_collection: 'required',
-      // Allow discount codes
-      allow_promotion_codes: true,
       // Store UTM data in session metadata
       metadata: metadata,
-    });
+    };
+
+    // Si llega un código promocional (p.ej. desde el vale del popup) lo auto-aplicamos.
+    // Stripe NO permite discounts + allow_promotion_codes a la vez, así que es uno u otro.
+    if (promoCode) {
+      try {
+        const promos = await stripe.promotionCodes.list({ code: promoCode, active: true, limit: 1 });
+        if (promos.data.length) {
+          sessionParams.discounts = [{ promotion_code: promos.data[0].id }];
+        } else {
+          sessionParams.allow_promotion_codes = true;
+        }
+      } catch (e) {
+        console.error('Error buscando promo code:', e.message);
+        sessionParams.allow_promotion_codes = true;
+      }
+    } else {
+      sessionParams.allow_promotion_codes = true;
+    }
+
+    // Create checkout session with embedded mode
+    const session = await stripe.checkout.sessions.create(sessionParams);
 
     return {
       statusCode: 200,

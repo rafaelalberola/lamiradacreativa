@@ -382,11 +382,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       } catch(e) {}
 
+      // Código promocional a auto-aplicar (p.ej. desde el vale del popup).
+      // Se lee una sola vez: si luego se abre el checkout por un CTA normal, no lleva descuento.
+      let promoCode = null;
+      try { promoCode = sessionStorage.getItem('lmc_promo'); sessionStorage.removeItem('lmc_promo'); } catch(e) {}
+
       // Create checkout session with UTM data and device_id
       const response = await fetch('/.netlify/functions/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ utm: utmData, amplitude_device_id: amplitudeDeviceId })
+        body: JSON.stringify({ utm: utmData, amplitude_device_id: amplitudeDeviceId, promo_code: promoCode })
       });
       
       if (!response.ok) {

@@ -493,19 +493,19 @@
       <div class="lead-perf"></div>
       <div class="lead-ticket-body">
         <div id="leadFormWrap">
-          <p class="lead-lead">Te guardamos el vale a cambio de tu email.</p>
+          <p class="lead-lead">Consigue tu vale descuento</p>
           <form id="leadForm" novalidate>
             <input type="email" id="leadEmail" name="email" placeholder="tu@email.com" autocomplete="email" required>
             <input type="text" name="website" class="lead-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
             <button type="submit" class="lead-submit" id="leadSubmit">Canjear mi 5%</button>
           </form>
           <p class="lead-err" id="leadErr"></p>
-          <p class="lead-fine">Nada de spam · te das de baja cuando quieras.</p>
+          <p class="lead-fine">Nada de spam</p>
         </div>
         <div id="leadSuccess" style="display:none;">
-          <p class="lead-lead">Tu vale está activo. Este es tu código:</p>
+          <p class="lead-lead">¡Enhorabuena! Aquí está tu vale 🎉</p>
           <div class="lead-code">BIENVENIDA5</div>
-          <p class="lead-fine" style="margin:0 0 16px;">Aplícalo en el paso de pago. Te lo hemos enviado también al email.</p>
+          <p class="lead-fine" style="margin:0 0 16px;">Aplícalo en el paso de pago.<br>Te lo hemos enviado también al email.</p>
           <button class="lead-go" id="leadGo">Usar mi 5% ahora</button>
         </div>
       </div>
@@ -529,7 +529,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="js/main.js?v=upwize4"></script>
+  <script src="js/main.js?v=vale5"></script>
   <script>
     (function(){var h=document.getElementById('siteHeader');function s(){if(window.scrollY>12)h.classList.add('scrolled');else h.classList.remove('scrolled');}window.addEventListener('scroll',s,{passive:true});s();})();
     (function(){var els=document.querySelectorAll('.reveal');if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{threshold:0.12,rootMargin:'0px 0px -8% 0px'});els.forEach(function(e){io.observe(e);});})();
@@ -620,8 +620,9 @@
     });
 
     goBtn.addEventListener('click', function(){
+      try { sessionStorage.setItem('lmc_promo', 'BIENVENIDA5'); } catch(e){}
       close();
-      track('Lead Popup To Checkout');
+      track('Lead Popup To Checkout', { promo: 'BIENVENIDA5' });
       var btn = document.querySelector('.btn-checkout');
       if(btn) btn.click();
     });
