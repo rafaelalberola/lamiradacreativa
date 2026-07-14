@@ -917,6 +917,7 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       z-index: 10000;
       opacity: 0;
+      pointer-events: none;
       transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       align-items: center;
@@ -2409,6 +2410,15 @@
         const isAuthenticated = await auth0Client.isAuthenticated();
         
         if (isAuthenticated) {
+          // Retorno al backoffice de métricas si el login se inició desde ahí.
+          // Marca con caducidad (15 min) y de un solo uso: no afecta al flujo normal.
+          try {
+            var _goM = parseInt(localStorage.getItem('lmc_go_metrics') || '0', 10);
+            if (_goM) {
+              localStorage.removeItem('lmc_go_metrics');
+              if (Date.now() - _goM < 900000) { window.location.replace('/metrics/'); return; }
+            }
+          } catch (e) {}
           currentUser = await auth0Client.getUser();
           showApp(currentUser);
         } else {

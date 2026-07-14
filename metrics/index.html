@@ -260,9 +260,15 @@
       loadRange();
     }
 
-    $('loginBtn').onclick = () => auth0Client.loginWithRedirect({
-      authorizationParams: { connection: 'email' }, // magic link, igual que la app
-    });
+    // El login directo en /metrics requiere que su callback esté en Auth0. Para no
+    // depender de eso, reutilizamos el login de la app (/app/, ya autorizado):
+    // dejamos una marca y, al autenticarte allí, la app te devuelve aquí sola. La
+    // sesión de Auth0 es compartida (mismo cliente + localStorage), así que /metrics
+    // la lee al volver.
+    $('loginBtn').onclick = () => {
+      try { localStorage.setItem('lmc_go_metrics', String(Date.now())); } catch (e) {}
+      window.location.href = '/app/';
+    };
     $('logout').onclick = () => auth0Client.logout({ logoutParams: { returnTo: window.location.origin + '/metrics/' } });
     $('refresh').onclick = () => loadRange();
     $('range').onchange = () => loadRange();
