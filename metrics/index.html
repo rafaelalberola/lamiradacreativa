@@ -6,54 +6,66 @@
   <meta name="robots" content="noindex, nofollow" />
   <title>Métricas · La Mirada Creativa</title>
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg: #f6f6f4; --card: #fff; --ink: #171512; --muted: #7a756c;
-      --line: #e7e4dd; --accent: #ea580c; --accent-soft: #fff1e8;
-      --green: #16a34a; --amber: #d97706; --red: #dc2626; --blue: #2563eb;
+      --bg: #F5F6F8; --card: #FFFFFF; --ink: #0B0B0D; --muted: #6A6F79;
+      --line: #E7E9ED; --accent: #2F6BFF; --accent-600: #1E56F0; --accent-soft: #EAF1FF;
+      --green: #2FC177; --amber: #D97706; --red: #E64240; --violet: #7C6CF5;
+      --cta: linear-gradient(135deg, #FFD84D 0%, #FFB020 100%); --cta-ink: #241900;
+      --font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --pill: 100px; --radius: 20px; --radius-sm: 14px;
+      --shadow-sm: 0 10px 30px -16px rgba(20,32,64,0.28);
+      --shadow: 0 24px 60px -30px rgba(20,32,64,0.35);
     }
     * { box-sizing: border-box; }
     body {
       margin: 0; background: var(--bg); color: var(--ink);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
+      font-family: var(--font); -webkit-font-smoothing: antialiased;
     }
     a { color: var(--accent); }
     .wrap { max-width: 1080px; margin: 0 auto; padding: 24px 18px 80px; }
 
+    /* brand lockup */
+    .lockup { display: inline-flex; align-items: center; gap: .5em; font-weight: 800; letter-spacing: -.01em; color: var(--ink); font-size: 1.05rem; }
+    .lockup img { width: 26px; height: 26px; display: block; }
+
     /* header */
     header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
-    .brand { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); font-weight: 700; }
-    h1 { font-size: 22px; margin: 2px 0 0; }
+    h1 { font-size: 22px; margin: 6px 0 0; letter-spacing: -.02em; }
     .controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     select, button {
-      font: inherit; border: 1px solid var(--line); background: #fff; color: var(--ink);
-      border-radius: 10px; padding: 8px 12px; cursor: pointer;
+      font: inherit; font-weight: 600; border: 1px solid var(--line); background: #fff; color: var(--ink);
+      border-radius: 12px; padding: 9px 14px; cursor: pointer; transition: border-color .2s var(--ease, ease), transform .2s ease, filter .2s ease;
     }
-    button.primary { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
-    button:hover { border-color: var(--accent); }
+    select:hover, button:hover { border-color: var(--accent); }
+    button.primary { background: var(--cta); color: var(--cta-ink); border: none; border-radius: var(--pill); font-weight: 700; box-shadow: 0 12px 30px -12px rgba(255,176,32,.55); }
+    button.primary:hover { transform: translateY(-1px); filter: brightness(1.03); }
     .updated { font-size: 12px; color: var(--muted); }
 
     /* actions */
-    .actions { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; margin-bottom: 18px; }
-    .actions h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 0 0 8px; }
-    .action { display: flex; gap: 8px; padding: 5px 0; font-size: 14px; line-height: 1.4; }
+    .actions { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 18px; box-shadow: var(--shadow-sm); }
+    .actions h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 0 0 8px; }
+    .action { display: flex; gap: 8px; padding: 5px 0; font-size: 14px; line-height: 1.45; }
     .action .dot { flex: none; }
 
     /* tiles */
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
-    .tile { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
-    .tile .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
-    .tile .value { font-size: 26px; font-weight: 700; margin: 4px 0 2px; letter-spacing: -.5px; }
+    .tile { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 16px 18px; box-shadow: var(--shadow-sm); }
+    .tile .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; font-weight: 600; }
+    .tile .value { font-size: 26px; font-weight: 800; margin: 4px 0 2px; letter-spacing: -.02em; }
     .tile .sub { font-size: 12px; color: var(--muted); }
-    .tile.hero .value { color: var(--accent); }
+    .tile.hero { background: var(--accent-soft); border-color: transparent; }
+    .tile.hero .value { color: var(--accent-600); }
     .v-green { color: var(--green) !important; } .v-amber { color: var(--amber) !important; } .v-red { color: var(--red) !important; }
 
     /* sections */
-    section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-bottom: 18px; }
-    section h2 { font-size: 15px; margin: 0 0 14px; }
+    section { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; margin-bottom: 18px; box-shadow: var(--shadow-sm); }
+    section h2 { font-size: 15px; margin: 0 0 14px; letter-spacing: -.01em; }
     .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
     @media (max-width: 760px) { .two { grid-template-columns: 1fr; } }
     table { width: 100%; border-collapse: collapse; font-size: 14px; }
@@ -67,23 +79,27 @@
     /* funnel */
     .funnel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     @media (max-width: 640px) { .funnel { grid-template-columns: repeat(2, 1fr); } }
-    .step { background: var(--accent-soft); border-radius: 12px; padding: 12px; text-align: center; }
-    .step .n { font-size: 22px; font-weight: 700; }
+    .step { background: var(--accent-soft); border-radius: var(--radius-sm); padding: 14px 12px; text-align: center; }
+    .step .n { font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
     .step .t { font-size: 12px; color: var(--muted); }
-    .step .r { font-size: 11px; color: var(--accent); margin-top: 3px; }
+    .step .r { font-size: 11px; color: var(--accent-600); font-weight: 700; margin-top: 3px; }
 
     /* settings */
     .form { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
     .field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-    .field input { width: 100%; padding: 9px 10px; border: 1px solid var(--line); border-radius: 10px; font: inherit; }
+    .field input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; font: inherit; }
+    .field input:focus { outline: none; border-color: var(--accent); }
 
     /* login / gates */
-    .center { min-height: 70vh; display: flex; align-items: center; justify-content: center; text-align: center; }
-    .card-login { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 32px; max-width: 380px; }
+    .center { min-height: 82vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 24px; }
+    .card-login { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 40px 34px; max-width: 380px; width: 100%; box-shadow: var(--shadow); }
+    .card-login .lockup { justify-content: center; margin-bottom: 22px; font-size: 1.15rem; }
+    .restricted { font-size: 1.35rem; font-weight: 800; letter-spacing: -.02em; margin: 0 0 22px; }
+    .card-login button.primary { width: 100%; min-height: 52px; font-size: 1.0625rem; }
     .hidden { display: none !important; }
-    .spinner { width: 26px; height: 26px; border: 3px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
+    .spinner { width: 30px; height: 30px; border: 3px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .errbox { font-size: 13px; color: var(--red); margin-top: 8px; }
+    .errbox { font-size: 13px; color: var(--red); margin-top: 14px; min-height: 1em; }
     .muted { color: var(--muted); font-size: 13px; }
   </style>
 </head>
@@ -94,10 +110,9 @@
   <!-- LOGIN -->
   <div id="login" class="center hidden">
     <div class="card-login">
-      <div class="brand">La Mirada Creativa</div>
-      <h1>Backoffice de métricas</h1>
-      <p class="muted">Acceso restringido. Inicia sesión con tu email de administrador.</p>
-      <button class="primary" id="loginBtn" style="margin-top:14px;width:100%;">Entrar</button>
+      <span class="lockup"><img src="/assets/images/favicon.svg" alt="" width="26" height="26" />La Mirada Creativa</span>
+      <p class="restricted">Acceso restringido</p>
+      <button class="primary" id="loginBtn">Entrar</button>
       <div id="loginErr" class="errbox"></div>
     </div>
   </div>
@@ -106,7 +121,7 @@
   <div id="app" class="wrap hidden">
     <header>
       <div>
-        <div class="brand">La Mirada Creativa</div>
+        <span class="lockup"><img src="/assets/images/favicon.svg" alt="" width="26" height="26" />La Mirada Creativa</span>
         <h1>Métricas</h1>
       </div>
       <div class="controls">
@@ -386,8 +401,8 @@
       window._m = new Chart($('chartMoney'), {
         type: 'bar',
         data: { labels: rev.labels, datasets: [
-          { label: 'Ingresos', data: rev.data, backgroundColor: '#ea580c', borderRadius: 4 },
-          { label: 'Gasto', data: spend.data, backgroundColor: '#94a3b8', borderRadius: 4 },
+          { label: 'Ingresos', data: rev.data, backgroundColor: '#2F6BFF', borderRadius: 4 },
+          { label: 'Gasto', data: spend.data, backgroundColor: '#FFB020', borderRadius: 4 },
         ] },
         options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } },
       });
@@ -400,8 +415,8 @@
       window._l = new Chart($('chartLeads'), {
         type: 'line',
         data: { labels: leads.labels, datasets: [
-          { label: 'Leads', data: leads.data, borderColor: '#ea580c', backgroundColor: 'rgba(234,88,12,.1)', tension: .3, fill: true },
-          { label: 'Visitas', data: visits.data, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,.08)', tension: .3, fill: true },
+          { label: 'Leads', data: leads.data, borderColor: '#2F6BFF', backgroundColor: 'rgba(47,107,255,.12)', tension: .3, fill: true },
+          { label: 'Visitas', data: visits.data, borderColor: '#7C6CF5', backgroundColor: 'rgba(124,108,245,.1)', tension: .3, fill: true },
         ] },
         options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } },
       });
