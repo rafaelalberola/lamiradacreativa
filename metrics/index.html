@@ -231,10 +231,14 @@
     const X = (n) => (n == null ? '—' : (Math.round(n * 10) / 10) + 'x');
 
     async function init() {
+      // Config IDÉNTICA a /app/ para compartir la MISMA sesión de Auth0.
+      // La clave de caché de auth0-spa-js es clientId::audience::scope; si difiere,
+      // /metrics no lee el token que /app/ guarda en localStorage. Sin scope explícito
+      // ni audience, exactamente como la app, para que la sesión se comparta.
       auth0Client = await auth0.createAuth0Client({
         domain: AUTH0_DOMAIN,
         clientId: AUTH0_CLIENT_ID,
-        authorizationParams: { redirect_uri: window.location.origin + '/metrics/', scope: 'openid profile email' },
+        authorizationParams: { redirect_uri: window.location.origin + '/app/' },
         cacheLocation: 'localstorage',
       });
 
