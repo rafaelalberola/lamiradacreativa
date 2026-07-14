@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Métricas · La Mirada Creativa</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #f6f6f4; --card: #fff; --ink: #171512; --muted: #7a756c;
+      --line: #e7e4dd; --accent: #ea580c; --accent-soft: #fff1e8;
+      --green: #16a34a; --amber: #d97706; --red: #dc2626; --blue: #2563eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 24px 18px 80px; }
+
+    /* header */
+    header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+    .brand { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+    h1 { font-size: 22px; margin: 2px 0 0; }
+    .controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    select, button {
+      font: inherit; border: 1px solid var(--line); background: #fff; color: var(--ink);
+      border-radius: 10px; padding: 8px 12px; cursor: pointer;
+    }
+    button.primary { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
+    button:hover { border-color: var(--accent); }
+    .updated { font-size: 12px; color: var(--muted); }
+
+    /* actions */
+    .actions { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; margin-bottom: 18px; }
+    .actions h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 0 0 8px; }
+    .action { display: flex; gap: 8px; padding: 5px 0; font-size: 14px; line-height: 1.4; }
+    .action .dot { flex: none; }
+
+    /* tiles */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .tile { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+    .tile .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+    .tile .value { font-size: 26px; font-weight: 700; margin: 4px 0 2px; letter-spacing: -.5px; }
+    .tile .sub { font-size: 12px; color: var(--muted); }
+    .tile.hero .value { color: var(--accent); }
+    .v-green { color: var(--green) !important; } .v-amber { color: var(--amber) !important; } .v-red { color: var(--red) !important; }
+
+    /* sections */
+    section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-bottom: 18px; }
+    section h2 { font-size: 15px; margin: 0 0 14px; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    @media (max-width: 760px) { .two { grid-template-columns: 1fr; } }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+    th { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; font-weight: 600; }
+    td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .bar { height: 8px; background: var(--accent-soft); border-radius: 6px; overflow: hidden; }
+    .bar > i { display: block; height: 100%; background: var(--accent); }
+    canvas { max-width: 100%; }
+
+    /* funnel */
+    .funnel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    @media (max-width: 640px) { .funnel { grid-template-columns: repeat(2, 1fr); } }
+    .step { background: var(--accent-soft); border-radius: 12px; padding: 12px; text-align: center; }
+    .step .n { font-size: 22px; font-weight: 700; }
+    .step .t { font-size: 12px; color: var(--muted); }
+    .step .r { font-size: 11px; color: var(--accent); margin-top: 3px; }
+
+    /* settings */
+    .form { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .field input { width: 100%; padding: 9px 10px; border: 1px solid var(--line); border-radius: 10px; font: inherit; }
+
+    /* login / gates */
+    .center { min-height: 70vh; display: flex; align-items: center; justify-content: center; text-align: center; }
+    .card-login { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 32px; max-width: 380px; }
+    .hidden { display: none !important; }
+    .spinner { width: 26px; height: 26px; border: 3px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .errbox { font-size: 13px; color: var(--red); margin-top: 8px; }
+    .muted { color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <!-- LOADING -->
+  <div id="loading" class="center"><div><div class="spinner"></div><p class="muted">Cargando…</p></div></div>
+
+  <!-- LOGIN -->
+  <div id="login" class="center hidden">
+    <div class="card-login">
+      <div class="brand">La Mirada Creativa</div>
+      <h1>Backoffice de métricas</h1>
+      <p class="muted">Acceso restringido. Inicia sesión con tu email de administrador.</p>
+      <button class="primary" id="loginBtn" style="margin-top:14px;width:100%;">Entrar</button>
+      <div id="loginErr" class="errbox"></div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="app" class="wrap hidden">
+    <header>
+      <div>
+        <div class="brand">La Mirada Creativa</div>
+        <h1>Métricas</h1>
+      </div>
+      <div class="controls">
+        <select id="range">
+          <option value="7">Últimos 7 días</option>
+          <option value="30" selected>Últimos 30 días</option>
+          <option value="90">Últimos 90 días</option>
+          <option value="365">Último año</option>
+        </select>
+        <button id="refresh">Actualizar</button>
+        <button id="logout">Salir</button>
+      </div>
+    </header>
+    <div class="updated" id="updated"></div>
+
+    <div class="actions" id="actionsBox">
+      <h2>Acciones a tomar</h2>
+      <div id="actions"></div>
+    </div>
+
+    <div class="grid" id="tiles"></div>
+
+    <section>
+      <h2>Embudo (rango seleccionado)</h2>
+      <div class="funnel" id="funnel"></div>
+      <p class="muted" id="funnelNote" style="margin:12px 0 0;"></p>
+    </section>
+
+    <div class="two">
+      <section>
+        <h2>Ingresos vs. gasto en publi</h2>
+        <canvas id="chartMoney" height="220"></canvas>
+      </section>
+      <section>
+        <h2>Leads y visitas por día</h2>
+        <canvas id="chartLeads" height="220"></canvas>
+      </section>
+    </div>
+
+    <div class="two">
+      <section>
+        <h2>CVR por precio</h2>
+        <table id="cvrPrice"><thead><tr><th>Precio</th><th class="num">Checkouts</th><th class="num">Ventas</th><th class="num">CVR</th></tr></thead><tbody></tbody></table>
+        <p class="muted" style="margin:10px 0 0;">Compara qué precio convierte mejor. Requiere volumen para ser fiable.</p>
+      </section>
+      <section>
+        <h2>Ingresos por canal (UTM)</h2>
+        <table id="bySource"><thead><tr><th>Fuente</th><th class="num">Ingresos</th></tr></thead><tbody></tbody></table>
+      </section>
+    </div>
+
+    <div class="two">
+      <section>
+        <h2>Cohortes de leads (por semana)</h2>
+        <table id="cohorts"><thead><tr><th>Semana</th><th class="num">Leads</th><th class="num">Convertidos</th><th class="num">CVR</th></tr></thead><tbody></tbody></table>
+        <p class="muted" style="margin:10px 0 0;">% de leads de cada semana que ya han comprado.</p>
+      </section>
+      <section>
+        <h2>Rachas de compradores</h2>
+        <table id="streaks"><tbody></tbody></table>
+      </section>
+    </div>
+
+    <section>
+      <h2>Ajustes de runway y objetivos</h2>
+      <div class="form" id="cfgForm">
+        <div class="field"><label>Caja disponible (€)</label><input type="number" step="0.01" id="cash_balance" /></div>
+        <div class="field"><label>Costes fijos mensuales (€)</label><input type="number" step="0.01" id="monthly_fixed_costs" /></div>
+        <div class="field"><label>Gasto publi NO-Meta 30d (€)</label><input type="number" step="0.01" id="other_ad_spend" /></div>
+        <div class="field"><label>Precio actual (€)</label><input type="number" step="0.01" id="product_price" /></div>
+        <div class="field"><label>ROAS objetivo</label><input type="number" step="0.1" id="target_roas" /></div>
+        <div class="field"><label>CPL objetivo (€)</label><input type="number" step="0.1" id="target_cpl" /></div>
+        <div class="field"><label>CAC objetivo (€)</label><input type="number" step="0.1" id="target_cac" /></div>
+        <div class="field"><label>Avisar si runway &lt; (meses)</label><input type="number" step="0.5" id="runway_alert_months" /></div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:10px;align-items:center;">
+        <button class="primary" id="saveCfg">Guardar ajustes</button>
+        <span id="cfgMsg" class="muted"></span>
+      </div>
+    </section>
+
+    <p class="muted" id="errors"></p>
+  </div>
+
+  <script>
+    // ---- Auth0 (mismo tenant que la app de compradores) ----
+    const AUTH0_DOMAIN = 'dev-0m1u7zddedry8oo3.eu.auth0.com';
+    const AUTH0_CLIENT_ID = 'wTRFr8TqbqdxBkWCJeQ052zvGGemnwsZ';
+    let auth0Client = null;
+    let idToken = null;
+
+    const $ = (id) => document.getElementById(id);
+    const show = (id) => $(id).classList.remove('hidden');
+    const hide = (id) => $(id).classList.add('hidden');
+
+    const EUR = (n) => (n == null ? '—' : Number(n).toLocaleString('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }));
+    const NUM = (n) => (n == null ? '—' : Number(n).toLocaleString('es-ES'));
+    const PCT = (n) => (n == null ? '—' : (Math.round(n * 10) / 10).toFixed(1) + ' %');
+    const X = (n) => (n == null ? '—' : (Math.round(n * 10) / 10) + 'x');
+
+    async function init() {
+      auth0Client = await auth0.createAuth0Client({
+        domain: AUTH0_DOMAIN,
+        clientId: AUTH0_CLIENT_ID,
+        authorizationParams: { redirect_uri: window.location.origin + '/metrics/' },
+        cacheLocation: 'localstorage',
+      });
+
+      if (location.search.includes('code=') && location.search.includes('state=')) {
+        try { await auth0Client.handleRedirectCallback(); } catch (e) {}
+        window.history.replaceState({}, document.title, '/metrics/');
+      }
+
+      const authed = await auth0Client.isAuthenticated();
+      if (!authed) { hide('loading'); show('login'); return; }
+
+      const claims = await auth0Client.getIdTokenClaims();
+      idToken = claims ? claims.__raw : null;
+      loadRange();
+    }
+
+    $('loginBtn').onclick = () => auth0Client.loginWithRedirect({
+      authorizationParams: { connection: 'email' }, // magic link, igual que la app
+    });
+    $('logout').onclick = () => auth0Client.logout({ logoutParams: { returnTo: window.location.origin + '/metrics/' } });
+    $('refresh').onclick = () => loadRange();
+    $('range').onchange = () => loadRange();
+
+    async function api(method, body) {
+      const opts = { method, headers: { Authorization: 'Bearer ' + idToken } };
+      if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
+      const range = $('range').value;
+      const url = '/.netlify/functions/metrics-api' + (method === 'GET' ? '?range=' + range : '');
+      return fetch(url, opts);
+    }
+
+    let charts = {};
+    async function loadRange() {
+      show('loading'); hide('login'); hide('app');
+      const res = await api('GET');
+      if (res.status === 401) {
+        hide('loading'); show('login');
+        $('loginErr').textContent = 'Esta cuenta no tiene acceso de administrador.';
+        return;
+      }
+      if (!res.ok) { hide('loading'); show('login'); $('loginErr').textContent = 'Error del servidor (' + res.status + ').'; return; }
+      const b = await res.json();
+      render(b);
+      hide('loading'); hide('login'); show('app');
+    }
+
+    function tile(label, value, sub, cls) {
+      return `<div class="tile ${cls || ''}"><div class="label">${label}</div><div class="value">${value}</div><div class="sub">${sub || ''}</div></div>`;
+    }
+
+    function render(b) {
+      const k = b.kpi;
+      $('updated').textContent = 'Actualizado ' + new Date(b.generatedAt).toLocaleString('es-ES') + ' · rango ' + b.rangeDays + ' días';
+
+      // runway color
+      let runwayVal, runwayCls;
+      if (k.runwayMonths === null || k.runwayMonths === undefined) { runwayVal = '—'; runwayCls = ''; }
+      else if (k.runwayMonths > 1e6 || k.runwayMonths === Infinity) { runwayVal = '∞'; runwayCls = 'v-green'; }
+      else {
+        runwayVal = (Math.round(k.runwayMonths * 10) / 10) + ' m';
+        runwayCls = k.runwayMonths < b.config.runway_alert_months ? 'v-red' : (k.runwayMonths < 6 ? 'v-amber' : 'v-green');
+      }
+      const roasCls = k.roas == null ? '' : (k.roas >= b.config.target_roas ? 'v-green' : 'v-red');
+
+      $('tiles').innerHTML = [
+        tile('Ingresos ' + b.rangeDays + 'd', EUR(k.revenueRangeNet), 'ayer ' + EUR(k.revenueYday) + ' · total ' + EUR(k.revenueLifetime), 'hero'),
+        tile('Ventas ' + b.rangeDays + 'd', NUM(k.ordersRange), 'ayer ' + NUM(k.ordersYday) + ' · total ' + NUM(k.ordersLifetime)),
+        tile('Runway', `<span class="${runwayCls}">${runwayVal}</span>`, 'burn ' + EUR(k.monthlyBurn) + '/mes'),
+        tile('ROAS', `<span class="${roasCls}">${X(k.roas)}</span>`, 'objetivo ≥ ' + b.config.target_roas + 'x'),
+        tile('Gasto publi ' + b.rangeDays + 'd', EUR(k.spendRange), 'ayer ' + EUR(k.spendYday)),
+        tile('Capital invertido', EUR(k.spendLifetime), 'total histórico en publi'),
+        tile('CAC', EUR(k.cac), 'objetivo ≤ ' + EUR(b.config.target_cac)),
+        tile('AOV', EUR(k.aov), 'ticket medio'),
+        tile('CPL', EUR(k.cpl), 'objetivo ≤ ' + EUR(b.config.target_cpl)),
+        tile('Beneficio 30d', `<span class="${k.netProfit30 >= 0 ? 'v-green' : 'v-red'}">${EUR(k.netProfit30)}</span>`, 'ingresos − publi − fijos'),
+        tile('Leads ' + b.rangeDays + 'd', NUM(k.leadsRange), NUM(k.leadsTotal) + ' total · conv ' + PCT(k.leadConvRate)),
+        tile('Audiencia Resend', b.audience.resend ? NUM(b.audience.resend.total) : 'n/d', b.audience.resend ? NUM(b.audience.resend.subscribed) + ' suscritos' : 'requiere RESEND_FULL_KEY'),
+      ].join('');
+
+      // actions
+      const icon = { alto: '🔴', medio: '🟠', bajo: '🟡', ok: '🟢', info: 'ℹ️' };
+      $('actions').innerHTML = b.actions.map(a => `<div class="action"><span class="dot">${icon[a.level] || '•'}</span><span>${a.text}</span></div>`).join('');
+
+      // funnel
+      const f = b.funnel;
+      $('funnel').innerHTML = [
+        `<div class="step"><div class="n">${NUM(f.visits)}</div><div class="t">Visitantes</div></div>`,
+        `<div class="step"><div class="n">${NUM(f.leads)}</div><div class="t">Leads</div><div class="r">${f.cvrVisitLead == null ? '' : PCT(f.cvrVisitLead)}</div></div>`,
+        `<div class="step"><div class="n">${NUM(f.checkoutStarts)}</div><div class="t">Checkouts</div></div>`,
+        `<div class="step"><div class="n">${NUM(f.orders)}</div><div class="t">Compras</div><div class="r">CVR pago ${PCT(f.cvrCheckout)}</div></div>`,
+      ].join('');
+      $('funnelNote').textContent = b.ownAnalytics
+        ? 'Visitas = analítica propia (sin Amplitude). Empieza a contar desde el despliegue.'
+        : 'Aún sin datos de visitas propias: falta la tabla events / el beacon. El embudo arranca en checkout.';
+
+      // charts
+      drawMoney(b.charts);
+      drawLeads(b.charts);
+
+      // cvr by price
+      $('cvrPrice').querySelector('tbody').innerHTML = (b.cvrByPrice || []).map(r =>
+        `<tr><td>${r.price}</td><td class="num">${NUM(r.created)}</td><td class="num">${NUM(r.won)}</td><td class="num">${PCT(r.cvr)}</td></tr>`
+      ).join('') || '<tr><td colspan="4" class="muted">Sin datos en el rango.</td></tr>';
+
+      // by source
+      const src = Object.entries(b.bySourceRevenue || {}).sort((a, c) => c[1] - a[1]);
+      $('bySource').querySelector('tbody').innerHTML = src.map(([s, v]) =>
+        `<tr><td>${s}</td><td class="num">${EUR(v)}</td></tr>`).join('') || '<tr><td colspan="2" class="muted">Sin datos.</td></tr>';
+
+      // cohorts
+      $('cohorts').querySelector('tbody').innerHTML = (b.cohorts || []).map(c =>
+        `<tr><td>${c.week}</td><td class="num">${NUM(c.total)}</td><td class="num">${NUM(c.converted)}</td><td class="num">${PCT(c.rate)}</td></tr>`
+      ).join('') || '<tr><td colspan="4" class="muted">Sin datos.</td></tr>';
+
+      // streaks
+      if (b.streaks) {
+        const d = b.streaks.distribucion; const tot = Object.values(d).reduce((a, x) => a + x, 0) || 1;
+        const row = (label, n) => `<tr><td>${label}</td><td class="num">${NUM(n)}</td><td style="width:45%"><div class="bar"><i style="width:${(n / tot * 100).toFixed(0)}%"></i></div></td></tr>`;
+        $('streaks').querySelector('tbody').innerHTML =
+          `<tr><td colspan="3" class="muted">Activos ${b.streaks.activos} · media ${b.streaks.rachaMedia}d · máx ${b.streaks.rachaMax}d</td></tr>` +
+          row('Inactivos', d.inactivo) + row('1–3 días', d.d1_3) + row('4–7 días', d.d4_7) + row('8–30 días', d.d8_30) + row('30+ días', d.d30plus);
+      }
+
+      // config form
+      for (const key of Object.keys(b.config)) { if ($(key)) $(key).value = b.config[key]; }
+
+      // errors
+      const errs = Object.entries(b.errors || {});
+      $('errors').textContent = errs.length ? '⚠ ' + errs.map(([s, m]) => s + ': ' + m).join('  ·  ') : '';
+    }
+
+    function seriesFrom(map, days) {
+      const labels = [], data = [];
+      const today = new Date(); today.setUTCHours(0, 0, 0, 0);
+      for (let i = days - 1; i >= 0; i--) {
+        const d = new Date(today); d.setUTCDate(d.getUTCDate() - i);
+        const key = d.toISOString().slice(0, 10);
+        labels.push(key.slice(5));
+        data.push(map[key] || 0);
+      }
+      return { labels, data };
+    }
+
+    function drawMoney(charts) {
+      const days = Math.min(parseInt($('range').value, 10), 90);
+      const rev = seriesFrom(charts.revByDay || {}, days);
+      const spend = seriesFrom(charts.spendByDay || {}, days);
+      if (window._m) window._m.destroy();
+      window._m = new Chart($('chartMoney'), {
+        type: 'bar',
+        data: { labels: rev.labels, datasets: [
+          { label: 'Ingresos', data: rev.data, backgroundColor: '#ea580c', borderRadius: 4 },
+          { label: 'Gasto', data: spend.data, backgroundColor: '#94a3b8', borderRadius: 4 },
+        ] },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } },
+      });
+    }
+    function drawLeads(charts) {
+      const days = Math.min(parseInt($('range').value, 10), 90);
+      const leads = seriesFrom(charts.leadsByDay || {}, days);
+      const visits = seriesFrom(charts.visitsByDay || {}, days);
+      if (window._l) window._l.destroy();
+      window._l = new Chart($('chartLeads'), {
+        type: 'line',
+        data: { labels: leads.labels, datasets: [
+          { label: 'Leads', data: leads.data, borderColor: '#ea580c', backgroundColor: 'rgba(234,88,12,.1)', tension: .3, fill: true },
+          { label: 'Visitas', data: visits.data, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,.08)', tension: .3, fill: true },
+        ] },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } },
+      });
+    }
+
+    $('saveCfg').onclick = async () => {
+      const cfg = {};
+      ['cash_balance', 'monthly_fixed_costs', 'other_ad_spend', 'product_price', 'target_roas', 'target_cpl', 'target_cac', 'runway_alert_months']
+        .forEach((f) => { cfg[f] = $(f).value; });
+      $('cfgMsg').textContent = 'Guardando…';
+      const res = await api('POST', { action: 'save-config', config: cfg });
+      $('cfgMsg').textContent = res.ok ? 'Guardado ✓ — recalculando…' : 'Error al guardar';
+      if (res.ok) setTimeout(loadRange, 600);
+    };
+
+    init().catch((e) => { hide('loading'); show('login'); $('loginErr').textContent = 'Error de inicialización: ' + e.message; });
+  </script>
+</body>
+</html>

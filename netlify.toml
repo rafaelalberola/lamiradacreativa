@@ -127,6 +127,10 @@
 # [functions."daily-report"]
 #   schedule = "0 7 * * *"
 
+# Resumen diario de métricas a Telegram (08:00 CET / 09:00 CEST)
+[functions."daily-telegram"]
+  schedule = "0 6 * * *"
+
 [functions."weekly-summary"]
   schedule = "0 9 * * 0"
 
