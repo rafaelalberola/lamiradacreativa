@@ -71,9 +71,15 @@ async function verifyAdmin(authHeader) {
   const expectedIss = `https://${domain}/`;
   if (payload.iss !== expectedIss) throw new Error('issuer mismatch');
 
-  const clientId = process.env.AUTH0_CLIENT_ID || DEFAULT_CLIENT_ID;
+  // Aceptamos SIEMPRE el client id real del SPA (hardcodeado en la app y en
+  // /metrics), además de cualquier override por env. Así no dependemos de que
+  // AUTH0_CLIENT_ID en Netlify apunte al valor correcto.
+  const accepted = new Set([DEFAULT_CLIENT_ID]);
+  if (process.env.AUTH0_CLIENT_ID) accepted.add(process.env.AUTH0_CLIENT_ID);
   const aud = Array.isArray(payload.aud) ? payload.aud : [payload.aud];
-  if (!aud.includes(clientId)) throw new Error('audience mismatch');
+  if (!aud.some((a) => accepted.has(a))) {
+    throw new Error(`audience mismatch (aud=${JSON.stringify(payload.aud)})`);
+  }
 
   const now = Math.floor(Date.now() / 1000);
   if (!payload.exp || payload.exp < now) throw new Error('token expired');
