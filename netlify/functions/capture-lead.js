@@ -61,8 +61,8 @@ function buildEmailHtml() {
     <p style="font-size:12px;color:#8A6A00;margin:0 0 6px;line-height:1.5;text-transform:uppercase;letter-spacing:0.06em;font-weight:700;">Tu código de bienvenida</p>
     <p style="font-size:24px;color:#0B0B0D;margin:0 0 14px;line-height:1.2;font-weight:800;">${DISCOUNT_PCT}% de descuento</p>
     <table cellpadding="0" cellspacing="0" align="center" style="margin:0 auto 14px;"><tr>
-      <td style="background-color:#0B0B0D;border-radius:10px;padding:13px 26px;">
-        <span style="font-size:20px;color:#ffffff;font-weight:700;letter-spacing:0.12em;font-family:'Courier New',Courier,monospace;">${PROMO_CODE}</span>
+      <td bgcolor="#FFFFFF" style="background-color:#FFFFFF;border:2px dashed #E7B94A;border-radius:10px;padding:13px 26px;">
+        <span style="font-size:20px;color:#000000;font-weight:700;letter-spacing:0.12em;font-family:'Courier New',Courier,monospace;">${PROMO_CODE}</span>
       </td></tr>
     </table>
     <p style="font-size:13px;color:#8A6A00;margin:0;line-height:1.5;">Aplícalo en el paso de pago. Sin fecha de caducidad.</p>
@@ -72,7 +72,7 @@ function buildEmailHtml() {
 
 <tr><td style="padding:24px 32px 0;" align="center">
   <table cellpadding="0" cellspacing="0"><tr><td style="background-color:#FFB020;background-image:linear-gradient(135deg,#FFD84D 0%,#FFB020 100%);border-radius:100px;">
-    <a href="https://lamiradacreativa.com/#precio?utm_source=email&utm_medium=lead&utm_campaign=bienvenida_5" style="display:inline-block;color:#241900;font-size:15px;font-weight:700;text-decoration:none;padding:14px 32px;border-radius:100px;font-family:${FONT};">Usar mi ${DISCOUNT_PCT}% ahora</a>
+    <a href="https://lamiradacreativa.com/#precio?utm_source=email&utm_medium=lead&utm_campaign=bienvenida_5" style="display:inline-block;color:#000000;font-size:15px;font-weight:700;text-decoration:none;padding:14px 32px;border-radius:100px;font-family:${FONT};">Usar mi ${DISCOUNT_PCT}% ahora</a>
   </td></tr></table>
 </td></tr>
 

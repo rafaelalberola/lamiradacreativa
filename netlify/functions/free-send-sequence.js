@@ -105,8 +105,8 @@ function buildEmailHtml(step) {
       <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">Los 365 ejercicios siguen ahí. 39 €. Sin prisa, pero sin pausa.</p>
       <p style="font-size:15px;color:#8A6A00;margin:0 0 12px;line-height:1.7;font-weight:600;">Recuerda: tienes un 10% de descuento.</p>
       <table cellpadding="0" cellspacing="0" style="margin:0 0 14px;">
-      <tr><td style="background-color:#0B0B0D;border-radius:8px;padding:10px 20px;">
-        <p style="font-size:18px;color:#ffffff;margin:0;font-weight:700;letter-spacing:0.1em;font-family:'Courier New',Courier,monospace;">WELCOME10</p>
+      <tr><td bgcolor="#FFFFFF" style="background-color:#FFFFFF;border:2px dashed #E7B94A;border-radius:8px;padding:10px 20px;">
+        <p style="font-size:18px;color:#000000;margin:0;font-weight:700;letter-spacing:0.1em;font-family:'Courier New',Courier,monospace;">WELCOME10</p>
       </td></tr>
       </table>
       <p style="font-size:13px;color:#8A6A00;margin:0 0 28px;line-height:1.5;">Usa este código en el checkout. Sin fecha de caducidad.</p>
@@ -142,7 +142,7 @@ function buildEmailHtml(step) {
 
 function ctaButton(text, url) {
   return `<table cellpadding="0" cellspacing="0"><tr><td>
-    <a href="${url}" style="display:inline-block;background-color:#FFB020;background-image:linear-gradient(135deg,#FFD84D 0%,#FFB020 100%);color:#241900;font-size:15px;font-weight:600;text-decoration:none;padding:14px 28px;border-radius:100px;">${text}</a>
+    <a href="${url}" style="display:inline-block;background-color:#FFB020;background-image:linear-gradient(135deg,#FFD84D 0%,#FFB020 100%);color:#000000;font-size:15px;font-weight:600;text-decoration:none;padding:14px 28px;border-radius:100px;">${text}</a>
   </td></tr></table>`;
 }
 

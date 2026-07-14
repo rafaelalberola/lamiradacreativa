@@ -254,7 +254,7 @@ function buildEmailHtml(name, email) {
 
     <!-- CTA -->
     <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
-      <a href="https://lamiradacreativa.com/app" style="display:inline-block;background-color:#FFB020;background-image:linear-gradient(135deg,#FFD84D 0%,#FFB020 100%);color:#241900;font-size:14px;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:100px;"><span style="color:#241900;">Acceder a la app</span></a>
+      <a href="https://lamiradacreativa.com/app" style="display:inline-block;background-color:#FFB020;background-image:linear-gradient(135deg,#FFD84D 0%,#FFB020 100%);color:#000000;font-size:14px;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:100px;"><span style="color:#000000;">Acceder a la app</span></a>
     </td></tr></table>
   </td></tr>
 

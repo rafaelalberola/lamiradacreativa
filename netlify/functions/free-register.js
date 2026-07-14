@@ -58,7 +58,7 @@ function buildWelcomeEmailHtml() {
   <p style="font-size:15px;color:#6A6F79;margin:0 0 28px;line-height:1.7;">No vas a aprender teoría. Vas a entrenar tu ojo.</p>
 
   <table cellpadding="0" cellspacing="0" width="100%"><tr><td>
-    <a href="https://lamiradacreativa.com/prueba-gratis/ejercicio/?day=1&utm_source=email&utm_medium=sequence&utm_campaign=free_trial&utm_content=day_0" style="display:inline-block;background-color:#FFB020;background-image:linear-gradient(135deg,#FFD84D 0%,#FFB020 100%);color:#241900;font-size:15px;font-weight:600;text-decoration:none;padding:14px 28px;border-radius:100px;">Abrir mi primer ejercicio</a>
+    <a href="https://lamiradacreativa.com/prueba-gratis/ejercicio/?day=1&utm_source=email&utm_medium=sequence&utm_campaign=free_trial&utm_content=day_0" style="display:inline-block;background-color:#FFB020;background-image:linear-gradient(135deg,#FFD84D 0%,#FFB020 100%);color:#000000;font-size:15px;font-weight:600;text-decoration:none;padding:14px 28px;border-radius:100px;">Abrir mi primer ejercicio</a>
   </td></tr></table>
 </td></tr>
 
@@ -69,8 +69,8 @@ function buildWelcomeEmailHtml() {
     <p style="font-size:13px;color:#8A6A00;margin:0 0 6px;line-height:1.5;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Tu regalo de bienvenida</p>
     <p style="font-size:22px;color:#0B0B0D;margin:0 0 12px;line-height:1.3;font-weight:700;">10% de descuento en el programa completo</p>
     <table cellpadding="0" cellspacing="0" style="margin:0 0 14px;">
-    <tr><td style="background-color:#0B0B0D;border-radius:8px;padding:12px 24px;">
-      <p style="font-size:20px;color:#ffffff;margin:0;font-weight:700;letter-spacing:0.1em;font-family:'Courier New',Courier,monospace;">WELCOME10</p>
+    <tr><td bgcolor="#FFFFFF" style="background-color:#FFFFFF;border:2px dashed #E7B94A;border-radius:8px;padding:12px 24px;">
+      <p style="font-size:20px;color:#000000;margin:0;font-weight:700;letter-spacing:0.1em;font-family:'Courier New',Courier,monospace;">WELCOME10</p>
     </td></tr>
     </table>
     <p style="font-size:13px;color:#8A6A00;margin:0;line-height:1.5;">Usa este código cuando quieras acceder a los 365 ejercicios. Sin prisa, sin fecha de caducidad.</p>
