@@ -15,9 +15,9 @@ const DEFAULT_ADMINS = 'helloimrafa@gmail.com';
 
 let jwksCache = { keys: null, at: 0 };
 
-async function getJwks(domain) {
+async function getJwks(domain, force = false) {
   const now = Date.now();
-  if (jwksCache.keys && now - jwksCache.at < 60 * 60 * 1000) {
+  if (!force && jwksCache.keys && now - jwksCache.at < 60 * 60 * 1000) {
     return jwksCache.keys;
   }
   const res = await fetch(`https://${domain}/.well-known/jwks.json`);
@@ -55,8 +55,13 @@ async function verifyAdmin(authHeader) {
   if (!domain) throw new Error('AUTH0_DOMAIN not set');
 
   // --- signature ---
-  const keys = await getJwks(domain);
-  const jwk = keys.find((k) => k.kid === header.kid);
+  let keys = await getJwks(domain);
+  let jwk = keys.find((k) => k.kid === header.kid);
+  if (!jwk) {
+    // La clave puede haber rotado: reintenta con JWKS fresco antes de rendirse.
+    keys = await getJwks(domain, true);
+    jwk = keys.find((k) => k.kid === header.kid);
+  }
   if (!jwk) throw new Error('signing key not found');
   const pubKey = crypto.createPublicKey({ key: jwk, format: 'jwk' });
   const ok = crypto.verify(
@@ -82,7 +87,8 @@ async function verifyAdmin(authHeader) {
   }
 
   const now = Math.floor(Date.now() / 1000);
-  if (!payload.exp || payload.exp < now) throw new Error('token expired');
+  const LEEWAY = 60; // tolerancia de desfase de reloj
+  if (!payload.exp || payload.exp < now - LEEWAY) throw new Error('token expired');
 
   const email = (payload.email || '').toLowerCase();
   if (!email) throw new Error('no email claim');

@@ -202,6 +202,14 @@
     const show = (id) => $(id).classList.remove('hidden');
     const hide = (id) => $(id).classList.add('hidden');
 
+    // Decodifica el exp del JWT en cliente para no enviar tokens caducados.
+    function tokenExpired(raw) {
+      try {
+        const p = JSON.parse(atob(raw.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+        return !p.exp || p.exp < Math.floor(Date.now() / 1000);
+      } catch (e) { return true; }
+    }
+
     const EUR = (n) => (n == null ? '—' : Number(n).toLocaleString('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }));
     const NUM = (n) => (n == null ? '—' : Number(n).toLocaleString('es-ES'));
     const PCT = (n) => (n == null ? '—' : (Math.round(n * 10) / 10).toFixed(1) + ' %');
@@ -223,11 +231,17 @@
       const authed = await auth0Client.isAuthenticated();
       if (!authed) { hide('loading'); show('login'); return; }
 
-      let claims = await auth0Client.getIdTokenClaims();
+      let claims = null;
+      try { claims = await auth0Client.getIdTokenClaims(); } catch (e) {}
       if (!claims) {
         try { await auth0Client.getTokenSilently(); claims = await auth0Client.getIdTokenClaims(); } catch (e) {}
       }
       idToken = claims ? claims.__raw : null;
+      if (!idToken || tokenExpired(idToken)) {
+        hide('loading'); show('login');
+        $('loginErr').textContent = 'Tu sesión ha expirado. Pulsa Entrar para renovarla.';
+        return;
+      }
       loadRange();
     }
 
@@ -254,7 +268,11 @@
         let reason = '';
         try { reason = (await res.json()).reason || ''; } catch (e) {}
         hide('loading'); show('login');
-        $('loginErr').textContent = 'Sin acceso de administrador' + (reason ? ' · ' + reason : '') + '.';
+        if (/expired|malformed|bearer|signature|signing key/i.test(reason)) {
+          $('loginErr').textContent = 'Tu sesión ha expirado. Pulsa Entrar para renovarla.';
+        } else {
+          $('loginErr').textContent = 'Sin acceso de administrador' + (reason ? ' · ' + reason : '') + '.';
+        }
         return;
       }
       if (!res.ok) { hide('loading'); show('login'); $('loginErr').textContent = 'Error del servidor (' + res.status + ').'; return; }
