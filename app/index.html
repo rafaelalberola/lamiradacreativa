@@ -2410,15 +2410,6 @@
         const isAuthenticated = await auth0Client.isAuthenticated();
         
         if (isAuthenticated) {
-          // Retorno al backoffice de métricas si el login se inició desde ahí.
-          // Marca con caducidad (15 min) y de un solo uso: no afecta al flujo normal.
-          try {
-            var _goM = parseInt(localStorage.getItem('lmc_go_metrics') || '0', 10);
-            if (_goM) {
-              localStorage.removeItem('lmc_go_metrics');
-              if (Date.now() - _goM < 900000) { window.location.replace('/metrics/'); return; }
-            }
-          } catch (e) {}
           currentUser = await auth0Client.getUser();
           showApp(currentUser);
         } else {

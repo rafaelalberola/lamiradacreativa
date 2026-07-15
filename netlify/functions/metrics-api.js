@@ -1,17 +1,17 @@
 // Metrics backoffice API.
-// GET  ?range=30  -> full metrics bundle (admin only)
-// POST { action:'save-config', config:{...} } -> update runway/targets (admin only)
+// GET  ?range=30  -> full metrics bundle
+// POST { action:'save-config', config:{...} } -> update runway/targets
 //
-// Auth: Auth0 ID token (Bearer) verified against JWKS + ADMIN_EMAILS allowlist.
+// Auth: cookie de sesión firmada (mtk), emitida por metrics-login.
 
 const { createClient } = require('@supabase/supabase-js');
-const { verifyAdmin } = require('../lib/auth0-verify');
+const { verifyCookie } = require('../lib/metrics-auth');
 const { computeMetrics } = require('../lib/metrics');
 
 const headers = {
   'Content-Type': 'application/json',
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Access-Control-Allow-Headers': 'Content-Type',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
   'Cache-Control': 'no-store',
 };
@@ -30,12 +30,9 @@ const CONFIG_FIELDS = [
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers, body: '' };
 
-  // --- auth ---
-  let admin;
-  try {
-    admin = await verifyAdmin(event.headers.authorization || event.headers.Authorization);
-  } catch (e) {
-    return { statusCode: 401, headers, body: JSON.stringify({ error: 'Unauthorized', reason: e.message }) };
+  // --- auth (cookie firmada) ---
+  if (!verifyCookie(event.headers.cookie || event.headers.Cookie)) {
+    return { statusCode: 401, headers, body: JSON.stringify({ error: 'Unauthorized' }) };
   }
 
   try {
@@ -65,7 +62,7 @@ exports.handler = async (event) => {
     // GET -> bundle
     const rangeDays = Math.min(365, Math.max(1, parseInt(event.queryStringParameters?.range, 10) || 30));
     const bundle = await computeMetrics({ rangeDays });
-    return { statusCode: 200, headers, body: JSON.stringify({ ok: true, admin: admin.email, ...bundle }) };
+    return { statusCode: 200, headers, body: JSON.stringify({ ok: true, ...bundle }) };
   } catch (e) {
     console.error('[metrics-api] error', e);
     return { statusCode: 500, headers, body: JSON.stringify({ error: 'Internal error', detail: e.message }) };

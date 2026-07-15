@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
     :root {
@@ -94,7 +93,9 @@
     .center { min-height: 82vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 24px; }
     .card-login { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 40px 34px; max-width: 380px; width: 100%; box-shadow: var(--shadow); }
     .card-login .lockup { justify-content: center; margin-bottom: 22px; font-size: 1.15rem; }
-    .restricted { font-size: 1.35rem; font-weight: 800; letter-spacing: -.02em; margin: 0 0 22px; }
+    .restricted { font-size: 1.35rem; font-weight: 800; letter-spacing: -.02em; margin: 0 0 20px; }
+    .card-login input { width: 100%; padding: 13px 15px; border: 1px solid var(--line); border-radius: 12px; font: inherit; text-align: center; margin-bottom: 12px; }
+    .card-login input:focus { outline: none; border-color: var(--accent); }
     .card-login button.primary { width: 100%; min-height: 52px; font-size: 1.0625rem; }
     .hidden { display: none !important; }
     .spinner { width: 30px; height: 30px; border: 3px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto; }
@@ -109,12 +110,13 @@
 
   <!-- LOGIN -->
   <div id="login" class="center hidden">
-    <div class="card-login">
+    <form class="card-login" id="loginForm" autocomplete="on">
       <span class="lockup"><img src="/assets/images/favicon.svg" alt="" width="26" height="26" />La Mirada Creativa</span>
       <p class="restricted">Acceso restringido</p>
-      <button class="primary" id="loginBtn">Entrar</button>
+      <input type="password" id="password" name="password" placeholder="Contraseña" autocomplete="current-password" autofocus />
+      <button class="primary" id="loginBtn" type="submit">Entrar</button>
       <div id="loginErr" class="errbox"></div>
-    </div>
+    </form>
   </div>
 
   <!-- DASHBOARD -->
@@ -207,78 +209,63 @@
   </div>
 
   <script>
-    // ---- Auth0 (mismo tenant que la app de compradores) ----
-    const AUTH0_DOMAIN = 'dev-0m1u7zddedry8oo3.eu.auth0.com';
-    const AUTH0_CLIENT_ID = 'wTRFr8TqbqdxBkWCJeQ052zvGGemnwsZ';
-    let auth0Client = null;
-    let idToken = null;
-
+    // ---- Auth: contraseña + cookie firmada (sin Auth0, sin rebotes) ----
     const $ = (id) => document.getElementById(id);
     const show = (id) => $(id).classList.remove('hidden');
     const hide = (id) => $(id).classList.add('hidden');
-
-    // Decodifica el exp del JWT en cliente para no enviar tokens caducados.
-    function tokenExpired(raw) {
-      try {
-        const p = JSON.parse(atob(raw.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
-        return !p.exp || p.exp < Math.floor(Date.now() / 1000);
-      } catch (e) { return true; }
-    }
 
     const EUR = (n) => (n == null ? '—' : Number(n).toLocaleString('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }));
     const NUM = (n) => (n == null ? '—' : Number(n).toLocaleString('es-ES'));
     const PCT = (n) => (n == null ? '—' : (Math.round(n * 10) / 10).toFixed(1) + ' %');
     const X = (n) => (n == null ? '—' : (Math.round(n * 10) / 10) + 'x');
 
+    // Al cargar: prueba la cookie existente. Si es válida, entra directo; si no, login.
     async function init() {
-      // Config IDÉNTICA a /app/ para compartir la MISMA sesión de Auth0.
-      // La clave de caché de auth0-spa-js es clientId::audience::scope; si difiere,
-      // /metrics no lee el token que /app/ guarda en localStorage. Sin scope explícito
-      // ni audience, exactamente como la app, para que la sesión se comparta.
-      auth0Client = await auth0.createAuth0Client({
-        domain: AUTH0_DOMAIN,
-        clientId: AUTH0_CLIENT_ID,
-        authorizationParams: { redirect_uri: window.location.origin + '/app/' },
-        cacheLocation: 'localstorage',
-      });
-
-      if (location.search.includes('code=') && location.search.includes('state=')) {
-        try { await auth0Client.handleRedirectCallback(); } catch (e) {}
-        window.history.replaceState({}, document.title, '/metrics/');
-      }
-
-      const authed = await auth0Client.isAuthenticated();
-      if (!authed) { hide('loading'); show('login'); return; }
-
-      let claims = null;
-      try { claims = await auth0Client.getIdTokenClaims(); } catch (e) {}
-      if (!claims) {
-        try { await auth0Client.getTokenSilently(); claims = await auth0Client.getIdTokenClaims(); } catch (e) {}
-      }
-      idToken = claims ? claims.__raw : null;
-      if (!idToken || tokenExpired(idToken)) {
-        hide('loading'); show('login');
-        $('loginErr').textContent = 'Tu sesión ha expirado. Pulsa Entrar para renovarla.';
-        return;
-      }
       loadRange();
     }
 
-    // El login directo en /metrics requiere que su callback esté en Auth0. Para no
-    // depender de eso, reutilizamos el login de la app (/app/, ya autorizado):
-    // dejamos una marca y, al autenticarte allí, la app te devuelve aquí sola. La
-    // sesión de Auth0 es compartida (mismo cliente + localStorage), así que /metrics
-    // la lee al volver.
-    $('loginBtn').onclick = () => {
-      try { localStorage.setItem('lmc_go_metrics', String(Date.now())); } catch (e) {}
-      window.location.href = '/app/';
+    // Login: envía la contraseña, el servidor firma la cookie httpOnly.
+    $('loginForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const pw = $('password').value;
+      $('loginErr').textContent = '';
+      $('loginBtn').disabled = true;
+      try {
+        const res = await fetch('/.netlify/functions/metrics-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ password: pw }),
+        });
+        if (res.ok) {
+          $('password').value = '';
+          loadRange();
+        } else if (res.status === 401) {
+          $('loginErr').textContent = 'Contraseña incorrecta.';
+        } else {
+          $('loginErr').textContent = 'Error del servidor (' + res.status + ').';
+        }
+      } catch (err) {
+        $('loginErr').textContent = 'Error de red. Reintenta.';
+      } finally {
+        $('loginBtn').disabled = false;
+      }
     };
-    $('logout').onclick = () => auth0Client.logout({ logoutParams: { returnTo: window.location.origin + '/metrics/' } });
+
+    $('logout').onclick = async () => {
+      try {
+        await fetch('/.netlify/functions/metrics-login', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          credentials: 'include', body: JSON.stringify({ action: 'logout' }),
+        });
+      } catch (e) {}
+      hide('app'); show('login');
+    };
     $('refresh').onclick = () => loadRange();
     $('range').onchange = () => loadRange();
 
     async function api(method, body) {
-      const opts = { method, headers: { Authorization: 'Bearer ' + idToken } };
+      const opts = { method, credentials: 'include', headers: {} };
       if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
       const range = $('range').value;
       const url = '/.netlify/functions/metrics-api' + (method === 'GET' ? '?range=' + range : '');
@@ -288,16 +275,12 @@
     let charts = {};
     async function loadRange() {
       show('loading'); hide('login'); hide('app');
-      const res = await api('GET');
+      let res;
+      try { res = await api('GET'); }
+      catch (e) { hide('loading'); show('login'); $('loginErr').textContent = 'Error de red. Reintenta.'; return; }
       if (res.status === 401) {
-        let reason = '';
-        try { reason = (await res.json()).reason || ''; } catch (e) {}
         hide('loading'); show('login');
-        if (/expired|malformed|bearer|signature|signing key/i.test(reason)) {
-          $('loginErr').textContent = 'Tu sesión ha expirado. Pulsa Entrar para renovarla.';
-        } else {
-          $('loginErr').textContent = 'Sin acceso de administrador' + (reason ? ' · ' + reason : '') + '.';
-        }
+        setTimeout(() => { try { $('password').focus(); } catch (e) {} }, 50);
         return;
       }
       if (!res.ok) { hide('loading'); show('login'); $('loginErr').textContent = 'Error del servidor (' + res.status + ').'; return; }
