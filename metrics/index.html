@@ -208,6 +208,7 @@
 
       <div class="tabs" role="tablist">
         <button class="tab active" data-tab="resumen">Resumen</button>
+        <button class="tab" data-tab="campana">Campaña activa</button>
         <button class="tab" data-tab="rendimiento">Rendimiento</button>
         <button class="tab" data-tab="audiencia">Audiencia</button>
         <button class="tab" data-tab="ajustes">Ajustes</button>
@@ -257,6 +258,12 @@
           <div class="card-h"><div class="card-t">Avisos</div><div class="card-d">Ordenados por prioridad</div></div>
           <div class="card-c"><div id="actions"></div></div>
         </div></section>
+      </div>
+
+      <!-- TAB: CAMPAÑA ACTIVA -->
+      <div class="tabpanel hidden" id="tab-campana">
+        <div class="section-label">Solo la campaña que está corriendo ahora — aislada del histórico</div>
+        <div id="campaigns"></div>
       </div>
 
       <!-- TAB: RENDIMIENTO -->
@@ -393,6 +400,35 @@
       return `<div class="stat"><div class="stat-label">${label}</div><div class="stat-value ${cls || ''}">${value}</div><div class="stat-sub">${sub || ''}</div></div>`;
     }
 
+    const OBJ = { OUTCOME_SALES: 'Ventas', OUTCOME_LEADS: 'Leads', OUTCOME_TRAFFIC: 'Tráfico', OUTCOME_ENGAGEMENT: 'Interacción', OUTCOME_AWARENESS: 'Reconocimiento' };
+    function renderCampaigns(list) {
+      const el = $('campaigns');
+      if (!list || !list.length) { el.innerHTML = `<div class="card"><div class="card-c muted">No hay ninguna campaña activa ahora mismo.</div></div>`; return; }
+      el.innerHTML = list.map((c) => {
+        const badge = c.learning
+          ? `<span class="badge badge-blue dot">Aprendizaje · día ${c.learning.day} de ${c.learning.total}</span>`
+          : `<span class="badge badge-green dot">Activa</span>`;
+        const cards = [
+          stat('Gasto', EUR(c.spend), c.dailyBudget ? EUR(c.dailyBudget) + '/día' : 'desde el lanzamiento'),
+          stat('Impresiones', NUM(c.impressions), NUM(c.clicks) + ' clics'),
+          stat('CTR', c.ctr == null ? '—' : PCT(c.ctr), 'clics ÷ impresiones'),
+          stat('CPC', c.cpc == null ? '—' : EUR(c.cpc), 'coste por clic'),
+          stat('Llegan a la web', NUM(c.landingViews), 'landing page views'),
+          stat('Inician pago', NUM(c.checkouts), 'checkouts empezados'),
+          stat('Compras', NUM(c.purchases), c.purchases > 0 && c.cpa != null ? 'CPA ' + EUR(c.cpa) : '0 por ahora'),
+          stat('ROAS (Meta)', c.roas == null ? '—' : X(c.roas), 'valor atribuido ÷ gasto'),
+        ].join('');
+        return `<div class="card" style="margin-bottom:18px;">
+          <div class="card-h"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+            <div><div class="card-t">${esc(c.name)}</div><div class="card-d">Objetivo: ${OBJ[c.objective] || c.objective || '—'} · lanzada el ${c.launch} · ${c.daysRunning} días corriendo</div></div>
+            ${badge}
+          </div></div>
+          <div class="card-c"><div class="grid g4">${cards}</div>
+          ${c.learning ? `<p class="muted" style="font-size:12px;margin:14px 0 0;">🎓 En fase de aprendizaje: déjala correr sin tocar hasta que Meta termine de optimizar (~7 días). Estos números aún no son definitivos.</p>` : ''}
+          </div></div>`;
+      }).join('');
+    }
+
     function render(b) {
       window._lastBundle = b;
       const k = b.kpi;
@@ -457,6 +493,9 @@
         stat('Audiencia Resend', b.audience.resend ? NUM(b.audience.resend.total) : 'n/d', b.audience.resend ? NUM(b.audience.resend.subscribed) + ' suscritos' : 'requiere key full'),
         stat('Compradores activos', NUM(k.buyers), 'usan la app'),
       ].join('');
+
+      // campaña activa (touchpoint aislado)
+      renderCampaigns(b.campaigns);
 
       // funnel
       const f = b.funnel;

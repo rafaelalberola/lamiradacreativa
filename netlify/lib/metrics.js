@@ -285,6 +285,59 @@ async function loadMeta(windows, errors) {
   }
 }
 
+// ---------------------------------------------------------------- Campaña activa
+// Datos SOLO de la(s) campaña(s) activa(s), aisladas del histórico.
+async function loadCampaigns(errors) {
+  const token = process.env.META_ACCESS_TOKEN;
+  const account = process.env.META_AD_ACCOUNT_ID || 'act_1405709477618981';
+  if (!token) return [];
+  try {
+    const cRes = await fetch(
+      `${META_API}/${account}/campaigns?fields=id,name,objective,created_time,start_time,daily_budget&effective_status=%5B%22ACTIVE%22%5D&limit=50&access_token=${token}`
+    );
+    const cJson = await cRes.json();
+    const actives = cJson.data || [];
+    if (!actives.length) return [];
+
+    const iRes = await fetch(
+      `${META_API}/${account}/insights?level=campaign&fields=campaign_id,spend,impressions,clicks,ctr,cpc,actions,cost_per_action_type,purchase_roas&date_preset=maximum&limit=200&access_token=${token}`
+    );
+    const iJson = await iRes.json();
+    const byId = {};
+    for (const row of iJson.data || []) byId[row.campaign_id] = row;
+
+    return actives.map((c) => {
+      const ins = byId[c.id] || {};
+      const act = (t) => { const a = (ins.actions || []).find((x) => x.action_type === t); return a ? Number(a.value) : 0; };
+      const cost = (t) => { const a = (ins.cost_per_action_type || []).find((x) => x.action_type === t); return a ? Number(a.value) : null; };
+      const launch = (c.created_time || c.start_time || '').slice(0, 10);
+      const daysRunning = launch ? Math.floor((Date.now() - new Date(launch + 'T00:00:00Z').getTime()) / 86400000) : null;
+      const roasArr = ins.purchase_roas || [];
+      return {
+        id: c.id, name: c.name, objective: c.objective, launch, daysRunning,
+        dailyBudget: c.daily_budget ? Number(c.daily_budget) / 100 : null,
+        learning: daysRunning != null && daysRunning < 7 ? { day: daysRunning, total: 7, daysLeft: 7 - daysRunning } : null,
+        spend: Number(ins.spend || 0),
+        impressions: Number(ins.impressions || 0),
+        clicks: Number(ins.clicks || 0),
+        ctr: ins.ctr ? Number(ins.ctr) : null,
+        cpc: ins.cpc ? Number(ins.cpc) : null,
+        landingViews: act('landing_page_view') || act('omni_landing_page_view'),
+        linkClicks: act('link_click'),
+        checkouts: act('initiate_checkout') || act('omni_initiated_checkout'),
+        purchases: act('purchase') || act('offsite_conversion.fb_pixel_purchase') || act('omni_purchase'),
+        leads: act('lead') || act('offsite_conversion.fb_pixel_lead'),
+        cpa: cost('purchase') || cost('offsite_conversion.fb_pixel_purchase'),
+        cpl: cost('lead'),
+        roas: roasArr.length ? Number(roasArr[0].value) : null,
+      };
+    });
+  } catch (e) {
+    errors.campaigns = `Meta campañas: ${e.message}`;
+    return [];
+  }
+}
+
 // ---------------------------------------------------------------- Supabase
 async function loadSupabase(windows, errors) {
   const url = process.env.SUPABASE_URL;
@@ -461,7 +514,7 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
   const windows = buildWindows(rangeDays);
   const errors = {};
 
-  const [stripe, meta, sb, resend, config] = await Promise.all([
+  const [stripe, meta, sb, resend, config, campaigns] = await Promise.all([
     loadStripe(windows, errors).catch((e) => {
       errors.stripe = `Stripe: ${e.message}`;
       return null;
@@ -473,6 +526,7 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
     }),
     loadResendAudience(errors),
     loadConfig(),
+    loadCampaigns(errors),
   ]);
 
   // ---- derived KPIs ----
@@ -591,6 +645,7 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
     },
     ownAnalytics: sb ? sb.eventsAvailable : false,
     learning,
+    campaigns: campaigns || [],
     errors,
   };
 
