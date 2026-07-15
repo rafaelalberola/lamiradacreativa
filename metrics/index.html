@@ -439,7 +439,7 @@
       const f = b.funnel;
       $('funnel').innerHTML = [
         `<div class="fstep"><div class="n">${NUM(f.visits)}</div><div class="t">Visitantes</div></div>`,
-        `<div class="fstep"><div class="n">${NUM(f.leads)}</div><div class="t">Leads</div><div class="r">${f.cvrVisitLead == null ? '' : PCT(f.cvrVisitLead)}</div></div>`,
+        `<div class="fstep"><div class="n">${NUM(f.leads)}</div><div class="t">Leads</div><div class="r">${(f.cvrVisitLead != null && f.cvrVisitLead <= 100) ? PCT(f.cvrVisitLead) : ''}</div></div>`,
         `<div class="fstep"><div class="n">${NUM(f.checkoutStarts)}</div><div class="t">Checkouts</div></div>`,
         `<div class="fstep"><div class="n">${NUM(f.orders)}</div><div class="t">Compras</div><div class="r">CVR ${PCT(f.cvrCheckout)}</div></div>`,
       ].join('');
