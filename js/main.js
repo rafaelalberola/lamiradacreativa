@@ -370,18 +370,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (stored) utmData = JSON.parse(stored);
       } catch(e) {}
 
-      // Get Amplitude device_id for server-side event linking
-      // Priority: get directly from Amplitude (most reliable), fallback to localStorage
-      let amplitudeDeviceId = null;
-      try {
-        if (window.amplitude && typeof amplitude.getDeviceId === 'function') {
-          amplitudeDeviceId = amplitude.getDeviceId();
-        }
-        if (!amplitudeDeviceId) {
-          amplitudeDeviceId = localStorage.getItem('lmc_amplitude_device_id');
-        }
-      } catch(e) {}
-
       // Código promocional a auto-aplicar (p.ej. desde el vale del popup).
       // Se lee una sola vez: si luego se abre el checkout por un CTA normal, no lleva descuento.
       let promoCode = null;
@@ -391,7 +379,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const response = await fetch('/.netlify/functions/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ utm: utmData, amplitude_device_id: amplitudeDeviceId, promo_code: promoCode })
+        body: JSON.stringify({ utm: utmData, promo_code: promoCode })
       });
       
       if (!response.ok) {

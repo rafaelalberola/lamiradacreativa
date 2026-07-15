@@ -38,14 +38,7 @@
   // ============================================
   function trackEvent(name, props) {
     props = props || {};
-    // Amplitude
-    if (window.amplitude && window.amplitude.track) {
-      try { amplitude.track(name, props); } catch(e) {}
-    }
-    // Mixpanel
-    if (window.mixpanel && window.mixpanel.track) {
-      try { mixpanel.track(name, props); } catch(e) {}
-    }
+    // (Amplitude/Mixpanel retirados — usamos analítica propia + GA4)
     // GA4
     if (window.gtag) {
       try { gtag('event', name.replace(/\s+/g, '_').toLowerCase(), props); } catch(e) {}

@@ -1,7 +1,7 @@
 // Stripe Webhook Handler
 // Creates Auth0 users when a Stripe checkout is completed
 // Uses passwordless (magic links) - no password needed
-// Also tracks events to Amplitude and Mixpanel
+// Métricas propias (Stripe/Supabase); Amplitude/Mixpanel retirados.
 
 const crypto = require('crypto');
 
@@ -9,68 +9,9 @@ const crypto = require('crypto');
 // Analytics Tracking
 // ============================================
 
-const AMPLITUDE_API_KEY = '96fdd3ad4d76df488f862da2f26efd5c';
-const MIXPANEL_TOKEN = 'c53f6532b5dbeda5ccde0ace3fb52c66';
-
-async function trackAmplitudeEvent(eventName, eventProperties, userEmail, deviceId = null) {
-  try {
-    const eventPayload = {
-      event_type: eventName,
-      user_id: userEmail,
-      event_properties: eventProperties,
-      time: Date.now()
-    };
-
-    // Include device_id to link with anonymous client-side events
-    if (deviceId) {
-      eventPayload.device_id = deviceId;
-    }
-
-    const response = await fetch('https://api.eu.amplitude.com/2/httpapi', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        api_key: AMPLITUDE_API_KEY,
-        events: [eventPayload]
-      })
-    });
-    console.log(`[Amplitude] ${eventName}:`, response.status, deviceId ? `(device_id: ${deviceId})` : '');
-  } catch (error) {
-    console.error('[Amplitude] Error:', error.message);
-  }
-}
-
-async function trackMixpanelEvent(eventName, eventProperties, userEmail) {
-  try {
-    const eventData = {
-      event: eventName,
-      properties: {
-        token: MIXPANEL_TOKEN,
-        distinct_id: userEmail,
-        time: Math.floor(Date.now() / 1000),
-        ...eventProperties
-      }
-    };
-
-    const base64Data = Buffer.from(JSON.stringify([eventData])).toString('base64');
-
-    const response = await fetch('https://api-eu.mixpanel.com/track', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `data=${base64Data}`
-    });
-    console.log(`[Mixpanel] ${eventName}:`, response.status);
-  } catch (error) {
-    console.error('[Mixpanel] Error:', error.message);
-  }
-}
-
-async function trackEvent(eventName, properties, userEmail, deviceId = null) {
-  await Promise.all([
-    trackAmplitudeEvent(eventName, properties, userEmail, deviceId),
-    trackMixpanelEvent(eventName, properties, userEmail)
-  ]);
-}
+// Analítica de Amplitude/Mixpanel retirada — usamos métricas propias (Stripe/Supabase).
+// Se mantiene trackEvent como no-op para no romper las llamadas existentes del webhook.
+async function trackEvent() { /* no-op */ }
 
 // Verify Stripe signature
 function verifyStripeSignature(payload, signature, secret) {
@@ -611,10 +552,8 @@ exports.handler = async (event, context) => {
     const utmSource = metadata.utm_source || null;
     const utmMedium = metadata.utm_medium || null;
     const utmCampaign = metadata.utm_campaign || null;
-    const amplitudeDeviceId = metadata.amplitude_device_id || null;
 
     console.log('Traffic source:', trafficSource, '| UTM:', utmSource, utmMedium, utmCampaign);
-    console.log('Amplitude device_id:', amplitudeDeviceId);
 
     // Track successful purchase in analytics with campaign data
     // Include device_id to link server event with client-side anonymous events
@@ -637,7 +576,7 @@ exports.handler = async (event, context) => {
       gclid: metadata.gclid || null,
       acquisition_type: trafficSource !== 'organic' ? 'Paid' : 'Organic',
       tracking_version: '2'
-    }, email, amplitudeDeviceId);
+    }, email);
 
     // Create or update user in Auth0
     const result = await createAuth0User(email, name, stripeCustomerId);
@@ -654,7 +593,7 @@ exports.handler = async (event, context) => {
           customer_email: email,
           scheduled_email_id: feedbackResult.id,
           scheduled_for: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
-        }, email, amplitudeDeviceId);
+        }, email);
       }
     } catch (feedbackError) {
       console.error('[Feedback Email] Failed to schedule:', feedbackError.message);

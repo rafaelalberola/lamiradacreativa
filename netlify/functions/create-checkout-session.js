@@ -39,14 +39,12 @@ exports.handler = async (event, context) => {
     // Get the origin for return URL
     const origin = event.headers.origin || event.headers.referer?.replace(/\/$/, '') || 'https://lamiradacreativa.com';
 
-    // Parse UTM data and device_id from request body
+    // Parse UTM data from request body
     let utm = {};
-    let amplitudeDeviceId = null;
     let promoCode = null;
     try {
       const body = JSON.parse(event.body || '{}');
       utm = body.utm || {};
-      amplitudeDeviceId = body.amplitude_device_id || null;
       promoCode = body.promo_code || null;
     } catch(e) {}
 
@@ -59,7 +57,6 @@ exports.handler = async (event, context) => {
     if (utm.utm_content) metadata.utm_content = utm.utm_content;
     if (utm.fbclid) metadata.fbclid = utm.fbclid;
     if (utm.gclid) metadata.gclid = utm.gclid;
-    if (amplitudeDeviceId) metadata.amplitude_device_id = amplitudeDeviceId;
 
     // Determine traffic source type
     if (utm.fbclid || utm.utm_source === 'facebook') {

@@ -792,14 +792,7 @@
       if (typeof gtag === 'function') {
         gtag('event', eventName, props);
       }
-      // Amplitude
-      if (typeof amplitude !== 'undefined' && amplitude.track) {
-        amplitude.track(eventName, props);
-      }
-      // Mixpanel
-      if (typeof mixpanel !== 'undefined' && mixpanel.track) {
-        mixpanel.track(eventName, props);
-      }
+      // (Amplitude/Mixpanel retirados — analítica propia + GA4)
       // Facebook Pixel (only for key events)
       if (typeof fbq === 'function' && eventName === 'exercise_completed') {
         fbq('trackCustom', 'ExerciseCompleted', props);
