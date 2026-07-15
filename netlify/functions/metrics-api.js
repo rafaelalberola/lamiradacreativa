@@ -17,14 +17,12 @@ const headers = {
 };
 
 const CONFIG_FIELDS = [
-  'cash_balance',
-  'monthly_fixed_costs',
+  'monthly_ad_budget',
   'other_ad_spend',
   'product_price',
   'target_roas',
   'target_cpl',
   'target_cac',
-  'runway_alert_months',
 ];
 
 exports.handler = async (event) => {

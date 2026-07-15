@@ -188,16 +188,14 @@
     </div>
 
     <section>
-      <h2>Ajustes de runway y objetivos</h2>
+      <h2>Ajustes de presupuesto y objetivos</h2>
       <div class="form" id="cfgForm">
-        <div class="field"><label>Caja disponible (€)</label><input type="number" step="0.01" id="cash_balance" /></div>
-        <div class="field"><label>Costes fijos mensuales (€)</label><input type="number" step="0.01" id="monthly_fixed_costs" /></div>
-        <div class="field"><label>Gasto publi NO-Meta 30d (€)</label><input type="number" step="0.01" id="other_ad_spend" /></div>
+        <div class="field"><label>Presupuesto publi / mes (€)</label><input type="number" step="1" id="monthly_ad_budget" /></div>
+        <div class="field"><label>Gasto publi NO-Meta este mes (€)</label><input type="number" step="0.01" id="other_ad_spend" /></div>
         <div class="field"><label>Precio actual (€)</label><input type="number" step="0.01" id="product_price" /></div>
         <div class="field"><label>ROAS objetivo</label><input type="number" step="0.1" id="target_roas" /></div>
         <div class="field"><label>CPL objetivo (€)</label><input type="number" step="0.1" id="target_cpl" /></div>
         <div class="field"><label>CAC objetivo (€)</label><input type="number" step="0.1" id="target_cac" /></div>
-        <div class="field"><label>Avisar si runway &lt; (meses)</label><input type="number" step="0.5" id="runway_alert_months" /></div>
       </div>
       <div style="margin-top:14px;display:flex;gap:10px;align-items:center;">
         <button class="primary" id="saveCfg">Guardar ajustes</button>
@@ -300,20 +298,21 @@
       if (b.kpi.refundsRange > 0) extra += ' · reembolsos ' + EUR(b.kpi.refundsRange);
       $('updated').textContent = 'Actualizado ' + new Date(b.generatedAt).toLocaleString('es-ES') + ' · rango ' + b.rangeDays + ' días' + extra;
 
-      // runway color
-      let runwayVal, runwayCls;
-      if (k.runwayMonths === null || k.runwayMonths === undefined) { runwayVal = '—'; runwayCls = ''; }
-      else if (k.runwayMonths > 1e6 || k.runwayMonths === Infinity) { runwayVal = '∞'; runwayCls = 'v-green'; }
+      // presupuesto del mes: color según % usado
+      let budgetVal, budgetCls, budgetSub;
+      if (!k.monthlyBudget) { budgetVal = '—'; budgetCls = ''; budgetSub = 'define presupuesto en Ajustes'; }
       else {
-        runwayVal = (Math.round(k.runwayMonths * 10) / 10) + ' m';
-        runwayCls = k.runwayMonths < b.config.runway_alert_months ? 'v-red' : (k.runwayMonths < 6 ? 'v-amber' : 'v-green');
+        budgetVal = EUR(k.spendMTD) + ' / ' + EUR(k.monthlyBudget);
+        const pct = k.budgetUsedPct == null ? 0 : k.budgetUsedPct;
+        budgetCls = k.spendMTD > k.monthlyBudget ? 'v-red' : (pct > 85 ? 'v-amber' : 'v-green');
+        budgetSub = 'quedan ' + EUR(k.budgetRemaining) + ' · ' + (Math.round(pct)) + '% · proy. ' + EUR(k.budgetProjected);
       }
       const roasCls = k.roas == null ? '' : (k.roas >= b.config.target_roas ? 'v-green' : 'v-red');
 
       $('tiles').innerHTML = [
         tile('Ingresos ' + b.rangeDays + 'd', EUR(k.revenueRangeNet), 'ayer ' + EUR(k.revenueYday) + ' · total ' + EUR(k.revenueLifetime), 'hero'),
         tile('Ventas ' + b.rangeDays + 'd', NUM(k.ordersRange), 'ayer ' + NUM(k.ordersYday) + ' · total ' + NUM(k.ordersLifetime)),
-        tile('Runway', `<span class="${runwayCls}">${runwayVal}</span>`, 'burn ' + EUR(k.monthlyBurn) + '/mes'),
+        tile('Presupuesto mes', `<span class="${budgetCls}">${budgetVal}</span>`, budgetSub),
         tile('ROAS', `<span class="${roasCls}">${X(k.roas)}</span>`, 'objetivo ≥ ' + b.config.target_roas + 'x'),
         tile('Gasto publi ' + b.rangeDays + 'd', EUR(k.spendRange), 'ayer ' + EUR(k.spendYday)),
         tile('Capital invertido', EUR(k.spendLifetime), 'total histórico en publi'),
@@ -440,7 +439,7 @@
 
     $('saveCfg').onclick = async () => {
       const cfg = {};
-      ['cash_balance', 'monthly_fixed_costs', 'other_ad_spend', 'product_price', 'target_roas', 'target_cpl', 'target_cac', 'runway_alert_months']
+      ['monthly_ad_budget', 'other_ad_spend', 'product_price', 'target_roas', 'target_cpl', 'target_cac']
         .forEach((f) => { cfg[f] = $(f).value; });
       $('cfgMsg').textContent = 'Guardando…';
       const res = await api('POST', { action: 'save-config', config: cfg });

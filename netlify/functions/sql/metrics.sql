@@ -3,19 +3,17 @@
 -- Ejecutar en el SQL editor de Supabase (una sola vez).
 -- ============================================================
 
--- 1) Configuración editable del backoffice (runway, costes, targets)
+-- 1) Configuración editable del backoffice (presupuesto de publi + targets)
 --    Fila única id = 1. La UI la lee y la escribe vía metrics-api.
 create table if not exists metrics_config (
-  id                  int primary key default 1,
-  cash_balance        numeric not null default 0,      -- caja disponible (€)
-  monthly_fixed_costs numeric not null default 0,      -- costes fijos mensuales (€)
-  other_ad_spend      numeric not null default 0,      -- gasto en publi NO-Meta últimos 30d (€)
-  product_price       numeric not null default 69,     -- precio actual de referencia (€)
-  target_roas         numeric not null default 2,      -- ROAS objetivo
-  target_cpl          numeric not null default 3,      -- CPL objetivo (€)
-  target_cac          numeric not null default 15,     -- CAC objetivo (€)
-  runway_alert_months numeric not null default 3,      -- avisar si runway < X meses
-  updated_at          timestamptz not null default now(),
+  id                 int primary key default 1,
+  monthly_ad_budget  numeric not null default 600,     -- presupuesto mensual para publi (€)
+  other_ad_spend     numeric not null default 0,       -- gasto en publi NO-Meta este mes (€)
+  product_price      numeric not null default 69,      -- precio actual de referencia (€)
+  target_roas        numeric not null default 2,       -- ROAS objetivo
+  target_cpl         numeric not null default 3,       -- CPL objetivo (€)
+  target_cac         numeric not null default 15,      -- CAC objetivo (€)
+  updated_at         timestamptz not null default now(),
   constraint metrics_config_singleton check (id = 1)
 );
 

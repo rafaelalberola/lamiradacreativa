@@ -201,9 +201,11 @@ async function loadMeta(windows, errors) {
     const isLead = (t) => t === 'lead' || t.includes('lead');
     const isPurchase = (t) => t === 'purchase' || t.includes('purchase');
 
+    const curMonth = dayKey(Math.floor(Date.now() / 1000)).slice(0, 7); // YYYY-MM actual
     let spendRange = 0,
       spend30 = 0,
       spendYday = 0,
+      spendMTD = 0,
       impressions = 0,
       clicks = 0,
       leadsMeta = 0,
@@ -221,6 +223,7 @@ async function loadMeta(windows, errors) {
         purchasesMeta += sumActions(row, isPurchase);
       }
       if (ts >= since30) spend30 += spend;
+      if (row.date_start.slice(0, 7) === curMonth) spendMTD += spend; // gasto del mes en curso
       if (row.date_start === dayKey(ydayStart)) spendYday += spend;
     }
 
@@ -228,6 +231,7 @@ async function loadMeta(windows, errors) {
       spendRange,
       spend30,
       spendYday,
+      spendMTD,
       spendLifetime,
       impressions,
       clicks,
@@ -373,14 +377,12 @@ async function loadConfig() {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const defaults = {
-    cash_balance: 0,
-    monthly_fixed_costs: 0,
-    other_ad_spend: 0,
+    monthly_ad_budget: 600, // presupuesto mensual de publi que aparta el usuario
+    other_ad_spend: 0, // gasto en publi NO-Meta del mes (€)
     product_price: 69,
     target_roas: 2,
     target_cpl: 3,
     target_cac: 15,
-    runway_alert_months: 3,
   };
   if (!url || !key) return defaults;
   try {
@@ -454,10 +456,17 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
   const leadsRange = sb ? sb.leadsRange : 0;
   const cpl = leadsRange > 0 && spendRange > 0 ? spendRange / leadsRange : null;
 
-  // Runway (base 30 días)
-  const monthlyBurn = (config.monthly_fixed_costs || 0) + spend30 - revenue30Net;
-  const runwayMonths = monthlyBurn <= 0 ? Infinity : (config.cash_balance || 0) / monthlyBurn;
-  const netProfit30 = revenue30Net - spend30 - (config.monthly_fixed_costs || 0);
+  // Presupuesto de publicidad del MES en curso (lo que el usuario aparta cada mes).
+  const monthlyBudget = Number(config.monthly_ad_budget) || 0;
+  const spendMTD = (meta ? meta.spendMTD : 0) + (config.other_ad_spend || 0);
+  const budgetRemaining = monthlyBudget - spendMTD;
+  const budgetUsedPct = monthlyBudget > 0 ? (spendMTD / monthlyBudget) * 100 : null;
+  // Proyección de gasto al cierre de mes según el ritmo actual.
+  const now = new Date();
+  const daysInMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0)).getUTCDate();
+  const dayOfMonth = now.getUTCDate();
+  const budgetProjected = dayOfMonth > 0 ? (spendMTD / dayOfMonth) * daysInMonth : spendMTD;
+  const netProfit30 = revenue30Net - spend30; // ingresos netos − gasto en publi
 
   const bundle = {
     generatedAt: new Date().toISOString(),
@@ -480,8 +489,11 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
       cac,
       aov,
       cpl,
-      runwayMonths,
-      monthlyBurn,
+      monthlyBudget,
+      spendMTD,
+      budgetRemaining,
+      budgetUsedPct,
+      budgetProjected,
       netProfit30,
       cvrCheckout: stripe ? stripe.cvrCheckout : 0,
       leadsRange,
@@ -532,13 +544,16 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
 // ---------------------------------------------------------------- summary (progreso)
 function buildSummary(b) {
   const k = b.kpi;
-  const runway = k.runwayMonths === Infinity ? 'rentable (∞)' : `${round1(k.runwayMonths)} meses`;
+  const presupuesto =
+    k.monthlyBudget > 0
+      ? `${eur(k.spendMTD)} / ${eur(k.monthlyBudget)} (${k.budgetUsedPct == null ? '—' : round1(k.budgetUsedPct) + '%'}) · quedan ${eur(k.budgetRemaining)}`
+      : 'sin presupuesto definido';
   const lines = [
     `Ingresos ${b.rangeDays}d: ${eur(k.revenueRangeNet)} · ayer ${eur(k.revenueYday)} · total ${eur(k.revenueLifetime)}`,
     `Ventas ${b.rangeDays}d: ${k.ordersRange} · ayer ${k.ordersYday} · total ${k.ordersLifetime}`,
     `Gasto publi ${b.rangeDays}d: ${eur(k.spendRange)} · ayer ${eur(k.spendYday)} · invertido total ${eur(k.spendLifetime)}`,
     `ROAS ${k.roas == null ? '—' : round1(k.roas) + 'x'} · CAC ${k.cac == null ? '—' : eur(k.cac)} · AOV ${k.aov == null ? '—' : eur(k.aov)}`,
-    `Runway: ${runway} · beneficio 30d ${eur(k.netProfit30)}`,
+    `Presupuesto publi del mes: ${presupuesto} · beneficio 30d ${eur(k.netProfit30)}`,
     `Leads ${b.rangeDays}d: ${k.leadsRange} (${k.leadsTotal} total) · audiencia Resend ${b.audience.resend ? b.audience.resend.total : 'n/d'}`,
     `Ejercicios completados ${b.rangeDays}d: ${b.engagement ? b.engagement.completadosRange : 0} · rachas activas ${b.streaks ? b.streaks.activos : 0}`,
   ];
@@ -552,8 +567,10 @@ function buildActions(b) {
   const out = [];
   const push = (level, text) => out.push({ level, text });
 
-  if (k.runwayMonths !== Infinity && k.runwayMonths < c.runway_alert_months) {
-    push('alto', `Runway ${round1(k.runwayMonths)} meses (< ${c.runway_alert_months}). Recorta burn o sube conversión antes de escalar gasto.`);
+  if (k.monthlyBudget > 0 && k.spendMTD > k.monthlyBudget) {
+    push('alto', `Presupuesto de publi del mes agotado: ${eur(k.spendMTD)} de ${eur(k.monthlyBudget)}. Pausa campañas o repón presupuesto.`);
+  } else if (k.monthlyBudget > 0 && k.budgetProjected > k.monthlyBudget * 1.1) {
+    push('medio', `A este ritmo te pasas del presupuesto del mes: proyección ${eur(k.budgetProjected)} vs ${eur(k.monthlyBudget)}. Baja el ritmo de gasto.`);
   }
   if (k.ordersYday === 0 && k.spendYday > 0) {
     push('alto', `0 ventas ayer con ${eur(k.spendYday)} de gasto. Revisa checkout, oferta y segmentación.`);
