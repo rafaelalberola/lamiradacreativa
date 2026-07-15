@@ -129,9 +129,9 @@
       <div class="controls">
         <select id="range">
           <option value="7">Últimos 7 días</option>
-          <option value="30" selected>Últimos 30 días</option>
+          <option value="30">Últimos 30 días</option>
           <option value="90">Últimos 90 días</option>
-          <option value="365">Último año</option>
+          <option value="365" selected>Último año</option>
         </select>
         <button id="refresh">Actualizar</button>
         <button id="logout">Salir</button>
@@ -295,7 +295,10 @@
 
     function render(b) {
       const k = b.kpi;
-      $('updated').textContent = 'Actualizado ' + new Date(b.generatedAt).toLocaleString('es-ES') + ' · rango ' + b.rangeDays + ' días';
+      let extra = '';
+      if (b.lastSaleDate) extra += ' · última venta ' + b.lastSaleDate;
+      if (b.kpi.refundsRange > 0) extra += ' · reembolsos ' + EUR(b.kpi.refundsRange);
+      $('updated').textContent = 'Actualizado ' + new Date(b.generatedAt).toLocaleString('es-ES') + ' · rango ' + b.rangeDays + ' días' + extra;
 
       // runway color
       let runwayVal, runwayCls;

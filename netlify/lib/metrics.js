@@ -87,12 +87,14 @@ async function loadStripe(windows, errors) {
   const bySourceRevenue = {};
   const revByDay = {};
   const completedByPrice = {}; // price -> count (rango)
+  let lastSale = 0; // unix de la última venta pagada
 
   for (const s of completed) {
     if (!paid(s)) continue;
     const v = euros(s);
     revenueLifetime += v;
     ordersLifetime += 1;
+    if (s.created > lastSale) lastSale = s.created;
     if (s.created >= since) {
       revenueRange += v;
       ordersRange += 1;
@@ -144,6 +146,7 @@ async function loadStripe(windows, errors) {
     cvrByPrice,
     checkoutStarts,
     cvrCheckout: checkoutStarts ? (ordersRange / checkoutStarts) * 100 : 0,
+    lastSaleDate: lastSale ? dayKey(lastSale) : null,
   };
 }
 
@@ -451,10 +454,12 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
     generatedAt: new Date().toISOString(),
     rangeDays,
     config,
+    lastSaleDate: stripe ? stripe.lastSaleDate : null,
     kpi: {
       revenueYday: stripe ? stripe.revenueYday : 0,
       revenueRange,
       revenueRangeNet,
+      refundsRange: stripe ? stripe.refundsRange : 0,
       revenueLifetime: stripe ? stripe.revenueLifetime : 0,
       ordersYday: stripe ? stripe.ordersYday : 0,
       ordersRange,

@@ -1,15 +1,14 @@
 // Login del backoffice de métricas — contraseña + cookie firmada.
 // Enfoque self-contained: sin Auth0, sin sesión compartida, sin rebotes.
-// - La contraseña se compara por hash sha256 (con sal estática).
-// - La cookie de sesión se firma con HMAC usando SUPABASE_SERVICE_ROLE_KEY,
-//   que ya está en el env de las functions y NUNCA se expone al cliente.
-//   Así, sin ese secreto de servidor, una cookie no se puede falsificar.
+// - La contraseña se verifica por HMAC(SUPABASE_SERVICE_ROLE_KEY, password): como
+//   la key es secreta (env, NO está en el repo), el valor esperado no permite
+//   crackear la contraseña aunque el repositorio sea público.
+// - La cookie de sesión se firma con el mismo secreto: sin él no se puede falsificar.
 
 const crypto = require('crypto');
 
-const SALT = 'lmc::';
-// sha256(SALT + password). Cambiar la contraseña = recalcular este hash.
-const PASS_HASH = 'ce2696905fd0afd2be0c63a7024201c20cff98eb60a4cb416c6ef6dd73cd940c';
+// HMAC(SUPABASE_SERVICE_ROLE_KEY, password). Cambiar la contraseña = recalcular esto.
+const EXPECTED = 'e3318aad7a3b5254143dabcad202cd5af21926513a099825a32ccaf9bb670c73';
 
 const COOKIE = 'mtk';
 const TTL = 30 * 24 * 3600; // 30 días
@@ -22,9 +21,6 @@ const headers = {
   'Cache-Control': 'no-store',
 };
 
-function sha256(s) {
-  return crypto.createHash('sha256').update(s).digest('hex');
-}
 function hmac(secret, data) {
   return crypto.createHmac('sha256', secret).update(data).digest('hex');
 }
@@ -54,7 +50,7 @@ exports.handler = async (event) => {
   }
 
   const password = String(body.password || '');
-  if (!safeEq(sha256(SALT + password), PASS_HASH)) {
+  if (!safeEq(hmac(secret, password), EXPECTED)) {
     return { statusCode: 401, headers, body: '{"error":"bad_password"}' };
   }
 
