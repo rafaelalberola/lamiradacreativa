@@ -1,0 +1,227 @@
+<meta charset="utf-8" />
+<title>La Mirada Creativa · Formatos (feed 4:5 · cuadrado 1:1 · stories 9:16)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --blue:#2F6BFF; --ink:#0B0B0D; --muted:#6A6F79;
+    --cta:linear-gradient(135deg,#FFD84D 0%,#FFB020 100%); --cta-ink:#241900;
+    --font:"Plus Jakarta Sans",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#e9eaee;font-family:var(--font);display:flex;flex-wrap:wrap;gap:44px;justify-content:center;align-items:flex-start;padding:44px;}
+
+  /* ── ESCALA TIPOGRÁFICA ÚNICA · idéntica en TODOS los formatos ── */
+  .frame{position:relative;overflow:hidden;background:#fff;color:var(--ink);font-family:var(--font);flex:none;
+    --t-display:4.5rem; --t-hero:4.8rem; --t-action:54px; --t-rating:48px; --t-brand:36px; --t-tag:30px; --t-overline:26px;
+    --gap:44px; --pitch-gap:24px; --tgap:3rem; --bgap:4rem;}
+  /* versión A: fondo azul de la landing + texto invertido a blanco */
+  .frame.a{display:flex;flex-direction:column;padding:var(--pt) var(--px) var(--pb);gap:4rem;
+    background:#2A5AD4;color:#fff;}
+  /* fondo tipo mosaico: teselas azules brillantes (radio 24px) sobre una base azul más oscura;
+     los gutters dejan ver la base y ESO dibuja la cuadrícula (efecto panal cuadrado) */
+  .frame.a::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.55;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='135' height='135'%3E%3Crect x='2' y='2' width='131' height='131' rx='10' fill='%233E7BFF'/%3E%3C/svg%3E");
+    background-size:135px 135px;background-position:center 19px;
+    -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 52%,transparent 96%);
+    mask-image:linear-gradient(to bottom,#000 0%,#000 52%,transparent 96%);}
+  .frame.a>*{position:relative;z-index:1;}
+  /* variación C · fondo blanco: teselas blancas sobre base gris muy claro */
+  .frame.a.white{background:#E7EBF2;color:var(--ink);}
+  .frame.a.white::before{opacity:.85;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='135' height='135'%3E%3Crect x='2' y='2' width='131' height='131' rx='10' fill='%23ffffff'/%3E%3C/svg%3E");}
+  .frame.a.white .hook{color:var(--ink);}
+  .frame.a.white .split{background:#ffffff;}
+  .frame.a.white .proof .t{color:var(--ink);}
+  .frame.a.white .proof .avs img{border-color:#fff;}
+  .frame.hero{padding:0;}
+
+  /* lo ÚNICO que cambia por formato: tamaño del lienzo + padding (zonas seguras) */
+  .feed{width:1080px;height:1350px; --pt:56px;--px:56px;--pb:52px;}
+  .square{width:1080px;height:1080px; --pt:48px;--px:48px;--pb:48px; --t-display:4.3rem;--t-hero:4.3rem;}
+  .story{width:1080px;height:1920px; --pt:200px;--px:72px;--pb:280px;}
+
+  /* ── componentes compartidos ── */
+  .brand{display:flex;align-items:center;gap:16px;}
+  .brand img{width:calc(var(--t-brand) * 1.7);height:calc(var(--t-brand) * 1.7);display:block;}
+  .brand .n{font-weight:800;font-size:var(--t-brand);letter-spacing:-.01em;line-height:1;}
+  .brand.light .n{color:#fff;}
+
+  .pitch{display:flex;flex-direction:column;gap:2.5rem;}
+  .kicker{align-self:flex-start;display:inline-flex;align-items:center;line-height:1;
+    font-size:1.5rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+    color:var(--blue);background:#EAF0FF;padding:.7em 1.1em;border-radius:999px;border:1.5px solid rgba(47,107,255,.30);}
+  .kicker.light{color:#fff;background:rgba(20,44,110,.42);border:1.5px solid rgba(255,255,255,.5);}
+
+  .cta{display:flex;align-items:center;justify-content:center;gap:14px;background:var(--cta);color:var(--cta-ink);
+    font-size:var(--t-action);font-weight:800;letter-spacing:-.01em;padding:.62em;border-radius:24px;text-align:center;
+    box-shadow:0 18px 40px -18px rgba(255,176,32,.6);}
+  .cta s{font-size:.82em;font-weight:600;opacity:.5;margin-left:2px;}
+
+  .proof{display:flex;align-items:center;justify-content:center;gap:16px;}
+  .proof .avs{display:flex;}
+  .proof .avs img{width:calc(var(--t-brand) * 1.55);height:calc(var(--t-brand) * 1.55);border-radius:50%;border:3px solid #fff;object-fit:cover;margin-left:-16px;}
+  .proof .avs img:first-child{margin-left:0;}
+  .proof .t{font-size:var(--t-tag);font-weight:400;color:#fff;}
+  .proof .t b{font-weight:800;}
+
+  /* A · antes/después */
+  .split{position:relative;display:flex;gap:24px;flex:1;min-height:0;border-radius:30px;overflow:hidden;background:#356df7;}
+  .shot{position:relative;flex:1;overflow:hidden;border-radius:30px;border:2px solid #fff;}
+  .shot img{width:100%;height:100%;object-fit:cover;display:block;}
+  .chip{position:absolute;top:24px;font-weight:800;font-size:var(--t-tag);padding:10px 22px;border-radius:999px;color:#fff;background:rgba(11,11,13,.6);}
+  .chip.l{left:24px;} .chip.r{right:24px;background:var(--cta);color:var(--cta-ink);}
+  .arrow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:96px;height:96px;border-radius:50%;
+    background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.35);z-index:2;}
+  .arrow svg{width:44px;height:44px;stroke:var(--blue);stroke-width:3;fill:none;}
+  .hook{font-size:4.5rem;line-height:1.03;font-weight:800;letter-spacing:-.035em;text-wrap:pretty;color:#fff;}
+
+  /* B · testimonio a sangre */
+  .frame.hero .bg,.frame.hero .bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .frame.hero .dim{position:absolute;inset:0;background:rgba(0,0,0,.28);}
+  .frame.hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,13,.5) 0%,rgba(11,11,13,0) 26%,rgba(11,11,13,.15) 42%,rgba(11,11,13,.92) 100%);}
+  .frame.hero .top{position:absolute;top:var(--pt);left:var(--px);right:var(--px);}
+  .frame.hero .bottom{position:absolute;bottom:var(--pb);left:var(--px);right:var(--px);display:flex;flex-direction:column;gap:var(--bgap);}
+  .tblock{display:flex;flex-direction:column;gap:var(--tgap);}
+  .stars{color:#FFC93C;font-size:var(--t-rating);letter-spacing:8px;line-height:1;}
+  .quote{color:#fff;font-size:var(--t-hero);line-height:1.12;font-weight:800;letter-spacing:-.02em;text-wrap:pretty;}
+  .quote .hl{color:#FFC93C;}
+</style>
+
+<!-- ═══════════════ A · ANTES/DESPUÉS ═══════════════ -->
+<div class="frame a feed" id="a-feed">
+  <div class="brand"><img src="../assets/images/favicon.svg" alt=""><div class="n">La Mirada Creativa</div></div>
+  <div class="split">
+    <div class="shot"><span class="chip l">Día 1</span><img src="../assets/photos/601982631_17934678420120850_7069851484265252714_n.jpg" alt=""></div>
+    <div class="shot"><span class="chip r">Día 365</span><img src="../assets/photos/download.jpg" alt=""></div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>
+  <div class="pitch">
+    <div class="kicker light">Método Guiado de Fotografía Creativa</div>
+    <div class="hook">El problema no es tu cámara, es tu forma de mirar.</div>
+  </div>
+  <div class="cta">Comprar por 69 € <s>129 €</s></div>
+  <div class="proof"><div class="avs"><img src="../assets/images/avatars/1.jpg"><img src="../assets/images/avatars/2.jpg"><img src="../assets/images/avatars/3.jpg"><img src="../assets/images/avatars/4.jpg"></div><div class="t"><b>+300</b> ya confían</div></div>
+</div>
+
+<div class="frame a square" id="a-square">
+  <div class="brand"><img src="../assets/images/favicon.svg" alt=""><div class="n">La Mirada Creativa</div></div>
+  <div class="split">
+    <div class="shot"><span class="chip l">Día 1</span><img src="../assets/photos/601982631_17934678420120850_7069851484265252714_n.jpg" alt=""></div>
+    <div class="shot"><span class="chip r">Día 365</span><img src="../assets/photos/download.jpg" alt=""></div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>
+  <div class="pitch">
+    <div class="kicker light">Método Guiado de Fotografía Creativa</div>
+    <div class="hook">El problema no es tu cámara, es tu forma de mirar.</div>
+  </div>
+  <div class="cta">Comprar por 69 € <s>129 €</s></div>
+  <div class="proof"><div class="avs"><img src="../assets/images/avatars/1.jpg"><img src="../assets/images/avatars/2.jpg"><img src="../assets/images/avatars/3.jpg"><img src="../assets/images/avatars/4.jpg"></div><div class="t"><b>+300</b> ya confían</div></div>
+</div>
+
+<div class="frame a story" id="a-story">
+  <div class="brand"><img src="../assets/images/favicon.svg" alt=""><div class="n">La Mirada Creativa</div></div>
+  <div class="split">
+    <div class="shot"><span class="chip l">Día 1</span><img src="../assets/photos/601982631_17934678420120850_7069851484265252714_n.jpg" alt=""></div>
+    <div class="shot"><span class="chip r">Día 365</span><img src="../assets/photos/download.jpg" alt=""></div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>
+  <div class="pitch">
+    <div class="kicker light">Método Guiado de Fotografía Creativa</div>
+    <div class="hook">El problema no es tu cámara, es tu forma de mirar.</div>
+  </div>
+  <div class="cta">Comprar por 69 € <s>129 €</s></div>
+  <div class="proof"><div class="avs"><img src="../assets/images/avatars/1.jpg"><img src="../assets/images/avatars/2.jpg"><img src="../assets/images/avatars/3.jpg"><img src="../assets/images/avatars/4.jpg"></div><div class="t"><b>+300</b> ya confían</div></div>
+</div>
+
+<!-- ═══════════════ C · ANTES/DESPUÉS · FONDO BLANCO ═══════════════ -->
+<div class="frame a white feed" id="aw-feed">
+  <div class="brand"><img src="../assets/images/favicon.svg" alt=""><div class="n">La Mirada Creativa</div></div>
+  <div class="split">
+    <div class="shot"><span class="chip l">Día 1</span><img src="../assets/photos/601982631_17934678420120850_7069851484265252714_n.jpg" alt=""></div>
+    <div class="shot"><span class="chip r">Día 365</span><img src="../assets/photos/download.jpg" alt=""></div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>
+  <div class="pitch">
+    <div class="kicker">Método Guiado de Fotografía Creativa</div>
+    <div class="hook">El problema no es tu cámara, es tu forma de mirar.</div>
+  </div>
+  <div class="cta">Comprar por 69 € <s>129 €</s></div>
+  <div class="proof"><div class="avs"><img src="../assets/images/avatars/1.jpg"><img src="../assets/images/avatars/2.jpg"><img src="../assets/images/avatars/3.jpg"><img src="../assets/images/avatars/4.jpg"></div><div class="t"><b>+300</b> ya confían</div></div>
+</div>
+
+<div class="frame a white square" id="aw-square">
+  <div class="brand"><img src="../assets/images/favicon.svg" alt=""><div class="n">La Mirada Creativa</div></div>
+  <div class="split">
+    <div class="shot"><span class="chip l">Día 1</span><img src="../assets/photos/601982631_17934678420120850_7069851484265252714_n.jpg" alt=""></div>
+    <div class="shot"><span class="chip r">Día 365</span><img src="../assets/photos/download.jpg" alt=""></div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>
+  <div class="pitch">
+    <div class="kicker">Método Guiado de Fotografía Creativa</div>
+    <div class="hook">El problema no es tu cámara, es tu forma de mirar.</div>
+  </div>
+  <div class="cta">Comprar por 69 € <s>129 €</s></div>
+  <div class="proof"><div class="avs"><img src="../assets/images/avatars/1.jpg"><img src="../assets/images/avatars/2.jpg"><img src="../assets/images/avatars/3.jpg"><img src="../assets/images/avatars/4.jpg"></div><div class="t"><b>+300</b> ya confían</div></div>
+</div>
+
+<div class="frame a white story" id="aw-story">
+  <div class="brand"><img src="../assets/images/favicon.svg" alt=""><div class="n">La Mirada Creativa</div></div>
+  <div class="split">
+    <div class="shot"><span class="chip l">Día 1</span><img src="../assets/photos/601982631_17934678420120850_7069851484265252714_n.jpg" alt=""></div>
+    <div class="shot"><span class="chip r">Día 365</span><img src="../assets/photos/download.jpg" alt=""></div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>
+  <div class="pitch">
+    <div class="kicker">Método Guiado de Fotografía Creativa</div>
+    <div class="hook">El problema no es tu cámara, es tu forma de mirar.</div>
+  </div>
+  <div class="cta">Comprar por 69 € <s>129 €</s></div>
+  <div class="proof"><div class="avs"><img src="../assets/images/avatars/1.jpg"><img src="../assets/images/avatars/2.jpg"><img src="../assets/images/avatars/3.jpg"><img src="../assets/images/avatars/4.jpg"></div><div class="t"><b>+300</b> ya confían</div></div>
+</div>
+
+<!-- ═══════════════ B · TESTIMONIO ═══════════════ -->
+<div class="frame hero feed" id="b-feed">
+  <div class="bg"><img src="../assets/photos/download.jpg" alt=""></div>
+  <div class="dim"></div><div class="veil"></div>
+  <div class="top"><div class="brand light"><img src="../assets/images/favicon.svg" alt=""><div class="n">La Mirada Creativa</div></div></div>
+  <div class="bottom">
+    <div class="tblock">
+      <div class="kicker light">Método Guiado de Fotografía Creativa</div>
+      <div class="stars">★★★★★</div>
+      <div class="quote">«Estaba cansada de cursos de fotografía que no funcionan. Un reto al día y por fin hago fotos <span class="hl">más creativas</span>».</div>
+    </div>
+    <div class="cta">Comprar por 69 € <s>129 €</s></div>
+    <div class="proof"><div class="avs"><img src="../assets/images/avatars/1.jpg"><img src="../assets/images/avatars/2.jpg"><img src="../assets/images/avatars/3.jpg"><img src="../assets/images/avatars/4.jpg"></div><div class="t"><b>+300</b> ya confían</div></div>
+  </div>
+</div>
+
+<div class="frame hero square" id="b-square">
+  <div class="bg"><img src="../assets/photos/download.jpg" alt=""></div>
+  <div class="dim"></div><div class="veil"></div>
+  <div class="top"><div class="brand light"><img src="../assets/images/favicon.svg" alt=""><div class="n">La Mirada Creativa</div></div></div>
+  <div class="bottom">
+    <div class="tblock">
+      <div class="kicker light">Método Guiado de Fotografía Creativa</div>
+      <div class="stars">★★★★★</div>
+      <div class="quote">«Estaba cansada de cursos de fotografía que no funcionan. Un reto al día y por fin hago fotos <span class="hl">más creativas</span>».</div>
+    </div>
+    <div class="cta">Comprar por 69 € <s>129 €</s></div>
+    <div class="proof"><div class="avs"><img src="../assets/images/avatars/1.jpg"><img src="../assets/images/avatars/2.jpg"><img src="../assets/images/avatars/3.jpg"><img src="../assets/images/avatars/4.jpg"></div><div class="t"><b>+300</b> ya confían</div></div>
+  </div>
+</div>
+
+<div class="frame hero story" id="b-story">
+  <div class="bg"><img src="../assets/photos/download.jpg" alt=""></div>
+  <div class="dim"></div><div class="veil"></div>
+  <div class="top"><div class="brand light"><img src="../assets/images/favicon.svg" alt=""><div class="n">La Mirada Creativa</div></div></div>
+  <div class="bottom">
+    <div class="tblock">
+      <div class="kicker light">Método Guiado de Fotografía Creativa</div>
+      <div class="stars">★★★★★</div>
+      <div class="quote">«Estaba cansada de cursos de fotografía que no funcionan. Un reto al día y por fin hago fotos <span class="hl">más creativas</span>».</div>
+    </div>
+    <div class="cta">Comprar por 69 € <s>129 €</s></div>
+    <div class="proof"><div class="avs"><img src="../assets/images/avatars/1.jpg"><img src="../assets/images/avatars/2.jpg"><img src="../assets/images/avatars/3.jpg"><img src="../assets/images/avatars/4.jpg"></div><div class="t"><b>+300</b> ya confían</div></div>
+  </div>
+</div>
