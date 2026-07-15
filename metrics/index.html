@@ -377,22 +377,42 @@
       $('errors').textContent = errs.length ? '⚠ ' + errs.map(([s, m]) => s + ': ' + m).join('  ·  ') : '';
     }
 
-    function seriesFrom(map, days) {
-      const labels = [], data = [];
+    // Serie diaria si el rango es corto (≤92d); mensual si es largo, para que la
+    // tendencia se vea aunque los datos estén meses atrás.
+    function buildSeries(map, rangeDays) {
       const today = new Date(); today.setUTCHours(0, 0, 0, 0);
-      for (let i = days - 1; i >= 0; i--) {
-        const d = new Date(today); d.setUTCDate(d.getUTCDate() - i);
-        const key = d.toISOString().slice(0, 10);
-        labels.push(key.slice(5));
-        data.push(map[key] || 0);
+      if (rangeDays <= 92) {
+        const labels = [], data = [];
+        for (let i = rangeDays - 1; i >= 0; i--) {
+          const d = new Date(today); d.setUTCDate(d.getUTCDate() - i);
+          const key = d.toISOString().slice(0, 10);
+          labels.push(key.slice(5));
+          data.push(map[key] || 0);
+        }
+        return { labels, data };
+      }
+      const months = {};
+      for (const [k, v] of Object.entries(map)) {
+        const mk = k.slice(0, 7);
+        months[mk] = (months[mk] || 0) + v;
+      }
+      const labels = [], data = [];
+      const start = new Date(today); start.setUTCDate(start.getUTCDate() - rangeDays);
+      let cur = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), 1));
+      const end = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1));
+      while (cur <= end) {
+        const mk = cur.toISOString().slice(0, 7);
+        labels.push(mk);
+        data.push(months[mk] || 0);
+        cur.setUTCMonth(cur.getUTCMonth() + 1);
       }
       return { labels, data };
     }
 
     function drawMoney(charts) {
-      const days = Math.min(parseInt($('range').value, 10), 90);
-      const rev = seriesFrom(charts.revByDay || {}, days);
-      const spend = seriesFrom(charts.spendByDay || {}, days);
+      const rd = parseInt($('range').value, 10);
+      const rev = buildSeries(charts.revByDay || {}, rd);
+      const spend = buildSeries(charts.spendByDay || {}, rd);
       if (window._m) window._m.destroy();
       window._m = new Chart($('chartMoney'), {
         type: 'bar',
@@ -404,9 +424,9 @@
       });
     }
     function drawLeads(charts) {
-      const days = Math.min(parseInt($('range').value, 10), 90);
-      const leads = seriesFrom(charts.leadsByDay || {}, days);
-      const visits = seriesFrom(charts.visitsByDay || {}, days);
+      const rd = parseInt($('range').value, 10);
+      const leads = buildSeries(charts.leadsByDay || {}, rd);
+      const visits = buildSeries(charts.visitsByDay || {}, rd);
       if (window._l) window._l.destroy();
       window._l = new Chart($('chartLeads'), {
         type: 'line',
