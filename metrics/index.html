@@ -118,13 +118,31 @@
     .plan-cols ul, .plan-cols ol { margin: 0; padding-left: 18px; }
     .plan-cols li { margin: 5px 0; line-height: 1.45; }
 
-    /* veredicto */
-    .verdict { display: flex; align-items: center; gap: 14px; padding: 18px 20px; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); background: var(--card); }
-    .verdict .vic { font-size: 26px; flex: none; line-height: 1; }
-    .verdict .vtxt { font-size: 16px; font-weight: 700; letter-spacing: -.01em; line-height: 1.4; }
-    .verdict.rentable { background: color-mix(in srgb, var(--green) 9%, var(--card)); border-color: color-mix(in srgb, var(--green) 35%, var(--border)); }
-    .verdict.justo { background: color-mix(in srgb, var(--amber) 9%, var(--card)); border-color: color-mix(in srgb, var(--amber) 35%, var(--border)); }
-    .verdict.perdida { background: color-mix(in srgb, var(--red) 9%, var(--card)); border-color: color-mix(in srgb, var(--red) 35%, var(--border)); }
+    /* callout reutilizable (¿es rentable?) — compacto, con "Ver más" */
+    .callout { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); background: var(--card); }
+    .callout .cic { font-size: 22px; flex: none; line-height: 1; }
+    .callout .ctxt { font-size: 15px; font-weight: 700; letter-spacing: -.01em; line-height: 1.4; flex: 1; }
+    .callout .callout-more { flex: none; white-space: nowrap; }
+    .callout.rentable { background: color-mix(in srgb, var(--green) 9%, var(--card)); border-color: color-mix(in srgb, var(--green) 35%, var(--border)); }
+    .callout.justo { background: color-mix(in srgb, var(--amber) 9%, var(--card)); border-color: color-mix(in srgb, var(--amber) 35%, var(--border)); }
+    .callout.perdida { background: color-mix(in srgb, var(--red) 9%, var(--card)); border-color: color-mix(in srgb, var(--red) 35%, var(--border)); }
+    @media (max-width: 560px) { .callout { flex-wrap: wrap; } .callout .ctxt { flex-basis: calc(100% - 36px); } .callout .callout-more { width: 100%; justify-content: center; } }
+
+    /* sheet (side panel derecho) */
+    .sheet-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 40; opacity: 0; animation: cfade .18s forwards; }
+    @keyframes cfade { to { opacity: 1; } }
+    .sheet { position: fixed; top: 0; right: 0; height: 100dvh; width: 440px; max-width: 92vw; background: var(--card); border-left: 1px solid var(--border); box-shadow: -14px 0 40px rgba(0,0,0,.18); z-index: 50; display: flex; flex-direction: column; transform: translateX(100%); animation: cslide .24s cubic-bezier(.32,.72,0,1) forwards; }
+    @keyframes cslide { to { transform: translateX(0); } }
+    .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+    .sheet-title { font-size: 16px; font-weight: 800; letter-spacing: -.01em; }
+    .sheet-body { padding: 18px 20px 30px; overflow-y: auto; }
+    .sheet-body .callout { margin-bottom: 8px; }
+    .sheet-body h4 { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted-foreground); margin: 20px 0 6px; }
+    .kv { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .kv:last-child { border-bottom: none; }
+    .kv-k { color: var(--muted-foreground); }
+    .kv-v { font-weight: 700; font-variant-numeric: tabular-nums; }
+    .sheet-note { font-size: 13px; color: var(--muted-foreground); line-height: 1.55; margin: 12px 0 0; background: var(--muted); padding: 12px 14px; border-radius: calc(var(--radius) - .15rem); }
 
     /* avisos list */
     .aviso { display: flex; gap: 11px; padding: 13px 0; border-top: 1px solid var(--border); }
@@ -218,10 +236,7 @@
       <div class="tabpanel" id="tab-resumen">
         <section class="block">
           <div class="section-label">¿Sale rentable? · según todo el histórico</div>
-          <div class="verdict" id="verdictBox">
-            <span class="vic" id="verdictIcon"></span>
-            <div class="vtxt" id="verdictText"></div>
-          </div>
+          <div id="verdictWrap"></div>
         </section>
 
         <section class="block"><div class="plan" id="planBox">
@@ -262,6 +277,10 @@
 
       <!-- TAB: CAMPAÑA ACTIVA -->
       <div class="tabpanel hidden" id="tab-campana">
+        <section class="block">
+          <div class="section-label">¿Va rentable esta campaña? · en tiempo real</div>
+          <div id="campVerdictWrap"></div>
+        </section>
         <div class="section-label">Solo la campaña que está corriendo ahora — aislada del histórico</div>
         <div id="campaigns"></div>
       </div>
@@ -327,11 +346,33 @@
     </div>
   </div>
 
+  <!-- SHEET (side panel derecho) -->
+  <div class="sheet-overlay hidden" id="sheetOverlay"></div>
+  <aside class="sheet hidden" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="sheet-head"><div class="sheet-title" id="sheetTitle"></div><button class="btn btn-ghost" id="sheetClose" aria-label="Cerrar">✕</button></div>
+    <div class="sheet-body" id="sheetBody"></div>
+  </aside>
+
   <script>
     const $ = (id) => document.getElementById(id);
     const show = (id) => $(id).classList.remove('hidden');
     const hide = (id) => $(id).classList.add('hidden');
     const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const CIC = { rentable: '✅', justo: '🟠', perdida: '🔴', 'sin-datos': '⚪' };
+    const MESC = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+    const fmtD = (iso) => { if (!iso) return ''; const [, m, d] = iso.split('-'); return parseInt(d, 10) + ' ' + MESC[parseInt(m, 10) - 1]; };
+    // callout reutilizable: compacto + botón "Ver más" que abre el sidepanel
+    function calloutHTML(v, moreKey) {
+      v = v || {};
+      return `<div class="callout ${v.status || ''}"><span class="cic">${CIC[v.status] || '📊'}</span>` +
+        `<div class="ctxt">${esc(v.sentence || '')}</div>` +
+        `<button class="btn btn-outline callout-more" data-more="${moreKey}">Ver más</button></div>`;
+    }
+    function calloutStatic(v) {
+      v = v || {};
+      return `<div class="callout ${v.status || ''}"><span class="cic">${CIC[v.status] || '📊'}</span><div class="ctxt">${esc(v.sentence || '')}</div></div>`;
+    }
+    const kvRow = (k, val) => `<div class="kv"><span class="kv-k">${k}</span><span class="kv-v">${val}</span></div>`;
     const EUR = (n) => (n == null ? '—' : Number(n).toLocaleString('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }));
     const NUM = (n) => (n == null ? '—' : Number(n).toLocaleString('es-ES'));
     const PCT = (n) => (n == null ? '—' : (Math.round(n * 10) / 10).toFixed(1) + ' %');
@@ -439,12 +480,9 @@
       if (k.refundsRange > 0) extra += ' · reembolsos ' + EUR(k.refundsRange);
       $('updated').textContent = 'Actualizado ' + new Date(b.generatedAt).toLocaleString('es-ES') + ' · rango ' + b.rangeDays + ' días' + extra;
 
-      // veredicto (una frase)
-      const v = b.verdict || {};
-      const vic = { rentable: '✅', justo: '🟠', perdida: '🔴', 'sin-datos': '⚪' };
-      $('verdictBox').className = 'verdict ' + (v.status || '');
-      $('verdictIcon').textContent = vic[v.status] || '📊';
-      $('verdictText').textContent = v.sentence || '';
+      // callouts de rentabilidad (mismo componente, dos horizontes de tiempo)
+      $('verdictWrap').innerHTML = calloutHTML(b.verdict, 'historico');
+      $('campVerdictWrap').innerHTML = calloutHTML(b.campaignVerdict, 'campana');
 
       // plan
       const p = b.plan || {};
@@ -614,6 +652,73 @@
       $('cfgMsg').textContent = res.ok ? 'Guardado ✓ — recalculando…' : 'Error al guardar';
       if (res.ok) setTimeout(loadRange, 600);
     };
+
+    // ===== Sidepanel (Sheet) — reutilizable para los callouts =====
+    function openSheet(key) {
+      const b = window._lastBundle; if (!b) return;
+      let title = '', body = '';
+      if (key === 'historico') { title = 'Rentabilidad · histórico'; body = historicoDetail(b); }
+      else if (key === 'campana') { title = 'Rentabilidad · campaña actual'; body = campanaDetail(b); }
+      else return;
+      $('sheetTitle').textContent = title;
+      $('sheetBody').innerHTML = body;
+      show('sheetOverlay'); show('sheet');
+    }
+    function closeSheet() { hide('sheetOverlay'); hide('sheet'); }
+    $('sheetClose').onclick = closeSheet;
+    $('sheetOverlay').onclick = closeSheet;
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSheet(); });
+    document.addEventListener('click', (e) => { const btn = e.target.closest('.callout-more'); if (btn) openSheet(btn.dataset.more); });
+
+    function historicoDetail(b) {
+      const k = b.kpi;
+      const gross = k.revenueLifetime || 0, net = k.revenueLifetimeNet || 0;
+      const refunds = gross - net, spend = k.spendLifetime || 0, profit = net - spend;
+      const roas = spend > 0 ? net / spend : null;
+      return calloutStatic(b.verdict) +
+        '<h4>Cuentas de siempre</h4>' +
+        kvRow('Ingresos brutos', EUR(gross)) +
+        kvRow('− Reembolsos', '−' + EUR(refunds)) +
+        kvRow('Ingresos netos', EUR(net)) +
+        kvRow('− Gasto en publicidad', '−' + EUR(spend)) +
+        kvRow('= Beneficio', `<span class="${profit >= 0 ? 'v-green' : 'v-red'}">${EUR(profit)}</span>`) +
+        kvRow('ROAS neto', X(roas)) +
+        '<h4>Ventas</h4>' +
+        kvRow('Ventas totales', NUM(k.ordersLifetime)) +
+        kvRow('Ticket medio', EUR(k.aov)) +
+        '<div class="sheet-note">Suma <b>toda tu historia</b>: distintos precios (12–69 €), rediseños de la web y pruebas. Mezcla etapas con conversiones muy distintas — sirve para ver el conjunto, no para juzgar lo de ahora.</div>';
+    }
+
+    function campanaDetail(b) {
+      const camps = b.campaigns || [];
+      if (!camps.length) return calloutStatic(b.campaignVerdict) + '<div class="sheet-note">No hay ninguna campaña activa ahora mismo.</div>';
+      const sum = (f) => camps.reduce((s, c) => s + (c[f] || 0), 0);
+      const spend = sum('spend'), impr = sum('impressions'), clicks = sum('clicks');
+      const lpv = sum('landingViews'), checkouts = sum('checkouts'), purchases = sum('purchases');
+      const price = Number(b.config.product_price) || 0;
+      const revenue = purchases * price, profit = revenue - spend;
+      const roas = spend > 0 ? revenue / spend : null;
+      const c0 = camps[0];
+      return calloutStatic(b.campaignVerdict) +
+        '<h4>' + (camps.length > 1 ? camps.length + ' campañas activas' : esc(c0.name)) + '</h4>' +
+        kvRow('Objetivo', OBJ[c0.objective] || c0.objective || '—') +
+        kvRow('Lanzada', c0.launch + ' · ' + c0.daysRunning + ' días') +
+        kvRow('Estado', c0.learning ? 'Aprendizaje · día ' + c0.learning.day + '/' + c0.learning.total : 'Activa') +
+        '<h4>Embudo de la campaña</h4>' +
+        kvRow('Impresiones', NUM(impr)) +
+        kvRow('Clics', NUM(clicks)) +
+        kvRow('Llegan a la web', NUM(lpv)) +
+        kvRow('Inician pago', NUM(checkouts)) +
+        kvRow('Compras', NUM(purchases)) +
+        '<h4>Rentabilidad en tiempo real</h4>' +
+        kvRow('Gasto', EUR(spend)) +
+        kvRow('Ingresos estimados', purchases > 0 ? EUR(revenue) : EUR(0) + ' (0 ventas)') +
+        kvRow('Beneficio', `<span class="${profit >= 0 ? 'v-green' : 'v-red'}">${EUR(profit)}</span>`) +
+        kvRow('ROAS', X(roas)) +
+        '<div class="sheet-note">' + (c0.learning
+          ? 'Está en <b>fase de aprendizaje</b>: Meta aún optimiza a quién enseñar el anuncio. Los números no son fiables hasta el <b>' + fmtD(c0.learning.until) + '</b>. No la toques todavía.'
+          : 'Mide solo lo que pasa <b>ahora mismo</b> con la oferta y la web actuales.') + '</div>';
+    }
 
     init().catch((e) => { hide('loading'); show('login'); $('loginErr').textContent = 'Error de inicialización: ' + e.message; });
   </script>

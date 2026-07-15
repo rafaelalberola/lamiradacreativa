@@ -316,7 +316,9 @@ async function loadCampaigns(errors) {
       return {
         id: c.id, name: c.name, objective: c.objective, launch, daysRunning,
         dailyBudget: c.daily_budget ? Number(c.daily_budget) / 100 : null,
-        learning: daysRunning != null && daysRunning < 7 ? { day: daysRunning, total: 7, daysLeft: 7 - daysRunning } : null,
+        learning: daysRunning != null && daysRunning < 7
+          ? { day: daysRunning, total: 7, daysLeft: 7 - daysRunning, until: launch ? new Date(new Date(launch + 'T00:00:00Z').getTime() + 7 * 86400000).toISOString().slice(0, 10) : null }
+          : null,
         spend: Number(ins.spend || 0),
         impressions: Number(ins.impressions || 0),
         clicks: Number(ins.clicks || 0),
@@ -651,6 +653,7 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
 
   bundle.summary = buildSummary(bundle);
   bundle.verdict = buildVerdict(bundle);
+  bundle.campaignVerdict = buildCampaignVerdict(bundle);
   bundle.plan = buildPlan(bundle);
   bundle.actions = buildActions(bundle);
   return bundle;
@@ -785,6 +788,32 @@ function buildVerdict(b) {
     sentence: `No sale rentable: por cada 1 € en publicidad recuperas ${round1(roas)} € y pierdes ${eur(Math.abs(profit))} en total.` };
 }
 
+// Misma pregunta, pero SOLO la campaña activa (tiempo real). Respeta el aprendizaje.
+function buildCampaignVerdict(b) {
+  const camps = b.campaigns || [];
+  const c = b.config || {};
+  if (!camps.length) return { status: 'sin-datos', sentence: 'No hay ninguna campaña activa ahora mismo.' };
+
+  const spend = camps.reduce((s, x) => s + (x.spend || 0), 0);
+  const purchases = camps.reduce((s, x) => s + (x.purchases || 0), 0);
+  const price = Number(c.product_price) || 0;
+  const revenue = purchases * price;
+  const profit = revenue - spend;
+  const roas = spend > 0 ? revenue / spend : null;
+
+  const learn = camps.find((x) => x.learning);
+  if (learn) {
+    const L = learn.learning;
+    return { status: 'sin-datos', profit, roas,
+      sentence: `Todavía no se puede saber: la campaña está en aprendizaje (día ${L.day} de ${L.total})${L.until ? ', espera al ' + fmtDate(L.until) : ''}. Ahora los números no son fiables.` };
+  }
+  if (spend <= 0) return { status: 'sin-datos', profit, roas, sentence: 'Aún no hay gasto suficiente en la campaña para saberlo.' };
+  if (purchases === 0) return { status: 'perdida', profit, roas, sentence: `De momento no sale rentable: ${eur(spend)} gastados y 0 ventas todavía.` };
+  if (roas >= 1.5) return { status: 'rentable', profit, roas, sentence: `Sí, va rentable: por cada 1 € recuperas ${round1(roas)} € (${purchases} ventas, +${eur(profit)}).` };
+  if (roas >= 1.0) return { status: 'justo', profit, roas, sentence: `Justo: por cada 1 € recuperas ${round1(roas)} € (${purchases} ventas). Cubres pero ganas poco.` };
+  return { status: 'perdida', profit, roas, sentence: `No sale rentable: por cada 1 € recuperas ${round1(roas)} € (${purchases} ventas, ${eur(profit)}).` };
+}
+
 // ---------------------------------------------------------------- plan proactivo
 // Sintetiza el problema #1 con argumento (por qué) y pasos concretos.
 function buildPlan(b) {
@@ -852,4 +881,4 @@ function buildPlan(b) {
   return { headline, problem, why, steps };
 }
 
-module.exports = { computeMetrics, buildActions, buildSummary, buildPlan, buildVerdict, eur, pct, round1 };
+module.exports = { computeMetrics, buildActions, buildSummary, buildPlan, buildVerdict, buildCampaignVerdict, eur, pct, round1 };
