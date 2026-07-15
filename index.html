@@ -54,6 +54,19 @@
     .lead-err { color: var(--red, #E64240); font-size: .8rem; margin: 6px 0 0; min-height: 1em; }
     /* Código = vale canjeable (verde) */
     .lead-code { display: block; font-family: 'Courier New', monospace; font-size: 1.5rem; font-weight: 700; letter-spacing: .16em; color: #15803D; background: #F0FDF4; border: 2px dashed #86EFAC; border-radius: 12px; padding: 14px; margin: 0 0 10px; }
+    @media (min-width: 761px) {
+      #autor .author-quote { align-items: center; }
+      #autor .author-sign-row { margin-left: -270px; }
+    }
+    /* Hero = mismo estilo que el anuncio: titular en frase (sin uppercase) + tag píldora */
+    .hero-copy .display { text-transform: none; }
+    .hero-copy .eyebrow.hero-tag {
+      display: inline-flex; align-items: center; margin: 0 0 1.1rem;
+      background: rgba(20,44,110,.42); border: 1.5px solid rgba(255,255,255,.5);
+      color: #fff; opacity: 1; padding: .55em 1.05em; border-radius: 999px;
+      text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; font-size: .8rem;
+    }
+    .hero-copy .eyebrow.hero-tag::before { display: none; }
   </style>
 
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
@@ -64,7 +77,7 @@
   <meta property="og:image" content="https://lamiradacreativa.com/assets/images/social.png">
   <meta property="og:locale" content="es_ES">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="La Mirada Creativa — 365 cartas para fotógrafos">
+  <meta name="twitter:title" content="La Mirada Creativa — 365 retos para fotógrafos">
   <meta name="twitter:description" content="365 retos para dejar de hacer fotos olvidables y encontrar tu estilo.">
   <meta name="twitter:image" content="https://lamiradacreativa.com/assets/images/social.png">
 
@@ -122,9 +135,9 @@
     <div class="wrap">
       <div class="hero-grid">
         <div class="hero-copy hero-stagger">
-          <span class="eyebrow" style="color:#fff;opacity:1">Método Guiado de Fotografía Creativa</span>
+          <span class="eyebrow hero-tag">Método Guiado de Fotografía Creativa</span>
           <h1 class="display">El problema no es tu cámara, es tu forma de mirar.</h1>
-          <p class="hero-sub"><strong>365 retos de fotografía</strong>, uno al día. Entrena tu mirada y por fin haz fotos más creativas.</p>
+          <p class="hero-sub"><strong>365 retos de fotografía</strong>, uno al día. Pasa de hacer fotos comunes a hacer fotos únicas.</p>
           <div class="offer">
             <button class="btn btn--lg btn-checkout" data-location="hero">Comprar por <span class="p69">69 €</span> <span class="price-old">129 €</span></button>
           </div>
@@ -142,7 +155,7 @@
         <!-- Deck (product) -->
         <div class="hero-deck">
           <div class="deck-group">
-            <span class="deck-hint">Desliza las cartas →</span>
+            <span class="deck-hint">Desliza los retos →</span>
             <div class="card-deck">
               <div class="card" data-index="0">
                 <div class="card-header"><span class="card-day">Día 1 / 365</span><span class="card-block">Mirada técnica</span></div>
@@ -196,10 +209,10 @@
   <div class="ticker" aria-hidden="true">
     <div class="ticker__track">
       <div class="ticker__set">
-        <span>365 cartas</span><i class="ticker__sep">✦</i><span>Una al <span class="g">día</span></span><i class="ticker__sep">✦</i><span>Entrena la <span class="g">mirada</span></span><i class="ticker__sep">✦</i><span>Menos de 5 min</span><i class="ticker__sep">✦</i><span>De ver a <span class="g">mirar</span></span><i class="ticker__sep">✦</i>
+        <span>365 retos</span><i class="ticker__sep">✦</i><span>Una al <span class="g">día</span></span><i class="ticker__sep">✦</i><span>Entrena la <span class="g">mirada</span></span><i class="ticker__sep">✦</i><span>Menos de 5 min</span><i class="ticker__sep">✦</i><span>De ver a <span class="g">mirar</span></span><i class="ticker__sep">✦</i>
       </div>
       <div class="ticker__set">
-        <span>365 cartas</span><i class="ticker__sep">✦</i><span>Una al <span class="g">día</span></span><i class="ticker__sep">✦</i><span>Entrena la <span class="g">mirada</span></span><i class="ticker__sep">✦</i><span>Menos de 5 min</span><i class="ticker__sep">✦</i><span>De ver a <span class="g">mirar</span></span><i class="ticker__sep">✦</i>
+        <span>365 retos</span><i class="ticker__sep">✦</i><span>Una al <span class="g">día</span></span><i class="ticker__sep">✦</i><span>Entrena la <span class="g">mirada</span></span><i class="ticker__sep">✦</i><span>Menos de 5 min</span><i class="ticker__sep">✦</i><span>De ver a <span class="g">mirar</span></span><i class="ticker__sep">✦</i>
       </div>
     </div>
   </div>
@@ -210,7 +223,7 @@
     <div class="wrap">
       <div class="section-head section-head--center reveal">
         <span class="eyebrow eyebrow--center">Cómo funciona</span>
-        <h2 class="display">Una carta al día</h2>
+        <h2 class="display">Un reto al día</h2>
         <p class="lead" style="margin-inline:auto;">Abres la app, ves el ejercicio de hoy y sales a hacer la foto en menos de cinco minutos.</p>
       </div>
       <div class="shots shots--one reveal">
@@ -225,11 +238,11 @@
             </div>
             <div class="shot-shutter"></div>
           </div>
-          <figcaption class="example-cap">La carta de hoy <b>→</b> tu foto</figcaption>
+          <figcaption class="example-cap">El reto de hoy <b>→</b> tu foto</figcaption>
         </figure>
       </div>
       <ol class="steps reveal">
-        <li class="step"><span class="step-num">1</span><div class="step-body"><strong>Abre la carta del día</strong><span>Un ejercicio concreto para hoy.</span></div></li>
+        <li class="step"><span class="step-num">1</span><div class="step-body"><strong>Abre el reto del día</strong><span>Un ejercicio concreto para hoy.</span></div></li>
         <li class="step"><span class="step-num">2</span><div class="step-body"><strong>Sal y dispara</strong><span>Cinco minutos y a la calle.</span></div></li>
         <li class="step"><span class="step-num">3</span><div class="step-body"><strong>Repite mañana</strong><span>Y así hasta las 365.</span></div></li>
       </ol>
@@ -305,12 +318,12 @@
         <p class="lead">El set completo, con las herramientas para no dejarlo a medias.</p>
       </div>
       <div class="feature-list reveal">
-        <div class="feature-row"><span class="feat-ic"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="13" height="15" rx="2"/><path d="M8 4h11a2 2 0 0 1 2 2v13"/></svg></span><div><b>Las 365 cartas</b><em>Un ejercicio por día, en 4 bloques.</em></div></div>
+        <div class="feature-row"><span class="feat-ic"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="13" height="15" rx="2"/><path d="M8 4h11a2 2 0 0 1 2 2v13"/></svg></span><div><b>Los 365 retos</b><em>Un ejercicio por día, en 4 bloques.</em></div></div>
         <div class="feature-row"><span class="feat-ic"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg></span><div><b>App web</b><em>Móvil, tablet y ordenador. Sin instalar nada.</em></div></div>
         <div class="feature-row"><span class="feat-ic"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></span><div><b>PDF descargable</b><em>Para consultar sin conexión o imprimir.</em></div></div>
-        <div class="feature-row"><span class="feat-ic"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span><div><b>Recordatorio diario</b><em>Tu carta al correo cada mañana.</em></div></div>
+        <div class="feature-row"><span class="feat-ic"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span><div><b>Recordatorio diario</b><em>Tu reto al correo cada mañana.</em></div></div>
         <div class="feature-row"><span class="feat-ic"><svg viewBox="0 0 24 24"><path d="M5 21V10M12 21V4M19 21v-7"/></svg></span><div><b>Resumen semanal</b><em>Tu racha y tu progreso cada domingo.</em></div></div>
-        <div class="feature-row"><span class="feat-ic"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></span><div><b>Actualizaciones</b><em>Nuevas cartas y mejoras gratis.</em></div></div>
+        <div class="feature-row"><span class="feat-ic"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></span><div><b>Actualizaciones</b><em>Nuevos retos y mejoras gratis.</em></div></div>
       </div>
       <p class="feature-foot reveal">Un pago y es <span class="accent-word">tuyo para siempre.</span></p>
     </div>
@@ -342,16 +355,16 @@
     <div class="wrap">
       <div class="section-head section-head--center reveal">
         <span class="eyebrow eyebrow--center">Un pago, para siempre</span>
-        <h2 class="display">365 cartas por <span class="p69">69 €</span></h2>
+        <h2 class="display">365 retos por <span class="p69">69 €</span></h2>
         <p class="lead">Menos de lo que cuesta un objetivo de segunda mano, y te dura toda la vida.</p>
       </div>
       <div class="price-wrap">
         <div class="price-card reveal" id="comprar">
           <div class="price-tag"><span class="price-current"><span class="p69">69 €</span></span><span class="price-anchor">129 €</span></div>
-          <p class="price-per">Son 365 cartas<br><strong>0,19 € por ejercicio</strong> · pago único</p>
+          <p class="price-per">Son 365 retos<br><strong>0,19 € por ejercicio</strong> · pago único</p>
           <div class="price-divider"></div>
           <ul class="price-features">
-            <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Las 365 cartas + app + PDF</li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Los 365 retos + app + PDF</li>
             <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Recordatorio y resumen semanal</li>
             <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Actualizaciones para siempre</li>
             <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Un pago único, sin suscripción.</li>
@@ -380,15 +393,15 @@
       <div class="accordion reveal">
         <div class="accordion-item">
           <button class="accordion-header"><span class="accordion-title">¿Necesito una cámara profesional?</span><span class="accordion-icon material-symbols-sharp">add</span></button>
-          <div class="accordion-content"><div class="accordion-body">No. Las cartas entrenan tu ojo, no tu equipo. Sirven igual con un móvil, una compacta o una réflex.</div></div>
+          <div class="accordion-content"><div class="accordion-body">No. Los retos entrenan tu ojo, no tu equipo. Sirven igual con un móvil, una compacta o una réflex.</div></div>
         </div>
         <div class="accordion-item">
           <button class="accordion-header"><span class="accordion-title">¿Es un curso?</span><span class="accordion-icon material-symbols-sharp">add</span></button>
-          <div class="accordion-content"><div class="accordion-body">No. Es un set de 365 cartas digitales: un ejercicio al día para hacer, no doce horas de vídeo para ver. Menos teoría, más disparar.</div></div>
+          <div class="accordion-content"><div class="accordion-body">No. Es un set de 365 retos digitales: un ejercicio al día para hacer, no doce horas de vídeo para ver. Menos teoría, más disparar.</div></div>
         </div>
         <div class="accordion-item">
           <button class="accordion-header"><span class="accordion-title">¿Qué pasa si me salto días?</span><span class="accordion-icon material-symbols-sharp">add</span></button>
-          <div class="accordion-content"><div class="accordion-body">Nada. Las 365 cartas están siempre disponibles y avanzas a tu ritmo. Retomas donde lo dejaste, sin culpa.</div></div>
+          <div class="accordion-content"><div class="accordion-body">Nada. Los 365 retos están siempre disponibles y avanzas a tu ritmo. Retomas donde lo dejaste, sin culpa.</div></div>
         </div>
         <div class="accordion-item">
           <button class="accordion-header"><span class="accordion-title">¿Sirve para mi nivel y mi especialidad?</span><span class="accordion-icon material-symbols-sharp">add</span></button>
@@ -403,7 +416,8 @@
   </section>
 
   <!-- ============ AUTOR ============ -->
-  <section class="s s--ink" id="autor">
+  <!-- Oculta temporalmente (recuperable: quitar style="display:none"). -->
+  <section class="s s--ink" id="autor" style="display:none">
     <div class="wrap">
       <div class="section-head reveal">
         <span class="eyebrow">Quién hay detrás</span>
@@ -419,7 +433,7 @@
             </div>
           </div>
           <div class="bubble bubble--author">
-            <p class="author-bio">Durante años hice cursos y tragué tutoriales, pero mis fotos seguían siendo correctas y olvidables. Un día dejé de estudiar y empecé a entrenar la mirada: cinco minutos al día, un ejercicio y salir a disparar. En unos meses mis fotos empezaron a tener algo mío, una forma de ver que se reconocía de un vistazo. Ese hábito es justo lo que vas a encontrar en estas 365 cartas.</p>
+            <p class="author-bio">Durante años hice cursos y tragué tutoriales, pero mis fotos seguían siendo correctas y olvidables. Un día dejé de estudiar y empecé a entrenar la mirada: cinco minutos al día, un ejercicio y salir a disparar. En unos meses mis fotos empezaron a tener algo mío, una forma de ver que se reconocía de un vistazo. Ese hábito es justo lo que vas a encontrar en estos 365 retos.</p>
           </div>
         </div>
       </div>
@@ -431,7 +445,7 @@
     <div class="wrap wrap--narrow">
       <span class="eyebrow eyebrow--center reveal">Empieza hoy</span>
       <h2 class="display reveal">El problema no es tu <span class="accent-word">cámara</span></h2>
-      <p class="lead reveal">Un pack de <strong>365 cartas digitales</strong> con retos para pasar de fotos normales a fotos inolvidables.</p>
+      <p class="lead reveal">Un pack de <strong>365 retos digitales</strong> con retos para pasar de fotos normales a fotos inolvidables.</p>
       <div class="cta-block cta-block--center reveal">
         <button class="btn btn--lg btn-checkout" data-location="cta-final">Comprar por <span class="p69">69 €</span> <span class="price-old">129 €</span></button>
         <div class="props props--center"><span class="prop"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 9.5h19"/></svg>Pago único</span><span class="prop"><svg viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10 18.5h4"/></svg>App + PDF</span><span class="prop"><svg viewBox="0 0 24 24"><path d="M12 2.5l7.5 3v5.5c0 4.8-3.2 8-7.5 9.5-4.3-1.5-7.5-4.7-7.5-9.5V5.5z"/><path d="M8.8 12.2l2.2 2.2 4.2-4.4"/></svg>Garantía 30 días</span></div>
@@ -451,7 +465,7 @@
     <div class="modal-backdrop"></div>
     <div class="modal-content modal-content--demo">
       <button class="modal-close" id="modalBloquesClose"><span class="material-symbols-sharp">close</span></button>
-      <div class="modal-header"><h3 class="display">Una carta por mirada</h3></div>
+      <div class="modal-header"><h3 class="display">Un reto por mirada</h3></div>
       <div class="modal-body">
         <div class="blocks-deck-wrapper">
           <div class="deck-group">
@@ -511,7 +525,7 @@
   <!-- Fixed CTA -->
   <div class="fixed-cta" id="fixedCta">
     <div class="fixed-cta-inner">
-      <span class="fixed-cta-text">365 cartas · pago único</span>
+      <span class="fixed-cta-text">365 retos · pago único</span>
       <button class="btn btn-checkout" data-location="fixed-bottom">Comprar por <span class="p69">69 €</span> <span class="price-old">129 €</span></button>
     </div>
   </div>
