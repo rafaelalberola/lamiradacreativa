@@ -172,15 +172,24 @@ async function loadMeta(windows, errors) {
 
   try {
     // Serie diaria (alimenta el gráfico y los cortes por ventana).
+    // OJO: la Graph API pagina; hay que seguir paging.next o se infravalora el
+    // gasto del rango (y se infla el ROAS).
     const dailyUrl =
       `${META_API}/${account}/insights?` +
-      `fields=spend,impressions,clicks,ctr,actions&time_increment=1&` +
+      `fields=spend,impressions,clicks,ctr,actions&time_increment=1&limit=500&` +
       `time_range=${encodeURIComponent(JSON.stringify({ since: startDate, until: endDate }))}&` +
       `access_token=${token}`;
-    const dailyRes = await fetch(dailyUrl);
-    const dailyJson = await dailyRes.json();
-    if (dailyJson.error) throw new Error(dailyJson.error.message);
-    const daily = dailyJson.data || [];
+    let daily = [];
+    let pageUrl = dailyUrl;
+    let pages = 0;
+    while (pageUrl && pages < 30) {
+      const res = await fetch(pageUrl);
+      const json = await res.json();
+      if (json.error) throw new Error(json.error.message);
+      daily = daily.concat(json.data || []);
+      pageUrl = json.paging && json.paging.next ? json.paging.next : null;
+      pages++;
+    }
 
     // Gasto acumulado histórico = capital invertido en publi.
     const lifeUrl =
