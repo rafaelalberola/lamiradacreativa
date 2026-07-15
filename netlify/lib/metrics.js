@@ -60,14 +60,14 @@ async function loadStripe(windows, errors) {
     .list({ created: { gte: since }, limit: 100 })
     .autoPagingToArray({ limit: 3000 });
 
-  // Reembolsos del rango para el neto.
+  // Reembolsos: todos (para el neto histórico) + cortes por ventana.
   let refundsRange = 0;
   let refunds30 = 0;
+  let refundsLifetime = 0;
   try {
-    const refunds = await stripe.refunds
-      .list({ created: { gte: Math.min(since, since30) }, limit: 100 })
-      .autoPagingToArray({ limit: 1000 });
+    const refunds = await stripe.refunds.list({ limit: 100 }).autoPagingToArray({ limit: 3000 });
     for (const r of refunds) {
+      refundsLifetime += r.amount / 100;
       if (r.created >= since) refundsRange += r.amount / 100;
       if (r.created >= since30) refunds30 += r.amount / 100;
     }
@@ -145,8 +145,10 @@ async function loadStripe(windows, errors) {
     ordersYday,
     refundsRange,
     refunds30,
+    refundsLifetime,
     revenueRangeNet: revenueRange - refundsRange,
     revenue30Net: revenue30 - refunds30,
+    revenueLifetimeNet: revenueLifetime - refundsLifetime,
     bySourceRevenue,
     revByDay,
     cvrByPrice,
@@ -533,6 +535,7 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
       revenueRangeNet,
       refundsRange: stripe ? stripe.refundsRange : 0,
       revenueLifetime: stripe ? stripe.revenueLifetime : 0,
+      revenueLifetimeNet: stripe ? stripe.revenueLifetimeNet : 0,
       ordersYday: stripe ? stripe.ordersYday : 0,
       ordersRange,
       ordersLifetime: stripe ? stripe.ordersLifetime : 0,
@@ -592,6 +595,7 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
   };
 
   bundle.summary = buildSummary(bundle);
+  bundle.verdict = buildVerdict(bundle);
   bundle.plan = buildPlan(bundle);
   bundle.actions = buildActions(bundle);
   return bundle;
@@ -701,6 +705,31 @@ function buildActions(b) {
   return out;
 }
 
+// ---------------------------------------------------------------- veredicto (histórico)
+// Una frase: ¿sale rentable o no? Basado en TODO el histórico: ingresos netos
+// (tras reembolsos) vs gasto en publicidad de siempre.
+function buildVerdict(b) {
+  const k = b.kpi;
+  const netRev = k.revenueLifetimeNet || 0;
+  const adSpend = k.spendLifetime || 0;
+  const profit = netRev - adSpend;
+  const roas = adSpend > 0 ? netRev / adSpend : null;
+
+  if (adSpend <= 0 || roas == null) {
+    return { status: 'sin-datos', sentence: 'Aún no hay suficiente gasto en publicidad para saber si es rentable.', profit, roas };
+  }
+  if (roas >= 1.5) {
+    return { status: 'rentable', profit, roas,
+      sentence: `Sí, sale rentable: por cada 1 € en publicidad recuperas ${round1(roas)} € y llevas ${eur(profit)} de beneficio en total.` };
+  }
+  if (roas >= 1.0) {
+    return { status: 'justo', profit, roas,
+      sentence: `Apenas rentable: por cada 1 € en publicidad recuperas solo ${round1(roas)} € — cubres el gasto pero ganas muy poco (${eur(profit)} en total).` };
+  }
+  return { status: 'perdida', profit, roas,
+    sentence: `No sale rentable: por cada 1 € en publicidad recuperas ${round1(roas)} € y pierdes ${eur(Math.abs(profit))} en total.` };
+}
+
 // ---------------------------------------------------------------- plan proactivo
 // Sintetiza el problema #1 con argumento (por qué) y pasos concretos.
 function buildPlan(b) {
@@ -768,4 +797,4 @@ function buildPlan(b) {
   return { headline, problem, why, steps };
 }
 
-module.exports = { computeMetrics, buildActions, buildSummary, buildPlan, eur, pct, round1 };
+module.exports = { computeMetrics, buildActions, buildSummary, buildPlan, buildVerdict, eur, pct, round1 };

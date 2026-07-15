@@ -118,6 +118,14 @@
     .plan-cols ul, .plan-cols ol { margin: 0; padding-left: 18px; }
     .plan-cols li { margin: 5px 0; line-height: 1.45; }
 
+    /* veredicto */
+    .verdict { display: flex; align-items: center; gap: 14px; padding: 18px 20px; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); background: var(--card); }
+    .verdict .vic { font-size: 26px; flex: none; line-height: 1; }
+    .verdict .vtxt { font-size: 16px; font-weight: 700; letter-spacing: -.01em; line-height: 1.4; }
+    .verdict.rentable { background: color-mix(in srgb, var(--green) 9%, var(--card)); border-color: color-mix(in srgb, var(--green) 35%, var(--border)); }
+    .verdict.justo { background: color-mix(in srgb, var(--amber) 9%, var(--card)); border-color: color-mix(in srgb, var(--amber) 35%, var(--border)); }
+    .verdict.perdida { background: color-mix(in srgb, var(--red) 9%, var(--card)); border-color: color-mix(in srgb, var(--red) 35%, var(--border)); }
+
     /* avisos list */
     .aviso { display: flex; gap: 11px; padding: 13px 0; border-top: 1px solid var(--border); }
     .aviso:first-child { border-top: none; padding-top: 4px; }
@@ -207,6 +215,14 @@
 
       <!-- TAB: RESUMEN -->
       <div class="tabpanel" id="tab-resumen">
+        <section class="block">
+          <div class="section-label">¿Sale rentable? · según todo el histórico</div>
+          <div class="verdict" id="verdictBox">
+            <span class="vic" id="verdictIcon"></span>
+            <div class="vtxt" id="verdictText"></div>
+          </div>
+        </section>
+
         <section class="block"><div class="plan" id="planBox">
           <div class="plan-head">
             <div><div class="plan-eyebrow">🧭 Tu plan ahora</div><p class="plan-headline" id="planHeadline"></p></div>
@@ -386,6 +402,13 @@
       if (b.lastSaleDate) extra += ' · última venta ' + b.lastSaleDate;
       if (k.refundsRange > 0) extra += ' · reembolsos ' + EUR(k.refundsRange);
       $('updated').textContent = 'Actualizado ' + new Date(b.generatedAt).toLocaleString('es-ES') + ' · rango ' + b.rangeDays + ' días' + extra;
+
+      // veredicto (una frase)
+      const v = b.verdict || {};
+      const vic = { rentable: '✅', justo: '🟠', perdida: '🔴', 'sin-datos': '⚪' };
+      $('verdictBox').className = 'verdict ' + (v.status || '');
+      $('verdictIcon').textContent = vic[v.status] || '📊';
+      $('verdictText').textContent = v.sentence || '';
 
       // plan
       const p = b.plan || {};

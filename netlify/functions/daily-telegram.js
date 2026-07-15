@@ -25,6 +25,12 @@ function buildMessage(b) {
 
   let msg = `*La Mirada Creativa · ${esc(fecha)}*\n\n`;
 
+  // Veredicto de rentabilidad (una frase)
+  if (b.verdict && b.verdict.sentence) {
+    const vic = { rentable: '✅', justo: '🟠', perdida: '🔴', 'sin-datos': '⚪' };
+    msg += `${vic[b.verdict.status] || '📊'} *${esc(b.verdict.sentence)}*\n\n`;
+  }
+
   // Plan proactivo primero
   const p = b.plan || {};
   if (p.headline) {
