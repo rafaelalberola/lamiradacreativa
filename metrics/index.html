@@ -49,8 +49,27 @@
     /* actions */
     .actions { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 18px; box-shadow: var(--shadow-sm); }
     .actions h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 0 0 8px; }
-    .action { display: flex; gap: 8px; padding: 5px 0; font-size: 14px; line-height: 1.45; }
-    .action .dot { flex: none; }
+    .action { display: flex; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); font-size: 14px; line-height: 1.45; }
+    .action:first-child { border-top: none; }
+    .action .dot { flex: none; font-size: 16px; }
+    .action .a-title { font-weight: 700; }
+    .action .a-plain { color: var(--ink); margin: 2px 0 0; }
+    .action ul.a-todo { margin: 6px 0 0; padding-left: 18px; }
+    .action ul.a-todo li { color: var(--muted); font-size: 13px; margin: 2px 0; }
+
+    /* plan proactivo */
+    .plan { background: var(--accent-soft); border: 1px solid transparent; border-radius: var(--radius); padding: 20px; margin-bottom: 18px; box-shadow: var(--shadow-sm); }
+    .plan-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+    .plan-head h2 { font-size: 16px; margin: 0; }
+    .btn-plan { background: var(--cta); color: var(--cta-ink); border: none; border-radius: var(--pill); font-weight: 700; padding: 8px 14px; box-shadow: 0 10px 24px -12px rgba(255,176,32,.55); }
+    .btn-plan:hover { transform: translateY(-1px); filter: brightness(1.03); }
+    .plan-headline { font-size: 1.15rem; font-weight: 800; letter-spacing: -.01em; margin: 4px 0 4px; color: var(--accent-600); }
+    .plan-problem { margin: 0 0 12px; color: var(--ink); }
+    .plan-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    @media (max-width: 640px) { .plan-cols { grid-template-columns: 1fr; } }
+    .plan-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 700; margin-bottom: 4px; }
+    .plan-cols ul, .plan-cols ol { margin: 0; padding-left: 20px; }
+    .plan-cols li { margin: 4px 0; font-size: 14px; line-height: 1.45; }
 
     /* tiles */
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
@@ -139,8 +158,22 @@
     </header>
     <div class="updated" id="updated"></div>
 
+    <!-- PLAN proactivo -->
+    <div class="plan" id="planBox">
+      <div class="plan-head">
+        <h2>🧭 Tu plan ahora</h2>
+        <button id="downloadPlan" class="btn-plan">⬇ Descargar plan (.md)</button>
+      </div>
+      <p class="plan-headline" id="planHeadline"></p>
+      <p class="plan-problem" id="planProblem"></p>
+      <div class="plan-cols">
+        <div><div class="plan-label">Por qué</div><ul id="planWhy"></ul></div>
+        <div><div class="plan-label">Qué hacer</div><ol id="planSteps"></ol></div>
+      </div>
+    </div>
+
     <div class="actions" id="actionsBox">
-      <h2>Acciones a tomar</h2>
+      <h2>Avisos</h2>
       <div id="actions"></div>
     </div>
 
@@ -216,6 +249,7 @@
     const NUM = (n) => (n == null ? '—' : Number(n).toLocaleString('es-ES'));
     const PCT = (n) => (n == null ? '—' : (Math.round(n * 10) / 10).toFixed(1) + ' %');
     const X = (n) => (n == null ? '—' : (Math.round(n * 10) / 10) + 'x');
+    const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
     // Al cargar: prueba la cookie existente. Si es válida, entra directo; si no, login.
     async function init() {
@@ -325,8 +359,21 @@
       ].join('');
 
       // actions
-      const icon = { alto: '🔴', medio: '🟠', bajo: '🟡', ok: '🟢', info: 'ℹ️' };
-      $('actions').innerHTML = b.actions.map(a => `<div class="action"><span class="dot">${icon[a.level] || '•'}</span><span>${a.text}</span></div>`).join('');
+      window._lastBundle = b;
+      // plan proactivo
+      const p = b.plan || {};
+      $('planHeadline').textContent = p.headline || '';
+      $('planProblem').textContent = p.problem || '';
+      $('planWhy').innerHTML = (p.why || []).map(w => `<li>${esc(w)}</li>`).join('');
+      $('planSteps').innerHTML = (p.steps || []).map(s => `<li>${esc(s)}</li>`).join('');
+      // avisos (lenguaje simple: título + explicación + qué hacer)
+      $('actions').innerHTML = (b.actions || []).map(a =>
+        `<div class="action"><span class="dot">${a.icon || '•'}</span><div>` +
+        `<div class="a-title">${esc(a.title)}</div>` +
+        `<div class="a-plain">${esc(a.plain)}</div>` +
+        ((a.todo && a.todo.length) ? `<ul class="a-todo">${a.todo.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : '') +
+        `</div></div>`
+      ).join('');
 
       // funnel
       const f = b.funnel;
@@ -436,6 +483,35 @@
         options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } },
       });
     }
+
+    $('downloadPlan').onclick = () => {
+      const b = window._lastBundle; if (!b) return;
+      const p = b.plan || {}, k = b.kpi, md = [];
+      const fecha = new Date(b.generatedAt).toLocaleDateString('es-ES');
+      md.push('# Plan de acción — La Mirada Creativa', '', '_Generado el ' + fecha + '_', '');
+      md.push('## 🧭 Tu plan ahora', '', '**' + (p.headline || '') + '**', '');
+      if (p.problem) md.push(p.problem, '');
+      if ((p.why || []).length) { md.push('**Por qué:**'); p.why.forEach((w) => md.push('- ' + w)); md.push(''); }
+      if ((p.steps || []).length) { md.push('**Qué hacer:**'); p.steps.forEach((s, i) => md.push((i + 1) + '. ' + s)); md.push(''); }
+      md.push('## 📋 Avisos', '');
+      (b.actions || []).forEach((a) => {
+        md.push('### ' + a.icon + ' ' + a.title, '', a.plain, '');
+        (a.todo || []).forEach((t) => md.push('- ' + t));
+        md.push('');
+      });
+      md.push('## 📊 Números clave', '');
+      md.push('- Ingresos (' + b.rangeDays + 'd): ' + EUR(k.revenueRangeNet) + ' · total ' + EUR(k.revenueLifetime));
+      md.push('- Ventas: ' + NUM(k.ordersRange) + ' · total ' + NUM(k.ordersLifetime));
+      md.push('- Gasto publi: ' + EUR(k.spendRange) + ' · capital invertido ' + EUR(k.spendLifetime));
+      md.push('- ROAS ' + X(k.roas) + ' · CAC ' + EUR(k.cac) + ' · AOV ' + EUR(k.aov) + ' · CPL ' + EUR(k.cpl));
+      md.push('- Presupuesto del mes: ' + EUR(k.spendMTD) + ' / ' + EUR(k.monthlyBudget) + ' (quedan ' + EUR(k.budgetRemaining) + ')');
+      const blob = new Blob([md.join('\n')], { type: 'text/markdown;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'plan-la-mirada-creativa.md';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    };
 
     $('saveCfg').onclick = async () => {
       const cfg = {};

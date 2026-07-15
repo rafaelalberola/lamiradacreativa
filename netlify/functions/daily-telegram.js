@@ -23,19 +23,32 @@ function buildMessage(b) {
     timeZone: 'Europe/Madrid',
   });
 
-  let msg = `*La Mirada Creativa · ${esc(fecha)}*\n_Resumen últimos ${b.rangeDays} días_\n\n`;
+  let msg = `*La Mirada Creativa · ${esc(fecha)}*\n\n`;
+
+  // Plan proactivo primero
+  const p = b.plan || {};
+  if (p.headline) {
+    msg += `*🧭 Tu plan ahora*\n${esc(p.headline)}\n`;
+    for (const s of (p.steps || []).slice(0, 3)) msg += `→ ${esc(s)}\n`;
+    msg += `\n`;
+  }
+
+  // Avisos en lenguaje simple (título + explicación)
+  const actions = (b.actions || []).filter((a) => a.level !== 'info');
+  if (actions.length) {
+    msg += `*✅ Avisos*\n`;
+    for (const a of actions) msg += `${a.icon || '•'} *${esc(a.title)}*\n${esc(a.plain)}\n`;
+    msg += `\n`;
+  }
+
+  // Progreso (números)
   msg += `*📊 Progreso*\n`;
   for (const line of b.summary) msg += `• ${esc(line)}\n`;
 
-  msg += `\n*✅ Acciones*\n`;
-  const actions = b.actions.filter((a) => a.level !== 'info');
-  if (!actions.length) msg += `• ${esc('Sin alertas.')}\n`;
-  for (const a of actions) msg += `${LEVEL_ICON[a.level] || '•'} ${esc(a.text)}\n`;
-
-  const infos = b.actions.filter((a) => a.level === 'info');
+  const infos = (b.actions || []).filter((a) => a.level === 'info');
   if (infos.length) {
     msg += `\n_Avisos técnicos_\n`;
-    for (const a of infos) msg += `• ${esc(a.text)}\n`;
+    for (const a of infos) msg += `• ${esc(a.plain || a.title)}\n`;
   }
 
   msg += `\n[Abrir dashboard](https://lamiradacreativa.com/metrics/)`;

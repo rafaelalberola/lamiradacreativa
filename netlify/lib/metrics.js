@@ -19,6 +19,12 @@ const eur = (n) =>
   }) + ' €';
 const pct = (n) => (Math.round(n * 10) / 10).toFixed(1) + ' %';
 const round1 = (n) => Math.round(n * 10) / 10;
+const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+function fmtDate(iso) {
+  if (!iso) return '';
+  const [, m, d] = iso.split('-');
+  return `${parseInt(d, 10)} ${MESES[parseInt(m, 10) - 1]}`;
+}
 
 function dayKey(dateOrUnix) {
   const d = typeof dateOrUnix === 'number' ? new Date(dateOrUnix * 1000) : new Date(dateOrUnix);
@@ -198,6 +204,31 @@ async function loadMeta(windows, errors) {
     const lifeJson = await lifeRes.json();
     const spendLifetime = lifeJson.data && lifeJson.data[0] ? Number(lifeJson.data[0].spend) : 0;
 
+    // Fase de aprendizaje: adset activo más reciente (para no juzgar antes de 7 días).
+    let activeAdsetCount = 0;
+    let newestActiveAdset = null;
+    const activeCampaigns = [];
+    try {
+      const asRes = await fetch(
+        `${META_API}/${account}/adsets?fields=effective_status,created_time&limit=200&access_token=${token}`
+      );
+      const asJson = await asRes.json();
+      for (const a of asJson.data || []) {
+        if (a.effective_status === 'ACTIVE') {
+          activeAdsetCount++;
+          const d = a.created_time ? a.created_time.slice(0, 10) : null;
+          if (d && (!newestActiveAdset || d > newestActiveAdset)) newestActiveAdset = d;
+        }
+      }
+      const cRes = await fetch(
+        `${META_API}/${account}/campaigns?fields=name,objective&effective_status=%5B%22ACTIVE%22%5D&limit=50&access_token=${token}`
+      );
+      const cJson = await cRes.json();
+      for (const c of cJson.data || []) activeCampaigns.push({ name: c.name, objective: c.objective });
+    } catch (e) {
+      /* aprendizaje es best-effort */
+    }
+
     const isLead = (t) => t === 'lead' || t.includes('lead');
     const isPurchase = (t) => t === 'purchase' || t.includes('purchase');
 
@@ -239,6 +270,9 @@ async function loadMeta(windows, errors) {
       leadsMeta,
       purchasesMeta,
       spendByDay,
+      activeAdsetCount,
+      newestActiveAdset,
+      activeCampaigns,
     };
   } catch (e) {
     errors.meta =
@@ -468,6 +502,26 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
   const budgetProjected = dayOfMonth > 0 ? (spendMTD / dayOfMonth) * daysInMonth : spendMTD;
   const netProfit30 = revenue30Net - spend30; // ingresos netos − gasto en publi
 
+  // Fase de aprendizaje de Meta: la estrategia dice NO juzgar hasta pasados 7 días
+  // desde el lanzamiento del adset activo (Meta aún está optimizando).
+  const LEARNING_DAYS = 7;
+  let learning = { active: false, activeCampaigns: meta ? meta.activeCampaigns || [] : [] };
+  if (meta && meta.newestActiveAdset) {
+    const launchMs = new Date(meta.newestActiveAdset + 'T00:00:00Z').getTime();
+    const daysSince = Math.floor((Date.now() - launchMs) / (86400 * 1000));
+    if (daysSince >= 0 && daysSince < LEARNING_DAYS) {
+      learning = {
+        active: true,
+        day: daysSince,
+        total: LEARNING_DAYS,
+        daysLeft: LEARNING_DAYS - daysSince,
+        launchDate: meta.newestActiveAdset,
+        until: new Date(launchMs + LEARNING_DAYS * 86400 * 1000).toISOString().slice(0, 10),
+        activeCampaigns: meta.activeCampaigns || [],
+      };
+    }
+  }
+
   const bundle = {
     generatedAt: new Date().toISOString(),
     rangeDays,
@@ -533,10 +587,12 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
       visitsByDay: sb ? sb.visitsByDay : {},
     },
     ownAnalytics: sb ? sb.eventsAvailable : false,
+    learning,
     errors,
   };
 
   bundle.summary = buildSummary(bundle);
+  bundle.plan = buildPlan(bundle);
   bundle.actions = buildActions(bundle);
   return bundle;
 }
@@ -561,51 +617,155 @@ function buildSummary(b) {
 }
 
 // ---------------------------------------------------------------- actions engine
+// Lenguaje sencillísimo (que lo entienda cualquiera): frases cortas, ejemplos
+// tipo "de cada 100 personas…", y para cada aviso, qué hacer.
+const ICON = { alto: '🔴', medio: '🟠', bajo: '🟡', ok: '🟢', info: 'ℹ️' };
+
 function buildActions(b) {
   const k = b.kpi;
   const c = b.config;
   const out = [];
-  const push = (level, text) => out.push({ level, text });
+  const push = (level, title, plain, todo) =>
+    out.push({ level, icon: ICON[level] || '•', title, plain, todo: todo || [] });
+
+  // Fase de aprendizaje: NO dar consejos reactivos. Respetar el plan (esperar 7 días).
+  if (b.learning && b.learning.active) {
+    push('ok', `Fase de aprendizaje: día ${b.learning.day} de ${b.learning.total}`,
+      `Lanzaste anuncios hace ${b.learning.day} día${b.learning.day === 1 ? '' : 's'}. Meta todavía está aprendiendo a quién enseñarlos, así que los números de ahora NO son fiables y es normal ver pocas ventas. Acordamos no tocar nada los primeros 7 días.`,
+      [
+        `Deja los anuncios correr sin cambios hasta el ${fmtDate(b.learning.until)}.`,
+        `No cambies precio, presupuesto ni creatividades (reiniciarías el aprendizaje).`,
+        `Mientras, la secuencia de emails va convirtiendo leads en ventas (tarda hasta 30 días).`,
+      ]);
+    for (const [src, msg] of Object.entries(b.errors || {})) push('info', `Aviso técnico (${src})`, msg, []);
+    return out;
+  }
 
   if (k.monthlyBudget > 0 && k.spendMTD > k.monthlyBudget) {
-    push('alto', `Presupuesto de publi del mes agotado: ${eur(k.spendMTD)} de ${eur(k.monthlyBudget)}. Pausa campañas o repón presupuesto.`);
+    push('alto', 'Te has pasado del presupuesto de anuncios del mes',
+      `Este mes tu tope era ${eur(k.monthlyBudget)} y ya llevas ${eur(k.spendMTD)} gastados en anuncios.`,
+      ['Pausa los anuncios, o sube el presupuesto a propósito.']);
   } else if (k.monthlyBudget > 0 && k.budgetProjected > k.monthlyBudget * 1.1) {
-    push('medio', `A este ritmo te pasas del presupuesto del mes: proyección ${eur(k.budgetProjected)} vs ${eur(k.monthlyBudget)}. Baja el ritmo de gasto.`);
+    push('medio', 'A este ritmo te pasarás del presupuesto del mes',
+      `Vas camino de gastar ${eur(k.budgetProjected)} y tu tope es ${eur(k.monthlyBudget)}.`,
+      ['Gasta un poco menos al día.']);
   }
   if (k.ordersYday === 0 && k.spendYday > 0) {
-    push('alto', `0 ventas ayer con ${eur(k.spendYday)} de gasto. Revisa checkout, oferta y segmentación.`);
+    push('alto', 'Ayer pagaste anuncios y no vendiste nada',
+      `Gastaste ${eur(k.spendYday)} en anuncios y vendiste 0. Eso es tirar dinero.`,
+      ['Pausa los anuncios hasta arreglar el precio (mira el plan de arriba).']);
   }
   if (k.roas != null && k.roas < c.target_roas && k.spendRange > 0) {
-    push('medio', `ROAS ${round1(k.roas)}x (objetivo ≥ ${c.target_roas}x). Pausa o renueva los peores creativos/públicos.`);
+    push('medio', 'Los anuncios casi no te dan beneficio',
+      `Por cada 1 € que metes en anuncios, recuperas ${round1(k.roas)} €. Lo bueno es ${c.target_roas} € o más.`,
+      ['Apaga los anuncios que peor funcionan y deja solo los mejores.']);
   }
   if (k.cpl != null && k.cpl > c.target_cpl) {
-    push('medio', `CPL ${eur(k.cpl)} (objetivo ≤ ${eur(c.target_cpl)}). Revisa gancho y creatividad de la campaña de leads.`);
+    push('medio', 'Conseguir un email te sale carísimo',
+      `Pagas ${eur(k.cpl)} por cada persona que deja su email. Debería costarte ${eur(c.target_cpl)} o menos.`,
+      ['Cambia la foto y el texto del anuncio que pide el email.']);
   }
   if (k.cac != null && k.cac > c.target_cac) {
-    push('medio', `CAC ${eur(k.cac)} (objetivo ≤ ${eur(c.target_cac)}). Margen estrecho: sube AOV o baja coste de adquisición.`);
+    push('medio', 'Cada cliente nuevo te cuesta más de la cuenta',
+      `Gastas ${eur(k.cac)} en anuncios por cada cliente, y cada uno paga de media ${eur(k.aov)}. Te queda muy poco.`,
+      ['Sube el precio, o gasta menos por cliente.']);
   }
   if (b.audience.leads3d === 0 && k.spendRange > 0) {
-    push('medio', `0 leads en 3 días con gasto activo. ¿La campaña de leads está encendida y el pixel dispara "Lead"?`);
+    push('medio', 'Llevas 3 días pagando anuncios sin conseguir ni un email',
+      'Gastas en anuncios pero no entra ningún email nuevo. Algo está apagado o roto.',
+      ['Comprueba que la campaña de emails está encendida.', 'Comprueba que el botón de "registrarse" funciona.']);
   }
   if (b.funnel.cvrCheckout && b.funnel.cvrCheckout < 30 && b.funnel.checkoutStarts >= 10) {
-    push('medio', `CVR de checkout ${pct(b.funnel.cvrCheckout)}: muchos inician pago y no completan. Revisa fricción y métodos de pago.`);
+    const de100 = Math.round(b.funnel.cvrCheckout);
+    push('medio', 'Mucha gente empieza a pagar pero no termina',
+      `De cada 100 que llegan a la pantalla de pago, solo ${de100} compran. Los otros ${100 - de100} se van.`,
+      ['Haz el pago más fácil: menos pasos y más formas de pagar (tarjeta, PayPal).']);
   }
-  // Insight de precio: si hay ≥2 buckets con volumen, sugiere el mejor.
   const priced = (b.cvrByPrice || []).filter((r) => r.created >= 10);
   if (priced.length >= 2) {
     const best = [...priced].sort((a, b) => b.cvr - a.cvr)[0];
     const worst = [...priced].sort((a, b) => a.cvr - b.cvr)[0];
-    if (best.price !== worst.price && best.cvr - worst.cvr > 1) {
-      push('bajo', `Precio: ${best.price} convierte al ${pct(best.cvr)} vs ${worst.price} al ${pct(worst.cvr)}. Considera un test de precio controlado.`);
+    if (best.price !== worst.price && best.cvr - worst.cvr > 3) {
+      push('bajo', `El precio de ${best.price} vendía mucho mejor que el de ${worst.price}`,
+        `A ${best.price} compraban ${Math.round(best.cvr)} de cada 100. A ${worst.price}, solo ${Math.round(worst.cvr)} de cada 100.`,
+        [`Prueba a poner el precio en ${best.price} (o los dos a la vez y compara).`]);
     }
   }
   if (Object.keys(b.errors || {}).length) {
-    for (const [src, msg] of Object.entries(b.errors)) push('info', `Fuente ${src}: ${msg}`);
+    for (const [src, msg] of Object.entries(b.errors)) push('info', `Aviso técnico (${src})`, msg, []);
   }
   if (!out.some((a) => a.level === 'alto' || a.level === 'medio')) {
-    push('ok', `Todo en verde. Mantén rumbo y escala presupuesto en los públicos/creativos con mejor ROAS.`);
+    push('ok', 'Todo va bien',
+      'Los números están sanos. Sigue igual y mete un poco más de dinero en lo que mejor funciona.', []);
   }
   return out;
 }
 
-module.exports = { computeMetrics, buildActions, buildSummary, eur, pct, round1 };
+// ---------------------------------------------------------------- plan proactivo
+// Sintetiza el problema #1 con argumento (por qué) y pasos concretos.
+function buildPlan(b) {
+  const k = b.kpi;
+  const c = b.config;
+
+  // En aprendizaje: el único plan sensato es esperar. Alineado a la estrategia.
+  if (b.learning && b.learning.active) {
+    const camp = (b.learning.activeCampaigns || [])[0];
+    return {
+      headline: `Espera y no toques nada: fase de aprendizaje (día ${b.learning.day} de ${b.learning.total}).`,
+      problem: `Tu anuncio${camp ? ' ("' + camp.name + '")' : ''} lleva solo ${b.learning.day} día${b.learning.day === 1 ? '' : 's'}. Aún no hay datos fiables para decidir nada.`,
+      why: [
+        `Meta necesita unos 7 días (o ~50 ventas) para aprender a quién enseñar tus anuncios.`,
+        `Si cambias precio, presupuesto o creatividad ahora, reinicias el aprendizaje y tiras el dinero ya gastado.`,
+        `Además, mucha gente que hoy deja su email comprará por email en los próximos 30 días.`,
+      ],
+      steps: [
+        `No toques nada hasta el ${fmtDate(b.learning.until)} (${b.learning.daysLeft} día${b.learning.daysLeft === 1 ? '' : 's'} más).`,
+        `Ese día vuelve aquí: ROAS, CPA y CVR ya serán fiables y decidimos con datos.`,
+        `Mientras, deja que la secuencia de emails haga su trabajo.`,
+      ],
+    };
+  }
+
+  const currentPrice = Math.round(Number(c.product_price) || 0);
+  const priced = (b.cvrByPrice || []).filter((r) => r.created >= 10);
+  const best = priced.slice().sort((a, d) => d.cvr - a.cvr)[0];
+  const current = priced.find((r) => Math.round(parseFloat(r.price)) === currentPrice);
+
+  const why = [];
+  const steps = [];
+  let headline;
+  let problem = null;
+
+  if (best && best.cvr > 0 && (!current || best.cvr - current.cvr > 5)) {
+    // El precio es el problema principal
+    problem = `Tu precio de ahora (${currentPrice} €) casi no vende.`;
+    headline = `Baja el precio a ${best.price}: es el que más te vendía.`;
+    why.push(`A ${best.price}, ${Math.round(best.cvr)} de cada 100 personas compraban.`);
+    why.push(current ? `A ${currentPrice} €, solo ${Math.round(current.cvr)} de cada 100.` : `A ${currentPrice} € casi no compra nadie.`);
+    if (k.spendYday > 0 && k.ordersYday === 0) why.push(`Y mientras, gastas ${eur(k.spendYday)} al día en anuncios sin vender nada.`);
+    steps.push(`Pon el precio en ${best.price} (o prueba ${best.price} y ${currentPrice} € a la vez durante 2 semanas).`);
+    if (k.spendYday > 0) steps.push(`Hasta que vuelva a vender, pausa los anuncios: pierdes ${eur(k.spendYday)} cada día.`);
+    steps.push(`Cuando empiece a vender otra vez, enciende los anuncios poco a poco y vigila el ROAS.`);
+  } else if (k.roas != null && k.roas < c.target_roas && k.spendRange > 0) {
+    problem = `Tus anuncios rinden poco.`;
+    headline = `Deja solo los anuncios que funcionan.`;
+    why.push(`Por cada 1 € en anuncios recuperas ${round1(k.roas)} €. Lo sano es ${c.target_roas} € o más.`);
+    steps.push(`Apaga los 2-3 anuncios o públicos con peor resultado.`);
+    steps.push(`Pon ese dinero en el anuncio que más vende.`);
+    steps.push(`Vuelve a mirar en 1 semana si el ROAS sube.`);
+  } else if (k.spendYday > 0 && k.ordersYday === 0) {
+    problem = `Pagas anuncios y no vendes.`;
+    headline = `Pausa los anuncios y revisa la oferta.`;
+    why.push(`Ayer gastaste ${eur(k.spendYday)} en anuncios y vendiste 0.`);
+    steps.push(`Pausa los anuncios hoy mismo.`);
+    steps.push(`Prueba a bajar el precio o a mejorar la oferta.`);
+  } else {
+    headline = `Vas bien. Escala lo que funciona.`;
+    why.push(`No hay fugas grandes ahora mismo.`);
+    steps.push(`Mete un poco más de presupuesto en el anuncio/público con mejor ROAS.`);
+    steps.push(`Vigila que el ROAS siga por encima de ${c.target_roas}.`);
+  }
+  return { headline, problem, why, steps };
+}
+
+module.exports = { computeMetrics, buildActions, buildSummary, buildPlan, eur, pct, round1 };
