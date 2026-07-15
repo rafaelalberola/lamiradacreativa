@@ -69,7 +69,10 @@ async function loadStripe(windows, errors) {
     /* refunds are best-effort */
   }
 
-  const paid = (s) => s.payment_status === 'paid' || s.status === 'complete';
+  // Solo cuenta como venta real la sesión PAGADA. Un checkout puede quedar
+  // 'complete' con payment_status 'no_payment_required' (cupón 100%) o 'unpaid':
+  // esos NO son ingresos y no deben inflar el nº de ventas ni bajar el AOV.
+  const paid = (s) => s.payment_status === 'paid';
   const euros = (s) => (s.amount_total || 0) / 100;
   const priceLabel = (s) => `${Math.round((s.amount_total || 0) / 100)} €`;
 

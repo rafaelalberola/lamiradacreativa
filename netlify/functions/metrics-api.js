@@ -35,6 +35,42 @@ exports.handler = async (event) => {
     return { statusCode: 401, headers, body: JSON.stringify({ error: 'Unauthorized' }) };
   }
 
+  // --- diagnóstico de datos (auditoría, solo admin) ---
+  if (event.queryStringParameters?.debug === 'stripe') {
+    try {
+      const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+      const all = await stripe.checkout.sessions.list({ limit: 100 }).autoPagingToArray({ limit: 8000 });
+      const completed = await stripe.checkout.sessions.list({ status: 'complete', limit: 100 }).autoPagingToArray({ limit: 8000 });
+      const byPayStatus = {};
+      let paidCount = 0, paidRevenue = 0, lastPaid = 0, firstPaid = 0;
+      const byMonth = {};
+      for (const s of completed) {
+        byPayStatus[s.payment_status] = (byPayStatus[s.payment_status] || 0) + 1;
+        if (s.payment_status === 'paid') {
+          paidCount++; paidRevenue += (s.amount_total || 0) / 100;
+          if (s.created > lastPaid) lastPaid = s.created;
+          if (!firstPaid || s.created < firstPaid) firstPaid = s.created;
+          const mk = new Date(s.created * 1000).toISOString().slice(0, 7);
+          byMonth[mk] = byMonth[mk] || { ventas: 0, ingresos: 0 };
+          byMonth[mk].ventas += 1;
+          byMonth[mk].ingresos += (s.amount_total || 0) / 100;
+        }
+      }
+      return { statusCode: 200, headers, body: JSON.stringify({
+        totalSessionsAllStatuses: all.length,
+        totalCompleted: completed.length,
+        byPaymentStatus: byPayStatus,
+        paidCount, paidRevenue: Math.round(paidRevenue * 100) / 100,
+        aov: paidCount ? Math.round(paidRevenue / paidCount * 100) / 100 : null,
+        firstPaidDate: firstPaid ? new Date(firstPaid * 1000).toISOString().slice(0, 10) : null,
+        lastPaidDate: lastPaid ? new Date(lastPaid * 1000).toISOString().slice(0, 10) : null,
+        ingresosPorMes: byMonth,
+      }, null, 2) };
+    } catch (e) {
+      return { statusCode: 500, headers, body: JSON.stringify({ error: 'debug', detail: e.message }) };
+    }
+  }
+
   try {
     if (event.httpMethod === 'POST') {
       const body = JSON.parse(event.body || '{}');
