@@ -70,11 +70,11 @@
     .badge-green { color: var(--green); } .badge-amber { color: var(--amber); } .badge-red { color: var(--red); }
 
     /* ============ layout ============ */
-    .wrap { max-width: 1200px; margin: 0 auto; padding: 20px; }
-    .updated { font-size: 12px; color: var(--muted-foreground); margin-bottom: 14px; }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 24px 64px; }
+    .updated { font-size: 12px; color: var(--muted-foreground); margin-bottom: 18px; }
 
     /* tabs (shadcn TabsList segmented) */
-    .tabs { display: inline-flex; gap: 2px; padding: 4px; background: var(--muted); border-radius: var(--radius); margin-bottom: 20px; overflow-x: auto; max-width: 100%; }
+    .tabs { display: inline-flex; gap: 2px; padding: 4px; background: var(--muted); border-radius: var(--radius); margin-bottom: 32px; overflow-x: auto; max-width: 100%; }
     .tab { border: none; background: transparent; color: var(--muted-foreground); font: inherit; font-weight: 600; font-size: 13px; padding: 7px 14px; border-radius: calc(var(--radius) - .2rem); cursor: pointer; white-space: nowrap; }
     .tab.active { background: var(--card); color: var(--foreground); box-shadow: var(--shadow); }
 
@@ -85,8 +85,12 @@
     .card-d { font-size: 12px; color: var(--muted-foreground); margin-top: 2px; }
     .card-c { padding: 16px 18px; }
 
-    section.block { margin-bottom: 22px; }
-    .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted-foreground); margin: 0 2px 10px; }
+    section.block { margin-bottom: 38px; }
+    section.block:last-child { margin-bottom: 0; }
+    .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted-foreground); margin: 0 2px 14px; }
+    /* rejillas sueltas (fuera de .block) también con separación */
+    .tabpanel > .grid { margin-bottom: 38px; }
+    .tabpanel > .grid:last-child { margin-bottom: 0; }
 
     /* symmetric grids */
     .grid { display: grid; gap: 14px; }
