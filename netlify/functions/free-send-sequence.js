@@ -84,25 +84,25 @@ function buildEmailHtml(step) {
       ${ctaButton('Ver el programa completo', `${BASE_URL}/?${utmBase}3`)}`,
 
     4: `
-      <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">El ejercicio del día 47 se llama "Luz que abraza".</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">El ejercicio del día 81 se llama "Hora dorada".</p>
       <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">Es el que más fotógrafos mencionan cuando les pregunto cuál les cambió la forma de ver.</p>
       <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">No puedo dártelo todavía — está en el Bloque 1, después del día 7.</p>
       <p style="font-size:15px;color:#6A6F79;margin:0 0 28px;line-height:1.7;">Pero mañana terminas tu prueba. Y puedes desbloquear los 365 por lo que cuesta un café a la semana durante un mes.</p>
-      <p style="font-size:15px;color:#0B0B0D;margin:0 0 28px;line-height:1.7;font-weight:600;">39 €. Una vez. Para siempre.</p>
-      ${ctaButton('Desbloquear los 365 ejercicios — 39 €', `${BASE_URL}/#precio?${utmBase}4`)}`,
+      <p style="font-size:15px;color:#0B0B0D;margin:0 0 28px;line-height:1.7;font-weight:600;">69 €. Una vez. Para siempre.</p>
+      ${ctaButton('Desbloquear los 365 ejercicios — 69 €', `${BASE_URL}/#precio?${utmBase}4`)}`,
 
     5: `
       <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">Hoy es tu día 7.</p>
       <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">Has entrenado tu mirada durante una semana. La pregunta es simple: ¿quieres seguir?</p>
       <p style="font-size:15px;color:#6A6F79;margin:0 0 28px;line-height:1.7;">365 ejercicios. Cuatro bloques. De mirada técnica a mirada propia.</p>
-      <p style="font-size:15px;color:#0B0B0D;margin:0 0 28px;line-height:1.7;font-weight:600;">39 €. Pago único. Acceso para siempre. Garantía de 30 días.</p>
-      ${ctaButton('Desbloquear acceso completo — 39 €', `${BASE_URL}/#precio?${utmBase}5`)}
+      <p style="font-size:15px;color:#0B0B0D;margin:0 0 28px;line-height:1.7;font-weight:600;">69 €. Pago único. Acceso para siempre. Garantía de 30 días.</p>
+      ${ctaButton('Desbloquear acceso completo — 69 €', `${BASE_URL}/#precio?${utmBase}5`)}
       <p style="font-size:15px;color:#6A6F79;margin:28px 0 0;line-height:1.7;">Si no es para ti, no pasa nada. Pero si has llegado hasta aquí, probablemente es para ti.</p>`,
 
     6: `
       <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">Llevas 3 días sin ejercicio.</p>
       <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">No te voy a presionar. Solo te digo que el ojo se entrena como un músculo. Si paras, vuelve a donde estaba.</p>
-      <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">Los 365 ejercicios siguen ahí. 39 €. Sin prisa, pero sin pausa.</p>
+      <p style="font-size:15px;color:#6A6F79;margin:0 0 20px;line-height:1.7;">Los 365 ejercicios siguen ahí. 69 €. Sin prisa, pero sin pausa.</p>
       <p style="font-size:15px;color:#8A6A00;margin:0 0 12px;line-height:1.7;font-weight:600;">Recuerda: tienes un 10% de descuento.</p>
       <table cellpadding="0" cellspacing="0" style="margin:0 0 14px;">
       <tr><td bgcolor="#FFFFFF" style="background-color:#FFFFFF;border:2px dashed #E7B94A;border-radius:8px;padding:10px 20px;">
