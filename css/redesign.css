@@ -226,7 +226,14 @@ header.header--light-text .menu-toggle { color: #fff; }
 .deck-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: 0.25; transition: all 0.3s; }
 .deck-dot.active { opacity: 1; transform: scale(1.3); background: var(--blue); }
 .hero .deck-dot { background: #fff; } .hero .deck-dot.active { background: #fff; }
-.deck-hint { font-size: 0.8rem; font-weight: 600; opacity: 0.72; }
+.deck-hint { font-size: 0.8rem; font-weight: 600; opacity: 0.72; display: inline-flex; flex-direction: column; align-items: center; gap: 0.35rem; }
+.deck-hint-arrow { width: 48px; height: 74px; flex: none; overflow: visible; margin-top: -2px; }
+.deck-hint-arrow .dh-curve, .deck-hint-arrow .dh-head { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dhDraw 1s ease forwards; }
+.deck-hint-arrow .dh-curve { animation-delay: 0.45s; }
+.deck-hint-arrow .dh-head { animation-delay: 1.25s; animation-duration: 0.4s; }
+@keyframes dhDraw { to { stroke-dashoffset: 0; } }
+@media (max-width: 760px) { .deck-hint { flex-direction: column-reverse; } .deck-hint-arrow { transform: scaleY(-1); margin-top: 0; margin-bottom: -2px; } }
+@media (prefers-reduced-motion: reduce) { .deck-hint-arrow .dh-curve, .deck-hint-arrow .dh-head { animation: none; stroke-dashoffset: 0; } }
 
 /* ============================================================ CÓMO FUNCIONA */
 .how-grid { display: grid; grid-template-columns: 1fr 0.9fr; gap: clamp(2.5rem, 6vw, 5rem); align-items: center; margin-top: 3.5rem; }
