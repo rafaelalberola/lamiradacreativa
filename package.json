@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "prepare": "git config core.hooksPath .githooks || true",
     "generate-pdf": "node scripts/generate-pdf.js",
     "import-exercises": "node scripts/import-exercises.js"
   },

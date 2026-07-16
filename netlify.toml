@@ -18,8 +18,12 @@
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "0"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), browsing-topics=()"
+    Cross-Origin-Resource-Policy = "same-origin"
 
 # ============================================
 # Cache Headers - Performance Optimization
@@ -100,6 +104,76 @@
   for = "*.mp4"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# ============================================
+# Seguridad · bloquear rutas sensibles servidas por publish="."
+# (force=true para ganar al fichero estático; devuelven 404)
+# ============================================
+[[redirects]]
+  from = "/scripts/*"
+  to = "/404.html"
+  status = 404
+  force = true
+[[redirects]]
+  from = "/tests/*"
+  to = "/404.html"
+  status = 404
+  force = true
+[[redirects]]
+  from = "/.git/*"
+  to = "/404.html"
+  status = 404
+  force = true
+[[redirects]]
+  from = "/.githooks/*"
+  to = "/404.html"
+  status = 404
+  force = true
+[[redirects]]
+  from = "/.claude/*"
+  to = "/404.html"
+  status = 404
+  force = true
+[[redirects]]
+  from = "/.env"
+  to = "/404.html"
+  status = 404
+  force = true
+[[redirects]]
+  from = "/package.json"
+  to = "/404.html"
+  status = 404
+  force = true
+[[redirects]]
+  from = "/package-lock.json"
+  to = "/404.html"
+  status = 404
+  force = true
+[[redirects]]
+  from = "/deno.lock"
+  to = "/404.html"
+  status = 404
+  force = true
+[[redirects]]
+  from = "/README.md"
+  to = "/404.html"
+  status = 404
+  force = true
+[[redirects]]
+  from = "/SETUP-AUTH.md"
+  to = "/404.html"
+  status = 404
+  force = true
+[[redirects]]
+  from = "/SETUP-METRICS.md"
+  to = "/404.html"
+  status = 404
+  force = true
+[[redirects]]
+  from = "/ADS-STRATEGY.md"
+  to = "/404.html"
+  status = 404
+  force = true
 
 # ============================================
 # Redirects

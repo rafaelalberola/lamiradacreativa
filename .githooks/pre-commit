@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# ─────────────────────────────────────────────────────────────────
+# pre-commit · secret guard — La Mirada Creativa
+# Bloquea ficheros de entorno/claves y patrones de secretos en el
+# diff staged ANTES de que entren en git. Bypass consciente:
+#   git commit --no-verify
+# Activación (una vez por clon):  git config core.hooksPath .githooks
+# (el script "prepare" de package.json lo hace en npm install)
+# ─────────────────────────────────────────────────────────────────
+set -uo pipefail
+fail=0
+
+# 1) Ficheros que NUNCA deben entrar (env, claves, certs)
+blocked=$(git diff --cached --name-only --diff-filter=ACM \
+  | grep -E '(^|/)\.env($|\.)|\.(pem|key|p12|pfx|keystore|secret)$|(^|/)id_(rsa|ed25519)$' \
+  | grep -vE '\.env\.example$' || true)
+if [ -n "$blocked" ]; then
+  echo "🛑 pre-commit: intento de commitear ficheros sensibles:"
+  echo "$blocked" | sed 's/^/   - /'
+  fail=1
+fi
+
+# 2) Patrones de secretos en el contenido añadido (excluye este propio hook)
+patterns='EAA[A-Za-z0-9]{40,}|sk_live_[A-Za-z0-9]{16,}|rk_live_[A-Za-z0-9]{16,}|sk_test_[A-Za-z0-9]{16,}|whsec_[A-Za-z0-9]{20,}|re_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{35}|-----BEGIN [A-Z ]*PRIVATE KEY-----|eyJ[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{15,}'
+hits=$(git diff --cached -U0 --no-color -- . ':(exclude).githooks/**' \
+  | grep -E '^\+' | grep -EnI "$patterns" || true)
+if [ -n "$hits" ]; then
+  echo "🛑 pre-commit: posible secreto en el diff staged:"
+  echo "$hits" | head -20 | sed 's/^/   /'
+  fail=1
+fi
+
+if [ "$fail" -ne 0 ]; then
+  echo ""
+  echo "Commit abortado por seguridad. Falso positivo real → git commit --no-verify"
+  exit 1
+fi
+exit 0
