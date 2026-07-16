@@ -6,7 +6,7 @@
 // Env: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 // Manual test: GET /.netlify/functions/daily-telegram?key=<TELEGRAM_TEST_KEY>
 
-const { computeMetrics } = require('../lib/metrics');
+const { computeMetrics, eur, round1 } = require('../lib/metrics');
 
 function esc(s) {
   // MarkdownV2 escaping
@@ -37,6 +37,22 @@ function buildMessage(b) {
     msg += `*🧭 Tu plan ahora*\n${esc(p.headline)}\n`;
     for (const s of (p.steps || []).slice(0, 3)) msg += `→ ${esc(s)}\n`;
     msg += `\n`;
+  }
+
+  // Últimos creativos, AISLADOS del histórico (solo los anuncios activos).
+  // Es lo que el owner quiere vigilar: cómo rinde lo que está vivo ahora.
+  const ac = b.activeCreatives;
+  if (ac && ac.totals && ac.totals.count) {
+    const t = ac.totals;
+    msg += `*🎯 Últimos creativos \\(sin histórico\\)*\n`;
+    for (const a of ac.ads.slice(0, 5)) {
+      const ctr = a.ctr != null ? round1(a.ctr) + '%' : '—';
+      msg += `• ${esc(`${a.name} · ${eur(a.spend)} · CTR ${ctr} · ${a.landingViews} vis · ${a.purchases} ventas`)}\n`;
+    }
+    const parts = [`Total: ${eur(t.spend)}`, `${t.landingViews} visitas`, `${t.checkouts} pago iniciado`, `${t.purchases} ventas`];
+    if (t.cpa) parts.push(`CPA ${eur(t.cpa)}`);
+    if (t.roas != null) parts.push(`ROAS ${round1(t.roas)}x`);
+    msg += `_${esc(parts.join(' · '))}_\n\n`;
   }
 
   // Avisos en lenguaje simple (título + explicación)

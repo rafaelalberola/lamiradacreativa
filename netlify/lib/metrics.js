@@ -340,6 +340,77 @@ async function loadCampaigns(errors) {
   }
 }
 
+// ---------------------------------------------------------------- Creativos activos (aislado)
+// SOLO los anuncios en estado ACTIVE (los creativos vivos), cada uno con SUS
+// métricas de por vida. NO mezcla el gasto de anuncios pausados/históricos, así
+// que responde a "cómo van los últimos creativos, sin que el histórico manche".
+async function loadActiveAds(errors) {
+  const token = process.env.META_ACCESS_TOKEN;
+  const account = process.env.META_AD_ACCOUNT_ID || 'act_1405709477618981';
+  if (!token) return null;
+  try {
+    // 1) Anuncios ACTIVE = los creativos que están vivos ahora mismo.
+    const adsRes = await fetch(
+      `${META_API}/${account}/ads?fields=id,name,effective_status&effective_status=%5B%22ACTIVE%22%5D&limit=200&access_token=${token}`
+    );
+    const adsJson = await adsRes.json();
+    if (adsJson.error) throw new Error(adsJson.error.message);
+    const activeAds = adsJson.data || [];
+    if (!activeAds.length) return { ads: [], totals: null };
+    const activeIds = new Set(activeAds.map((a) => a.id));
+    const nameById = {};
+    activeAds.forEach((a) => (nameById[a.id] = a.name));
+
+    // 2) Insights ad-level de por vida. Para creativos nuevos = sin histórico.
+    const insRes = await fetch(
+      `${META_API}/${account}/insights?level=ad&fields=ad_id,ad_name,spend,impressions,clicks,ctr,actions,cost_per_action_type&date_preset=maximum&limit=500&access_token=${token}`
+    );
+    const insJson = await insRes.json();
+    if (insJson.error) throw new Error(insJson.error.message);
+
+    const act = (row, t) => { const a = (row.actions || []).find((x) => x.action_type === t); return a ? Number(a.value) : 0; };
+    const cost = (row, t) => { const a = (row.cost_per_action_type || []).find((x) => x.action_type === t); return a ? Number(a.value) : null; };
+
+    const ads = [];
+    for (const row of insJson.data || []) {
+      if (!activeIds.has(row.ad_id)) continue; // descarta pausados/históricos
+      ads.push({
+        id: row.ad_id,
+        name: nameById[row.ad_id] || row.ad_name,
+        spend: Number(row.spend || 0),
+        impressions: Number(row.impressions || 0),
+        ctr: row.ctr ? Number(row.ctr) : null,
+        linkClicks: act(row, 'link_click'),
+        landingViews: act(row, 'landing_page_view') || act(row, 'omni_landing_page_view'),
+        checkouts: act(row, 'initiate_checkout') || act(row, 'omni_initiated_checkout'),
+        purchases: act(row, 'purchase') || act(row, 'offsite_conversion.fb_pixel_purchase') || act(row, 'omni_purchase'),
+        cpa: cost(row, 'purchase') || cost(row, 'offsite_conversion.fb_pixel_purchase'),
+      });
+    }
+    // Anuncios activos que aún no tienen impresiones no salen en insights → a 0.
+    for (const a of activeAds) {
+      if (!ads.find((x) => x.id === a.id)) {
+        ads.push({ id: a.id, name: a.name, spend: 0, impressions: 0, ctr: null, linkClicks: 0, landingViews: 0, checkouts: 0, purchases: 0, cpa: null });
+      }
+    }
+    ads.sort((a, b) => b.spend - a.spend);
+
+    const sum = (f) => ads.reduce((t, x) => t + (x[f] || 0), 0);
+    const spend = sum('spend'), impressions = sum('impressions'), linkClicks = sum('linkClicks'),
+      landingViews = sum('landingViews'), checkouts = sum('checkouts'), purchases = sum('purchases');
+    const totals = {
+      count: ads.length, spend, impressions, linkClicks, landingViews, checkouts, purchases,
+      ctr: impressions ? (linkClicks / impressions) * 100 : null,
+      costPerVisit: landingViews ? spend / landingViews : null,
+      cpa: purchases ? spend / purchases : null,
+    };
+    return { ads, totals };
+  } catch (e) {
+    errors.activeAds = `Meta creativos activos: ${e.message}`;
+    return null;
+  }
+}
+
 // ---------------------------------------------------------------- Supabase
 async function loadSupabase(windows, errors) {
   const url = process.env.SUPABASE_URL;
@@ -516,7 +587,7 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
   const windows = buildWindows(rangeDays);
   const errors = {};
 
-  const [stripe, meta, sb, resend, config, campaigns] = await Promise.all([
+  const [stripe, meta, sb, resend, config, campaigns, activeAds] = await Promise.all([
     loadStripe(windows, errors).catch((e) => {
       errors.stripe = `Stripe: ${e.message}`;
       return null;
@@ -529,7 +600,15 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
     loadResendAudience(errors),
     loadConfig(),
     loadCampaigns(errors),
+    loadActiveAds(errors),
   ]);
+
+  // ROAS de los creativos activos (aislado) = ventas × precio / gasto de esos anuncios.
+  if (activeAds && activeAds.totals) {
+    const price = Number(config.product_price) || 0;
+    activeAds.totals.revenue = activeAds.totals.purchases * price;
+    activeAds.totals.roas = activeAds.totals.spend > 0 ? activeAds.totals.revenue / activeAds.totals.spend : null;
+  }
 
   // ---- derived KPIs ----
   const revenueRange = stripe ? stripe.revenueRange : 0;
@@ -648,6 +727,7 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
     ownAnalytics: sb ? sb.eventsAvailable : false,
     learning,
     campaigns: campaigns || [],
+    activeCreatives: activeAds || { ads: [], totals: null },
     errors,
   };
 
