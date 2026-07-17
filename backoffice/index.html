@@ -122,22 +122,22 @@
   .arrow i{font-style:normal; font-size:10px; color:var(--faint);}
 
   /* ---------- los creativos ---------- */
-  .adlist{display:flex; flex-direction:column;}
-  .ad{display:flex; align-items:center; gap:var(--s16);
+  .entries{display:flex; flex-direction:column;}
+  .entry{display:flex; align-items:center; gap:var(--s16);
     padding-block:var(--s16); border-top:1px solid var(--line);}
-  .ad:last-child{border-bottom:1px solid var(--line);}
-  .ad img,.ad .noimg{flex:none; width:52px; height:65px; border-radius:7px; object-fit:cover;
+  .entry:last-child{border-bottom:1px solid var(--line);}
+  .entry img,.entry .noimg{flex:none; width:52px; height:65px; border-radius:7px; object-fit:cover;
     display:block; background:var(--surface); border:1px solid var(--line);}
-  .ad-info{flex:1; min-width:0; display:flex; flex-direction:column; gap:var(--s4);}
-  .ad-name{font-size:15px; font-weight:600; letter-spacing:-.01em;
+  .entry-info{flex:1; min-width:0; display:flex; flex-direction:column; gap:var(--s4);}
+  .entry-name{font-size:15px; font-weight:600; letter-spacing:-.01em;
     display:flex; align-items:center; gap:var(--s8);}
-  .ad-meta{font-size:13px; color:var(--muted);}
-  .ad-sales{flex:none; display:flex; flex-direction:column; align-items:flex-end; gap:var(--s6);}
-  .ad-sales b{font-family:"Fraunces",serif; font-size:26px; font-weight:400; line-height:1;}
-  .ad-sales small{font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+  .entry-meta{font-size:13px; color:var(--muted);}
+  .entry-sales{flex:none; display:flex; flex-direction:column; align-items:flex-end; gap:var(--s6);}
+  .entry-sales b{font-family:"Fraunces",serif; font-size:26px; font-weight:400; line-height:1;}
+  .entry-sales small{font-size:10px; letter-spacing:.1em; text-transform:uppercase;
     color:var(--faint); font-weight:600;}
-  .ad.win .ad-sales b{color:var(--green);}
-  .ad.zero{opacity:.5;}
+  .entry.win .entry-sales b{color:var(--green);}
+  .entry.zero{opacity:.5;}
   .tag{font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
     color:var(--ink); background:var(--green); padding:var(--s3) var(--s6); border-radius:4px;}
 
@@ -174,7 +174,7 @@
   @media (max-width:430px){
     .card{flex-direction:column;}
     .cell + .cell{border-left:0; border-top:1px solid var(--line);}
-    .ad{gap:var(--s12);} .ad img,.ad .noimg{width:44px; height:55px;}
+    .entry{gap:var(--s12);} .entry img,.entry .noimg{width:44px; height:55px;}
     .flow{gap:var(--s2);}
     .step .n,.arrow span{height:24px;} .step .n{font-size:19px;}
     .step .l{font-size:9px; letter-spacing:.04em;}
@@ -305,14 +305,14 @@ function render(b) {
   const arrow = (a, b2) => '<div class="arrow"><span>→</span><i>' + pctOf(a, b2) + '%</i></div>';
 
   const rows = ads.map((a) =>
-    '<div class="ad ' + (a.id === best ? 'win' : '') + ' ' + (a.purchases === 0 ? 'zero' : '') + '">' +
+    '<div class="entry ' + (a.id === best ? 'win' : '') + ' ' + (a.purchases === 0 ? 'zero' : '') + '">' +
       (a.thumb ? '<img src="' + esc(a.thumb) + '" alt="" loading="lazy">' : '<div class="noimg"></div>') +
-      '<div class="ad-info">' +
-        '<div class="ad-name">' + esc(clean(a.name)) + (a.id === best ? '<span class="tag">gana</span>' : '') + '</div>' +
-        '<div class="ad-meta">' + eur(a.spend) + ' · ' + a.landingViews + ' visitas' +
+      '<div class="entry-info">' +
+        '<div class="entry-name">' + esc(clean(a.name)) + (a.id === best ? '<span class="tag">gana</span>' : '') + '</div>' +
+        '<div class="entry-meta">' + eur(a.spend) + ' · ' + a.landingViews + ' visitas' +
           (a.ctr != null ? ' · CTR ' + one(a.ctr) + '%' : '') + '</div>' +
       '</div>' +
-      '<div class="ad-sales"><b>' + a.purchases + '</b>' +
+      '<div class="entry-sales"><b>' + a.purchases + '</b>' +
         '<small>' + (a.purchases === 1 ? 'venta' : 'ventas') + '</small></div>' +
     '</div>').join('');
 
@@ -347,7 +347,7 @@ function render(b) {
 
     // 4 · los creativos
     '<section class="panel" data-r="4"><h2>Creativos</h2>' +
-      '<div class="adlist">' + rows + '</div>' +
+      '<div class="entries">' + rows + '</div>' +
     '</section>' +
 
     // 5 · conexiones
