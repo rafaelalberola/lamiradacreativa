@@ -1,730 +1,402 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex, nofollow" />
-  <title>Métricas · La Mirada Creativa</title>
-  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <style>
-    /* ============ shadcn-style design tokens ============ */
-    :root {
-      --background: #f8f8f9; --foreground: #09090b;
-      --card: #ffffff; --card-foreground: #09090b;
-      --muted: #f4f4f5; --muted-foreground: #71717a;
-      --border: #e4e4e7; --input: #e4e4e7;
-      --primary: #2563eb; --primary-foreground: #ffffff;
-      --accent-soft: #eff6ff;
-      --green: #16a34a; --red: #dc2626; --amber: #d97706; --violet: #7c3aed;
-      --radius: 0.65rem;
-      --shadow: 0 1px 2px 0 rgba(0,0,0,.04), 0 1px 3px 0 rgba(0,0,0,.04);
-      --font: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --background: #09090b; --foreground: #fafafa;
-        --card: #101012; --card-foreground: #fafafa;
-        --muted: #1c1c1f; --muted-foreground: #a1a1aa;
-        --border: #26262a; --input: #26262a;
-        --primary: #3b82f6; --primary-foreground: #ffffff;
-        --accent-soft: #17233f;
-        --shadow: 0 1px 2px 0 rgba(0,0,0,.3);
-      }
-    }
-    * { box-sizing: border-box; }
-    body { margin: 0; background: var(--background); color: var(--foreground); font-family: var(--font); -webkit-font-smoothing: antialiased; font-size: 14px; }
-    h1, h2, h3 { margin: 0; letter-spacing: -.01em; }
-    .num { font-variant-numeric: tabular-nums; }
-    .hidden { display: none !important; }
-    .muted { color: var(--muted-foreground); }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>La Mirada Creativa · Campaña</title>
+<link rel="icon" href="/assets/images/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     Un instrumento, no un dashboard.
+     Una pantalla. Una pregunta: ¿esto funciona, y qué creativo tira?
 
-    /* ============ topbar ============ */
-    .topbar { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--background) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
-    .topbar-in { max-width: 1200px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-    .brand { display: inline-flex; align-items: center; gap: 9px; font-weight: 800; letter-spacing: -.02em; font-size: 15px; }
-    .brand img { width: 24px; height: 24px; display: block; }
-    .brand .sep { color: var(--border); font-weight: 400; }
-    .brand .sub { color: var(--muted-foreground); font-weight: 600; }
-    .controls { display: flex; align-items: center; gap: 8px; }
+     Construcción: TODO se compone con flex + gap.
+     El margin/padding no separa hermanos — solo respira dentro de una caja.
+     Espaciado: escala fija (abajo). Ningún valor fuera de ella.
+     Iconos: Lucide, inline. Cero dependencias externas de JS.
+     ============================================================ */
+  :root{
+    /* escala de espaciado — única fuente de separación */
+    --s2:2px;  --s3:3px;  --s4:4px;  --s6:6px;   --s8:8px;   --s10:10px;
+    --s12:12px;--s16:16px;--s20:20px;--s24:24px; --s32:32px; --s40:40px;
+    --s48:48px;--s60:60px;--s80:80px;--s120:120px;
+    /* color */
+    --ink:#0B0B0D; --surface:#131317; --line:#24242B;
+    --text:#F4F3F1; --muted:#8B8B96; --faint:#5A5A65;
+    --blue:#4F86FF; --green:#2FC177; --amber:#FFB020; --coral:#FF6B6B;
+    --edge: clamp(var(--s20), 5vw, var(--s40));
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    background:var(--ink); color:var(--text);
+    font-family:"Plus Jakarta Sans",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    min-height:100dvh; line-height:1.5;
+  }
+  body::after{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:99; opacity:.028;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
 
-    /* ============ shadcn primitives ============ */
-    .btn { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: calc(var(--radius) - .1rem); font: inherit; font-weight: 600; font-size: 13px; cursor: pointer; border: 1px solid transparent; transition: background .15s, border-color .15s, opacity .15s; white-space: nowrap; }
-    .btn-default { background: var(--primary); color: var(--primary-foreground); }
-    .btn-default:hover { opacity: .9; }
-    .btn-outline { background: var(--card); color: var(--foreground); border-color: var(--border); }
-    .btn-outline:hover { background: var(--muted); }
-    .btn-ghost { background: transparent; color: var(--muted-foreground); }
-    .btn-ghost:hover { background: var(--muted); color: var(--foreground); }
-    .btn:disabled { opacity: .5; cursor: default; }
-    select.sel { height: 36px; padding: 0 30px 0 12px; border: 1px solid var(--input); background: var(--card) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2'><path d='m6 9 6 6 6-6'/></svg>") no-repeat right 9px center; -webkit-appearance: none; appearance: none; border-radius: calc(var(--radius) - .1rem); font: inherit; font-size: 13px; font-weight: 600; color: var(--foreground); cursor: pointer; }
-    select.sel:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
-    input.inp { width: 100%; height: 38px; padding: 0 12px; border: 1px solid var(--input); background: var(--card); color: var(--foreground); border-radius: calc(var(--radius) - .1rem); font: inherit; font-size: 14px; }
-    input.inp:focus { outline: 2px solid var(--primary); outline-offset: -1px; border-color: var(--primary); }
-    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; border: 1px solid var(--border); background: var(--muted); color: var(--muted-foreground); }
-    .badge.dot::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-    .badge-blue { background: var(--accent-soft); color: var(--primary); border-color: transparent; }
-    .badge-green { color: var(--green); } .badge-amber { color: var(--amber); } .badge-red { color: var(--red); }
+  /* ---------- esqueleto ---------- */
+  .wrap{
+    max-width:680px; margin-inline:auto; padding:var(--edge);
+    display:flex; flex-direction:column; gap:var(--s60);
+  }
+  #body{display:flex; flex-direction:column; gap:var(--s60);}
 
-    /* ============ layout ============ */
-    .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 24px 64px; }
-    .updated { font-size: 12px; color: var(--muted-foreground); margin-bottom: 18px; }
+  /* ---------- entrada ---------- */
+  .gate{min-height:100dvh; display:flex; align-items:center; justify-content:center; padding:var(--edge);}
+  .gate form{width:100%; max-width:300px; display:flex; flex-direction:column; gap:var(--s24);}
+  .gate .fields{display:flex; flex-direction:column; gap:var(--s10);}
+  .gate h1{font-family:"Fraunces",serif; font-weight:300; font-size:26px;
+    letter-spacing:-.01em; text-align:center;}
+  input[type=password],input[type=number]{
+    width:100%; background:var(--surface); border:1px solid var(--line); color:var(--text);
+    border-radius:10px; padding:var(--s12) var(--s16); font:inherit; font-size:15px;
+    outline:none; transition:border-color .18s ease;
+  }
+  input:focus{border-color:var(--blue);}
+  .btn{
+    background:var(--text); color:var(--ink); border:0; border-radius:10px;
+    padding:var(--s12) var(--s16); font:inherit; font-weight:600; font-size:15px;
+    cursor:pointer; transition:opacity .18s ease;
+  }
+  .btn:hover{opacity:.86;} .btn:disabled{opacity:.45; cursor:default;}
+  .err{color:var(--coral); font-size:13px; min-height:18px; text-align:center;}
 
-    /* tabs (shadcn TabsList segmented) */
-    .tabs { display: inline-flex; gap: 2px; padding: 4px; background: var(--muted); border-radius: var(--radius); margin-bottom: 32px; overflow-x: auto; max-width: 100%; }
-    .tab { border: none; background: transparent; color: var(--muted-foreground); font: inherit; font-weight: 600; font-size: 13px; padding: 7px 14px; border-radius: calc(var(--radius) - .2rem); cursor: pointer; white-space: nowrap; }
-    .tab.active { background: var(--card); color: var(--foreground); box-shadow: var(--shadow); }
+  /* ---------- cabecera ---------- */
+  .top{display:flex; align-items:baseline; justify-content:space-between; gap:var(--s16);}
+  .brand{font-size:12px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--faint);}
+  .ghost{background:none; border:0; color:var(--faint); font:inherit; font-size:12px;
+    cursor:pointer; transition:color .18s ease;}
+  .ghost:hover{color:var(--text);}
 
-    /* card */
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
-    .card-h { padding: 16px 18px 0; }
-    .card-t { font-size: 14px; font-weight: 700; }
-    .card-d { font-size: 12px; color: var(--muted-foreground); margin-top: 2px; }
-    .card-c { padding: 16px 18px; }
+  /* ---------- 1 · el veredicto ---------- */
+  .hero{display:flex; flex-direction:column; align-items:flex-start; gap:var(--s20);}
+  .period{font-size:13px; color:var(--muted);}
+  .period b{color:var(--text); font-weight:600;}
+  .hero-num{
+    font-family:"Fraunces",serif; font-weight:300; font-optical-sizing:auto;
+    font-size:clamp(72px,17vw,116px); line-height:.86; letter-spacing:-.035em;
+    color:var(--st,var(--text)); display:flex; align-items:baseline; gap:var(--s4);
+  }
+  .hero-num .cur{font-size:.38em; letter-spacing:-.02em;}
+  .hero-text{display:flex; flex-direction:column; gap:var(--s10);}
+  .hero-say{font-family:"Fraunces",serif; font-weight:300; font-size:clamp(19px,3.6vw,24px);
+    line-height:1.32; letter-spacing:-.01em; max-width:22ch;}
+  .hero-sub{font-size:14px; color:var(--muted);}
+  .hero-sub .pos{color:var(--green);} .hero-sub .neg{color:var(--coral);}
 
-    section.block { margin-bottom: 38px; }
-    section.block:last-child { margin-bottom: 0; }
-    .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted-foreground); margin: 0 2px 14px; }
-    /* rejillas sueltas (fuera de .block) también con separación */
-    .tabpanel > .grid { margin-bottom: 38px; }
-    .tabpanel > .grid:last-child { margin-bottom: 0; }
+  /* ---------- Card: componente compartido (dinero y funnel) ---------- */
+  /* el divisor es un borde, no un gap: un hueco no dibuja líneas */
+  .panel{display:flex; flex-direction:column; gap:var(--s20);}
+  .card{display:flex; border:1px solid var(--line); border-radius:14px; overflow:hidden;}
+  .cell{flex:1; min-width:0; display:flex; flex-direction:column; gap:var(--s8);
+    padding:var(--s24) var(--s20);}
+  .cell + .cell{border-left:1px solid var(--line);}
+  .k{font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:var(--faint);
+    display:flex; align-items:center; gap:var(--s6);}
+  .v{font-family:"Fraunces",serif; font-weight:400; font-size:30px; letter-spacing:-.02em;}
+  .ic{width:13px; height:13px; flex:none;}
+  .ic.out{color:var(--coral);}   /* sale dinero */
+  .ic.in{color:var(--green);}    /* entra dinero */
+  h2{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); font-weight:600;}
 
-    /* symmetric grids */
-    .grid { display: grid; gap: 14px; }
-    .g4 { grid-template-columns: repeat(4, 1fr); }
-    .g3 { grid-template-columns: repeat(3, 1fr); }
-    .g2 { grid-template-columns: repeat(2, 1fr); }
-    @media (max-width: 900px) { .g4 { grid-template-columns: repeat(2, 1fr); } .g3 { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 640px) { .g4, .g3, .g2 { grid-template-columns: 1fr; } }
+  /* ---------- el embudo (dentro de Card) ----------
+     Flecha y número comparten caja de 30px → la flecha queda centrada con la
+     fila de números; el % cae en la fila de etiquetas. */
+  .flow{display:flex; align-items:flex-start; gap:var(--s8);}
+  .step,.arrow{display:flex; flex-direction:column; align-items:center; gap:var(--s6);}
+  .step{flex:1; min-width:0;}
+  .arrow{flex:none; width:28px;}
+  .step .n,.arrow span{height:30px; display:flex; align-items:center; justify-content:center;}
+  .step .n{font-family:"Fraunces",serif; font-size:26px; font-weight:400; letter-spacing:-.02em;}
+  .arrow span{font-size:14px; color:var(--line);}
+  .step .l{font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint);}
+  .arrow i{font-style:normal; font-size:10px; color:var(--faint);}
 
-    /* stat card */
-    .stat { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 18px; display: flex; flex-direction: column; gap: 3px; min-height: 104px; }
-    .stat-label { font-size: 12px; font-weight: 600; color: var(--muted-foreground); }
-    .stat-value { font-size: 26px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
-    .stat-value.sm { font-size: 20px; }
-    .stat-sub { font-size: 12px; color: var(--muted-foreground); margin-top: auto; }
-    .v-green { color: var(--green); } .v-red { color: var(--red); } .v-amber { color: var(--amber); }
-    .prog { height: 6px; border-radius: 999px; background: var(--muted); overflow: hidden; margin-top: 6px; }
-    .prog > i { display: block; height: 100%; background: var(--primary); }
+  /* ---------- los creativos ---------- */
+  .adlist{display:flex; flex-direction:column;}
+  .ad{display:flex; align-items:center; gap:var(--s16);
+    padding-block:var(--s16); border-top:1px solid var(--line);}
+  .ad:last-child{border-bottom:1px solid var(--line);}
+  .ad img,.ad .noimg{flex:none; width:52px; height:65px; border-radius:7px; object-fit:cover;
+    display:block; background:var(--surface); border:1px solid var(--line);}
+  .ad-info{flex:1; min-width:0; display:flex; flex-direction:column; gap:var(--s4);}
+  .ad-name{font-size:15px; font-weight:600; letter-spacing:-.01em;
+    display:flex; align-items:center; gap:var(--s8);}
+  .ad-meta{font-size:13px; color:var(--muted);}
+  .ad-sales{flex:none; display:flex; flex-direction:column; align-items:flex-end; gap:var(--s6);}
+  .ad-sales b{font-family:"Fraunces",serif; font-size:26px; font-weight:400; line-height:1;}
+  .ad-sales small{font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--faint); font-weight:600;}
+  .ad.win .ad-sales b{color:var(--green);}
+  .ad.zero{opacity:.5;}
+  .tag{font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--ink); background:var(--green); padding:var(--s3) var(--s6); border-radius:4px;}
 
-    /* plan (highlighted alert card) */
-    .plan { border: 1px solid var(--border); border-left: 3px solid var(--primary); background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; }
-    .plan-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-    .plan-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted-foreground); }
-    .plan-headline { font-size: 18px; font-weight: 800; letter-spacing: -.02em; margin: 4px 0 4px; }
-    .plan-problem { color: var(--muted-foreground); margin: 0 0 14px; max-width: 70ch; }
-    .plan-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    @media (max-width: 640px) { .plan-cols { grid-template-columns: 1fr; } }
-    .plan-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted-foreground); font-weight: 700; margin-bottom: 6px; }
-    .plan-cols ul, .plan-cols ol { margin: 0; padding-left: 18px; }
-    .plan-cols li { margin: 5px 0; line-height: 1.45; }
+  /* ---------- conexiones ---------- */
+  .sources{display:flex; flex-direction:column; gap:var(--s10);}
+  .src{display:flex; align-items:center; gap:var(--s8); font-size:12px;}
+  .dot{flex:none; width:6px; height:6px; border-radius:50%; background:var(--faint);}
+  .dot.ok{background:var(--green); box-shadow:0 0 0 3px rgba(47,193,119,.14);}
+  .dot.bad{background:var(--coral); box-shadow:0 0 0 3px rgba(255,107,107,.14);}
+  .src-n{color:var(--text);}
+  .src.off .src-n{color:var(--muted);}
+  .src-d{color:var(--faint); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 
-    /* callout reutilizable (¿es rentable?) — compacto, con "Ver más" */
-    .callout { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); background: var(--card); }
-    .callout .cic { font-size: 22px; flex: none; line-height: 1; }
-    .callout .ctxt { font-size: 15px; font-weight: 700; letter-spacing: -.01em; line-height: 1.4; flex: 1; }
-    .callout .callout-more { flex: none; white-space: nowrap; }
-    .callout.rentable { background: color-mix(in srgb, var(--green) 9%, var(--card)); border-color: color-mix(in srgb, var(--green) 35%, var(--border)); }
-    .callout.justo { background: color-mix(in srgb, var(--amber) 9%, var(--card)); border-color: color-mix(in srgb, var(--amber) 35%, var(--border)); }
-    .callout.perdida { background: color-mix(in srgb, var(--red) 9%, var(--card)); border-color: color-mix(in srgb, var(--red) 35%, var(--border)); }
-    @media (max-width: 560px) { .callout { flex-wrap: wrap; } .callout .ctxt { flex-basis: calc(100% - 36px); } .callout .callout-more { width: 100%; justify-content: center; } }
+  /* ---------- pie ---------- */
+  /* Sin "Ajustes": el precio de venta lo fija STRIPE_PRICE_ID (env de Netlify),
+     no este panel. Un control que aparenta cambiar el precio sin cambiarlo es
+     peor que no tenerlo. */
+  .foot{display:flex; justify-content:space-between; align-items:center; gap:var(--s16);
+    padding-top:var(--s24); border-top:1px solid var(--line);}
+  .stamp{font-size:11px; color:var(--faint);}
+  .empty{font-family:"Fraunces",serif; font-weight:300; font-size:22px; color:var(--muted);
+    line-height:1.4; padding-block:var(--s60);}
 
-    /* sheet (side panel derecho) */
-    .sheet-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 40; opacity: 0; animation: cfade .18s forwards; }
-    @keyframes cfade { to { opacity: 1; } }
-    .sheet { position: fixed; top: 0; right: 0; height: 100dvh; width: 440px; max-width: 92vw; background: var(--card); border-left: 1px solid var(--border); box-shadow: -14px 0 40px rgba(0,0,0,.18); z-index: 50; display: flex; flex-direction: column; transform: translateX(100%); animation: cslide .24s cubic-bezier(.32,.72,0,1) forwards; }
-    @keyframes cslide { to { transform: translateX(0); } }
-    .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 16px 20px; border-bottom: 1px solid var(--border); }
-    .sheet-title { font-size: 16px; font-weight: 800; letter-spacing: -.01em; }
-    .sheet-body { padding: 18px 20px 30px; overflow-y: auto; }
-    .sheet-body .callout { margin-bottom: 8px; }
-    .sheet-body h4 { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted-foreground); margin: 20px 0 6px; }
-    .kv { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
-    .kv:last-child { border-bottom: none; }
-    .kv-k { color: var(--muted-foreground); }
-    .kv-v { font-weight: 700; font-variant-numeric: tabular-nums; }
-    .sheet-note { font-size: 13px; color: var(--muted-foreground); line-height: 1.55; margin: 12px 0 0; background: var(--muted); padding: 12px 14px; border-radius: calc(var(--radius) - .15rem); }
+  /* ---------- una sola entrada orquestada (solo la primera vez) ---------- */
+  [data-r]{opacity:0; transform:translateY(12px); animation:rise .62s cubic-bezier(.22,1,.36,1) forwards;}
+  [data-r="1"]{animation-delay:.04s} [data-r="2"]{animation-delay:.12s}
+  [data-r="3"]{animation-delay:.20s} [data-r="4"]{animation-delay:.28s} [data-r="5"]{animation-delay:.36s}
+  @keyframes rise{to{opacity:1; transform:none;}}
+  /* los refrescos automáticos no re-animan: sería un parpadeo molesto */
+  body.ready [data-r]{animation:none; opacity:1; transform:none;}
+  @media (prefers-reduced-motion:reduce){[data-r]{animation:none; opacity:1; transform:none;}}
+  .hide{display:none !important;}
 
-    /* avisos list */
-    .aviso { display: flex; gap: 11px; padding: 13px 0; border-top: 1px solid var(--border); }
-    .aviso:first-child { border-top: none; padding-top: 4px; }
-    .aviso .ic { flex: none; font-size: 15px; line-height: 1.4; }
-    .aviso .at { font-weight: 700; }
-    .aviso .ap { color: var(--muted-foreground); margin-top: 1px; }
-    .aviso ul { margin: 7px 0 0; padding-left: 17px; }
-    .aviso ul li { color: var(--muted-foreground); font-size: 13px; margin: 2px 0; }
-
-    /* funnel */
-    .funnel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    @media (max-width: 640px) { .funnel { grid-template-columns: repeat(2, 1fr); } }
-    .fstep { background: var(--muted); border-radius: calc(var(--radius) - .1rem); padding: 14px; text-align: center; }
-    .fstep .n { font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
-    .fstep .t { font-size: 12px; color: var(--muted-foreground); margin-top: 2px; }
-    .fstep .r { font-size: 11px; color: var(--primary); font-weight: 700; margin-top: 4px; }
-
-    /* table */
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    thead th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted-foreground); padding: 0 8px 10px; border-bottom: 1px solid var(--border); }
-    tbody td { padding: 10px 8px; border-bottom: 1px solid var(--border); }
-    tbody tr:last-child td { border-bottom: none; }
-    td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
-    .bar { height: 7px; background: var(--muted); border-radius: 999px; overflow: hidden; }
-    .bar > i { display: block; height: 100%; background: var(--primary); }
-    canvas { max-width: 100%; }
-    .form { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-    @media (max-width: 640px) { .form { grid-template-columns: 1fr; } }
-    .field label { display: block; font-size: 12px; font-weight: 600; color: var(--muted-foreground); margin-bottom: 6px; }
-
-    /* login / loading */
-    .center { min-height: 90vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
-    .login-card { width: 100%; max-width: 360px; text-align: center; padding: 34px 30px; }
-    .login-card .brand { justify-content: center; margin-bottom: 18px; font-size: 16px; }
-    .login-card h1 { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
-    .login-card p.muted { font-size: 13px; margin: 0 0 18px; }
-    .login-card input { margin-bottom: 12px; text-align: center; }
-    .login-card .btn { width: 100%; justify-content: center; height: 40px; }
-    .errbox { font-size: 13px; color: var(--red); margin-top: 12px; min-height: 1em; }
-    .spinner { width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin .7s linear infinite; margin: 0 auto; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-  </style>
+  @media (max-width:430px){
+    .card{flex-direction:column;}
+    .cell + .cell{border-left:0; border-top:1px solid var(--line);}
+    .ad{gap:var(--s12);} .ad img,.ad .noimg{width:44px; height:55px;}
+    .flow{gap:var(--s2);}
+    .step .n,.arrow span{height:24px;} .step .n{font-size:19px;}
+    .step .l{font-size:9px; letter-spacing:.04em;}
+    .arrow{width:16px;} .arrow span{font-size:11px;} .arrow i{font-size:9px;}
+  }
+</style>
 </head>
 <body>
-  <!-- LOADING -->
-  <div id="loading" class="center"><div><div class="spinner"></div><p class="muted" style="margin-top:12px;">Cargando…</p></div></div>
 
-  <!-- LOGIN -->
-  <div id="login" class="center hidden">
-    <form class="card login-card" id="loginForm" autocomplete="on">
-      <span class="brand"><img src="/assets/images/favicon.svg" alt="" />La Mirada Creativa</span>
-      <h1>Backoffice de métricas</h1>
-      <p class="muted">Acceso restringido</p>
-      <input class="inp" type="password" id="password" name="password" placeholder="Contraseña" autocomplete="current-password" autofocus />
-      <button class="btn btn-default" id="loginBtn" type="submit">Entrar</button>
-      <div id="loginErr" class="errbox"></div>
-    </form>
-  </div>
-
-  <!-- APP -->
-  <div id="app" class="hidden">
-    <div class="topbar">
-      <div class="topbar-in">
-        <span class="brand"><img src="/assets/images/favicon.svg" alt="" />La Mirada Creativa<span class="sep">/</span><span class="sub">Métricas</span></span>
-        <div class="controls">
-          <select id="range" class="sel">
-            <option value="7">7 días</option>
-            <option value="30">30 días</option>
-            <option value="90">90 días</option>
-            <option value="365" selected>Último año</option>
-          </select>
-          <button id="refresh" class="btn btn-outline">Actualizar</button>
-          <button id="logout" class="btn btn-ghost">Salir</button>
-        </div>
-      </div>
+<div class="gate" id="gate">
+  <form id="gateForm">
+    <h1>La Mirada Creativa</h1>
+    <div class="fields">
+      <input type="password" id="pw" placeholder="Contraseña" autocomplete="current-password" required autofocus>
+      <button class="btn" type="submit" id="go">Entrar</button>
+      <div class="err" id="gateErr"></div>
     </div>
+  </form>
+</div>
 
-    <div class="wrap">
-      <div class="updated" id="updated"></div>
-
-      <div class="tabs" role="tablist">
-        <button class="tab active" data-tab="resumen">Resumen</button>
-        <button class="tab" data-tab="campana">Campaña activa</button>
-        <button class="tab" data-tab="rendimiento">Rendimiento</button>
-        <button class="tab" data-tab="audiencia">Audiencia</button>
-        <button class="tab" data-tab="ajustes">Ajustes</button>
-      </div>
-
-      <!-- TAB: RESUMEN -->
-      <div class="tabpanel" id="tab-resumen">
-        <section class="block">
-          <div class="section-label">¿Sale rentable? · según todo el histórico</div>
-          <div id="verdictWrap"></div>
-        </section>
-
-        <section class="block"><div class="plan" id="planBox">
-          <div class="plan-head">
-            <div><div class="plan-eyebrow">🧭 Tu plan ahora</div><p class="plan-headline" id="planHeadline"></p></div>
-            <button id="downloadPlan" class="btn btn-outline">⬇ Descargar plan</button>
-          </div>
-          <p class="plan-problem" id="planProblem"></p>
-          <div class="plan-cols">
-            <div><div class="plan-label">Por qué</div><ul id="planWhy"></ul></div>
-            <div><div class="plan-label">Qué hacer</div><ol id="planSteps"></ol></div>
-          </div>
-        </div></section>
-
-        <section class="block">
-          <div class="section-label">Dinero</div>
-          <div class="grid g4" id="kpiMoney"></div>
-        </section>
-        <section class="block">
-          <div class="section-label">Publicidad</div>
-          <div class="grid g3" id="kpiAds"></div>
-        </section>
-        <section class="block">
-          <div class="section-label">Audiencia</div>
-          <div class="grid g4" id="kpiAudience"></div>
-        </section>
-
-        <section class="block"><div class="card">
-          <div class="card-h"><div class="card-t">Embudo</div><div class="card-d">Del visitante a la compra (rango seleccionado)</div></div>
-          <div class="card-c"><div class="funnel" id="funnel"></div><p class="muted" id="funnelNote" style="font-size:12px;margin:12px 0 0;"></p></div>
-        </div></section>
-
-        <section class="block"><div class="card">
-          <div class="card-h"><div class="card-t">Avisos</div><div class="card-d">Ordenados por prioridad</div></div>
-          <div class="card-c"><div id="actions"></div></div>
-        </div></section>
-      </div>
-
-      <!-- TAB: CAMPAÑA ACTIVA -->
-      <div class="tabpanel hidden" id="tab-campana">
-        <section class="block">
-          <div class="section-label">¿Va rentable esta campaña? · en tiempo real</div>
-          <div id="campVerdictWrap"></div>
-        </section>
-        <div class="section-label">Solo la campaña que está corriendo ahora — aislada del histórico</div>
-        <div id="campaigns"></div>
-      </div>
-
-      <!-- TAB: RENDIMIENTO -->
-      <div class="tabpanel hidden" id="tab-rendimiento">
-        <section class="block"><div class="card">
-          <div class="card-h"><div class="card-t">Ingresos vs. gasto en publicidad</div><div class="card-d">Diario si el rango es corto, mensual si es largo</div></div>
-          <div class="card-c"><canvas id="chartMoney" height="230"></canvas></div>
-        </div></section>
-        <div class="grid g2">
-          <div class="card">
-            <div class="card-h"><div class="card-t">Conversión por precio</div><div class="card-d">Qué precio vende mejor</div></div>
-            <div class="card-c"><table id="cvrPrice"><thead><tr><th>Precio</th><th class="r">Checkouts</th><th class="r">Ventas</th><th class="r">CVR</th></tr></thead><tbody></tbody></table></div>
-          </div>
-          <div class="card">
-            <div class="card-h"><div class="card-t">Ingresos por canal</div><div class="card-d">Origen de las ventas (UTM)</div></div>
-            <div class="card-c"><table id="bySource"><thead><tr><th>Fuente</th><th class="r">Ingresos</th></tr></thead><tbody></tbody></table></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TAB: AUDIENCIA -->
-      <div class="tabpanel hidden" id="tab-audiencia">
-        <section class="block"><div class="card">
-          <div class="card-h"><div class="card-t">Leads y visitas por día</div><div class="card-d">Crecimiento de la audiencia</div></div>
-          <div class="card-c"><canvas id="chartLeads" height="230"></canvas></div>
-        </div></section>
-        <div class="grid g2">
-          <div class="card">
-            <div class="card-h"><div class="card-t">Cohortes de leads</div><div class="card-d">% que compra, por semana de registro</div></div>
-            <div class="card-c"><table id="cohorts"><thead><tr><th>Semana</th><th class="r">Leads</th><th class="r">Compran</th><th class="r">CVR</th></tr></thead><tbody></tbody></table></div>
-          </div>
-          <div class="card">
-            <div class="card-h"><div class="card-t">Constancia de compradores</div><div class="card-d">Días seguidos usando la app</div></div>
-            <div class="card-c"><div id="streaksMeta" class="muted" style="font-size:12px;margin-bottom:10px;"></div><table id="streaks"><tbody></tbody></table></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TAB: AJUSTES -->
-      <div class="tabpanel hidden" id="tab-ajustes">
-        <section class="block"><div class="card">
-          <div class="card-h"><div class="card-t">Presupuesto y objetivos</div><div class="card-d">Se guardan y afectan a los cálculos y avisos</div></div>
-          <div class="card-c">
-            <div class="form">
-              <div class="field"><label>Presupuesto publi / mes (€)</label><input class="inp" type="number" step="1" id="monthly_ad_budget" /></div>
-              <div class="field"><label>Gasto publi NO-Meta este mes (€)</label><input class="inp" type="number" step="0.01" id="other_ad_spend" /></div>
-              <div class="field"><label>Precio actual (€)</label><input class="inp" type="number" step="0.01" id="product_price" /></div>
-              <div class="field"><label>ROAS objetivo</label><input class="inp" type="number" step="0.1" id="target_roas" /></div>
-              <div class="field"><label>CPL objetivo (€)</label><input class="inp" type="number" step="0.1" id="target_cpl" /></div>
-              <div class="field"><label>CAC objetivo (€)</label><input class="inp" type="number" step="0.1" id="target_cac" /></div>
-            </div>
-            <div style="margin-top:16px;display:flex;gap:12px;align-items:center;">
-              <button class="btn btn-default" id="saveCfg">Guardar ajustes</button>
-              <span id="cfgMsg" class="muted" style="font-size:13px;"></span>
-            </div>
-          </div>
-        </div></section>
-      </div>
-
-      <p class="muted" id="errors" style="font-size:12px;margin-top:8px;"></p>
-    </div>
+<main class="wrap hide" id="app">
+  <div class="top">
+    <span class="brand">La Mirada Creativa</span>
+    <button class="ghost" id="out">Salir</button>
   </div>
+  <div id="body"></div>
+  <div class="foot">
+    <span class="stamp" id="stamp"></span>
+  </div>
+</main>
 
-  <!-- SHEET (side panel derecho) -->
-  <div class="sheet-overlay hidden" id="sheetOverlay"></div>
-  <aside class="sheet hidden" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
-    <div class="sheet-head"><div class="sheet-title" id="sheetTitle"></div><button class="btn btn-ghost" id="sheetClose" aria-label="Cerrar">✕</button></div>
-    <div class="sheet-body" id="sheetBody"></div>
-  </aside>
+<script>
+const $ = (id) => document.getElementById(id);
+const API = '/.netlify/functions/metrics-api';
+const AUTH = '/.netlify/functions/metrics-login';
+const REFRESH_MS = 60000; // el panel se refresca solo; ver nota sobre latencia de Meta
 
-  <script>
-    const $ = (id) => document.getElementById(id);
-    const show = (id) => $(id).classList.remove('hidden');
-    const hide = (id) => $(id).classList.add('hidden');
-    const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-    const CIC = { rentable: '✅', justo: '🟠', perdida: '🔴', 'sin-datos': '⚪' };
-    const MESC = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
-    const fmtD = (iso) => { if (!iso) return ''; const [, m, d] = iso.split('-'); return parseInt(d, 10) + ' ' + MESC[parseInt(m, 10) - 1]; };
-    // callout reutilizable: compacto + botón "Ver más" que abre el sidepanel
-    function calloutHTML(v, moreKey) {
-      v = v || {};
-      return `<div class="callout ${v.status || ''}"><span class="cic">${CIC[v.status] || '📊'}</span>` +
-        `<div class="ctxt">${esc(v.sentence || '')}</div>` +
-        `<button class="btn btn-outline callout-more" data-more="${moreKey}">Ver más</button></div>`;
-    }
-    function calloutStatic(v) {
-      v = v || {};
-      return `<div class="callout ${v.status || ''}"><span class="cic">${CIC[v.status] || '📊'}</span><div class="ctxt">${esc(v.sentence || '')}</div></div>`;
-    }
-    const kvRow = (k, val) => `<div class="kv"><span class="kv-k">${k}</span><span class="kv-v">${val}</span></div>`;
-    const EUR = (n) => (n == null ? '—' : Number(n).toLocaleString('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }));
-    const NUM = (n) => (n == null ? '—' : Number(n).toLocaleString('es-ES'));
-    const PCT = (n) => (n == null ? '—' : (Math.round(n * 10) / 10).toFixed(1) + ' %');
-    const X = (n) => (n == null ? '—' : (Math.round(n * 10) / 10) + 'x');
+const eur = (n) => (Math.round((n || 0) * 100) / 100).toLocaleString('es-ES',
+  { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + ' €';
+const one = (n) => (Math.round((n || 0) * 10) / 10).toLocaleString('es-ES',
+  { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const day = (iso) => { if (!iso) return ''; const p = iso.split('-'); return parseInt(p[2], 10) + ' ' + MES[parseInt(p[1], 10) - 1]; };
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) =>
+  ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const pctOf = (a, b) => (b ? Math.round((a / b) * 100) : 0);
 
-    // Chart.js defaults — limpio, estilo industria
-    const cssv = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-    Chart.defaults.font.family = '"Plus Jakarta Sans", system-ui, sans-serif';
-    Chart.defaults.font.size = 11;
-    Chart.defaults.plugins.legend.labels.boxWidth = 10;
-    Chart.defaults.plugins.legend.labels.boxHeight = 10;
-    Chart.defaults.plugins.legend.labels.usePointStyle = true;
-    Chart.defaults.plugins.legend.position = 'bottom';
-    Chart.defaults.maintainAspectRatio = false;
+// Iconos Lucide, inline (trazo 1.5 = fino). Sin CDN: cero dependencias.
+const SVG = (paths, cls) => '<svg class="ic ' + cls + '" viewBox="0 0 24 24" fill="none" ' +
+  'stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" ' +
+  'aria-hidden="true">' + paths + '</svg>';
+const ICON = {
+  arrowUp: (c) => SVG('<path d="M12 19V5"/><path d="m5 12 7-7 7 7"/>', c),
+  arrowDown: (c) => SVG('<path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>', c),
+};
 
-    async function init() { loadRange(); }
+// El nombre trae prefijos técnicos ("LMC69 · ABC · B testimonio"). Solo importa la idea.
+const clean = (n) => String(n || '').split('·').pop().trim() || String(n || '');
 
-    $('loginForm').onsubmit = async (e) => {
-      e.preventDefault();
-      const pw = $('password').value; $('loginErr').textContent = ''; $('loginBtn').disabled = true;
-      try {
-        const res = await fetch('/.netlify/functions/metrics-login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify({ password: pw }) });
-        if (res.ok) { $('password').value = ''; loadRange(); }
-        else if (res.status === 401) $('loginErr').textContent = 'Contraseña incorrecta.';
-        else $('loginErr').textContent = 'Error del servidor (' + res.status + ').';
-      } catch (err) { $('loginErr').textContent = 'Error de red. Reintenta.'; }
-      finally { $('loginBtn').disabled = false; }
-    };
-    $('logout').onclick = async () => {
-      try { await fetch('/.netlify/functions/metrics-login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify({ action: 'logout' }) }); } catch (e) {}
-      hide('app'); show('login');
-    };
-    $('refresh').onclick = () => loadRange();
-    $('range').onchange = () => loadRange();
+// Las ventas salen de Stripe. Si Stripe no responde, "0 ventas" NO significa
+// "no vende": significa "no lo sé". Un panel que confunde ambas cosas miente.
+function verdict(cp, salesOk) {
+  if (!salesOk) return { st: 'var(--muted)', blind: true, say: 'No puedo leer las ventas: Stripe no responde.' };
+  if (!cp.orders) {
+    return cp.spend > 0
+      ? { st: 'var(--coral)', say: 'Todavía no ha vendido nada.' }
+      : { st: 'var(--muted)', say: 'Aún sin datos.' };
+  }
+  const r = cp.roas;
+  if (r >= 1.5) return { st: 'var(--green)', num: r, say: 'Por cada euro invertido, esto es lo que vuelve.' };
+  if (r >= 1)   return { st: 'var(--amber)', num: r, say: 'Se sostiene, pero por poco.' };
+  return { st: 'var(--coral)', num: r, say: 'Cada euro que entra vuelve incompleto.' };
+}
 
-    // Tabs
-    let currentTab = 'resumen';
-    document.querySelectorAll('[data-tab]').forEach((t) => {
-      t.onclick = () => {
-        currentTab = t.dataset.tab;
-        document.querySelectorAll('[data-tab]').forEach((x) => x.classList.toggle('active', x === t));
-        document.querySelectorAll('.tabpanel').forEach((p) => p.classList.toggle('hidden', p.id !== 'tab-' + currentTab));
-        if (window._lastBundle) redrawCharts(window._lastBundle.charts);
-      };
-    });
+// Estado de conexión de cada herramienta que alimenta el panel.
+// verde = trae datos · coral = falla · gris = no configurada (opcional)
+function sourcesHTML(sources) {
+  if (!sources || !sources.length) return '';
+  const rows = sources.map((s) => {
+    const cls = s.ok ? 'ok' : (s.optional ? '' : 'bad');
+    return '<div class="src ' + (s.ok ? '' : 'off') + '">' +
+      '<i class="dot ' + cls + '"></i>' +
+      '<span class="src-n">' + esc(s.name) + '</span>' +
+      (s.ok ? '' : '<span class="src-d">' + esc(s.detail || 'sin conexión') + '</span>') +
+    '</div>';
+  }).join('');
+  return '<section class="panel" data-r="5"><h2>Conexiones</h2>' +
+         '<div class="sources">' + rows + '</div></section>';
+}
 
-    async function api(method, body) {
-      const opts = { method, credentials: 'include', headers: {} };
-      if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
-      const range = $('range').value;
-      const url = '/.netlify/functions/metrics-api' + (method === 'GET' ? '?range=' + range : '');
-      return fetch(url, opts);
-    }
+function render(b) {
+  const cp = b.campaignPeriod;
 
-    async function loadRange() {
-      show('loading'); hide('login'); hide('app');
-      let res;
-      try { res = await api('GET'); } catch (e) { hide('loading'); show('login'); $('loginErr').textContent = 'Error de red. Reintenta.'; return; }
-      if (res.status === 401) { hide('loading'); show('login'); setTimeout(() => { try { $('password').focus(); } catch (e) {} }, 50); return; }
-      if (!res.ok) { hide('loading'); show('login'); $('loginErr').textContent = 'Error del servidor (' + res.status + ').'; return; }
-      render(await res.json());
-      hide('loading'); hide('login'); show('app');
-    }
+  $('stamp').textContent = 'Actualizado ' + new Date(b.generatedAt).toLocaleTimeString('es-ES',
+    { hour: '2-digit', minute: '2-digit' });
 
-    function stat(label, value, sub, cls) {
-      return `<div class="stat"><div class="stat-label">${label}</div><div class="stat-value ${cls || ''}">${value}</div><div class="stat-sub">${sub || ''}</div></div>`;
-    }
+  const sources = sourcesHTML(b.sources);
 
-    const OBJ = { OUTCOME_SALES: 'Ventas', OUTCOME_LEADS: 'Leads', OUTCOME_TRAFFIC: 'Tráfico', OUTCOME_ENGAGEMENT: 'Interacción', OUTCOME_AWARENESS: 'Reconocimiento' };
-    function renderCampaigns(list) {
-      const el = $('campaigns');
-      if (!list || !list.length) { el.innerHTML = `<div class="card"><div class="card-c muted">No hay ninguna campaña activa ahora mismo.</div></div>`; return; }
-      el.innerHTML = list.map((c) => {
-        const badge = c.learning
-          ? `<span class="badge badge-blue dot">Aprendizaje · día ${c.learning.day} de ${c.learning.total}</span>`
-          : `<span class="badge badge-green dot">Activa</span>`;
-        const cards = [
-          stat('Gasto', EUR(c.spend), c.dailyBudget ? EUR(c.dailyBudget) + '/día' : 'desde el lanzamiento'),
-          stat('Impresiones', NUM(c.impressions), NUM(c.clicks) + ' clics'),
-          stat('CTR', c.ctr == null ? '—' : PCT(c.ctr), 'clics ÷ impresiones'),
-          stat('CPC', c.cpc == null ? '—' : EUR(c.cpc), 'coste por clic'),
-          stat('Llegan a la web', NUM(c.landingViews), 'landing page views'),
-          stat('Inician pago', NUM(c.checkouts), 'checkouts empezados'),
-          stat('Compras', NUM(c.purchases), c.purchases > 0 && c.cpa != null ? 'CPA ' + EUR(c.cpa) : '0 por ahora'),
-          stat('ROAS (Meta)', c.roas == null ? '—' : X(c.roas), 'valor atribuido ÷ gasto'),
-        ].join('');
-        return `<div class="card" style="margin-bottom:18px;">
-          <div class="card-h"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;">
-            <div><div class="card-t">${esc(c.name)}</div><div class="card-d">Objetivo: ${OBJ[c.objective] || c.objective || '—'} · lanzada el ${c.launch} · ${c.daysRunning} días corriendo</div></div>
-            ${badge}
-          </div></div>
-          <div class="card-c"><div class="grid g4">${cards}</div>
-          ${c.learning ? `<p class="muted" style="font-size:12px;margin:14px 0 0;">🎓 En fase de aprendizaje: déjala correr sin tocar hasta que Meta termine de optimizar (~7 días). Estos números aún no son definitivos.</p>` : ''}
-          </div></div>`;
-      }).join('');
-    }
+  if (!cp || !cp.ads || !cp.ads.length) {
+    $('body').innerHTML = '<div class="empty" data-r="1">No hay creativos activos.<br>No hay campaña que medir.</div>' + sources;
+    return;
+  }
 
-    function render(b) {
-      window._lastBundle = b;
-      const k = b.kpi;
+  // ¿Podemos fiarnos del dato de ventas? Sale de Stripe.
+  const stripeSrc = (b.sources || []).find((s) => s.id === 'stripe');
+  const salesOk = !stripeSrc || stripeSrc.ok;
 
-      // updated
-      let extra = '';
-      if (b.lastSaleDate) extra += ' · última venta ' + b.lastSaleDate;
-      if (k.refundsRange > 0) extra += ' · reembolsos ' + EUR(k.refundsRange);
-      $('updated').textContent = 'Actualizado ' + new Date(b.generatedAt).toLocaleString('es-ES') + ' · rango ' + b.rangeDays + ' días' + extra;
+  const v = verdict(cp, salesOk);
+  const ads = cp.ads.slice().sort((a, z) => (z.purchases - a.purchases) || (z.spend - a.spend));
+  const best = salesOk && ads[0] && ads[0].purchases > 0 ? ads[0].id : null;
 
-      // callouts de rentabilidad (mismo componente, dos horizontes de tiempo)
-      $('verdictWrap').innerHTML = calloutHTML(b.verdict, 'historico');
-      $('campVerdictWrap').innerHTML = calloutHTML(b.campaignVerdict, 'campana');
+  // "×1,2" — el multiplicador delante, como se lee en español.
+  const hero = v.blind
+    ? '<span class="hero-num" style="--st:' + v.st + '">—</span>'
+    : v.num != null
+      ? '<span class="hero-num" style="--st:' + v.st + '"><span class="cur">×</span>' + one(v.num) + '</span>'
+      : '<span class="hero-num" style="--st:' + v.st + '">' + cp.orders + '<span class="cur">ventas</span></span>';
 
-      // plan
-      const p = b.plan || {};
-      $('planHeadline').textContent = p.headline || '';
-      $('planProblem').textContent = p.problem || '';
-      $('planWhy').innerHTML = (p.why || []).map((w) => `<li>${esc(w)}</li>`).join('');
-      $('planSteps').innerHTML = (p.steps || []).map((s) => `<li>${esc(s)}</li>`).join('');
+  const profit = cp.profit >= 0
+    ? '<span class="pos">+' + eur(cp.profit) + '</span>'
+    : '<span class="neg">' + eur(cp.profit) + '</span>';
+  // Sin Stripe no hay ni ventas ni beneficio que enseñar: un guion, no un cero.
+  const heroSub = v.blind
+    ? 'El gasto sí es real; las ventas no se pueden confirmar.'
+    : cp.orders + ' ' + (cp.orders === 1 ? 'venta' : 'ventas') + ' · ' + profit;
 
-      // avisos
-      $('actions').innerHTML = (b.actions || []).map((a) =>
-        `<div class="aviso"><span class="ic">${a.icon || '•'}</span><div>` +
-        `<div class="at">${esc(a.title)}</div><div class="ap">${esc(a.plain)}</div>` +
-        ((a.todo && a.todo.length) ? `<ul>${a.todo.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>` : '') +
-        `</div></div>`).join('');
+  const step = (n, l) => '<div class="step"><div class="n">' + n + '</div><div class="l">' + l + '</div></div>';
+  const arrow = (a, b2) => '<div class="arrow"><span>→</span><i>' + pctOf(a, b2) + '%</i></div>';
 
-      // KPIs — Dinero
-      const rd = b.rangeDays;
-      $('kpiMoney').innerHTML = [
-        stat('Ingresos ' + rd + 'd', EUR(k.revenueRangeNet), 'ayer ' + EUR(k.revenueYday) + ' · total ' + EUR(k.revenueLifetime), 'v-' + (k.revenueRangeNet > 0 ? 'green' : '')),
-        stat('Ventas ' + rd + 'd', NUM(k.ordersRange), 'ayer ' + NUM(k.ordersYday) + ' · total ' + NUM(k.ordersLifetime)),
-        stat('Ticket medio (AOV)', EUR(k.aov), 'por compra'),
-        stat('Beneficio 30d', EUR(k.netProfit30), 'ingresos − publi', k.netProfit30 >= 0 ? 'v-green' : 'v-red'),
-      ].join('');
+  const rows = ads.map((a) =>
+    '<div class="ad ' + (a.id === best ? 'win' : '') + ' ' + (a.purchases === 0 ? 'zero' : '') + '">' +
+      (a.thumb ? '<img src="' + esc(a.thumb) + '" alt="" loading="lazy">' : '<div class="noimg"></div>') +
+      '<div class="ad-info">' +
+        '<div class="ad-name">' + esc(clean(a.name)) + (a.id === best ? '<span class="tag">gana</span>' : '') + '</div>' +
+        '<div class="ad-meta">' + eur(a.spend) + ' · ' + a.landingViews + ' visitas' +
+          (a.ctr != null ? ' · CTR ' + one(a.ctr) + '%' : '') + '</div>' +
+      '</div>' +
+      '<div class="ad-sales"><b>' + a.purchases + '</b>' +
+        '<small>' + (a.purchases === 1 ? 'venta' : 'ventas') + '</small></div>' +
+    '</div>').join('');
 
-      // KPIs — Publicidad (incluye presupuesto con progreso)
-      const pctUsed = k.budgetUsedPct == null ? 0 : Math.min(100, Math.round(k.budgetUsedPct));
-      const budgetCls = k.spendMTD > k.monthlyBudget ? 'v-red' : (pctUsed > 85 ? 'v-amber' : '');
-      const budgetCard = `<div class="stat"><div class="stat-label">Presupuesto del mes</div>` +
-        `<div class="stat-value sm ${budgetCls}">${EUR(k.spendMTD)} <span class="muted" style="font-weight:600;">/ ${EUR(k.monthlyBudget)}</span></div>` +
-        `<div class="prog"><i style="width:${pctUsed}%"></i></div>` +
-        `<div class="stat-sub">quedan ${EUR(k.budgetRemaining)} · proy. ${EUR(k.budgetProjected)}</div></div>`;
-      const roasCls = k.roas == null ? '' : (k.roas >= b.config.target_roas ? 'v-green' : 'v-red');
-      $('kpiAds').innerHTML = [
-        stat('Gasto publi ' + rd + 'd', EUR(k.spendRange), 'ayer ' + EUR(k.spendYday)),
-        stat('ROAS', X(k.roas), 'objetivo ≥ ' + b.config.target_roas + 'x', roasCls),
-        budgetCard,
-        stat('CAC', EUR(k.cac), 'objetivo ≤ ' + EUR(b.config.target_cac)),
-        stat('CPL', EUR(k.cpl), 'objetivo ≤ ' + EUR(b.config.target_cpl)),
-        stat('Capital invertido', EUR(k.spendLifetime), 'total histórico'),
-      ].join('');
+  $('body').innerHTML =
+    // 1 · el veredicto
+    '<section class="hero" data-r="1">' +
+      '<p class="period">Creativos actuales · desde <b>' + day(cp.since) + '</b> · día <b>' + cp.days + '</b></p>' +
+      hero +
+      '<div class="hero-text">' +
+        '<p class="hero-say">' + esc(v.say) + '</p>' +
+        '<p class="hero-sub">' + heroSub + '</p>' +
+      '</div>' +
+    '</section>' +
 
-      // KPIs — Audiencia
-      $('kpiAudience').innerHTML = [
-        stat('Leads ' + rd + 'd', NUM(k.leadsRange), NUM(k.leadsTotal) + ' total'),
-        stat('Conversión de leads', PCT(k.leadConvRate), 'leads que compran'),
-        stat('Audiencia Resend', b.audience.resend ? NUM(b.audience.resend.total) : 'n/d', b.audience.resend ? NUM(b.audience.resend.subscribed) + ' suscritos' : 'requiere key full'),
-        stat('Compradores activos', NUM(k.buyers), 'usan la app'),
-      ].join('');
+    // 2 · el dinero
+    '<section class="card" data-r="2">' +
+      '<div class="cell"><div class="k">' + ICON.arrowUp('out') + 'Invertido</div>' +
+        '<div class="v">' + eur(cp.spend) + '</div></div>' +
+      '<div class="cell"><div class="k">' + ICON.arrowDown('in') + 'Ingresado</div>' +
+        '<div class="v">' + (salesOk ? eur(cp.revenue) : '—') + '</div></div>' +
+    '</section>' +
 
-      // campaña activa (touchpoint aislado)
-      renderCampaigns(b.campaigns);
+    // 3 · el funnel — manda sobre los creativos: dice DÓNDE se rompe
+    '<section class="panel" data-r="3"><h2>Funnel</h2>' +
+      '<div class="card"><div class="cell"><div class="flow">' +
+        step(cp.linkClicks, 'Clics') + arrow(cp.landingViews, cp.linkClicks) +
+        step(cp.landingViews, 'Visitas') + arrow(cp.checkouts, cp.landingViews) +
+        step(cp.checkouts, 'Al pago') + (salesOk ? arrow(cp.orders, cp.checkouts) : '<div class="arrow"><span>→</span><i>—</i></div>') +
+        step(salesOk ? cp.orders : '—', 'Compran') +
+      '</div></div></div>' +
+    '</section>' +
 
-      // funnel
-      const f = b.funnel;
-      $('funnel').innerHTML = [
-        `<div class="fstep"><div class="n">${NUM(f.visits)}</div><div class="t">Visitantes</div></div>`,
-        `<div class="fstep"><div class="n">${NUM(f.leads)}</div><div class="t">Leads</div><div class="r">${(f.cvrVisitLead != null && f.cvrVisitLead <= 100) ? PCT(f.cvrVisitLead) : ''}</div></div>`,
-        `<div class="fstep"><div class="n">${NUM(f.checkoutStarts)}</div><div class="t">Checkouts</div></div>`,
-        `<div class="fstep"><div class="n">${NUM(f.orders)}</div><div class="t">Compras</div><div class="r">CVR ${PCT(f.cvrCheckout)}</div></div>`,
-      ].join('');
-      $('funnelNote').textContent = b.ownAnalytics ? 'Visitas: analítica propia (sin Amplitude), desde el despliegue.' : 'Aún sin visitas propias: el embudo arranca en checkout.';
+    // 4 · los creativos
+    '<section class="panel" data-r="4"><h2>Creativos</h2>' +
+      '<div class="adlist">' + rows + '</div>' +
+    '</section>' +
 
-      // charts (redraw when their tab is visible)
-      redrawCharts(b.charts);
+    // 5 · conexiones
+    sources;
+}
 
-      // cvr price
-      $('cvrPrice').querySelector('tbody').innerHTML = (b.cvrByPrice || []).map((r) =>
-        `<tr><td>${r.price}</td><td class="r">${NUM(r.created)}</td><td class="r">${NUM(r.won)}</td><td class="r">${PCT(r.cvr)}</td></tr>`).join('') || '<tr><td colspan="4" class="muted">Sin datos.</td></tr>';
+async function load() {
+  const r = await fetch(API + '?range=30', { credentials: 'include' });
+  if (r.status === 401) {
+    $('app').classList.add('hide'); $('gate').style.display = 'flex';
+    document.body.classList.remove('ready');
+    return;
+  }
+  const b = await r.json();
+  $('gate').style.display = 'none';
+  $('app').classList.remove('hide');
+  render(b);
+  // a partir del primer pintado, los refrescos son silenciosos (sin re-animar)
+  requestAnimationFrame(() => document.body.classList.add('ready'));
+}
 
-      // channels
-      const src = Object.entries(b.bySourceRevenue || {}).sort((a, c) => c[1] - a[1]);
-      $('bySource').querySelector('tbody').innerHTML = src.map(([s, v]) => `<tr><td>${esc(s)}</td><td class="r">${EUR(v)}</td></tr>`).join('') || '<tr><td colspan="2" class="muted">Sin datos.</td></tr>';
+// El panel se mantiene solo: refresca en segundo plano y al volver a la pestaña.
+// (La venta entra al instante vía Stripe; el gasto de Meta lleva su propia latencia.)
+setInterval(() => { if (!document.hidden && !$('app').classList.contains('hide')) load(); }, REFRESH_MS);
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && !$('app').classList.contains('hide')) load();
+});
 
-      // cohorts
-      $('cohorts').querySelector('tbody').innerHTML = (b.cohorts || []).map((c) =>
-        `<tr><td>${c.week}</td><td class="r">${NUM(c.total)}</td><td class="r">${NUM(c.converted)}</td><td class="r">${PCT(c.rate)}</td></tr>`).join('') || '<tr><td colspan="4" class="muted">Sin datos.</td></tr>';
+$('gateForm').onsubmit = async (e) => {
+  e.preventDefault();
+  $('go').disabled = true; $('gateErr').textContent = '';
+  try {
+    const r = await fetch(AUTH, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      credentials: 'include', body: JSON.stringify({ password: $('pw').value }) });
+    if (!r.ok) throw new Error('Contraseña incorrecta');
+    await load();
+  } catch (err) { $('gateErr').textContent = err.message; }
+  $('go').disabled = false;
+};
 
-      // streaks
-      if (b.streaks) {
-        const d = b.streaks.distribucion; const tot = Object.values(d).reduce((a, x) => a + x, 0) || 1;
-        $('streaksMeta').textContent = `Activos ${b.streaks.activos} · media ${b.streaks.rachaMedia}d · máx ${b.streaks.rachaMax}d`;
-        const row = (label, n) => `<tr><td>${label}</td><td class="r">${NUM(n)}</td><td style="width:45%"><div class="bar"><i style="width:${(n / tot * 100).toFixed(0)}%"></i></div></td></tr>`;
-        $('streaks').querySelector('tbody').innerHTML = row('Inactivos', d.inactivo) + row('1–3 días', d.d1_3) + row('4–7 días', d.d4_7) + row('8–30 días', d.d8_30) + row('30+ días', d.d30plus);
-      }
+$('out').onclick = async () => {
+  try {
+    await fetch(AUTH, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      credentials: 'include', body: JSON.stringify({ action: 'logout' }) });
+  } catch (e) {}
+  location.reload();
+};
 
-      // config form
-      for (const key of Object.keys(b.config)) { if ($(key)) $(key).value = b.config[key]; }
-
-      // errors
-      const errs = Object.entries(b.errors || {});
-      $('errors').textContent = errs.length ? '⚠ ' + errs.map(([s, m]) => s + ': ' + m).join('  ·  ') : '';
-    }
-
-    function buildSeries(map, rangeDays) {
-      const today = new Date(); today.setUTCHours(0, 0, 0, 0);
-      if (rangeDays <= 92) {
-        const labels = [], data = [];
-        for (let i = rangeDays - 1; i >= 0; i--) { const d = new Date(today); d.setUTCDate(d.getUTCDate() - i); const key = d.toISOString().slice(0, 10); labels.push(key.slice(5)); data.push(map[key] || 0); }
-        return { labels, data };
-      }
-      const months = {};
-      for (const [key, v] of Object.entries(map)) { const mk = key.slice(0, 7); months[mk] = (months[mk] || 0) + v; }
-      const labels = [], data = [];
-      const start = new Date(today); start.setUTCDate(start.getUTCDate() - rangeDays);
-      let cur = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), 1));
-      const end = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1));
-      while (cur <= end) { const mk = cur.toISOString().slice(0, 7); labels.push(mk); data.push(months[mk] || 0); cur.setUTCMonth(cur.getUTCMonth() + 1); }
-      return { labels, data };
-    }
-
-    const chartOpts = () => ({
-      responsive: true,
-      interaction: { mode: 'index', intersect: false },
-      plugins: { legend: { labels: { color: cssv('--muted-foreground') } }, tooltip: { padding: 10, cornerRadius: 8, backgroundColor: cssv('--foreground'), titleColor: cssv('--background'), bodyColor: cssv('--background') } },
-      scales: {
-        x: { grid: { display: false }, ticks: { color: cssv('--muted-foreground'), maxRotation: 0, autoSkip: true, maxTicksLimit: 12 } },
-        y: { beginAtZero: true, border: { display: false }, grid: { color: cssv('--border') }, ticks: { color: cssv('--muted-foreground'), maxTicksLimit: 6 } },
-      },
-    });
-
-    function redrawCharts(charts) {
-      if (!charts) return;
-      const rd = parseInt($('range').value, 10);
-      if (currentTab === 'rendimiento') {
-        const rev = buildSeries(charts.revByDay || {}, rd), spend = buildSeries(charts.spendByDay || {}, rd);
-        if (window._m) window._m.destroy();
-        window._m = new Chart($('chartMoney'), { type: 'bar', data: { labels: rev.labels, datasets: [
-          { label: 'Ingresos', data: rev.data, backgroundColor: cssv('--primary'), borderRadius: 5, maxBarThickness: 26 },
-          { label: 'Gasto', data: spend.data, backgroundColor: cssv('--amber'), borderRadius: 5, maxBarThickness: 26 } ] }, options: chartOpts() });
-      }
-      if (currentTab === 'audiencia') {
-        const leads = buildSeries(charts.leadsByDay || {}, rd), visits = buildSeries(charts.visitsByDay || {}, rd);
-        if (window._l) window._l.destroy();
-        window._l = new Chart($('chartLeads'), { type: 'line', data: { labels: leads.labels, datasets: [
-          { label: 'Leads', data: leads.data, borderColor: cssv('--primary'), backgroundColor: 'rgba(37,99,235,.12)', tension: .35, fill: true, pointRadius: 0, borderWidth: 2 },
-          { label: 'Visitas', data: visits.data, borderColor: cssv('--violet'), backgroundColor: 'rgba(124,58,237,.1)', tension: .35, fill: true, pointRadius: 0, borderWidth: 2 } ] }, options: chartOpts() });
-      }
-    }
-
-    $('downloadPlan').onclick = () => {
-      const b = window._lastBundle; if (!b) return;
-      const p = b.plan || {}, k = b.kpi, md = [];
-      const fecha = new Date(b.generatedAt).toLocaleDateString('es-ES');
-      md.push('# Plan de acción — La Mirada Creativa', '', '_Generado el ' + fecha + '_', '');
-      md.push('## 🧭 Tu plan ahora', '', '**' + (p.headline || '') + '**', '');
-      if (p.problem) md.push(p.problem, '');
-      if ((p.why || []).length) { md.push('**Por qué:**'); p.why.forEach((w) => md.push('- ' + w)); md.push(''); }
-      if ((p.steps || []).length) { md.push('**Qué hacer:**'); p.steps.forEach((s, i) => md.push((i + 1) + '. ' + s)); md.push(''); }
-      md.push('## 📋 Avisos', '');
-      (b.actions || []).forEach((a) => { md.push('### ' + a.icon + ' ' + a.title, '', a.plain, ''); (a.todo || []).forEach((t) => md.push('- ' + t)); md.push(''); });
-      md.push('## 📊 Números clave', '');
-      md.push('- Ingresos (' + b.rangeDays + 'd): ' + EUR(k.revenueRangeNet) + ' · total ' + EUR(k.revenueLifetime));
-      md.push('- Ventas: ' + NUM(k.ordersRange) + ' · total ' + NUM(k.ordersLifetime));
-      md.push('- Gasto publi: ' + EUR(k.spendRange) + ' · capital invertido ' + EUR(k.spendLifetime));
-      md.push('- ROAS ' + X(k.roas) + ' · CAC ' + EUR(k.cac) + ' · AOV ' + EUR(k.aov) + ' · CPL ' + EUR(k.cpl));
-      md.push('- Presupuesto del mes: ' + EUR(k.spendMTD) + ' / ' + EUR(k.monthlyBudget) + ' (quedan ' + EUR(k.budgetRemaining) + ')');
-      const blob = new Blob([md.join('\n')], { type: 'text/markdown;charset=utf-8' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'plan-la-mirada-creativa.md';
-      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-    };
-
-    $('saveCfg').onclick = async () => {
-      const cfg = {};
-      ['monthly_ad_budget', 'other_ad_spend', 'product_price', 'target_roas', 'target_cpl', 'target_cac'].forEach((f) => { cfg[f] = $(f).value; });
-      $('cfgMsg').textContent = 'Guardando…';
-      const res = await api('POST', { action: 'save-config', config: cfg });
-      $('cfgMsg').textContent = res.ok ? 'Guardado ✓ — recalculando…' : 'Error al guardar';
-      if (res.ok) setTimeout(loadRange, 600);
-    };
-
-    // ===== Sidepanel (Sheet) — reutilizable para los callouts =====
-    function openSheet(key) {
-      const b = window._lastBundle; if (!b) return;
-      let title = '', body = '';
-      if (key === 'historico') { title = 'Rentabilidad · histórico'; body = historicoDetail(b); }
-      else if (key === 'campana') { title = 'Rentabilidad · campaña actual'; body = campanaDetail(b); }
-      else return;
-      $('sheetTitle').textContent = title;
-      $('sheetBody').innerHTML = body;
-      show('sheetOverlay'); show('sheet');
-    }
-    function closeSheet() { hide('sheetOverlay'); hide('sheet'); }
-    $('sheetClose').onclick = closeSheet;
-    $('sheetOverlay').onclick = closeSheet;
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSheet(); });
-    document.addEventListener('click', (e) => { const btn = e.target.closest('.callout-more'); if (btn) openSheet(btn.dataset.more); });
-
-    function historicoDetail(b) {
-      const k = b.kpi;
-      const gross = k.revenueLifetime || 0, net = k.revenueLifetimeNet || 0;
-      const refunds = gross - net, spend = k.spendLifetime || 0, profit = net - spend;
-      const roas = spend > 0 ? net / spend : null;
-      return calloutStatic(b.verdict) +
-        '<h4>Cuentas de siempre</h4>' +
-        kvRow('Ingresos brutos', EUR(gross)) +
-        kvRow('− Reembolsos', '−' + EUR(refunds)) +
-        kvRow('Ingresos netos', EUR(net)) +
-        kvRow('− Gasto en publicidad', '−' + EUR(spend)) +
-        kvRow('= Beneficio', `<span class="${profit >= 0 ? 'v-green' : 'v-red'}">${EUR(profit)}</span>`) +
-        kvRow('ROAS neto', X(roas)) +
-        '<h4>Ventas</h4>' +
-        kvRow('Ventas totales', NUM(k.ordersLifetime)) +
-        kvRow('Ticket medio', EUR(k.aov)) +
-        '<div class="sheet-note">Suma <b>toda tu historia</b>: distintos precios (12–69 €), rediseños de la web y pruebas. Mezcla etapas con conversiones muy distintas — sirve para ver el conjunto, no para juzgar lo de ahora.</div>';
-    }
-
-    function campanaDetail(b) {
-      const camps = b.campaigns || [];
-      if (!camps.length) return calloutStatic(b.campaignVerdict) + '<div class="sheet-note">No hay ninguna campaña activa ahora mismo.</div>';
-      const sum = (f) => camps.reduce((s, c) => s + (c[f] || 0), 0);
-      const spend = sum('spend'), impr = sum('impressions'), clicks = sum('clicks');
-      const lpv = sum('landingViews'), checkouts = sum('checkouts'), purchases = sum('purchases');
-      const price = Number(b.config.product_price) || 0;
-      const revenue = purchases * price, profit = revenue - spend;
-      const roas = spend > 0 ? revenue / spend : null;
-      const c0 = camps[0];
-      return calloutStatic(b.campaignVerdict) +
-        '<h4>' + (camps.length > 1 ? camps.length + ' campañas activas' : esc(c0.name)) + '</h4>' +
-        kvRow('Objetivo', OBJ[c0.objective] || c0.objective || '—') +
-        kvRow('Lanzada', c0.launch + ' · ' + c0.daysRunning + ' días') +
-        kvRow('Estado', c0.learning ? 'Aprendizaje · día ' + c0.learning.day + '/' + c0.learning.total : 'Activa') +
-        '<h4>Embudo de la campaña</h4>' +
-        kvRow('Impresiones', NUM(impr)) +
-        kvRow('Clics', NUM(clicks)) +
-        kvRow('Llegan a la web', NUM(lpv)) +
-        kvRow('Inician pago', NUM(checkouts)) +
-        kvRow('Compras', NUM(purchases)) +
-        '<h4>Rentabilidad en tiempo real</h4>' +
-        kvRow('Gasto', EUR(spend)) +
-        kvRow('Ingresos estimados', purchases > 0 ? EUR(revenue) : EUR(0) + ' (0 ventas)') +
-        kvRow('Beneficio', `<span class="${profit >= 0 ? 'v-green' : 'v-red'}">${EUR(profit)}</span>`) +
-        kvRow('ROAS', X(roas)) +
-        '<div class="sheet-note">' + (c0.learning
-          ? 'Está en <b>fase de aprendizaje</b>: Meta aún optimiza a quién enseñar el anuncio. Los números no son fiables hasta el <b>' + fmtD(c0.learning.until) + '</b>. No la toques todavía.'
-          : 'Mide solo lo que pasa <b>ahora mismo</b> con la oferta y la web actuales.') + '</div>';
-    }
-
-    init().catch((e) => { hide('loading'); show('login'); $('loginErr').textContent = 'Error de inicialización: ' + e.message; });
-  </script>
+load();
+</script>
 </body>
 </html>
