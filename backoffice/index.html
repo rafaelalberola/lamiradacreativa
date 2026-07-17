@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/images/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   /* ============================================================
      Un instrumento, no un dashboard.
@@ -54,6 +54,8 @@
   .gate{min-height:100dvh; display:flex; align-items:center; justify-content:center; padding:var(--edge);}
   .gate form{width:100%; max-width:300px; display:flex; flex-direction:column; gap:var(--s24);}
   .gate .fields{display:flex; flex-direction:column; gap:var(--s10);}
+  .gate .gbrand{display:flex; flex-direction:column; align-items:center; gap:var(--s6);}
+  .gate .gbrand img{width:34px; height:34px; border-radius:9px;}
   .gate h1{font-family:"Fraunces",serif; font-weight:300; font-size:26px;
     letter-spacing:-.01em; text-align:center;}
   input[type=password],input[type=number]{
@@ -72,7 +74,11 @@
 
   /* ---------- cabecera ---------- */
   .top{display:flex; align-items:baseline; justify-content:space-between; gap:var(--s16);}
-  .brand{font-size:12px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--faint);}
+  .brand{display:flex; align-items:center; gap:var(--s8);}
+  .brand-logo{width:26px; height:26px; border-radius:7px; flex:none;}
+  .brand-name{display:flex; flex-direction:column;}
+  .brand-name b{font-size:12px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--faint);}
+  .brand-sub{font-family:"Fraunces",serif; font-style:italic; font-weight:400; font-size:12px; color:var(--muted); letter-spacing:0;}
   .ghost{background:none; border:0; color:var(--faint); font:inherit; font-size:12px;
     cursor:pointer; transition:color .18s ease;}
   .ghost:hover{color:var(--text);}
@@ -191,7 +197,11 @@
 
 <div class="gate" id="gate">
   <form id="gateForm">
-    <h1>La Mirada Creativa</h1>
+    <div class="gbrand">
+      <img src="/assets/images/favicon.svg" alt="">
+      <h1>La Mirada Creativa</h1>
+      <em class="brand-sub">Backoffice</em>
+    </div>
     <div class="fields">
       <input type="password" id="pw" placeholder="Contraseña" autocomplete="current-password" required autofocus>
       <button class="btn" type="submit" id="go">Entrar</button>
@@ -202,7 +212,10 @@
 
 <main class="wrap hide" id="app">
   <div class="top">
-    <span class="brand">La Mirada Creativa</span>
+    <span class="brand">
+      <img class="brand-logo" src="/assets/images/favicon.svg" alt="">
+      <span class="brand-name"><b>La Mirada Creativa</b><em class="brand-sub">Backoffice</em></span>
+    </span>
     <button class="ghost" id="out">Salir</button>
   </div>
   <div id="body"></div>
