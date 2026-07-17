@@ -175,14 +175,15 @@
     .card{flex-direction:column;}
     .cell + .cell{border-left:0; border-top:1px solid var(--line);}
     .entry{gap:var(--s12);} .entry img,.entry .noimg{width:44px; height:55px;}
-    /* funnel en BLOQUE (vertical): cada paso una fila, la flecha apunta hacia abajo */
-    .flow{flex-direction:column; align-items:stretch; gap:var(--s4);}
-    .step,.arrow{width:100%;}
-    .step .n,.arrow span{height:auto;}
-    .step .n{font-size:24px;}
-    .step .l{font-size:10px; letter-spacing:.08em;}
-    .arrow span{font-size:13px; transform:rotate(90deg);}
-    .arrow i{font-size:10px;}
+    /* funnel HORIZONTAL con scroll PROPIO (el body nunca hace scroll horizontal) */
+    .flow{overflow-x:auto; -webkit-overflow-scrolling:touch; gap:var(--s8); padding-bottom:var(--s6);}
+    .step{flex:none; min-width:60px;}
+    .arrow{flex:none;}
+    .step .n,.arrow span{height:28px;}
+    .step .n{font-size:22px;}
+    .step .l{font-size:9px; letter-spacing:.06em; white-space:nowrap;}
+    .arrow span{font-size:13px;}
+    .arrow i{font-size:9px;}
   }
 </style>
 </head>
