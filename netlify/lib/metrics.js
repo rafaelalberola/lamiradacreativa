@@ -94,10 +94,14 @@ async function loadStripe(windows, errors) {
   const revByDay = {};
   const completedByPrice = {}; // price -> count (rango)
   let lastSale = 0; // unix de la última venta pagada
+  // Lista compacta de ventas pagadas: permite recortar por CUALQUIER ventana
+  // (p. ej. "desde que lanzamos los creativos actuales") sin volver a llamar a Stripe.
+  const paidSessions = [];
 
   for (const s of completed) {
     if (!paid(s)) continue;
     const v = euros(s);
+    paidSessions.push({ created: s.created, amount: v, source: (s.metadata && s.metadata.utm_source) || 'directo' });
     revenueLifetime += v;
     ordersLifetime += 1;
     if (s.created > lastSale) lastSale = s.created;
@@ -155,6 +159,7 @@ async function loadStripe(windows, errors) {
     checkoutStarts,
     cvrCheckout: checkoutStarts ? (ordersRange / checkoutStarts) * 100 : 0,
     lastSaleDate: lastSale ? dayKey(lastSale) : null,
+    paidSessions,
   };
 }
 
@@ -351,15 +356,23 @@ async function loadActiveAds(errors) {
   try {
     // 1) Anuncios ACTIVE = los creativos que están vivos ahora mismo.
     const adsRes = await fetch(
-      `${META_API}/${account}/ads?fields=id,name,effective_status&effective_status=%5B%22ACTIVE%22%5D&limit=200&access_token=${token}`
+      `${META_API}/${account}/ads?fields=id,name,effective_status,created_time&effective_status=%5B%22ACTIVE%22%5D&limit=200&access_token=${token}`
     );
     const adsJson = await adsRes.json();
     if (adsJson.error) throw new Error(adsJson.error.message);
     const activeAds = adsJson.data || [];
-    if (!activeAds.length) return { ads: [], totals: null };
+    if (!activeAds.length) return { ads: [], totals: null, since: null };
     const activeIds = new Set(activeAds.map((a) => a.id));
     const nameById = {};
     activeAds.forEach((a) => (nameById[a.id] = a.name));
+
+    // Inicio del periodo = el creativo activo más antiguo. Si mañana cambias
+    // creativos, la ventana se mueve sola y el informe sigue siendo "solo lo vivo".
+    let since = null;
+    for (const a of activeAds) {
+      const d = a.created_time ? a.created_time.slice(0, 10) : null;
+      if (d && (!since || d < since)) since = d;
+    }
 
     // 2) Insights ad-level de por vida. Para creativos nuevos = sin histórico.
     const insRes = await fetch(
@@ -404,7 +417,7 @@ async function loadActiveAds(errors) {
       costPerVisit: landingViews ? spend / landingViews : null,
       cpa: purchases ? spend / purchases : null,
     };
-    return { ads, totals };
+    return { ads, totals, since };
   } catch (e) {
     errors.activeAds = `Meta creativos activos: ${e.message}`;
     return null;
@@ -603,11 +616,36 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
     loadActiveAds(errors),
   ]);
 
-  // ROAS de los creativos activos (aislado) = ventas × precio / gasto de esos anuncios.
-  if (activeAds && activeAds.totals) {
-    const price = Number(config.product_price) || 0;
-    activeAds.totals.revenue = activeAds.totals.purchases * price;
-    activeAds.totals.roas = activeAds.totals.spend > 0 ? activeAds.totals.revenue / activeAds.totals.spend : null;
+  // ---- Periodo de campaña: SOLO los creativos vivos y SOLO desde que se lanzaron.
+  // Gasto/tráfico salen de Meta (esos anuncios); ventas e ingresos de Stripe en esa
+  // misma ventana (fuente de verdad). Nada de histórico ni de anuncios pausados.
+  let campaignPeriod = null;
+  if (activeAds && activeAds.totals && activeAds.since) {
+    const t = activeAds.totals;
+    const sinceSec = Math.floor(new Date(activeAds.since + 'T00:00:00Z').getTime() / 1000);
+    const sess = (stripe && stripe.paidSessions ? stripe.paidSessions : []).filter((s) => s.created >= sinceSec);
+    const orders = sess.length;
+    const revenue = sess.reduce((a, s) => a + s.amount, 0);
+    campaignPeriod = {
+      since: activeAds.since,
+      days: Math.max(1, Math.floor((Date.now() - sinceSec * 1000) / 86400000) + 1),
+      name: (meta && (meta.activeCampaigns || [])[0] && meta.activeCampaigns[0].name) || null,
+      spend: t.spend,
+      impressions: t.impressions,
+      linkClicks: t.linkClicks,
+      landingViews: t.landingViews,
+      checkouts: t.checkouts,
+      ctr: t.ctr,
+      costPerVisit: t.costPerVisit,
+      metaPurchases: t.purchases, // lo que Meta atribuye (para ver QUÉ creativo vendió)
+      orders, // ventas reales cobradas (Stripe) en la ventana
+      revenue,
+      roas: t.spend > 0 ? revenue / t.spend : null,
+      cpa: orders > 0 ? t.spend / orders : null,
+      aov: orders > 0 ? revenue / orders : null,
+      profit: revenue - t.spend,
+      ads: activeAds.ads,
+    };
   }
 
   // ---- derived KPIs ----
@@ -728,6 +766,7 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
     learning,
     campaigns: campaigns || [],
     activeCreatives: activeAds || { ads: [], totals: null },
+    campaignPeriod,
     errors,
   };
 

@@ -13,8 +13,24 @@ function esc(s) {
   return String(s).replace(/([_*[\]()~`>#+\-=|{}.!\\])/g, '\\$1');
 }
 
-const LEVEL_ICON = { alto: '🔴', medio: '🟠', bajo: '🟡', ok: '🟢', info: 'ℹ️' };
+const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+function fmtDay(iso) {
+  if (!iso) return '';
+  const [, m, d] = iso.split('-');
+  return `${parseInt(d, 10)} ${MESES[parseInt(m, 10) - 1]}`;
+}
 
+function errorsBlock(b) {
+  const errs = Object.entries(b.errors || {});
+  if (!errs.length) return '';
+  let out = `\n_Avisos técnicos_\n`;
+  for (const [src, m] of errs) out += `• ${esc(`${src}: ${m}`)}\n`;
+  return out;
+}
+
+// El resumen habla SOLO de la campaña viva: los creativos activos y únicamente
+// desde que se lanzaron. Sin histórico, sin anuncios pausados, sin acumulados
+// de otras épocas — así el número no se puede malinterpretar.
 function buildMessage(b) {
   const fecha = new Date().toLocaleDateString('es-ES', {
     weekday: 'long',
@@ -22,57 +38,60 @@ function buildMessage(b) {
     month: 'long',
     timeZone: 'Europe/Madrid',
   });
+  const cp = b.campaignPeriod;
 
-  let msg = `*La Mirada Creativa · ${esc(fecha)}*\n\n`;
+  let msg = `*La Mirada Creativa · ${esc(fecha)}*\n`;
 
-  // Veredicto de rentabilidad (una frase)
-  if (b.verdict && b.verdict.sentence) {
-    const vic = { rentable: '✅', justo: '🟠', perdida: '🔴', 'sin-datos': '⚪' };
-    msg += `${vic[b.verdict.status] || '📊'} *${esc(b.verdict.sentence)}*\n\n`;
+  if (!cp || !cp.ads || !cp.ads.length) {
+    msg += `\n⚪ ${esc('No hay creativos activos: no hay campaña que medir ahora mismo.')}\n`;
+    msg += errorsBlock(b);
+    msg += `\n[Abrir dashboard](https://lamiradacreativa.com/metrics/)`;
+    return msg;
   }
 
-  // Plan proactivo primero
-  const p = b.plan || {};
-  if (p.headline) {
-    msg += `*🧭 Tu plan ahora*\n${esc(p.headline)}\n`;
-    for (const s of (p.steps || []).slice(0, 3)) msg += `→ ${esc(s)}\n`;
-    msg += `\n`;
-  }
+  msg += `_${esc(`Creativos actuales · desde ${fmtDay(cp.since)} · día ${cp.days}`)}_\n\n`;
 
-  // Últimos creativos, AISLADOS del histórico (solo los anuncios activos).
-  // Es lo que el owner quiere vigilar: cómo rinde lo que está vivo ahora.
-  const ac = b.activeCreatives;
-  if (ac && ac.totals && ac.totals.count) {
-    const t = ac.totals;
-    msg += `*🎯 Últimos creativos \\(sin histórico\\)*\n`;
-    for (const a of ac.ads.slice(0, 5)) {
-      const ctr = a.ctr != null ? round1(a.ctr) + '%' : '—';
-      msg += `• ${esc(`${a.name} · ${eur(a.spend)} · CTR ${ctr} · ${a.landingViews} vis · ${a.purchases} ventas`)}\n`;
+  // Veredicto SOLO de este periodo.
+  let icon = '⚪';
+  let line = 'Aún sin datos suficientes para juzgar.';
+  const vs = cp.orders === 1 ? 'venta' : 'ventas';
+  if (cp.orders > 0 && cp.roas != null) {
+    if (cp.roas >= 1.5) {
+      icon = '✅';
+      line = `Va rentable: por cada 1 € recuperas ${round1(cp.roas)} € (${cp.orders} ${vs}, ${eur(cp.profit)}).`;
+    } else if (cp.roas >= 1) {
+      icon = '🟠';
+      line = `Justo: por cada 1 € recuperas ${round1(cp.roas)} € (${cp.orders} ${vs}, ${eur(cp.profit)}).`;
+    } else {
+      icon = '🔴';
+      line = `De momento pierdes: por cada 1 € recuperas ${round1(cp.roas)} € (${cp.orders} ${vs}, ${eur(cp.profit)}).`;
     }
-    const parts = [`Total: ${eur(t.spend)}`, `${t.landingViews} visitas`, `${t.checkouts} pago iniciado`, `${t.purchases} ventas`];
-    if (t.cpa) parts.push(`CPA ${eur(t.cpa)}`);
-    if (t.roas != null) parts.push(`ROAS ${round1(t.roas)}x`);
-    msg += `_${esc(parts.join(' · '))}_\n\n`;
+  } else if (cp.spend > 0) {
+    icon = '🔴';
+    line = `${eur(cp.spend)} gastados y 0 ventas todavía.`;
+  }
+  msg += `${icon} *${esc(line)}*\n\n`;
+
+  // Qué creativo tira: el detalle por anuncio vivo.
+  msg += `*🎯 Creativos*\n`;
+  for (const a of cp.ads.slice(0, 5)) {
+    const ctr = a.ctr != null ? round1(a.ctr) + '%' : '—';
+    const v = `${a.purchases} ${a.purchases === 1 ? 'venta' : 'ventas'}`;
+    msg += `• ${esc(`${a.name} · ${eur(a.spend)} · CTR ${ctr} · ${a.landingViews} vis · ${a.checkouts} chk · ${v}`)}\n`;
   }
 
-  // Avisos en lenguaje simple (título + explicación)
-  const actions = (b.actions || []).filter((a) => a.level !== 'info');
-  if (actions.length) {
-    msg += `*✅ Avisos*\n`;
-    for (const a of actions) msg += `${a.icon || '•'} *${esc(a.title)}*\n${esc(a.plain)}\n`;
-    msg += `\n`;
-  }
+  // Números del periodo.
+  msg += `\n*📊 Este periodo*\n`;
+  const rows = [
+    `Gasto: ${eur(cp.spend)}`,
+    `Visitas: ${cp.landingViews}${cp.costPerVisit ? ` (${eur(cp.costPerVisit)}/visita)` : ''}`,
+    `Pago iniciado: ${cp.checkouts}`,
+    `Ventas: ${cp.orders} · Ingresos: ${eur(cp.revenue)}`,
+    `ROAS: ${cp.roas == null ? '—' : round1(cp.roas) + 'x'} · CPA: ${cp.cpa == null ? '—' : eur(cp.cpa)} · Beneficio: ${eur(cp.profit)}`,
+  ];
+  for (const r of rows) msg += `• ${esc(r)}\n`;
 
-  // Progreso (números)
-  msg += `*📊 Progreso*\n`;
-  for (const line of b.summary) msg += `• ${esc(line)}\n`;
-
-  const infos = (b.actions || []).filter((a) => a.level === 'info');
-  if (infos.length) {
-    msg += `\n_Avisos técnicos_\n`;
-    for (const a of infos) msg += `• ${esc(a.plain || a.title)}\n`;
-  }
-
+  msg += errorsBlock(b);
   msg += `\n[Abrir dashboard](https://lamiradacreativa.com/metrics/)`;
   return msg;
 }
@@ -96,6 +115,9 @@ async function sendTelegram(text) {
   if (!json.ok) throw new Error(`Telegram: ${json.description}`);
   return json;
 }
+
+// Exportado solo para poder testear el render sin enviar nada.
+exports.buildMessage = buildMessage;
 
 exports.handler = async (event) => {
   // Manual HTTP trigger requires a matching test key. The scheduled invocation
