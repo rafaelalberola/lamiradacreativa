@@ -355,8 +355,9 @@ async function loadActiveAds(errors) {
   if (!token) return null;
   try {
     // 1) Anuncios ACTIVE = los creativos que están vivos ahora mismo.
+    // Pedimos la miniatura para poder VER el creativo, no solo leer su nombre.
     const adsRes = await fetch(
-      `${META_API}/${account}/ads?fields=id,name,effective_status,created_time&effective_status=%5B%22ACTIVE%22%5D&limit=200&access_token=${token}`
+      `${META_API}/${account}/ads?fields=id,name,effective_status,created_time,creative%7Bthumbnail_url%7D&effective_status=%5B%22ACTIVE%22%5D&limit=200&access_token=${token}`
     );
     const adsJson = await adsRes.json();
     if (adsJson.error) throw new Error(adsJson.error.message);
@@ -364,7 +365,11 @@ async function loadActiveAds(errors) {
     if (!activeAds.length) return { ads: [], totals: null, since: null };
     const activeIds = new Set(activeAds.map((a) => a.id));
     const nameById = {};
-    activeAds.forEach((a) => (nameById[a.id] = a.name));
+    const thumbById = {};
+    activeAds.forEach((a) => {
+      nameById[a.id] = a.name;
+      thumbById[a.id] = (a.creative && a.creative.thumbnail_url) || null;
+    });
 
     // Inicio del periodo = el creativo activo más antiguo. Si mañana cambias
     // creativos, la ventana se mueve sola y el informe sigue siendo "solo lo vivo".
@@ -390,6 +395,7 @@ async function loadActiveAds(errors) {
       ads.push({
         id: row.ad_id,
         name: nameById[row.ad_id] || row.ad_name,
+        thumb: thumbById[row.ad_id] || null,
         spend: Number(row.spend || 0),
         impressions: Number(row.impressions || 0),
         ctr: row.ctr ? Number(row.ctr) : null,
@@ -403,7 +409,7 @@ async function loadActiveAds(errors) {
     // Anuncios activos que aún no tienen impresiones no salen en insights → a 0.
     for (const a of activeAds) {
       if (!ads.find((x) => x.id === a.id)) {
-        ads.push({ id: a.id, name: a.name, spend: 0, impressions: 0, ctr: null, linkClicks: 0, landingViews: 0, checkouts: 0, purchases: 0, cpa: null });
+        ads.push({ id: a.id, name: a.name, thumb: thumbById[a.id] || null, spend: 0, impressions: 0, ctr: null, linkClicks: 0, landingViews: 0, checkouts: 0, purchases: 0, cpa: null });
       }
     }
     ads.sort((a, b) => b.spend - a.spend);
@@ -545,6 +551,41 @@ async function loadResendAudience(errors) {
     errors.resend = `Resend: ${e.message}`;
     return null;
   }
+}
+
+// ---------------------------------------------------------------- estado de las fuentes
+// Un "dot" por fuente en el panel: verde si respondió con datos, gris si no.
+// NO llama a ninguna API: solo lee lo que ya devolvieron los loaders + `errors`.
+const MAX_DETAIL = 90;
+
+// Los mensajes de `errors` a veces llevan la explicación larga tras un guion largo
+// ("Token caducado — regenera un token de..."). Para el dot basta la primera parte.
+function shortDetail(msg) {
+  if (!msg) return 'Sin datos';
+  let s = String(msg).replace(/\s+/g, ' ').trim();
+  const dash = s.indexOf(' — ');
+  if (dash > 0) s = s.slice(0, dash);
+  return s.length > MAX_DETAIL ? s.slice(0, MAX_DETAIL - 1).trimEnd() + '…' : s;
+}
+
+function buildSources({ stripe, meta, sb, resend, errors }) {
+  const e = errors || {};
+  // ok solo si el loader trajo datos Y no dejó error. Si no, detail reutiliza `errors`.
+  const conn = (id, name, data, err) =>
+    data && !err
+      ? { id, name, ok: true, detail: null }
+      : { id, name, ok: false, detail: shortDetail(err) };
+
+  return [
+    conn('stripe', 'Stripe', stripe, e.stripe),
+    conn('meta', 'Meta Ads', meta, e.meta),
+    conn('supabase', 'Supabase', sb, e.supabase),
+    // Resend es opcional: sin RESEND_AUDIENCE_ID no está roto, simplemente no se usa.
+    // `optional:true` marca ese caso para que el front pinte "gris", no "roto".
+    process.env.RESEND_AUDIENCE_ID
+      ? conn('resend', 'Resend', resend, e.resend)
+      : { id: 'resend', name: 'Resend', ok: false, detail: 'No configurado', optional: true },
+  ];
 }
 
 // ---------------------------------------------------------------- config
@@ -768,6 +809,8 @@ async function computeMetrics({ rangeDays = 30 } = {}) {
     activeCreatives: activeAds || { ads: [], totals: null },
     campaignPeriod,
     errors,
+    // Estado de conexión de cada fuente (el panel pinta un dot por cada una).
+    sources: buildSources({ stripe, meta, sb, resend, errors }),
   };
 
   bundle.summary = buildSummary(bundle);
@@ -1000,4 +1043,4 @@ function buildPlan(b) {
   return { headline, problem, why, steps };
 }
 
-module.exports = { computeMetrics, buildActions, buildSummary, buildPlan, buildVerdict, buildCampaignVerdict, eur, pct, round1 };
+module.exports = { computeMetrics, buildActions, buildSummary, buildPlan, buildVerdict, buildCampaignVerdict, buildSources, eur, pct, round1 };

@@ -9,7 +9,16 @@
 # Functions
 [functions]
   node_bundler = "esbuild"
-  included_files = ["netlify/functions/assets/**", "netlify/functions/data/**"]
+  # @resvg/resvg-js carga un binario nativo (.node) según plataforma: esbuild no
+  # puede empaquetarlo, hay que dejarlo fuera para que Netlify copie el módulo tal cual.
+  external_node_modules = ["@resvg/resvg-js"]
+  # Las fuentes las necesita satori para dibujar la tarjeta del aviso de venta.
+  included_files = [
+    "netlify/functions/assets/**",
+    "netlify/functions/data/**",
+    "assets/fonts/Inter-Regular.ttf",
+    "assets/fonts/InterTight-SemiBold.ttf"
+  ]
 
 # ============================================
 # Security Headers
@@ -189,6 +198,19 @@
   from = "/cartas/*"
   to = "/app"
   status = 301
+
+# Back-office (antes /metrics) — los enlaces antiguos siguen funcionando
+[[redirects]]
+  from = "/metrics"
+  to = "/backoffice/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/metrics/*"
+  to = "/backoffice/:splat"
+  status = 301
+  force = true
 
 # ============================================
 # Scheduled Functions

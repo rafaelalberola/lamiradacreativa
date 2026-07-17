@@ -555,6 +555,18 @@ exports.handler = async (event, context) => {
 
     console.log('Traffic source:', trafficSource, '| UTM:', utmSource, utmMedium, utmCampaign);
 
+    // --- Aviso instantáneo de venta a Telegram ---
+    // Va lo primero a propósito: si Auth0 o Resend fallan más abajo, la venta ya
+    // se ha avisado igualmente. notifySale() no lanza nunca y tiene tope de tiempo,
+    // así que no puede tumbar ni retrasar de más la respuesta 200 a Stripe.
+    try {
+      const { notifySale } = require('../lib/sale-alert');
+      await notifySale(session);
+    } catch (alertError) {
+      console.error('[Stripe Webhook] Aviso de venta falló (no bloqueante):', alertError.message);
+    }
+    // --- Fin aviso de venta ---
+
     // Track successful purchase in analytics with campaign data
     // Include device_id to link server event with client-side anonymous events
     await trackEvent('Purchase Completed (Server)', {

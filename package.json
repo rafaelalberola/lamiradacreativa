@@ -9,8 +9,10 @@
   },
   "dependencies": {
     "@netlify/functions": "^2.8.0",
+    "@resvg/resvg-js": "^2.6.2",
     "@supabase/supabase-js": "^2.49.0",
     "pdfkit": "^0.17.2",
+    "satori": "^0.28.0",
     "stripe": "^14.0.0"
   }
 }

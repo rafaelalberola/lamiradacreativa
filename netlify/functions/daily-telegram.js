@@ -45,7 +45,7 @@ function buildMessage(b) {
   if (!cp || !cp.ads || !cp.ads.length) {
     msg += `\n⚪ ${esc('No hay creativos activos: no hay campaña que medir ahora mismo.')}\n`;
     msg += errorsBlock(b);
-    msg += `\n[Abrir dashboard](https://lamiradacreativa.com/metrics/)`;
+    msg += `\n[Abrir back-office](https://lamiradacreativa.com/backoffice/)`;
     return msg;
   }
 
@@ -92,7 +92,7 @@ function buildMessage(b) {
   for (const r of rows) msg += `• ${esc(r)}\n`;
 
   msg += errorsBlock(b);
-  msg += `\n[Abrir dashboard](https://lamiradacreativa.com/metrics/)`;
+  msg += `\n[Abrir back-office](https://lamiradacreativa.com/backoffice/)`;
   return msg;
 }
 
