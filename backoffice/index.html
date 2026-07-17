@@ -8,180 +8,165 @@
 <link rel="icon" href="/assets/images/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   /* ============================================================
-     Back-office · MISMA MARCA que la landing (lamiradacreativa.com).
-     Tokens tomados de css/redesign.css: superficie clara + rejilla, cards
-     blancas flotantes (borde + sombra suave, radios grandes), azul de marca,
-     ámbar CTA, Plus Jakarta Sans. Semántica coral/verde/ámbar.
+     Un instrumento, no un dashboard.
+     Una pantalla. Una pregunta: ¿esto funciona, y qué creativo tira?
 
-     Construcción: flex + gap (separación solo por gap, nunca margins).
-     Escala de espaciado fija. Iconos Lucide inline (cero deps JS).
-     REGLA: nunca clases 'ad'/'adlist' (los ad-blockers las ocultan).
+     Construcción: TODO se compone con flex + gap.
+     El margin/padding no separa hermanos — solo respira dentro de una caja.
+     Espaciado: escala fija (abajo). Ningún valor fuera de ella.
+     Iconos: Lucide, inline. Cero dependencias externas de JS.
      ============================================================ */
   :root{
     /* escala de espaciado — única fuente de separación */
     --s2:2px;  --s3:3px;  --s4:4px;  --s6:6px;   --s8:8px;   --s10:10px;
     --s12:12px;--s16:16px;--s20:20px;--s24:24px; --s32:32px; --s40:40px;
     --s48:48px;--s60:60px;--s80:80px;--s120:120px;
-    /* color — de la landing */
-    --bg:#FFFFFF; --bg-2:#F5F6F8; --ink:#0B0B0D; --ink-2:#1A1B1F;
-    --muted:#6A6F79; --muted-2:#9AA0AA;
-    --line:#E7E9ED; --line-soft:rgba(11,11,13,.06); --grid:rgba(22,40,90,.05);
-    --blue:#2F6BFF; --blue-600:#1E56F0; --blue-050:#EAF1FF;
-    --green:#2FC177; --coral:#FF6B6B; --sun:#FFC93C;
-    --radius:24px; --radius-sm:16px; --pill:100px;
-    --shadow-sm:0 10px 30px -16px rgba(20,32,64,.28);
-    --shadow:0 24px 60px -30px rgba(20,32,64,.35);
+    /* color */
+    --ink:#0B0B0D; --surface:#131317; --line:#24242B;
+    --text:#F4F3F1; --muted:#8B8B96; --faint:#5A5A65;
+    --blue:#4F86FF; --green:#2FC177; --amber:#FFB020; --coral:#FF6B6B;
     --edge: clamp(var(--s20), 5vw, var(--s40));
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{-webkit-text-size-adjust:100%;}
   body{
-    background:var(--bg-2); color:var(--ink);
-    font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+    background:var(--ink); color:var(--text);
+    font-family:"Plus Jakarta Sans",system-ui,sans-serif;
     -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     min-height:100dvh; line-height:1.5;
-    /* rejilla fina de marca (como el hero de la landing) */
-    background-image:
-      linear-gradient(var(--grid) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size:44px 44px;
+  }
+  body::after{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:99; opacity:.028;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
   /* ---------- esqueleto ---------- */
   .wrap{
     max-width:680px; margin-inline:auto; padding:var(--edge);
-    display:flex; flex-direction:column; gap:var(--s48);
+    display:flex; flex-direction:column; gap:var(--s60);
   }
-  #body{display:flex; flex-direction:column; gap:var(--s48);}
+  #body{display:flex; flex-direction:column; gap:var(--s60);}
 
   /* ---------- entrada ---------- */
   .gate{min-height:100dvh; display:flex; align-items:center; justify-content:center; padding:var(--edge);}
-  .gate form{width:100%; max-width:320px; display:flex; flex-direction:column; gap:var(--s24);
-    background:var(--bg); border:1px solid var(--line); border-radius:var(--radius);
-    box-shadow:var(--shadow-sm); padding:var(--s32);}
+  .gate form{width:100%; max-width:300px; display:flex; flex-direction:column; gap:var(--s24);}
   .gate .fields{display:flex; flex-direction:column; gap:var(--s10);}
-  .gate .logo{display:flex; align-items:center; justify-content:center; gap:var(--s10);}
-  .gate .logo img{width:30px; height:30px; border-radius:8px;}
-  .gate h1{font-weight:800; font-size:19px; letter-spacing:-.02em; text-align:center;}
+  .gate h1{font-family:"Fraunces",serif; font-weight:300; font-size:26px;
+    letter-spacing:-.01em; text-align:center;}
   input[type=password],input[type=number]{
-    width:100%; background:var(--bg); border:1px solid var(--line); color:var(--ink);
-    border-radius:12px; padding:var(--s12) var(--s16); font:inherit; font-size:15px;
-    outline:none; transition:border-color .18s ease, box-shadow .18s ease;
+    width:100%; background:var(--surface); border:1px solid var(--line); color:var(--text);
+    border-radius:10px; padding:var(--s12) var(--s16); font:inherit; font-size:15px;
+    outline:none; transition:border-color .18s ease;
   }
-  input::placeholder{color:var(--muted-2);}
-  input:focus{border-color:var(--blue); box-shadow:0 0 0 3px var(--blue-050);}
+  input:focus{border-color:var(--blue);}
   .btn{
-    background:var(--blue); color:#fff; border:0; border-radius:12px;
-    padding:var(--s12) var(--s16); font:inherit; font-weight:700; font-size:15px;
-    cursor:pointer; transition:background .18s ease, transform .1s ease;
+    background:var(--text); color:var(--ink); border:0; border-radius:10px;
+    padding:var(--s12) var(--s16); font:inherit; font-weight:600; font-size:15px;
+    cursor:pointer; transition:opacity .18s ease;
   }
-  .btn:hover{background:var(--blue-600);} .btn:active{transform:translateY(1px);}
-  .btn:disabled{opacity:.5; cursor:default;}
-  .err{color:var(--coral); font-size:13px; min-height:18px; text-align:center; font-weight:500;}
+  .btn:hover{opacity:.86;} .btn:disabled{opacity:.45; cursor:default;}
+  .err{color:var(--coral); font-size:13px; min-height:18px; text-align:center;}
 
   /* ---------- cabecera ---------- */
-  .top{display:flex; align-items:center; justify-content:space-between; gap:var(--s16);}
-  .brand{display:flex; align-items:center; gap:var(--s8); font-size:15px; font-weight:800;
-    letter-spacing:-.02em; color:var(--ink);}
-  .brand img{width:24px; height:24px; border-radius:7px;}
-  .ghost{background:none; border:0; color:var(--muted); font:inherit; font-size:13px; font-weight:600;
+  .top{display:flex; align-items:baseline; justify-content:space-between; gap:var(--s16);}
+  .brand{font-size:12px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--faint);}
+  .ghost{background:none; border:0; color:var(--faint); font:inherit; font-size:12px;
     cursor:pointer; transition:color .18s ease;}
-  .ghost:hover{color:var(--ink);}
+  .ghost:hover{color:var(--text);}
 
   /* ---------- 1 · el veredicto ---------- */
-  .hero{display:flex; flex-direction:column; align-items:flex-start; gap:var(--s16);}
+  .hero{display:flex; flex-direction:column; align-items:flex-start; gap:var(--s20);}
   .period{font-size:13px; color:var(--muted);}
-  .period b{color:var(--ink); font-weight:700;}
-  /* píldora de veredicto — igual que la píldora sobre el titular de la landing */
-  .verdict{font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
-    padding:var(--s6) var(--s12); border-radius:var(--pill);}
-  .verdict.good{background:var(--green); color:#08351f;}
-  .verdict.ok{background:var(--sun); color:#4a3600;}
-  .verdict.bad{background:var(--coral); color:#fff;}
-  .verdict.blind,.verdict.none{background:var(--bg); border:1px solid var(--line); color:var(--muted);}
+  .period b{color:var(--text); font-weight:600;}
   .hero-num{
-    font-weight:800; font-size:clamp(64px,15vw,104px); line-height:.9; letter-spacing:-.045em;
-    color:var(--ink); display:flex; align-items:baseline; gap:var(--s4);
+    font-family:"Fraunces",serif; font-weight:300; font-optical-sizing:auto;
+    font-size:clamp(72px,17vw,116px); line-height:.86; letter-spacing:-.035em;
+    color:var(--st,var(--text)); display:flex; align-items:baseline; gap:var(--s4);
   }
-  .hero-num .cur{font-size:.34em; font-weight:700; letter-spacing:-.02em; color:var(--muted);}
-  .hero-text{display:flex; flex-direction:column; gap:var(--s8);}
-  .hero-say{font-weight:700; font-size:clamp(20px,4.2vw,26px);
-    line-height:1.24; letter-spacing:-.02em; max-width:20ch; text-wrap:balance;}
-  .hero-sub{font-size:14px; color:var(--muted); font-weight:500;}
-  .hero-sub .pos{color:#1f9d5b; font-weight:700;} .hero-sub .neg{color:var(--coral); font-weight:700;}
+  .hero-num .cur{font-size:.38em; letter-spacing:-.02em;}
+  .hero-text{display:flex; flex-direction:column; gap:var(--s10);}
+  .hero-say{font-family:"Fraunces",serif; font-weight:300; font-size:clamp(22px,4.6vw,27px);
+    line-height:1.32; letter-spacing:-.01em; max-width:22ch; text-wrap:balance;}
+  .hero-sub{font-size:14px; color:var(--muted);}
+  .hero-sub .pos{color:var(--green);} .hero-sub .neg{color:var(--coral);}
 
-  /* ---------- Card: componente compartido (dinero y funnel) ----------
-     Card blanca flotante como las de la landing: borde + sombra suave. */
-  .panel{display:flex; flex-direction:column; gap:var(--s16);}
-  .card{display:flex; background:var(--bg); border:1px solid var(--line);
-    border-radius:var(--radius-sm); box-shadow:var(--shadow-sm); overflow:hidden;}
+  /* ---------- Card: componente compartido (dinero y funnel) ---------- */
+  /* el divisor es un borde, no un gap: un hueco no dibuja líneas */
+  .panel{display:flex; flex-direction:column; gap:var(--s20);}
+  .card{display:flex; border:1px solid var(--line); border-radius:14px; overflow:hidden;}
   .cell{flex:1; min-width:0; display:flex; flex-direction:column; gap:var(--s8);
     padding:var(--s24) var(--s20);}
   .cell + .cell{border-left:1px solid var(--line);}
-  .k{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700;
+  .k{font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:var(--faint);
     display:flex; align-items:center; gap:var(--s6);}
-  .v{font-weight:800; font-size:29px; letter-spacing:-.03em; color:var(--ink);}
+  .v{font-family:"Fraunces",serif; font-weight:400; font-size:30px; letter-spacing:-.02em;}
   .ic{width:13px; height:13px; flex:none;}
   .ic.out{color:var(--coral);}   /* sale dinero */
-  .ic.in{color:#1f9d5b;}         /* entra dinero */
-  h2{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:700;}
+  .ic.in{color:var(--green);}    /* entra dinero */
+  h2{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); font-weight:600;}
 
-  /* ---------- el embudo (dentro de Card) ---------- */
+  /* ---------- el embudo (dentro de Card) ----------
+     Flecha y número comparten caja de 30px → la flecha queda centrada con la
+     fila de números; el % cae en la fila de etiquetas. */
   .flow{display:flex; align-items:flex-start; gap:var(--s8);}
   .step,.arrow{display:flex; flex-direction:column; align-items:center; gap:var(--s6);}
   .step{flex:1; min-width:0;}
   .arrow{flex:none; width:28px;}
   .step .n,.arrow span{height:30px; display:flex; align-items:center; justify-content:center;}
-  .step .n{font-weight:800; font-size:25px; letter-spacing:-.03em; color:var(--ink);}
-  .arrow span{font-size:15px; color:var(--muted-2);}
-  .step .l{font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600;}
-  .arrow i{font-style:normal; font-size:10px; color:var(--muted-2); font-weight:600;}
+  .step .n{font-family:"Fraunces",serif; font-size:26px; font-weight:400; letter-spacing:-.02em;}
+  .arrow span{font-size:14px; color:var(--line);}
+  .step .l{font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint);}
+  .arrow i{font-style:normal; font-size:10px; color:var(--faint);}
 
   /* ---------- los creativos ---------- */
-  .entries{display:flex; flex-direction:column; background:var(--bg); border:1px solid var(--line);
-    border-radius:var(--radius-sm); box-shadow:var(--shadow-sm); padding-inline:var(--s20);}
-  .entry{display:flex; align-items:center; gap:var(--s16); padding-block:var(--s16);}
-  .entry + .entry{border-top:1px solid var(--line);}
-  .entry img,.entry .noimg{flex:none; width:50px; height:63px; border-radius:10px; object-fit:cover;
-    display:block; background:var(--bg-2); border:1px solid var(--line);}
+  .entries{display:flex; flex-direction:column;}
+  .entry{display:flex; align-items:center; gap:var(--s16);
+    padding-block:var(--s16); border-top:1px solid var(--line);}
+  .entry:last-child{border-bottom:1px solid var(--line);}
+  .entry img,.entry .noimg{flex:none; width:52px; height:65px; border-radius:7px; object-fit:cover;
+    display:block; background:var(--surface); border:1px solid var(--line);}
   .entry-info{flex:1; min-width:0; display:flex; flex-direction:column; gap:var(--s4);}
-  .entry-name{font-size:15px; font-weight:700; letter-spacing:-.01em; color:var(--ink);
+  .entry-name{font-size:15px; font-weight:600; letter-spacing:-.01em;
     display:flex; align-items:center; gap:var(--s8);}
-  .entry-meta{font-size:13px; color:var(--muted); font-weight:500;}
-  .entry-sales{flex:none; display:flex; flex-direction:column; align-items:flex-end; gap:var(--s4);}
-  .entry-sales b{font-weight:800; font-size:25px; letter-spacing:-.03em; line-height:1; color:var(--ink);}
-  .entry-sales small{font-size:10px; letter-spacing:.08em; text-transform:uppercase;
-    color:var(--muted-2); font-weight:600;}
-  .entry.win .entry-sales b{color:#1f9d5b;}
-  .entry.zero{opacity:.55;}
-  .tag{font-size:9px; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
-    color:#08351f; background:var(--green); padding:var(--s3) var(--s6); border-radius:var(--pill);}
+  .entry-meta{font-size:13px; color:var(--muted);}
+  .entry-sales{flex:none; display:flex; flex-direction:column; align-items:flex-end; gap:var(--s6);}
+  .entry-sales b{font-family:"Fraunces",serif; font-size:26px; font-weight:400; line-height:1;}
+  .entry-sales small{font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--faint); font-weight:600;}
+  .entry.win .entry-sales b{color:var(--green);}
+  .entry.zero{opacity:.5;}
+  .tag{font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--ink); background:var(--green); padding:var(--s3) var(--s6); border-radius:4px;}
 
   /* ---------- conexiones ---------- */
   .sources{display:flex; flex-direction:column; gap:var(--s10);}
-  .src{display:flex; align-items:center; gap:var(--s8); font-size:13px;}
-  .dot{flex:none; width:7px; height:7px; border-radius:50%; background:var(--muted-2);}
-  .dot.ok{background:var(--green); box-shadow:0 0 0 3px rgba(47,193,119,.16);}
-  .dot.bad{background:var(--coral); box-shadow:0 0 0 3px rgba(255,107,107,.16);}
-  .src-n{color:var(--ink); font-weight:600;}
-  .src.off .src-n{color:var(--muted); font-weight:500;}
-  .src-d{color:var(--muted-2); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .src{display:flex; align-items:center; gap:var(--s8); font-size:12px;}
+  .dot{flex:none; width:6px; height:6px; border-radius:50%; background:var(--faint);}
+  .dot.ok{background:var(--green); box-shadow:0 0 0 3px rgba(47,193,119,.14);}
+  .dot.bad{background:var(--coral); box-shadow:0 0 0 3px rgba(255,107,107,.14);}
+  .src-n{color:var(--text);}
+  .src.off .src-n{color:var(--muted);}
+  .src-d{color:var(--faint); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 
   /* ---------- pie ---------- */
+  /* Sin "Ajustes": el precio de venta lo fija STRIPE_PRICE_ID (env de Netlify),
+     no este panel. Un control que aparenta cambiar el precio sin cambiarlo es
+     peor que no tenerlo. */
   .foot{display:flex; justify-content:space-between; align-items:center; gap:var(--s16);
     padding-top:var(--s24); border-top:1px solid var(--line);}
-  .stamp{font-size:12px; color:var(--muted-2); font-weight:500;}
-  .empty{font-weight:700; font-size:22px; color:var(--muted); line-height:1.4;
-    letter-spacing:-.01em; padding-block:var(--s60);}
+  .stamp{font-size:11px; color:var(--faint);}
+  .empty{font-family:"Fraunces",serif; font-weight:300; font-size:22px; color:var(--muted);
+    line-height:1.4; padding-block:var(--s60);}
 
   /* ---------- una sola entrada orquestada (solo la primera vez) ---------- */
   [data-r]{opacity:0; transform:translateY(12px); animation:rise .62s cubic-bezier(.22,1,.36,1) forwards;}
   [data-r="1"]{animation-delay:.04s} [data-r="2"]{animation-delay:.12s}
   [data-r="3"]{animation-delay:.20s} [data-r="4"]{animation-delay:.28s} [data-r="5"]{animation-delay:.36s}
   @keyframes rise{to{opacity:1; transform:none;}}
+  /* los refrescos automáticos no re-animan: sería un parpadeo molesto */
   body.ready [data-r]{animation:none; opacity:1; transform:none;}
   @media (prefers-reduced-motion:reduce){[data-r]{animation:none; opacity:1; transform:none;}}
   .hide{display:none !important;}
@@ -196,7 +181,7 @@
     .arrow{flex:none;}
     .step .n,.arrow span{height:28px;}
     .step .n{font-size:22px;}
-    .step .l{font-size:9px; letter-spacing:.05em; white-space:nowrap;}
+    .step .l{font-size:9px; letter-spacing:.06em; white-space:nowrap;}
     .arrow span{font-size:13px;}
     .arrow i{font-size:9px;}
   }
@@ -206,7 +191,7 @@
 
 <div class="gate" id="gate">
   <form id="gateForm">
-    <div class="logo"><img src="/assets/images/favicon.svg" alt=""><h1>La Mirada Creativa</h1></div>
+    <h1>La Mirada Creativa</h1>
     <div class="fields">
       <input type="password" id="pw" placeholder="Contraseña" autocomplete="current-password" required autofocus>
       <button class="btn" type="submit" id="go">Entrar</button>
@@ -217,7 +202,7 @@
 
 <main class="wrap hide" id="app">
   <div class="top">
-    <span class="brand"><img src="/assets/images/favicon.svg" alt="">La Mirada Creativa</span>
+    <span class="brand">La Mirada Creativa</span>
     <button class="ghost" id="out">Salir</button>
   </div>
   <div id="body"></div>
@@ -244,7 +229,7 @@ const pctOf = (a, b) => (b ? Math.round((a / b) * 100) : 0);
 
 // Iconos Lucide, inline (trazo 1.5 = fino). Sin CDN: cero dependencias.
 const SVG = (paths, cls) => '<svg class="ic ' + cls + '" viewBox="0 0 24 24" fill="none" ' +
-  'stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" ' +
+  'stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" ' +
   'aria-hidden="true">' + paths + '</svg>';
 const ICON = {
   arrowUp: (c) => SVG('<path d="M12 19V5"/><path d="m5 12 7-7 7 7"/>', c),
@@ -256,18 +241,17 @@ const clean = (n) => String(n || '').split('·').pop().trim() || String(n || '')
 
 // Las ventas salen de Stripe. Si Stripe no responde, "0 ventas" NO significa
 // "no vende": significa "no lo sé". Un panel que confunde ambas cosas miente.
-// Devuelve el 'kind' (color de la píldora) + texto de la píldora + frase.
 function verdict(cp, salesOk) {
-  if (!salesOk) return { kind: 'blind', pill: 'Sin datos', say: 'No puedo leer las ventas: Stripe no responde.' };
+  if (!salesOk) return { st: 'var(--muted)', blind: true, say: 'No puedo leer las ventas: Stripe no responde.' };
   if (!cp.orders) {
     return cp.spend > 0
-      ? { kind: 'bad', pill: 'En pérdida', say: 'Todavía no ha vendido nada.' }
-      : { kind: 'none', pill: 'Sin datos', say: 'Aún sin datos.' };
+      ? { st: 'var(--coral)', say: 'Todavía no ha vendido nada.' }
+      : { st: 'var(--muted)', say: 'Aún sin datos.' };
   }
   const r = cp.roas;
-  if (r >= 1.5) return { kind: 'good', pill: 'Rentable', num: r, say: 'Por cada euro invertido, esto es lo que vuelve.' };
-  if (r >= 1)   return { kind: 'ok', pill: 'Justo', num: r, say: 'Se sostiene, pero por poco.' };
-  return { kind: 'bad', pill: 'En pérdida', num: r, say: 'Cada euro que entra vuelve incompleto.' };
+  if (r >= 1.5) return { st: 'var(--green)', num: r, say: 'Por cada euro invertido, esto es lo que vuelve.' };
+  if (r >= 1)   return { st: 'var(--amber)', num: r, say: 'Se sostiene, pero por poco.' };
+  return { st: 'var(--coral)', num: r, say: 'Cada euro que entra vuelve incompleto.' };
 }
 
 // Estado de conexión de cada herramienta que alimenta el panel.
@@ -307,18 +291,18 @@ function render(b) {
   const ads = cp.ads.slice().sort((a, z) => (z.purchases - a.purchases) || (z.spend - a.spend));
   const best = salesOk && ads[0] && ads[0].purchases > 0 ? ads[0].id : null;
 
-  // "×1,2" — el multiplicador delante, como se lee en español. Número en tinta;
-  // el color del veredicto va en la píldora de arriba (como el tag de la landing).
-  const heroNum = v.num != null
-    ? '<span class="hero-num"><span class="cur">×</span>' + one(v.num) + '</span>'
-    : (v.kind === 'blind'
-        ? '<span class="hero-num">—</span>'
-        : '<span class="hero-num">' + cp.orders + '<span class="cur"> ventas</span></span>');
+  // "×1,2" — el multiplicador delante, como se lee en español.
+  const hero = v.blind
+    ? '<span class="hero-num" style="--st:' + v.st + '">—</span>'
+    : v.num != null
+      ? '<span class="hero-num" style="--st:' + v.st + '"><span class="cur">×</span>' + one(v.num) + '</span>'
+      : '<span class="hero-num" style="--st:' + v.st + '">' + cp.orders + '<span class="cur">ventas</span></span>';
 
   const profit = cp.profit >= 0
     ? '<span class="pos">+' + eur(cp.profit) + '</span>'
     : '<span class="neg">' + eur(cp.profit) + '</span>';
-  const heroSub = v.kind === 'blind'
+  // Sin Stripe no hay ni ventas ni beneficio que enseñar: un guion, no un cero.
+  const heroSub = v.blind
     ? 'El gasto sí es real; las ventas no se pueden confirmar.'
     : cp.orders + ' ' + (cp.orders === 1 ? 'venta' : 'ventas') + ' · ' + profit;
 
@@ -341,8 +325,7 @@ function render(b) {
     // 1 · el veredicto
     '<section class="hero" data-r="1">' +
       '<p class="period">Creativos actuales · desde <b>' + day(cp.since) + '</b> · día <b>' + cp.days + '</b></p>' +
-      '<span class="verdict ' + v.kind + '">' + esc(v.pill) + '</span>' +
-      heroNum +
+      hero +
       '<div class="hero-text">' +
         '<p class="hero-say">' + esc(v.say) + '</p>' +
         '<p class="hero-sub">' + heroSub + '</p>' +
