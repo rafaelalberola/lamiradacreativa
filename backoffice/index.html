@@ -352,7 +352,8 @@ function render(b) {
         '<div class="entry-info">' +
           '<div class="entry-name">' + esc(clean(a.name)) + (a.id === best ? '<span class="tag">gana</span>' : '') + '</div>' +
           '<div class="entry-meta">' + eur(a.spend) + ' · ' + a.landingViews + ' visitas' +
-            (a.ctr != null ? ' · CTR ' + one(a.ctr) + '%' : '') + '</div>' +
+            (a.ctr != null ? ' · CTR ' + one(a.ctr) + '%' : '') +
+            (a.landingViews ? ' · CVR ' + one(a.purchases / a.landingViews * 100) + '%' : '') + '</div>' +
         '</div>' +
         '<div class="entry-sales"><b>' + a.purchases + '</b>' +
           '<small>' + (a.purchases === 1 ? 'venta' : 'ventas') + '</small></div>' +
