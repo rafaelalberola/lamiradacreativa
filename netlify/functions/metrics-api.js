@@ -5,7 +5,7 @@
 // Auth: cookie de sesión firmada (mtk), emitida por metrics-login.
 
 const { createClient } = require('@supabase/supabase-js');
-const { isAuthed } = require('../lib/metrics-auth');
+const { isAuthed, mintToken } = require('../lib/metrics-auth');
 const { computeMetrics } = require('../lib/metrics');
 
 const headers = {
@@ -93,10 +93,11 @@ exports.handler = async (event) => {
       return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
     }
 
-    // GET -> bundle
+    // GET -> bundle. Devuelve además un token fresco para que el cliente lo guarde
+    // en localStorage: así el login se recuerda (y se renueva) en cada carga correcta.
     const rangeDays = Math.min(365, Math.max(1, parseInt(event.queryStringParameters?.range, 10) || 30));
     const bundle = await computeMetrics({ rangeDays });
-    return { statusCode: 200, headers, body: JSON.stringify({ ok: true, ...bundle }) };
+    return { statusCode: 200, headers, body: JSON.stringify({ ok: true, token: mintToken(), ...bundle }) };
   } catch (e) {
     console.error('[metrics-api] error', e);
     return { statusCode: 500, headers, body: JSON.stringify({ error: 'Internal error', detail: e.message }) };

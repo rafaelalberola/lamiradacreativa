@@ -8,6 +8,16 @@
 
 const crypto = require('crypto');
 
+// Emite un token firmado nuevo (mismo formato que metrics-login). Se usa para
+// renovar/sembrar la sesión en cada carga correcta del panel (login recordado).
+function mintToken(ttlSeconds = 30 * 24 * 3600) {
+  const secret = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!secret) return null;
+  const exp = Math.floor(Date.now() / 1000) + ttlSeconds;
+  const payload = Buffer.from(JSON.stringify({ exp })).toString('base64url');
+  return `${payload}.${crypto.createHmac('sha256', secret).update(payload).digest('hex')}`;
+}
+
 function verifyToken(token) {
   const secret = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!secret || !token) return false;
@@ -45,4 +55,4 @@ function isAuthed(event) {
   return m ? verifyToken(m[1]) : false;
 }
 
-module.exports = { verifyCookie, verifyToken, isAuthed };
+module.exports = { verifyCookie, verifyToken, isAuthed, mintToken };

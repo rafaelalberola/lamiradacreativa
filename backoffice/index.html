@@ -407,6 +407,7 @@ async function load() {
     return;
   }
   const b = await r.json();
+  if (b && b.token) setTok(b.token);   // renueva/siembra el login recordado en cada carga OK
   $('gate').style.display = 'none';
   $('app').classList.remove('hide');
   render(b);
