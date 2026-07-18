@@ -129,9 +129,10 @@
 
   /* ---------- los creativos ---------- */
   .entries{display:flex; flex-direction:column;}
-  .entry{display:flex; align-items:center; gap:var(--s16);
+  .entry{display:flex; flex-direction:column; gap:var(--s12);
     padding-block:var(--s16); border-top:1px solid var(--line);}
   .entry:last-child{border-bottom:1px solid var(--line);}
+  .entry-top{display:flex; align-items:center; gap:var(--s16);}
   .entry img,.entry .noimg{flex:none; width:52px; height:65px; border-radius:7px; object-fit:cover;
     display:block; background:var(--surface); border:1px solid var(--line);}
   .entry-info{flex:1; min-width:0; display:flex; flex-direction:column; gap:var(--s4);}
@@ -146,6 +147,10 @@
   .entry.zero{opacity:.5;}
   .tag{font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
     color:var(--ink); background:var(--green); padding:var(--s3) var(--s6); border-radius:4px;}
+  /* embudo por creativo — mismo componente que el global, a menor escala (es secundario) */
+  .entry-flow .card{border-radius:10px;}
+  .entry-flow .cell{padding:var(--s12) var(--s16);}
+  .entry-flow .flow .n{font-size:20px;}
 
   /* ---------- conexiones ---------- */
   .sources{display:flex; flex-direction:column; gap:var(--s10);}
@@ -180,7 +185,7 @@
   @media (max-width:430px){
     .card{flex-direction:column;}
     .cell + .cell{border-left:0; border-top:1px solid var(--line);}
-    .entry{gap:var(--s12);} .entry img,.entry .noimg{width:44px; height:55px;}
+    .entry-top{gap:var(--s12);} .entry img,.entry .noimg{width:44px; height:55px;}
     /* funnel HORIZONTAL con scroll PROPIO (el body nunca hace scroll horizontal) */
     .flow{overflow-x:auto; -webkit-overflow-scrolling:touch; gap:var(--s8); padding-bottom:var(--s6);}
     .step{flex:none; min-width:60px;}
@@ -229,6 +234,13 @@ const $ = (id) => document.getElementById(id);
 const API = '/.netlify/functions/metrics-api';
 const AUTH = '/.netlify/functions/metrics-login';
 const REFRESH_MS = 60000; // el panel se refresca solo; ver nota sobre latencia de Meta
+
+// Login recordado: el token firmado se guarda en localStorage (persiste siempre,
+// aunque el navegador no conserve la cookie) y se manda como Authorization: Bearer.
+const TKEY = 'mtk';
+const getTok = () => { try { return localStorage.getItem(TKEY) || ''; } catch (e) { return ''; } };
+const setTok = (t) => { try { t ? localStorage.setItem(TKEY, t) : localStorage.removeItem(TKEY); } catch (e) {} };
+const authHead = () => { const t = getTok(); return t ? { 'Authorization': 'Bearer ' + t } : {}; };
 
 const eur = (n) => (Math.round((n || 0) * 100) / 100).toLocaleString('es-ES',
   { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + ' €';
@@ -322,16 +334,30 @@ function render(b) {
   const step = (n, l) => '<div class="step"><div class="n">' + n + '</div><div class="l">' + l + '</div></div>';
   const arrow = (a, b2) => '<div class="arrow"><span>→</span><i>' + pctOf(a, b2) + '%</i></div>';
 
+  // El mismo embudo del panel global, pero por creativo: dice DÓNDE se rompe cada uno.
+  // Solo se dibuja si el creativo ya reparte (tiene impresiones); si no, sería una fila de ceros.
+  const adFlow = (a) => a.impressions > 0
+    ? '<div class="entry-flow"><div class="card"><div class="cell"><div class="flow">' +
+        step(a.linkClicks, 'Clics') + arrow(a.landingViews, a.linkClicks) +
+        step(a.landingViews, 'Visitas') + arrow(a.checkouts, a.landingViews) +
+        step(a.checkouts, 'Al pago') + arrow(a.purchases, a.checkouts) +
+        step(a.purchases, a.purchases === 1 ? 'Compra' : 'Compran') +
+      '</div></div></div></div>'
+    : '';
+
   const rows = ads.map((a) =>
     '<div class="entry ' + (a.id === best ? 'win' : '') + ' ' + (a.purchases === 0 ? 'zero' : '') + '">' +
-      (a.thumb ? '<img src="' + esc(a.thumb) + '" alt="" loading="lazy">' : '<div class="noimg"></div>') +
-      '<div class="entry-info">' +
-        '<div class="entry-name">' + esc(clean(a.name)) + (a.id === best ? '<span class="tag">gana</span>' : '') + '</div>' +
-        '<div class="entry-meta">' + eur(a.spend) + ' · ' + a.landingViews + ' visitas' +
-          (a.ctr != null ? ' · CTR ' + one(a.ctr) + '%' : '') + '</div>' +
+      '<div class="entry-top">' +
+        (a.thumb ? '<img src="' + esc(a.thumb) + '" alt="" loading="lazy">' : '<div class="noimg"></div>') +
+        '<div class="entry-info">' +
+          '<div class="entry-name">' + esc(clean(a.name)) + (a.id === best ? '<span class="tag">gana</span>' : '') + '</div>' +
+          '<div class="entry-meta">' + eur(a.spend) + ' · ' + a.landingViews + ' visitas' +
+            (a.ctr != null ? ' · CTR ' + one(a.ctr) + '%' : '') + '</div>' +
+        '</div>' +
+        '<div class="entry-sales"><b>' + a.purchases + '</b>' +
+          '<small>' + (a.purchases === 1 ? 'venta' : 'ventas') + '</small></div>' +
       '</div>' +
-      '<div class="entry-sales"><b>' + a.purchases + '</b>' +
-        '<small>' + (a.purchases === 1 ? 'venta' : 'ventas') + '</small></div>' +
+      adFlow(a) +
     '</div>').join('');
 
   $('body').innerHTML =
@@ -373,8 +399,9 @@ function render(b) {
 }
 
 async function load() {
-  const r = await fetch(API + '?range=30', { credentials: 'include' });
+  const r = await fetch(API + '?range=30', { credentials: 'include', headers: authHead() });
   if (r.status === 401) {
+    setTok('');  // token caducado/ inválido: olvídalo para no reintentar en bucle
     $('app').classList.add('hide'); $('gate').style.display = 'flex';
     document.body.classList.remove('ready');
     return;
@@ -401,12 +428,15 @@ $('gateForm').onsubmit = async (e) => {
     const r = await fetch(AUTH, { method: 'POST', headers: { 'Content-Type': 'application/json' },
       credentials: 'include', body: JSON.stringify({ password: $('pw').value }) });
     if (!r.ok) throw new Error('Contraseña incorrecta');
+    const d = await r.json().catch(() => ({}));
+    if (d && d.token) setTok(d.token);   // recuerda el login para los próximos refrescos
     await load();
   } catch (err) { $('gateErr').textContent = err.message; }
   $('go').disabled = false;
 };
 
 $('out').onclick = async () => {
+  setTok('');  // olvida el login recordado
   try {
     await fetch(AUTH, { method: 'POST', headers: { 'Content-Type': 'application/json' },
       credentials: 'include', body: JSON.stringify({ action: 'logout' }) });

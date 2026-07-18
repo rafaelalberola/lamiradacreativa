@@ -1,17 +1,17 @@
-// Verificación de la cookie de sesión del backoffice (mtk).
-// La cookie = base64url({exp}).hmac(payload, SUPABASE_SERVICE_ROLE_KEY).
+// Verificación de la sesión del backoffice (token firmado `mtk`).
+// El token = base64url({exp}).hmac(payload, SUPABASE_SERVICE_ROLE_KEY).
 // Sin el secreto de servidor no se puede forjar; aquí solo se valida.
+// Se acepta por DOS vías equivalentes:
+//   1) cookie `mtk` (HttpOnly, la emite metrics-login)
+//   2) cabecera `Authorization: Bearer <token>` — el cliente guarda el token en
+//      localStorage para recordar el login aunque el navegador no conserve la cookie.
 
 const crypto = require('crypto');
 
-function verifyCookie(cookieHeader) {
+function verifyToken(token) {
   const secret = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!secret || !cookieHeader) return false;
+  if (!secret || !token) return false;
 
-  const m = String(cookieHeader).match(/(?:^|;\s*)mtk=([^;]+)/);
-  if (!m) return false;
-
-  const token = m[1];
   const dot = token.lastIndexOf('.');
   if (dot < 1) return false;
   const payload = token.slice(0, dot);
@@ -30,4 +30,19 @@ function verifyCookie(cookieHeader) {
   }
 }
 
-module.exports = { verifyCookie };
+function verifyCookie(cookieHeader) {
+  if (!cookieHeader) return false;
+  const m = String(cookieHeader).match(/(?:^|;\s*)mtk=([^;]+)/);
+  return m ? verifyToken(m[1]) : false;
+}
+
+// Autoriza si vale la cookie O el token del header Authorization (Bearer).
+function isAuthed(event) {
+  const h = (event && event.headers) || {};
+  if (verifyCookie(h.cookie || h.Cookie)) return true;
+  const auth = h.authorization || h.Authorization || '';
+  const m = String(auth).match(/^Bearer\s+(.+)$/i);
+  return m ? verifyToken(m[1]) : false;
+}
+
+module.exports = { verifyCookie, verifyToken, isAuthed };

@@ -356,12 +356,15 @@ async function loadActiveAds(errors) {
   try {
     // 1) Anuncios ACTIVE = los creativos que están vivos ahora mismo.
     // Pedimos la miniatura para poder VER el creativo, no solo leer su nombre.
+    // "Lo vivo" = los anuncios que YO he activado (status ACTIVE), incluidos los que
+    // Meta aún está revisando (effective_status PENDING_REVIEW / IN_PROCESS). Filtrar por
+    // effective_status=ACTIVE escondía el creativo recién activado hasta que se aprobaba.
     const adsRes = await fetch(
-      `${META_API}/${account}/ads?fields=id,name,effective_status,created_time,creative%7Bthumbnail_url%7D&effective_status=%5B%22ACTIVE%22%5D&limit=200&access_token=${token}`
+      `${META_API}/${account}/ads?fields=id,name,status,effective_status,created_time,creative%7Bthumbnail_url%7D&limit=500&access_token=${token}`
     );
     const adsJson = await adsRes.json();
     if (adsJson.error) throw new Error(adsJson.error.message);
-    const activeAds = adsJson.data || [];
+    const activeAds = (adsJson.data || []).filter((a) => a.status === 'ACTIVE');
     if (!activeAds.length) return { ads: [], totals: null, since: null };
     const activeIds = new Set(activeAds.map((a) => a.id));
     const nameById = {};

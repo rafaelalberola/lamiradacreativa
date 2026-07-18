@@ -59,9 +59,12 @@ exports.handler = async (event) => {
   const payload = Buffer.from(JSON.stringify({ exp })).toString('base64url');
   const token = `${payload}.${hmac(secret, payload)}`;
 
+  // Devuelve el token también en el body: el cliente lo guarda en localStorage
+  // y lo manda como `Authorization: Bearer` para recordar el login en cada refresh,
+  // aunque el navegador no conserve la cookie.
   return {
     statusCode: 200,
     headers: { ...headers, 'Set-Cookie': cookieString(token, TTL) },
-    body: '{"ok":true}',
+    body: JSON.stringify({ ok: true, token }),
   };
 };

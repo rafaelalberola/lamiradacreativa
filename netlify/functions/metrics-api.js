@@ -5,13 +5,13 @@
 // Auth: cookie de sesión firmada (mtk), emitida por metrics-login.
 
 const { createClient } = require('@supabase/supabase-js');
-const { verifyCookie } = require('../lib/metrics-auth');
+const { isAuthed } = require('../lib/metrics-auth');
 const { computeMetrics } = require('../lib/metrics');
 
 const headers = {
   'Content-Type': 'application/json',
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
   'Cache-Control': 'no-store',
 };
@@ -28,8 +28,8 @@ const CONFIG_FIELDS = [
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers, body: '' };
 
-  // --- auth (cookie firmada) ---
-  if (!verifyCookie(event.headers.cookie || event.headers.Cookie)) {
+  // --- auth (cookie firmada O token Bearer del cliente) ---
+  if (!isAuthed(event)) {
     return { statusCode: 401, headers, body: JSON.stringify({ error: 'Unauthorized' }) };
   }
 
