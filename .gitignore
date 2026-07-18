@@ -25,3 +25,11 @@ service-account*.json
 # Sistema / editor
 .DS_Store
 Thumbs.db
+
+# ── Artefactos locales · NO van al repo público ──────────────────
+# Docs internos con cifras de negocio / IDs de cuenta (auditorías, diagnósticos)
+output/
+# Creativos exportados (material de marketing, pesados)
+ads/exports/
+# Herramienta de exploración de paletas (dev, no enlazada)
+explore-palettes.html
