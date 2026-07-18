@@ -497,7 +497,7 @@
       <div class="lead-perf"></div>
       <div class="lead-ticket-body">
         <div id="leadFormWrap">
-          <p class="lead-lead">Consigue tu vale descuento</p>
+          <p class="lead-lead" id="leadLead">Consigue tu vale descuento</p>
           <form id="leadForm" novalidate>
             <input type="email" id="leadEmail" name="email" placeholder="tu@email.com" autocomplete="email" required>
             <input type="text" name="website" class="lead-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -562,27 +562,51 @@
     function ls(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
     function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
     function track(name, props){
-      try{  }catch(e){}
-      try{  }catch(e){}
+      try{
+        if(!window.lmcTrack) return;
+        var ev = String(name).toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');
+        if(props && props.context) ev += '_' + props.context;
+        window.lmcTrack(ev);
+      }catch(e){}
     }
 
-    var shown = false, maxDepth = 0;
-    function canShow(){
+    var shown = false, maxDepth = 0, reachedOffer = false, checkoutOpened = false;
+    var eyebrowEl = document.getElementById('leadEyebrow');
+    var leadLeadEl = document.getElementById('leadLead');
+    // Copy contextual por disparador (el 5% no cambia; cambia el gancho).
+    var COPY = {
+      exit:     { eyebrow:'Antes de irte',           lead:'Consigue tu vale descuento' },
+      checkout: { eyebrow:'¿Lo dejas a medias?',     lead:'Guarda tu plaza con un 5% de descuento. Te lo aplicamos en el pago.' },
+      pricing:  { eyebrow:'¿Te lo estás pensando?',  lead:'Un 5% para dar el paso hoy.' },
+      back:     { eyebrow:'Espera un segundo',       lead:'Llévate un 5% antes de salir.' },
+      idle:     { eyebrow:'¿Sigues ahí?',            lead:'Te guardamos un 5% de descuento.' }
+    };
+    function applyCopy(ctx){
+      var c = COPY[ctx] || COPY.exit;
+      if(eyebrowEl) eyebrowEl.textContent = c.eyebrow;
+      if(leadLeadEl) leadLeadEl.textContent = c.lead;
+    }
+    // force=true salta el cooldown de 7 días (solo para abandono de checkout,
+    // el momento de máxima intención). Nunca salta DONE_KEY ni "ya mostrado".
+    function canShow(force){
       if(shown) return false;
       if(ls(DONE_KEY)) return false;
-      var t = parseInt(ls(SHOWN_KEY)||'0', 10);
-      if(t && (Date.now()-t) < COOLDOWN) return false;
       var cm = document.getElementById('checkoutModal');
       if(cm && cm.classList.contains('active')) return false;
+      if(!force){
+        var t = parseInt(ls(SHOWN_KEY)||'0', 10);
+        if(t && (Date.now()-t) < COOLDOWN) return false;
+      }
       return true;
     }
-    function open(){
-      if(!canShow()) return;
+    function open(force, ctx){
+      if(!canShow(force)) return;
       shown = true; lsSet(SHOWN_KEY, String(Date.now()));
+      applyCopy(ctx || 'exit');
       modal.classList.add('active');
       modal.setAttribute('aria-hidden','false');
       try{ emailIn.focus(); }catch(e){}
-      track('Lead Popup Shown');
+      track('Lead Popup Shown', { context: ctx || 'exit' });
     }
     function close(){
       modal.classList.remove('active');
@@ -631,36 +655,118 @@
       if(btn) btn.click();
     });
 
-    // Previsualización: ?lead=1 fuerza la apertura (salta cooldown/estado)
-    if(/[?&]lead=1/.test(location.search)){
-      setTimeout(function(){ shown = true; modal.classList.add('active'); modal.setAttribute('aria-hidden','false'); try{ emailIn.focus(); }catch(e){} }, 300);
+    // Previsualización: ?lead=1 fuerza la apertura (salta cooldown/estado).
+    // ?lead=checkout|pricing|back|idle fuerza además un copy concreto.
+    var leadPreview = (location.search.match(/[?&]lead=([a-z0-9]+)/)||[])[1];
+    if(leadPreview){
+      setTimeout(function(){ open(true, COPY[leadPreview] ? leadPreview : 'exit'); }, 300);
     }
 
-    // Profundidad de scroll (para gating de los fallbacks)
+    // ── Señales de intención ─────────────────────────────────────────────
+    // "reachedOffer": el usuario ha visto el precio o abierto el checkout.
+    // Los disparadores "blandos" (exit-intent, idle, back, tiempo) se arman
+    // SOLO a partir de aquí, para no molestar mientras aún lee secciones altas
+    // como "Qué te llevas".
+    function markOffer(){ reachedOffer = true; }
+
+    // Profundidad de scroll (para la subida rápida en móvil)
     window.addEventListener('scroll', function(){
       var y = window.scrollY;
       var docH = document.documentElement.scrollHeight - window.innerHeight;
       if(docH > 0) maxDepth = Math.max(maxDepth, y/docH);
     }, { passive: true });
 
+    // Observa precio y CTA final → marca "ha visto la oferta"
+    if('IntersectionObserver' in window){
+      var offerSeen = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){ if(en.isIntersecting && en.intersectionRatio >= 0.4) markOffer(); });
+      }, { threshold:[0, 0.4, 1] });
+      ['precio','cta-final'].forEach(function(idsec){
+        var el = document.getElementById(idsec); if(el) offerSeen.observe(el);
+      });
+
+      // (2) DUDA EN PRECIO — permanece sobre la sección de precio ~9s sin abrir
+      //     el checkout → le ofrecemos el 5% para cerrar la decisión.
+      var precioEl = document.getElementById('precio');
+      if(precioEl){
+        var dwellT = null;
+        new IntersectionObserver(function(entries){
+          entries.forEach(function(en){
+            if(en.isIntersecting && en.intersectionRatio > 0.5 && !checkoutOpened){
+              if(!dwellT) dwellT = setTimeout(function(){ if(!checkoutOpened) open(false, 'pricing'); }, 9000);
+            } else if(dwellT){ clearTimeout(dwellT); dwellT = null; }
+          });
+        }, { threshold:[0, 0.5, 1] }).observe(precioEl);
+      }
+    } else {
+      // Sin IntersectionObserver: arma la oferta por scroll (>45%)
+      window.addEventListener('scroll', function(){ if(maxDepth > 0.45) markOffer(); }, { passive:true });
+    }
+
+    // (1) PRINCIPAL — ABANDONO DE CHECKOUT: abrió el pago y lo cerró sin comprar.
+    //     Máxima intención → salta siempre (ignora el cooldown de 7 días).
+    //     Si completa la compra, Stripe redirige a /gracias y la página se
+    //     descarga antes de que el setTimeout dispare, así que nunca ofrecemos
+    //     descuento a quien ya pagó.
+    var cmEl = document.getElementById('checkoutModal');
+    if(cmEl && 'MutationObserver' in window){
+      var wasActive = cmEl.classList.contains('active');
+      new MutationObserver(function(){
+        var active = cmEl.classList.contains('active');
+        if(active && !wasActive){ checkoutOpened = true; markOffer(); }
+        if(!active && wasActive && checkoutOpened && !ls(DONE_KEY) && !document.hidden){
+          setTimeout(function(){ open(true, 'checkout'); }, 350);
+        }
+        wasActive = active;
+      }).observe(cmEl, { attributes:true, attributeFilter:['class'] });
+    }
+
     var isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
     if(isTouch){
-      // Móvil: subida rápida cerca del inicio tras haber bajado (intención de salir)
+      // (3) MÓVIL — subida rápida cerca del inicio tras haber bajado (salir)
       var lastY = window.scrollY;
       window.addEventListener('scroll', function(){
         var y = window.scrollY;
-        if(y < lastY - 40 && maxDepth > 0.35 && y < 400){ open(); }
+        if(reachedOffer && y < lastY - 40 && maxDepth > 0.35 && y < 500){ open(false, 'exit'); }
         lastY = y;
       }, { passive: true });
-      // Fallback: 30s con scroll > 40%
-      setTimeout(function(){ if(maxDepth > 0.4) open(); }, 30000);
-    } else {
-      // Desktop: exit-intent (el ratón sale por arriba)
-      document.addEventListener('mouseout', function(e){
-        if(e.clientY <= 0 && !e.relatedTarget){ open(); }
+
+      // (4) MÓVIL — intento de "atrás": arma una trampa de historial una vez
+      //     vista la oferta. El primer "atrás" muestra la oferta (una sola vez;
+      //     no re-empuja estado → un segundo "atrás" sale con normalidad).
+      var trapPushed = false;
+      var armTrap = setInterval(function(){
+        if(reachedOffer && !trapPushed && canShow(false)){
+          trapPushed = true;
+          try{ history.pushState({ lmcLead:1 }, document.title, location.href); }catch(e){}
+          clearInterval(armTrap);
+        }
+      }, 1000);
+      window.addEventListener('popstate', function(){
+        if(trapPushed && canShow(false)) open(false, 'back');
       });
-      // Fallback: 60s con scroll > 30%
-      setTimeout(function(){ if(maxDepth > 0.3) open(); }, 60000);
+
+      // (5) FALLBACK de tiempo: 40s tras ver la oferta
+      setTimeout(function(){ if(reachedOffer) open(false, 'exit'); }, 40000);
+    } else {
+      // (3) DESKTOP — exit-intent: el ratón sale por arriba (hacia pestañas/URL)
+      document.addEventListener('mouseout', function(e){
+        if(reachedOffer && e.clientY <= 0 && !e.relatedTarget){ open(false, 'exit'); }
+      });
+
+      // (4) DESKTOP — inactividad: 35s sin interacción tras ver la oferta
+      var idleT = null;
+      function resetIdle(){
+        if(!reachedOffer) return;
+        if(idleT) clearTimeout(idleT);
+        idleT = setTimeout(function(){ open(false, 'idle'); }, 35000);
+      }
+      ['mousemove','keydown','scroll','click','touchstart'].forEach(function(ev){
+        window.addEventListener(ev, resetIdle, { passive:true });
+      });
+
+      // (5) FALLBACK de tiempo: 60s tras ver la oferta
+      setTimeout(function(){ if(reachedOffer) open(false, 'exit'); }, 60000);
     }
   })();
   </script>
