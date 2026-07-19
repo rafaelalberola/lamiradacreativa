@@ -313,13 +313,15 @@
       
       // Track in Facebook Pixel
       if (typeof fbq !== 'undefined') {
+        // eventID = session_id → Meta deduplica con el evento server-side (CAPI),
+        // que manda el webhook con event_id = session.id. Así nunca se cuenta doble.
         fbq('track', 'Purchase', {
           value: price,
           currency: 'EUR',
           content_ids: ['la_mirada_creativa'],
           content_type: 'product'
-        });
-        console.log('[Tracking] FB Pixel purchase event sent');
+        }, { eventID: sessionId });
+        console.log('[Tracking] FB Pixel purchase event sent (eventID:', sessionId, ')');
       } else {
         console.warn('[Tracking] fbq not available');
       }

@@ -567,6 +567,18 @@ exports.handler = async (event, context) => {
     }
     // --- Fin aviso de venta ---
 
+    // --- Conversions API: manda la compra a Meta SERVER-TO-SERVER ---
+    // Imprescindible: el píxel de cliente (/gracias) lo bloquean los ad-blockers,
+    // así que Meta perdía confirmaciones y la atribución por creativo salía mal.
+    // CAPI llega siempre. Dedup con el píxel vía event_id = session.id. No bloquea.
+    try {
+      const { sendPurchaseCapi } = require('../lib/meta-capi');
+      await sendPurchaseCapi(session, { email });
+    } catch (capiError) {
+      console.error('[Stripe Webhook] CAPI falló (no bloqueante):', capiError.message);
+    }
+    // --- Fin CAPI ---
+
     // Track successful purchase in analytics with campaign data
     // Include device_id to link server event with client-side anonymous events
     await trackEvent('Purchase Completed (Server)', {
