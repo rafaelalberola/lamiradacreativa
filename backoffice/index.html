@@ -232,7 +232,8 @@
 const $ = (id) => document.getElementById(id);
 const API = '/.netlify/functions/metrics-api';
 const AUTH = '/.netlify/functions/metrics-login';
-const REFRESH_MS = 60000; // el panel se refresca solo; ver nota sobre latencia de Meta
+const REFRESH_MS = 20000; // refresco frecuente: una venta aparece en ≤20s de que Stripe la confirme
+                          // (+ refresco inmediato al enfocar la pestaña). El gasto de Meta lleva su propia latencia.
 
 // Login recordado: el token firmado se guarda en localStorage (persiste siempre,
 // aunque el navegador no conserve la cookie) y se manda como Authorization: Bearer.
